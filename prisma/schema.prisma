@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  message   String
+  length    Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relation to users who used this message
+  users User[]
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  phoneNumber       String    @map("phone_number") @unique
+  email             String    @unique
+  name              String
+  trialEnds         DateTime? @map("trial_ends")
+  premium           Boolean   @default(false)
+  lastUsedMessageId Int?      @map("last_used_message")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  // Relation to the last used message
+  lastUsedMessage Message? @relation(fields: [lastUsedMessageId], references: [id])
+
+  @@map("users")
+}
