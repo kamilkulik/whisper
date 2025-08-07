@@ -20,7 +20,7 @@ export default function Home() {
       {/* Navigation Bar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 overscroll-none ${
         scrolled 
-          ? 'bg-blue-900/80 backdrop-blur-md shadow-lg' 
+          ? 'bg-black/20 backdrop-blur-md shadow-lg' 
           : 'bg-transparent'
       }`}>
         <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
@@ -43,19 +43,22 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <div className="pt-20">
-        {/* Hero Section - Gradient Background */}
-        <div className="relative overflow-hidden">
-          {/* Background gradient with gentle shapes */}
+      {/* Main Content - Seamless Flow */}
+      <div className="">
+        {/* Hero Section - Extended vertically */}
+        <div className="relative min-h-screen">
+          {/* Background gradient with gentle shapes - extended */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800">
             <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl"></div>
           </div>
           
-          <div className="relative max-w-7xl mx-auto px-6 py-12">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Extended gradient that starts blending into next section */}
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-purple-900/80 via-purple-900/40 to-transparent"></div>
+          
+          <div className="relative max-w-7xl mx-auto px-6 py-12 pt-32">
+            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
               {/* Left Side - Content */}
               <div className="space-y-8">
                 <div>
@@ -134,16 +137,19 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Features Section - Mesh Gradient Background */}
-        <div className="relative overflow-hidden">
-          {/* Mesh gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/50 via-purple-900/30 to-blue-900/50">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.3),transparent_50%)]"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.3),transparent_50%)]"></div>
+        {/* Features Section - Extended vertically with proper blending */}
+        <div className="relative min-h-screen">
+          {/* Background that starts from purple and transitions to indigo */}
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-900 via-indigo-900 to-blue-900">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.2),transparent_50%)]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.2),transparent_50%)]"></div>
           </div>
           
+          {/* Extended gradient that starts blending into next section */}
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-blue-900/80 via-blue-900/40 to-transparent"></div>
+          
           <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white">
+            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
               <h2 className="text-3xl font-bold mb-6">Why Choose Wieczorny Szept?</h2>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
@@ -163,20 +169,23 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Collections Section - Geometric Shapes Background */}
-        <div className="relative overflow-hidden">
-          {/* Geometric background with shapes */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-800 via-indigo-800 to-purple-800">
+        {/* Collections Section - Extended vertically with proper blending */}
+        <div className="relative min-h-screen">
+          {/* Background that starts from blue and transitions to indigo */}
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900 via-indigo-900 to-purple-900">
             <div className="absolute top-0 left-0 w-full h-full">
-              <div className="absolute top-20 left-20 w-32 h-32 bg-purple-500/20 rotate-45"></div>
-              <div className="absolute top-40 right-32 w-24 h-24 bg-blue-500/20 rounded-full"></div>
-              <div className="absolute bottom-32 left-1/3 w-40 h-40 bg-indigo-500/20 transform rotate-12"></div>
-              <div className="absolute bottom-20 right-20 w-28 h-28 bg-purple-500/20 rounded-full"></div>
+              <div className="absolute top-20 left-20 w-32 h-32 bg-purple-500/15 rotate-45"></div>
+              <div className="absolute top-40 right-32 w-24 h-24 bg-blue-500/15 rounded-full"></div>
+              <div className="absolute bottom-32 left-1/3 w-40 h-40 bg-indigo-500/15 transform rotate-12"></div>
+              <div className="absolute bottom-20 right-20 w-28 h-28 bg-purple-500/15 rounded-full"></div>
             </div>
           </div>
           
+          {/* Extended gradient that starts blending into next section */}
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-purple-900/80 via-purple-900/40 to-transparent"></div>
+          
           <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white">
+            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
               <h2 className="text-3xl font-bold mb-6">Featured Collections</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm rounded-lg p-8 border border-purple-500/30">
@@ -198,20 +207,23 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Testimonials Section - Wave Pattern Background */}
-        <div className="relative overflow-hidden">
-          {/* Wave pattern background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-            <svg className="absolute bottom-0 left-0 w-full h-32 text-purple-800/30" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        {/* Testimonials Section - Extended vertically with proper blending */}
+        <div className="relative min-h-screen">
+          {/* Background that starts from purple and transitions to deep blue */}
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-900 via-blue-900 to-indigo-900">
+            <svg className="absolute bottom-0 left-0 w-full h-32 text-purple-800/20" viewBox="0 0 1200 120" preserveAspectRatio="none">
               <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="currentColor"></path>
             </svg>
-            <svg className="absolute top-0 right-0 w-full h-32 text-blue-800/30" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <svg className="absolute top-0 right-0 w-full h-32 text-blue-800/20" viewBox="0 0 1200 120" preserveAspectRatio="none">
               <path d="M1200,120V0H0V120Z" fill="currentColor"></path>
             </svg>
           </div>
           
+          {/* Extended gradient that starts blending into next section */}
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-indigo-900/80 via-indigo-900/40 to-transparent"></div>
+          
           <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white">
+            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
               <h2 className="text-3xl font-bold mb-6">What Our Readers Say</h2>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10">
@@ -249,15 +261,15 @@ export default function Home() {
           </div>
         </div>
 
-        {/* CTA Section - Radial Gradient Background */}
-        <div className="relative overflow-hidden">
-          {/* Radial gradient background */}
-          <div className="absolute inset-0 bg-gradient-radial from-purple-900 via-blue-900 to-indigo-900">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.2),transparent_70%)]"></div>
+        {/* CTA Section - Extended vertically with proper blending */}
+        <div className="relative min-h-screen">
+          {/* Background that starts from indigo and transitions to deep purple */}
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15),transparent_70%)]"></div>
           </div>
           
           <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white">
+            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
               <h2 className="text-4xl font-bold mb-6">Ready to Begin Your Journey?</h2>
               <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
                 Join thousands of poetry enthusiasts who have discovered the transformative power of carefully curated lyrical expressions.
