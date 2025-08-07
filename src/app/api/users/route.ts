@@ -60,8 +60,7 @@ export const POST = async (request: NextRequest) => {
           phoneNumber: body.numerTelefonu,
           email: body.email,
           name: body.imie,
-          premium: false,
-          trialEnds: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days trial
+          premium: true,
         }
       });
     }

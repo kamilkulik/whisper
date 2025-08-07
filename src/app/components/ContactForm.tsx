@@ -25,6 +25,7 @@ export default function ContactForm() {
     setMessage('');
 
     try {
+      // First, save the contact information
       const response = await fetch('/api/users', {
         method: 'POST',
         headers: {
@@ -33,11 +34,25 @@ export default function ContactForm() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        setMessage('Wiadomość została wysłana pomyślnie!');
+        setMessage('Informacje zapisane! Przekierowywanie do kasy...');
+        
+        // Clear the form
         setFormData({ numerTelefonu: '', email: '', imie: '' });
+        
+        // Redirect to Stripe checkout after a short delay
+        setTimeout(() => {
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = '/api/checkout_sessions';
+          document.body.appendChild(form);
+          form.submit();
+        }, 1500);
+        
       } else {
-        setMessage('Wystąpił błąd podczas wysyłania wiadomości.');
+        setMessage(data.error || 'Wystąpił błąd podczas wysyłania wiadomości.');
       }
     } catch (error) {
       setMessage('Wystąpił błąd podczas wysyłania wiadomości.');
@@ -101,18 +116,25 @@ export default function ContactForm() {
           />
         </div>
 
+              {/* Divider */}
+        <div className="my-6 flex items-center">
+          <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+          {/* <span className="px-3 text-sm text-gray-500 dark:text-gray-400">lub</span> */}
+          <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+        </div>
+
         <button
           type="submit"
           disabled={isSubmitting}
           className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          {isSubmitting ? 'Wysyłanie...' : 'Wyślij'}
+          {isSubmitting ? 'Wysyłanie...' : 'Wyślij i przejdź do kasy'}
         </button>
       </form>
 
       {message && (
         <div className={`mt-4 p-3 rounded-md text-sm ${
-          message.includes('pomyślnie') 
+          message.includes('zapisane') 
             ? 'bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200' 
             : 'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200'
         }`}>

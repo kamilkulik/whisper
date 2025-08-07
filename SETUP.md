@@ -130,33 +130,6 @@ The application includes two main tables:
    - The cron job will automatically start running daily at 8:00 PM CET
    - You can check the logs in your Vercel dashboard
 
-## Customization
-
-### Adding Message Management
-You can extend the API to create and manage messages:
-
-```typescript
-// Example: Create a new message
-await prisma.message.create({
-  data: {
-    message: "Your message content",
-    length: message.length
-  }
-});
-```
-
-### Adding Email Notifications
-Add email sending functionality to the cron job or message handler:
-
-```typescript
-// Example with email service
-await sendEmail({
-  to: 'admin@example.com',
-  subject: 'New Contact Form Submission',
-  body: `Name: ${body.imie}\nEmail: ${body.email}\nPhone: ${body.numerTelefonu}`
-});
-```
-
 ## Testing
 
 1. **Local Development**:

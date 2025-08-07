@@ -15,10 +15,12 @@ model Message {
   message   String
   length    Int
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 
   // Relation to users who used this message
   users User[]
+
+  @@map("messages")
 }
 
 model User {
@@ -30,7 +32,7 @@ model User {
   premium           Boolean   @default(false)
   lastUsedMessageId Int?      @map("last_used_message")
   createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
+  updatedAt         DateTime?  @updatedAt @map("updated_at")
 
   // Relation to the last used message
   lastUsedMessage Message? @relation(fields: [lastUsedMessageId], references: [id])
