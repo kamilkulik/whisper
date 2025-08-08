@@ -58,7 +58,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-blue-900">
+    <>
+    <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
       {/* Navigation Bar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
@@ -69,14 +70,10 @@ export default function Home() {
           <div className="flex items-center space-x-8">
             <div className="text-white font-bold text-xl">▲ WIECZORNY SZEPT</div>
             <div className="hidden md:flex space-x-6">
-              <a href="#" className="text-blue-200 hover:text-white transition-colors">Poems</a>
-              <a href="#" className="text-blue-200 hover:text-white transition-colors">Collections</a>
             </div>
           </div>
           
           <div className="flex items-center space-x-6">
-            <a href="#" className="text-white hover:text-blue-200 transition-colors hidden md:block">For Writers</a>
-            <a href="#" className="text-white hover:text-blue-200 transition-colors hidden md:block">Gift Subscription</a>
             <a href="#" className="text-white hover:text-blue-200 transition-colors">Log in</a>
             <a href="/signup" className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors inline-block">
               Subscribe Now
@@ -308,8 +305,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* CTA Section */}
+      </div>
+      </div>
+      {/* CTA Section */}
+      <div className="bg-[#2A031E] text-white relative overflow-hidden">
         <div className="relative py-16">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center text-white">
@@ -323,10 +322,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
-
       {/* Footer */}
-      <div className="bg-[#2A031E] text-white relative overflow-hidden">
         {/* Footer Background Orbs */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
@@ -400,6 +396,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+
+    </>
   );
 }
