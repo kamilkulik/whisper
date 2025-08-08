@@ -16,9 +16,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 overscroll-none">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-blue-900">
       {/* Navigation Bar */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 overscroll-none ${
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
           ? 'bg-black/20 backdrop-blur-md shadow-lg' 
           : 'bg-transparent'
@@ -43,19 +43,16 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Main Content - Seamless Flow */}
+      {/* Main Content - All sections with continuous background */}
       <div className="">
-        {/* Hero Section - Extended vertically */}
+        {/* Hero Section */}
         <div className="relative min-h-screen">
-          {/* Background gradient with gentle shapes - extended */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl"></div>
+          {/* Hero Background Gradients */}
+          <div className="absolute inset-0">
+            <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/40 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-blue-500/40 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-3xl"></div>
           </div>
-          
-          {/* Extended gradient that starts blending into next section */}
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-purple-900/80 via-purple-900/40 to-transparent"></div>
           
           <div className="relative max-w-7xl mx-auto px-6 py-12 pt-32">
             <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
@@ -64,7 +61,7 @@ export default function Home() {
                 <div>
                   <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
                     Discover the world's most{' '}
-                    <span className="bg-purple-400 bg-opacity-20 px-2 rounded">beautiful</span>{' '}
+                    <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">beautiful</span>{' '}
                     lyrical expressions.
                   </h1>
                 </div>
@@ -73,15 +70,15 @@ export default function Home() {
                   Immerse yourself in carefully curated poems and lyrical messages delivered to your inbox. Experience the power of words that touch your soul, inspire your mind, and awaken your emotions.
                 </p>
                 
-                <a href="/signup" className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-colors inline-block">
+                <a href="/signup" className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105">
                   Start Your Journey &gt;
                 </a>
                 
                 <div className="flex items-center space-x-4 pt-8">
                   <div className="flex -space-x-2">
-                    <div className="w-12 h-12 bg-gray-300 rounded-full border-2 border-white"></div>
-                    <div className="w-12 h-12 bg-gray-400 rounded-full border-2 border-white"></div>
-                    <div className="w-12 h-12 bg-gray-500 rounded-full border-2 border-white"></div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full border-2 border-white"></div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-full border-2 border-white"></div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-400 rounded-full border-2 border-white"></div>
                   </div>
                   <div className="text-white">
                     <p className="font-medium">Join over 25,000 poetry lovers worldwide.</p>
@@ -92,11 +89,11 @@ export default function Home() {
 
               {/* Right Side - Poetry Preview */}
               <div className="relative">
-                <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-gray-700/50">
+                <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-gray-700/50">
                   {/* Poetry Frame */}
-                  <div className="bg-gray-900/90 rounded-xl overflow-hidden">
+                  <div className="bg-gradient-to-br from-gray-900/90 to-gray-800/90 rounded-xl overflow-hidden">
                     {/* Top Section - Poem preview */}
-                    <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6">
+                    <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 p-6">
                       <div className="text-white">
                         <p className="font-semibold text-lg mb-2">"Evening Whispers"</p>
                         <p className="text-blue-100 italic">by Maria Nowak</p>
@@ -104,7 +101,7 @@ export default function Home() {
                     </div>
                     
                     {/* Bottom Section - Poem content */}
-                    <div className="p-6 bg-gray-800/90 relative">
+                    <div className="p-6 bg-gradient-to-br from-gray-800/90 to-gray-700/90 relative">
                       <div className="text-white space-y-3">
                         <p className="text-sm leading-relaxed">
                           "In the quiet of twilight's embrace,<br/>
@@ -116,14 +113,14 @@ export default function Home() {
                       
                       {/* Decorative elements */}
                       <div className="absolute inset-0 pointer-events-none">
-                        <div className="absolute top-2 left-4 w-1 h-1 bg-yellow-400 rounded-full"></div>
-                        <div className="absolute top-4 right-6 w-1 h-1 bg-pink-400 rounded-full"></div>
-                        <div className="absolute bottom-4 left-8 w-1 h-1 bg-green-400 rounded-full"></div>
-                        <div className="absolute bottom-2 right-4 w-1 h-1 bg-purple-400 rounded-full"></div>
+                        <div className="absolute top-2 left-4 w-1 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full"></div>
+                        <div className="absolute top-4 right-6 w-1 h-1 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full"></div>
+                        <div className="absolute bottom-4 left-8 w-1 h-1 bg-gradient-to-r from-green-400 to-teal-400 rounded-full"></div>
+                        <div className="absolute bottom-2 right-4 w-1 h-1 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full"></div>
                       </div>
                       
                       {/* Read more button */}
-                      <button className="absolute bottom-4 right-4 bg-white text-gray-900 px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-100 transition-colors">
+                      <button className="absolute bottom-4 right-4 bg-gradient-to-r from-white to-gray-100 text-gray-900 px-4 py-2 rounded-lg flex items-center space-x-2 hover:from-gray-100 hover:to-white transition-all duration-300 shadow-md hover:shadow-lg">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -137,19 +134,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Features Section - Extended vertically with proper blending */}
-        <div className="relative min-h-screen">
-          {/* Background that starts from purple and transitions to indigo */}
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-900 via-indigo-900 to-blue-900">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.2),transparent_50%)]"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.2),transparent_50%)]"></div>
-          </div>
-          
-          {/* Extended gradient that starts blending into next section */}
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-blue-900/80 via-blue-900/40 to-transparent"></div>
-          
-          <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
+        {/* Features Section */}
+        <div className="relative py-16">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center text-white">
               <h2 className="text-3xl font-bold mb-6">Why Choose Wieczorny Szept?</h2>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
@@ -169,23 +157,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Collections Section - Extended vertically with proper blending */}
-        <div className="relative min-h-screen">
-          {/* Background that starts from blue and transitions to indigo */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900 via-indigo-900 to-purple-900">
-            <div className="absolute top-0 left-0 w-full h-full">
-              <div className="absolute top-20 left-20 w-32 h-32 bg-purple-500/15 rotate-45"></div>
-              <div className="absolute top-40 right-32 w-24 h-24 bg-blue-500/15 rounded-full"></div>
-              <div className="absolute bottom-32 left-1/3 w-40 h-40 bg-indigo-500/15 transform rotate-12"></div>
-              <div className="absolute bottom-20 right-20 w-28 h-28 bg-purple-500/15 rounded-full"></div>
-            </div>
-          </div>
-          
-          {/* Extended gradient that starts blending into next section */}
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-purple-900/80 via-purple-900/40 to-transparent"></div>
-          
-          <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
+        {/* Collections Section */}
+        <div className="relative py-16">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center text-white">
               <h2 className="text-3xl font-bold mb-6">Featured Collections</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm rounded-lg p-8 border border-purple-500/30">
@@ -207,23 +182,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Testimonials Section - Extended vertically with proper blending */}
-        <div className="relative min-h-screen">
-          {/* Background that starts from purple and transitions to deep blue */}
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-900 via-blue-900 to-indigo-900">
-            <svg className="absolute bottom-0 left-0 w-full h-32 text-purple-800/20" viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="currentColor"></path>
-            </svg>
-            <svg className="absolute top-0 right-0 w-full h-32 text-blue-800/20" viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M1200,120V0H0V120Z" fill="currentColor"></path>
-            </svg>
-          </div>
-          
-          {/* Extended gradient that starts blending into next section */}
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-indigo-900/80 via-indigo-900/40 to-transparent"></div>
-          
-          <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
+        {/* Testimonials Section */}
+        <div className="relative py-16">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center text-white">
               <h2 className="text-3xl font-bold mb-6">What Our Readers Say</h2>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10">
@@ -261,15 +223,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* CTA Section - Extended vertically with proper blending */}
-        <div className="relative min-h-screen">
-          {/* Background that starts from indigo and transitions to deep purple */}
-          <div className="absolute inset-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15),transparent_70%)]"></div>
-          </div>
-          
-          <div className="relative max-w-7xl mx-auto px-6 py-16">
-            <div className="text-center text-white min-h-[80vh] flex flex-col justify-center">
+        {/* CTA Section */}
+        <div className="relative py-16">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center text-white">
               <h2 className="text-4xl font-bold mb-6">Ready to Begin Your Journey?</h2>
               <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
                 Join thousands of poetry enthusiasts who have discovered the transformative power of carefully curated lyrical expressions.
