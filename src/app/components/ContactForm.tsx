@@ -17,7 +17,9 @@ export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
+  const languageDropdownRef = useRef<HTMLDivElement>(null);
 
   const countryOptions = [
     { code: '+48', name: 'Polska' },
@@ -27,6 +29,13 @@ export default function ContactForm() {
     { code: '+52', name: 'Meksyk' },
     { code: '+56', name: 'Chile' },
     { code: '+39', name: 'Włochy' }
+  ];
+
+  const languageOptions = [
+    { code: 'Polski', name: 'Polski' },
+    { code: 'Angielski', name: 'English' },
+    { code: 'Hiszpański', name: 'Español' },
+    { code: 'Włoski', name: 'Italiano' }
   ];
 
   // Update form data when locale context is loaded
@@ -40,11 +49,14 @@ export default function ContactForm() {
     }
   }, [isLoaded, countryCode, language]);
 
-  // Handle clicking outside the country dropdown
+  // Handle clicking outside the dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
         setIsCountryDropdownOpen(false);
+      }
+      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+        setIsLanguageDropdownOpen(false);
       }
     };
 
@@ -60,6 +72,14 @@ export default function ContactForm() {
       countryCode
     }));
     setIsCountryDropdownOpen(false);
+  };
+
+  const handleLanguageSelect = (language: string) => {
+    setFormData(prev => ({
+      ...prev,
+      jezykWiadomosci: language
+    }));
+    setIsLanguageDropdownOpen(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -219,25 +239,35 @@ export default function ContactForm() {
           <label htmlFor="jezykWiadomosci" className="block text-white font-medium mb-2 text-sm">
             Język wiadomości *
           </label>
-          <div className="relative">
-            <select
-              id="jezykWiadomosci"
-              name="jezykWiadomosci"
-              value={formData.jezykWiadomosci}
-              onChange={handleChange}
-              required
-              className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm appearance-none pr-10"
-          >
-              <option value="Polski" className="bg-gray-800 text-white">Polski</option>
-              <option value="Angielski" className="bg-gray-800 text-white">Angielski</option>
-              <option value="Hiszpański" className="bg-gray-800 text-white">Hiszpański</option>
-              <option value="Włoski" className="bg-gray-800 text-white">Włoski</option>
-            </select>
+          <div className="relative" ref={languageDropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+              className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-10 text-left"
+            >
+              {formData.jezykWiadomosci}
+            </button>
             <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4 h-4 text-white transition-transform ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
+            {isLanguageDropdownOpen && (
+              <div className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-full">
+                {languageOptions.map((option) => (
+                  <button
+                    key={option.code}
+                    type="button"
+                    onClick={() => handleLanguageSelect(option.code)}
+                    className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
+                      formData.jezykWiadomosci === option.code ? 'bg-gray-700' : ''
+                    }`}
+                  >
+                    {option.name}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
