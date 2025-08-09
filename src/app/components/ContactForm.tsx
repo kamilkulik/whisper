@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocale } from '../contexts/LocaleContext';
 
 export default function ContactForm() {
@@ -16,6 +16,18 @@ export default function ContactForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const countryDropdownRef = useRef<HTMLDivElement>(null);
+
+  const countryOptions = [
+    { code: '+48', name: 'Polska' },
+    { code: '+44', name: 'Wielka Brytania' },
+    { code: '+1', name: 'Stany Zjednoczone' },
+    { code: '+34', name: 'Hiszpania' },
+    { code: '+52', name: 'Meksyk' },
+    { code: '+56', name: 'Chile' },
+    { code: '+39', name: 'Włochy' }
+  ];
 
   // Update form data when locale context is loaded
   useEffect(() => {
@@ -27,6 +39,28 @@ export default function ContactForm() {
       }));
     }
   }, [isLoaded, countryCode, language]);
+
+  // Handle clicking outside the country dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+        setIsCountryDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleCountrySelect = (countryCode: string) => {
+    setFormData(prev => ({
+      ...prev,
+      countryCode
+    }));
+    setIsCountryDropdownOpen(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -128,32 +162,40 @@ export default function ContactForm() {
           />
         </div>
 
-        <div className="grid grid-cols-[auto_1fr] gap-2">
+        <div className="grid grid-cols-[80px_1fr] gap-2">
           <div className="h-full">
             <label htmlFor="countryCode" className="block text-white font-medium mb-2 text-sm">
               Kod kraju *
             </label>
-            <div className="relative">
-              <select
-                id="countryCode"
-                name="countryCode"
-                value={formData.countryCode}
-                onChange={handleChange}
-                className="w-32 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm appearance-none pr-10"
+            <div className="relative" ref={countryDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
               >
-                <option value="+48" className="bg-gray-800 text-white">+48 Polska</option>
-                <option value="+44" className="bg-gray-800 text-white">+44 Wielka Brytania</option>
-                <option value="+1" className="bg-gray-800 text-white">+1 Stany Zjednoczone</option>
-                <option value="+34" className="bg-gray-800 text-white">+34 Hiszpania</option>
-                <option value="+52" className="bg-gray-800 text-white">+52 Meksyk</option>
-                <option value="+56" className="bg-gray-800 text-white">+56 Chile</option>
-                <option value="+39" className="bg-gray-800 text-white">+39 Włochy</option>
-              </select>
+                {formData.countryCode}
+              </button>
               <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-4 h-4 text-white transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
+              {isCountryDropdownOpen && (
+                <div className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60">
+                  {countryOptions.map((option) => (
+                    <button
+                      key={option.code}
+                      type="button"
+                      onClick={() => handleCountrySelect(option.code)}
+                      className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
+                        formData.countryCode === option.code ? 'bg-gray-700' : ''
+                      }`}
+                    >
+                      {option.code} {option.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="h-full">

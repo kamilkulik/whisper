@@ -179,7 +179,7 @@ export default function Home() {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div id="contact-form-container" className={`relative ${isFormShaking ? 'shake-form' : ''}`}>
+              <div id="contact-form-container" className={`relative -mt-12 ${isFormShaking ? 'shake-form' : ''}`}>
                 <ContactForm />
               </div>
             </div>
