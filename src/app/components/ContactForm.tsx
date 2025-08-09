@@ -1,28 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocale } from '../contexts/LocaleContext';
 
 export default function ContactForm() {
+  const { language, countryCode, isLoaded } = useLocale();
+
   const [formData, setFormData] = useState({
     numerTelefonu: '',
     email: '',
-    imie: ''
+    imie: '',
+    countryCode: '+48', // Default fallback
+    jezykWiadomosci: 'Polski', // Default fallback
+    acceptTerms: false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  // Update form data when locale context is loaded
+  useEffect(() => {
+    if (isLoaded) {
+      setFormData(prev => ({
+        ...prev,
+        countryCode: countryCode,
+        jezykWiadomosci: language
+      }));
+    }
+  }, [isLoaded, countryCode, language]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setMessage('');
+
+    // Validate terms and conditions acceptance
+    if (!formData.acceptTerms) {
+      setMessage('Musisz zaakceptować regulamin usługi, aby kontynuować.');
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       // First, save the contact information
@@ -40,7 +66,7 @@ export default function ContactForm() {
         setMessage('Informacje zapisane! Przekierowywanie do kasy...');
         
         // Clear the form
-        setFormData({ numerTelefonu: '', email: '', imie: '' });
+        setFormData({ numerTelefonu: '', email: '', imie: '', countryCode: countryCode, jezykWiadomosci: language, acceptTerms: false });
         
         // Redirect to Stripe checkout after a short delay
         setTimeout(() => {
@@ -62,14 +88,16 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-        Formularz kontaktowy
-      </h2>
+    <div className="max-w-md mx-auto bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-xl p-8 backdrop-blur-sm">
+      <div className="mb-8">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          Zacznij otrzymywać wiadomości!
+        </h3>
+      </div>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="imie" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="imie" className="block text-white font-medium mb-2 text-sm">
             Imię *
           </label>
           <input
@@ -79,14 +107,14 @@ export default function ContactForm() {
             value={formData.imie}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-            placeholder="Wprowadź swoje imię"
+            className="w-full px-6 py-4 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+            placeholder="Wpisz swoje imię"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Email *
+          <label htmlFor="email" className="block text-white font-medium mb-2 text-sm">
+            Adres email *
           </label>
           <input
             type="email"
@@ -95,25 +123,66 @@ export default function ContactForm() {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-            placeholder="Wprowadź swój email"
+            className="w-full px-6 py-4 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+            placeholder="np. jan.kowalski@email.com"
           />
         </div>
 
+        <div className="grid grid-cols-[auto_1fr] gap-2">
+          <div>
+            <label htmlFor="countryCode" className="block text-white font-medium mb-2 text-sm">
+              Kod kraju *
+            </label>
+            <select
+              id="countryCode"
+              name="countryCode"
+              value={formData.countryCode}
+              onChange={handleChange}
+              className="w-32 px-4 py-4 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm text-sm"
+            >
+              <option value="+48" className="bg-gray-800 text-white">+48 Polska</option>
+              <option value="+44" className="bg-gray-800 text-white">+44 Wielka Brytania</option>
+              <option value="+1" className="bg-gray-800 text-white">+1 Stany Zjednoczone</option>
+              <option value="+34" className="bg-gray-800 text-white">+34 Hiszpania</option>
+              <option value="+52" className="bg-gray-800 text-white">+52 Meksyk</option>
+              <option value="+56" className="bg-gray-800 text-white">+56 Chile</option>
+              <option value="+39" className="bg-gray-800 text-white">+39 Włochy</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="numerTelefonu" className="block text-white font-medium mb-2 text-sm">
+              Numer telefonu *
+            </label>
+            <input
+              type="tel"
+              id="numerTelefonu"
+              name="numerTelefonu"
+              value={formData.numerTelefonu}
+              onChange={handleChange}
+              required
+              className="px-6 py-4 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+              placeholder="np. 123 456 789"
+            />
+          </div>
+        </div>
+
         <div>
-          <label htmlFor="numerTelefonu" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Numer telefonu *
+          <label htmlFor="jezykWiadomosci" className="block text-white font-medium mb-2 text-sm">
+            Język wiadomości *
           </label>
-          <input
-            type="tel"
-            id="numerTelefonu"
-            name="numerTelefonu"
-            value={formData.numerTelefonu}
+          <select
+            id="jezykWiadomosci"
+            name="jezykWiadomosci"
+            value={formData.jezykWiadomosci}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-            placeholder="Wprowadź numer telefonu"
-          />
+            className="w-full px-6 py-4 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+          >
+            <option value="Polski" className="bg-gray-800 text-white">Polski</option>
+            <option value="Angielski" className="bg-gray-800 text-white">Angielski</option>
+            <option value="Hiszpański" className="bg-gray-800 text-white">Hiszpański</option>
+            <option value="Włoski" className="bg-gray-800 text-white">Włoski</option>
+          </select>
         </div>
 
               {/* Divider */}
@@ -123,20 +192,52 @@ export default function ContactForm() {
           <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
         </div>
 
+        {/* Terms and Conditions Checkbox */}
+        <div className={`flex items-center space-x-3 ${
+          !formData.acceptTerms && message.includes('regulamin') 
+            ? 'p-3 border border-red-300 rounded-2xl bg-red-500/20' 
+            : ''
+        }`}>
+          <input
+            type="checkbox"
+            id="acceptTerms"
+            name="acceptTerms"
+            checked={formData.acceptTerms}
+            onChange={handleChange}
+            required
+            className={`h-5 w-5 text-white focus:ring-white/30 rounded ${
+              !formData.acceptTerms && message.includes('regulamin')
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-white/30 bg-white/20'
+            }`}
+          />
+          <label htmlFor="acceptTerms" className="text-sm text-white/90">
+            Akceptuję{' '}
+            <a 
+              href="/regulamin" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white underline hover:text-white/80"
+            >
+              regulamin usługi
+            </a>
+          </label>
+        </div>
+
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
         >
-          {isSubmitting ? 'Wysyłanie...' : 'Wyślij i przejdź do kasy'}
+          {isSubmitting ? 'WYSYŁANIE...' : 'WYŚLIJ'}
         </button>
       </form>
 
       {message && (
-        <div className={`mt-4 p-3 rounded-md text-sm ${
+        <div className={`mt-4 p-4 rounded-2xl text-sm backdrop-blur-sm ${
           message.includes('zapisane') 
-            ? 'bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200' 
-            : 'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200'
+            ? 'bg-green-500/20 text-green-100 border border-green-400/30' 
+            : 'bg-red-500/20 text-red-100 border border-red-400/30'
         }`}>
           {message}
         </div>

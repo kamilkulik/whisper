@@ -30,3 +30,52 @@ body {
 html, body {
   overflow-x: hidden;
 }
+
+/* Heartbeat animation */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  14% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  28% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  42% {
+    transform: scale(1.15);
+    opacity: 0.95;
+  }
+  70% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+}
+
+.heartbeat {
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-8px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(8px);
+  }
+}
+
+.shake-form {
+  animation: shake 0.8s ease-in-out !important;
+}

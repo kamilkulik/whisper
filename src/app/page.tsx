@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import ContactForm from './components/ContactForm';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isFormShaking, setIsFormShaking] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,6 +59,56 @@ export default function Home() {
     setCurrentTestimonial(index);
   };
 
+  const handleStartJourney = () => {
+    console.log('Start Journey clicked!'); // Debug log
+    
+    // Focus the first input field in the contact form
+    const firstInput = document.querySelector('#imie') as HTMLInputElement;
+    if (firstInput) {
+      firstInput.focus();
+      console.log('Input focused'); // Debug log
+    }
+    
+    // Trigger shake animation
+    console.log('Setting shake to true'); // Debug log
+    setIsFormShaking(true);
+    setTimeout(() => {
+      console.log('Setting shake to false'); // Debug log
+      setIsFormShaking(false);
+    }, 600); // Animation duration
+  };
+
+  const handleStartJourneyWithScroll = () => {
+    console.log('Start Journey with scroll clicked!'); // Debug log
+    
+    // Smooth scroll to the contact form
+    const formContainer = document.querySelector('#contact-form-container');
+    if (formContainer) {
+      formContainer.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+    }
+    
+    // Add a delay before focusing and shaking to allow scroll to complete
+    setTimeout(() => {
+      // Focus the first input field in the contact form
+      const firstInput = document.querySelector('#imie') as HTMLInputElement;
+      if (firstInput) {
+        firstInput.focus();
+        console.log('Input focused after scroll'); // Debug log
+      }
+      
+      // Trigger shake animation
+      console.log('Setting shake to true after scroll'); // Debug log
+      setIsFormShaking(true);
+      setTimeout(() => {
+        console.log('Setting shake to false'); // Debug log
+        setIsFormShaking(false);
+      }, 600); // Animation duration
+    }, 800); // Wait for scroll to complete
+  };
+
   return (
     <>
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
@@ -75,9 +127,9 @@ export default function Home() {
           
           <div className="flex items-center space-x-6">
             <a href="#" className="text-white hover:text-blue-200 transition-colors">Log in</a>
-            <a href="/signup" className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors inline-block">
+            <button onClick={handleStartJourney} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors inline-block cursor-pointer">
               Subscribe Now
-            </a>
+            </button>
           </div>
         </div>
       </nav>
@@ -86,9 +138,9 @@ export default function Home() {
       <div className="">
         {/* Hero Section */}
         <div className="relative min-h-screen">
-          {/* Hero Background Gradients */}
+          {/* Hero Background Orbs */}
           <div className="absolute inset-0">
-            <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/40 rounded-full blur-3xl"></div>
+            <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/40 rounded-full blur-2xl heartbeat"></div>
             <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-blue-500/40 rounded-full blur-3xl"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-3xl"></div>
           </div>
@@ -109,9 +161,9 @@ export default function Home() {
                   Immerse yourself in carefully curated poems and lyrical messages delivered to your inbox. Experience the power of words that touch your soul, inspire your mind, and awaken your emotions.
                 </p>
                 
-                <a href="/signup" className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105">
+                <button onClick={handleStartJourney} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
                   Start Your Journey &gt;
-                </a>
+                </button>
                 
                 <div className="flex items-center space-x-4 pt-8">
                   <div className="flex -space-x-2">
@@ -126,48 +178,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Right Side - Poetry Preview */}
-              <div className="relative">
-                <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-gray-700/50">
-                  {/* Poetry Frame */}
-                  <div className="bg-gradient-to-br from-gray-900/90 to-gray-800/90 rounded-xl overflow-hidden">
-                    {/* Top Section - Poem preview */}
-                    <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 p-6">
-                      <div className="text-white">
-                        <p className="font-semibold text-lg mb-2">"Evening Whispers"</p>
-                        <p className="text-blue-100 italic">by Maria Nowak</p>
-                      </div>
-                    </div>
-                    
-                    {/* Bottom Section - Poem content */}
-                    <div className="p-6 bg-gradient-to-br from-gray-800/90 to-gray-700/90 relative">
-                      <div className="text-white space-y-3">
-                        <p className="text-sm leading-relaxed">
-                          "In the quiet of twilight's embrace,<br/>
-                          Where shadows dance with gentle grace,<br/>
-                          The evening whispers secrets sweet,<br/>
-                          As day and night in harmony meet."
-                        </p>
-                      </div>
-                      
-                      {/* Decorative elements */}
-                      <div className="absolute inset-0 pointer-events-none">
-                        <div className="absolute top-2 left-4 w-1 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full"></div>
-                        <div className="absolute top-4 right-6 w-1 h-1 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full"></div>
-                        <div className="absolute bottom-4 left-8 w-1 h-1 bg-gradient-to-r from-green-400 to-teal-400 rounded-full"></div>
-                        <div className="absolute bottom-2 right-4 w-1 h-1 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full"></div>
-                      </div>
-                      
-                      {/* Read more button */}
-                      <button className="absolute bottom-4 right-4 bg-gradient-to-r from-white to-gray-100 text-gray-900 px-4 py-2 rounded-lg flex items-center space-x-2 hover:from-gray-100 hover:to-white transition-all duration-300 shadow-md hover:shadow-lg">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>Read more</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              {/* Right Side - Contact Form */}
+              <div id="contact-form-container" className={`relative ${isFormShaking ? 'shake-form' : ''}`}>
+                <ContactForm />
               </div>
             </div>
           </div>
@@ -176,58 +189,37 @@ export default function Home() {
         {/* Smartphone Notification Section */}
         <div className="relative min-h-[80vh] flex items-center">
           <div className="max-w-7xl mx-auto px-6 w-full">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Left Side - Smartphone Video */}
-              <div className="relative">
-                <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-700/50">
-                  {/* Smartphone Frame */}
-                  <div className="w-64 h-96 mx-auto bg-black rounded-3xl p-2 shadow-lg">
-                    <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900 rounded-2xl relative overflow-hidden">
-                      {/* Notification Animation */}
-                      <div className="absolute top-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg animate-pulse">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M2.003 2.007a1 1 0 00-.471 1.897l.707.703L14.414 15H16a1 1 0 001-1V4a1 1 0 00-1-1H2.003zM18 4v10a3 3 0 01-3 3H4.414l-1.703 1.704a1 1 0 01-1.414-1.414L2.586 16H3a1 1 0 001-1V4a1 1 0 00-1-1H2.003z" />
-                            </svg>
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-semibold text-gray-800">Wieczorny Szept</p>
-                            <p className="text-xs text-gray-600">Nowy wiersz czeka na Ciebie</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* App Interface */}
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                          <div className="text-white text-center">
-                            <p className="text-sm font-medium mb-2">"Wieczorne Szepty"</p>
-                            <p className="text-xs opacity-80">Kliknij, aby przeczytać</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="grid lg:grid-cols-5 gap-12 items-center">
+              {/* Left Side - Smartphone Image */}
+              <div className="relative flex justify-center items-center h-[550px] lg:col-span-3">
+                <img 
+                  src="/phone.png" 
+                  alt="Smartphone showing Wieczorny Szept notification" 
+                  className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                  style={{
+                    filter: 'drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))'
+                  }}
+                />
               </div>
 
               {/* Right Side - Polish Copy */}
-              <div className="space-y-6">
-                <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-                  Codzienny SMS którego nie będziesz mogła się doczekać
+              <div className="h-[550px] overflow-hidden flex flex-col justify-center lg:col-span-2">
+                <div className="space-y-4 max-h-full">
+                <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
+                  Codzienna wiadomość, której nie możesz się doczekać
                 </h2>
-                <p className="text-xl text-blue-200 leading-relaxed">
-                  Otrzymuj piękne wiersze prosto na swój telefon każdego dnia. Każdy SMS to nowa historia, nowe emocje i nowa perspektywa na życie. Dołącz do tysięcy miłośników poezji, którzy rozpoczynają każdy dzień od słów, które poruszają duszę.
+                <p className="text-lg text-blue-200 leading-relaxed">
+                  Otrzymuj piękne wiersze prosto na swój telefon każdego dnia. Każdy SMS to nowa historia, nowe emocje i nowa perspektywa na życie. Dołącz do tysięcy miłośników poezji, którzy rozpoczynają każdy dzień od słów, które poruszają duszę. 
                 </p>
                 <div className="flex items-center space-x-4">
-                  <a href="/signup" className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105">
+                  <button onClick={handleStartJourneyWithScroll} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer">
                     Rozpocznij Darmowy Trial
-                  </a>
+                  </button>
                   <div className="text-white text-sm">
                     <p className="font-medium">✓ Darmowy przez 7 dni</p>
                     <p className="text-blue-200">✓ Anuluj w każdej chwili</p>
                   </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -316,9 +308,9 @@ export default function Home() {
               <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
                 Join thousands of poetry enthusiasts who have discovered the transformative power of carefully curated lyrical expressions.
               </p>
-              <a href="/signup" className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-colors inline-block">
+              <button onClick={handleStartJourneyWithScroll} className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg inline-block transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer relative z-10">
                 Start Your Free Trial &gt;
-              </a>
+              </button>
             </div>
           </div>
         </div>
