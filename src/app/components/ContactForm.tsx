@@ -88,7 +88,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-xl p-8 backdrop-blur-sm">
+    <div className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm">
       <div className="mb-8">
         <h3 className="text-2xl font-bold text-white mb-2">
           Zacznij otrzymywać wiadomości!
@@ -107,7 +107,7 @@ export default function ContactForm() {
             value={formData.imie}
             onChange={handleChange}
             required
-            className="w-full px-6 py-4 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+            className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
             placeholder="Wpisz swoje imię"
           />
         </div>
@@ -123,33 +123,40 @@ export default function ContactForm() {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full px-6 py-4 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+            className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
             placeholder="np. jan.kowalski@email.com"
           />
         </div>
 
         <div className="grid grid-cols-[auto_1fr] gap-2">
-          <div>
+          <div className="h-full">
             <label htmlFor="countryCode" className="block text-white font-medium mb-2 text-sm">
               Kod kraju *
             </label>
-            <select
-              id="countryCode"
-              name="countryCode"
-              value={formData.countryCode}
-              onChange={handleChange}
-              className="w-32 px-4 py-4 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm text-sm"
-            >
-              <option value="+48" className="bg-gray-800 text-white">+48 Polska</option>
-              <option value="+44" className="bg-gray-800 text-white">+44 Wielka Brytania</option>
-              <option value="+1" className="bg-gray-800 text-white">+1 Stany Zjednoczone</option>
-              <option value="+34" className="bg-gray-800 text-white">+34 Hiszpania</option>
-              <option value="+52" className="bg-gray-800 text-white">+52 Meksyk</option>
-              <option value="+56" className="bg-gray-800 text-white">+56 Chile</option>
-              <option value="+39" className="bg-gray-800 text-white">+39 Włochy</option>
-            </select>
+            <div className="relative">
+              <select
+                id="countryCode"
+                name="countryCode"
+                value={formData.countryCode}
+                onChange={handleChange}
+                className="w-32 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm appearance-none pr-10"
+              >
+                <option value="+48" className="bg-gray-800 text-white">+48 Polska</option>
+                <option value="+44" className="bg-gray-800 text-white">+44 Wielka Brytania</option>
+                <option value="+1" className="bg-gray-800 text-white">+1 Stany Zjednoczone</option>
+                <option value="+34" className="bg-gray-800 text-white">+34 Hiszpania</option>
+                <option value="+52" className="bg-gray-800 text-white">+52 Meksyk</option>
+                <option value="+56" className="bg-gray-800 text-white">+56 Chile</option>
+                <option value="+39" className="bg-gray-800 text-white">+39 Włochy</option>
+              </select>
+              <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
-          <div>
+          <div className="h-full">
             <label htmlFor="numerTelefonu" className="block text-white font-medium mb-2 text-sm">
               Numer telefonu *
             </label>
@@ -160,7 +167,7 @@ export default function ContactForm() {
               value={formData.numerTelefonu}
               onChange={handleChange}
               required
-              className="px-6 py-4 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+              className="h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
               placeholder="np. 123 456 789"
             />
           </div>
@@ -170,19 +177,26 @@ export default function ContactForm() {
           <label htmlFor="jezykWiadomosci" className="block text-white font-medium mb-2 text-sm">
             Język wiadomości *
           </label>
-          <select
-            id="jezykWiadomosci"
-            name="jezykWiadomosci"
-            value={formData.jezykWiadomosci}
-            onChange={handleChange}
-            required
-            className="w-full px-6 py-4 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+          <div className="relative">
+            <select
+              id="jezykWiadomosci"
+              name="jezykWiadomosci"
+              value={formData.jezykWiadomosci}
+              onChange={handleChange}
+              required
+              className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm appearance-none pr-10"
           >
-            <option value="Polski" className="bg-gray-800 text-white">Polski</option>
-            <option value="Angielski" className="bg-gray-800 text-white">Angielski</option>
-            <option value="Hiszpański" className="bg-gray-800 text-white">Hiszpański</option>
-            <option value="Włoski" className="bg-gray-800 text-white">Włoski</option>
-          </select>
+              <option value="Polski" className="bg-gray-800 text-white">Polski</option>
+              <option value="Angielski" className="bg-gray-800 text-white">Angielski</option>
+              <option value="Hiszpański" className="bg-gray-800 text-white">Hiszpański</option>
+              <option value="Włoski" className="bg-gray-800 text-white">Włoski</option>
+            </select>
+            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
 
               {/* Divider */}
