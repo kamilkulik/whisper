@@ -150,19 +150,23 @@ export default function Home() {
               {/* Left Side - Content */}
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
-                    Discover the world's most{' '}
-                    <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">beautiful</span>{' '}
-                    lyrical expressions.
+                  <h1 className="text-5xl lg:text-4xl font-bold text-white leading-tight">
+                  Otrzymuj codzienny szept, który{' '}
+                    <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">ogrzeje</span>{' '}
+                    Twoje serce — prosto na Twój telefon.
                   </h1>
                 </div>
                 
                 <p className="text-xl text-white leading-relaxed">
-                  Immerse yourself in carefully curated poems and lyrical messages delivered to your inbox. Experience the power of words that touch your soul, inspire your mind, and awaken your emotions.
+                  Krótka wiadomość, pełna ciepła i magii słów. Każdego wieczoru, o tej samej porze.
+                  <br />
+                  Darmowy dostęp przez 7 dni.
+                  <br />
+                  Możesz anulować w każdej chwili.
                 </p>
                 
                 <button onClick={handleStartJourney} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
-                  Start Your Journey &gt;
+                  Wyślij mi pierwszy szept &gt;
                 </button>
                 
                 <div className="flex items-center space-x-4 pt-8">

@@ -2,6 +2,30 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useLocale } from '../contexts/LocaleContext';
+import { z } from 'zod';
+import DOMPurify from 'dompurify';
+
+// Validation schema
+const formSchema = z.object({
+  imie: z.string()
+    .min(2, 'Imię musi mieć co najmniej 2 znaki')
+    .max(50, 'Imię nie może być dłuższe niż 50 znaków')
+    .regex(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]+$/, 'Imię może zawierać tylko litery, spacje, myślniki i apostrofy'),
+  email: z.string()
+    .min(1, 'Email jest wymagany')
+    .max(254, 'Email jest za długi')
+    .email('Nieprawidłowy format email'),
+  numerTelefonu: z.string()
+    .min(6, 'Numer telefonu musi mieć co najmniej 6 cyfr')
+    .max(15, 'Numer telefonu nie może być dłuższy niż 15 cyfr')
+    .regex(/^[0-9\s\-\(\)\+]+$/, 'Numer telefonu może zawierać tylko cyfry, spacje, myślniki, nawiasy i znak plus')
+});
+
+type ValidationErrors = {
+  imie?: string;
+  email?: string;
+  numerTelefonu?: string;
+};
 
 export default function ContactForm() {
   const { language, countryCode, isLoaded } = useLocale();
@@ -16,6 +40,7 @@ export default function ContactForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
@@ -82,6 +107,53 @@ export default function ContactForm() {
     setIsLanguageDropdownOpen(false);
   };
 
+  // Sanitize input function
+  const sanitizeInput = (input: string): string => {
+    return DOMPurify.sanitize(input.trim());
+  };
+
+  // Validate single field
+  const validateField = (fieldName: keyof ValidationErrors, value: string): string | undefined => {
+    try {
+      const fieldSchema = formSchema.shape[fieldName];
+      fieldSchema.parse(value);
+      return undefined; // No error
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return error.issues[0]?.message;
+      }
+      return 'Błąd walidacji';
+    }
+  };
+
+  // Handle input blur with validation and sanitization
+  const handleInputBlur = (fieldName: keyof ValidationErrors, value: string) => {
+    const sanitizedValue = sanitizeInput(value);
+    const error = validateField(fieldName, sanitizedValue);
+    
+    // Update form data with sanitized value
+    setFormData(prev => ({
+      ...prev,
+      [fieldName]: sanitizedValue
+    }));
+
+    // Update validation errors
+    setValidationErrors(prev => ({
+      ...prev,
+      [fieldName]: error
+    }));
+  };
+
+  // Clear validation error when user starts typing
+  const clearValidationError = (fieldName: keyof ValidationErrors) => {
+    if (validationErrors[fieldName]) {
+      setValidationErrors(prev => ({
+        ...prev,
+        [fieldName]: undefined
+      }));
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -101,6 +173,34 @@ export default function ContactForm() {
       setMessage('Musisz zaakceptować regulamin usługi, aby kontynuować.');
       return;
     }
+
+    // Validate all input fields
+    const sanitizedData = {
+      imie: sanitizeInput(formData.imie),
+      email: sanitizeInput(formData.email.toLowerCase()),
+      numerTelefonu: sanitizeInput(formData.numerTelefonu)
+    };
+
+    const errors: ValidationErrors = {};
+    Object.entries(sanitizedData).forEach(([key, value]) => {
+      const error = validateField(key as keyof ValidationErrors, value);
+      if (error) {
+        errors[key as keyof ValidationErrors] = error;
+      }
+    });
+
+    // If there are validation errors, show them and don't submit
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      setMessage('Proszę poprawić błędy w formularzu.');
+      return;
+    }
+
+    // Update form data with sanitized values
+    setFormData(prev => ({
+      ...prev,
+      ...sanitizedData
+    }));
 
     setIsSubmitting(true);
 
@@ -159,11 +259,22 @@ export default function ContactForm() {
             id="imie"
             name="imie"
             value={formData.imie}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              clearValidationError('imie');
+            }}
+            onBlur={(e) => handleInputBlur('imie', e.target.value)}
             required
-            className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+              validationErrors.imie 
+                ? 'focus:ring-red-500/50 ring-2 ring-red-500/30' 
+                : 'focus:ring-white/30'
+            }`}
             placeholder="Wpisz swoje imię"
           />
+          {validationErrors.imie && (
+            <p className="mt-1 text-sm text-red-300">{validationErrors.imie}</p>
+          )}
         </div>
 
         <div>
@@ -175,11 +286,22 @@ export default function ContactForm() {
             id="email"
             name="email"
             value={formData.email}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              clearValidationError('email');
+            }}
+            onBlur={(e) => handleInputBlur('email', e.target.value)}
             required
-            className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+              validationErrors.email 
+                ? 'focus:ring-red-500/50 ring-2 ring-red-500/30' 
+                : 'focus:ring-white/30'
+            }`}
             placeholder="np. jan.kowalski@email.com"
           />
+          {validationErrors.email && (
+            <p className="mt-1 text-sm text-red-300">{validationErrors.email}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-[80px_1fr] gap-2">
@@ -227,13 +349,24 @@ export default function ContactForm() {
               id="numerTelefonu"
               name="numerTelefonu"
               value={formData.numerTelefonu}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                clearValidationError('numerTelefonu');
+              }}
+              onBlur={(e) => handleInputBlur('numerTelefonu', e.target.value)}
               required
-              className="h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm"
+              className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+                validationErrors.numerTelefonu 
+                  ? 'focus:ring-red-500/50 ring-2 ring-red-500/30' 
+                  : 'focus:ring-white/30'
+              }`}
               placeholder="np. 123 456 789"
             />
           </div>
         </div>
+        {validationErrors.numerTelefonu && (
+          <p className="mt-1 text-sm text-red-300">{validationErrors.numerTelefonu}</p>
+        )}
 
         <div>
           <label htmlFor="jezykWiadomosci" className="block text-white font-medium mb-2 text-sm">
