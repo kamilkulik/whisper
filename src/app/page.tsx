@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import ContactForm from './components/ContactForm';
+import TestimonialsCarousel from './components/TestimonialsCarousel';
+import ImageCarousel from './components/ImageCarousel';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isFormShaking, setIsFormShaking] = useState(false);
 
   useEffect(() => {
@@ -47,36 +48,15 @@ export default function Home() {
     }
   ];
 
-  const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-  };
+  // Image carousel data
+  const carouselImages = [
+    { src: '/szept_1.png', alt: 'Wieczorny Szept Image 1' },
+    { src: '/szept_2.png', alt: 'Wieczorny Szept Image 2' },
+    { src: '/szept_3.png', alt: 'Wieczorny Szept Image 3' }
+  ];
 
-  const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
 
-  const goToTestimonial = (index: number) => {
-    setCurrentTestimonial(index);
-  };
 
-  const handleStartJourney = () => {
-    console.log('Start Journey clicked!'); // Debug log
-    
-    // Focus the first input field in the contact form
-    const firstInput = document.querySelector('#imie') as HTMLInputElement;
-    if (firstInput) {
-      firstInput.focus();
-      console.log('Input focused'); // Debug log
-    }
-    
-    // Trigger shake animation
-    console.log('Setting shake to true'); // Debug log
-    setIsFormShaking(true);
-    setTimeout(() => {
-      console.log('Setting shake to false'); // Debug log
-      setIsFormShaking(false);
-    }, 600); // Animation duration
-  };
 
   const handleStartJourneyWithScroll = () => {
     console.log('Start Journey with scroll clicked!'); // Debug log
@@ -127,7 +107,7 @@ export default function Home() {
           
           <div className="flex items-center space-x-6">
             <a href="#" className="text-white hover:text-blue-200 transition-colors">Log in</a>
-            <button onClick={handleStartJourney} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors inline-block cursor-pointer">
+            <button onClick={handleStartJourneyWithScroll} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors inline-block cursor-pointer">
               Subscribe Now
             </button>
           </div>
@@ -146,9 +126,9 @@ export default function Home() {
           </div>
           
           <div className="relative max-w-7xl mx-auto px-6 py-12 pt-32">
-            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
+            <div className="grid lg:grid-cols-5 gap-12 items-center min-h-[80vh]">
               {/* Left Side - Content */}
-              <div className="space-y-8">
+              <div className="lg:col-span-2 space-y-8">
                 <div>
                   <h1 className="text-5xl lg:text-4xl font-bold text-white leading-tight">
                   Otrzymuj codzienny szept, który{' '}
@@ -165,7 +145,7 @@ export default function Home() {
                   Możesz anulować w każdej chwili.
                 </p>
                 
-                <button onClick={handleStartJourney} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
+                <button onClick={handleStartJourneyWithScroll} className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
                   Wyślij mi pierwszy szept &gt;
                 </button>
                 
@@ -182,9 +162,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Right Side - Contact Form */}
-              <div id="contact-form-container" className={`relative -mt-12 ${isFormShaking ? 'shake-form' : ''}`}>
-                <ContactForm />
+              {/* Right Side - Image Carousel */}
+              <div className="lg:col-span-3 relative">
+                <ImageCarousel images={carouselImages} />
               </div>
             </div>
           </div>
@@ -197,7 +177,7 @@ export default function Home() {
               {/* Left Side - Smartphone Image */}
               <div className="relative flex justify-center items-center h-[550px] lg:col-span-3">
                 <img 
-                  src="/phone.png" 
+                  src="/szept_4.png" 
                   alt="Smartphone showing Wieczorny Szept notification" 
                   className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                   style={{
@@ -231,90 +211,17 @@ export default function Home() {
         </div>
 
         {/* Testimonials Section */}
-        <div className="relative py-32">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="relative group">
-              {/* Floating Navigation Arrows */}
-              <button 
-                onClick={prevTestimonial}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30 z-10"
-              >
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </button>
-              
-              <button 
-                onClick={nextTestimonial}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30 z-10"
-              >
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                </svg>
-              </button>
-
-              {/* Testimonial Content with Slide Transition */}
-              <div className="overflow-hidden">
-                <div 
-                  className="flex transition-transform duration-1500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-                  style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
-                >
-                  {testimonials.map((testimonial, index) => (
-                    <div key={index} className="w-full flex-shrink-0 text-center text-white">
-                      {/* Star Rating */}
-                      <div className="flex justify-center mb-6">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-8 h-8 text-yellow-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-                      </div>
-
-                      {/* Testimonial Quote */}
-                      <div className="relative mb-8">
-                        <div className="text-2xl leading-relaxed italic font-serif">
-                          "{testimonial.quote}"
-                        </div>
-                      </div>
-
-                      {/* Customer Attribution */}
-                      <div className="mb-8">
-                        <p className="text-white/80 font-medium">- {testimonial.author}, {testimonial.status}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Pagination Dots */}
-              <div className="flex justify-center space-x-3 mt-8">
-                {testimonials.map((_, i) => (
-                  <button 
-                    key={i} 
-                    className={`w-3 h-3 rounded-full transition-all duration-300 hover:bg-white ${
-                      i === currentTestimonial ? 'bg-white' : 'bg-white/30'
-                    }`}
-                    onClick={() => goToTestimonial(i)}
-                  ></button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        <TestimonialsCarousel testimonials={testimonials} />
       </div>
       </div>
-      {/* CTA Section */}
-      <div className="bg-[#2A031E] text-white relative overflow-hidden">
-        <div className="relative py-16">
+      {/* Contact Form Section */}
+      <div className="bg-[#2A031E] text-white relative overflow-hidden z-50">
+        <div className="relative py-16 z-50">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center text-white">
-              <h2 className="text-4xl font-bold mb-6">Ready to Begin Your Journey?</h2>
-              <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
-                Join thousands of poetry enthusiasts who have discovered the transformative power of carefully curated lyrical expressions.
-              </p>
-              <button onClick={handleStartJourneyWithScroll} className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg inline-block transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer relative z-10">
-                Start Your Free Trial &gt;
-              </button>
+            <div className="flex justify-center">
+              <div id="contact-form-container" className={`relative z-50 ${isFormShaking ? 'shake-form' : ''}`}>
+                <ContactForm />
+              </div>
             </div>
           </div>
         </div>

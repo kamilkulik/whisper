@@ -242,7 +242,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm">
+    <div className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
       <div className="mb-8">
         <h3 className="text-2xl font-bold text-white mb-2">
           Zacznij otrzymywać wiadomości!
