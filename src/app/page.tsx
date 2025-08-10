@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import ContactForm from './components/ContactForm';
 import TestimonialsCarousel from './components/TestimonialsCarousel';
 import ImageCarousel from './components/ImageCarousel';
+import HowItWorks from './components/HowItWorks';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -169,6 +170,9 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* How It Works Section */}
+        <HowItWorks onGetStarted={handleStartJourneyWithScroll} />
 
         {/* Smartphone Notification Section */}
         <div className="relative min-h-[80vh] flex items-center">
