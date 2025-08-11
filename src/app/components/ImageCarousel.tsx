@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface ImageSlide {
   src: string;
@@ -30,7 +30,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
 
   const handleManualNavigation = (navigationFn: () => void) => {
     navigationFn();
-    setResetTimer(prev => prev + 1); // Trigger timer reset
+    setResetTimer((prev) => prev + 1); // Trigger timer reset
   };
 
   // Auto-advance carousel every 5 seconds
@@ -43,31 +43,50 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   }, [images.length, resetTimer]);
 
   return (
-    <div className="relative h-full flex items-center justify-center">
+    <div className="relative h-full flex items-center justify-center" style={{
+      filter:
+        "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+    }}>
       <div className="relative w-full max-w-2xl">
         <div className="relative group">
           {/* Floating Navigation Arrows */}
-          <button 
+          <button
             onClick={() => handleManualNavigation(prevImage)}
             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30 z-10"
           >
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+            <svg
+              className="w-6 h-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </button>
-          
-          <button 
+
+          <button
             onClick={() => handleManualNavigation(nextImage)}
             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30 z-10"
           >
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+            <svg
+              className="w-6 h-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </button>
 
           {/* Image Content with Slide Transition */}
           <div className="overflow-hidden rounded-2xl shadow-2xl h-[600px]">
-            <div 
+            <div
               className="flex items-start h-full transition-transform duration-1500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
               style={{ transform: `translateX(-${currentImage * 100}%)` }}
             >
@@ -89,10 +108,10 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           {/* Pagination Dots */}
           <div className="flex justify-center space-x-3 mt-6">
             {images.map((_, i) => (
-              <button 
-                key={i} 
+              <button
+                key={i}
                 className={`w-3 h-3 rounded-full transition-all duration-300 hover:bg-white ${
-                  i === currentImage ? 'bg-white' : 'bg-white/30'
+                  i === currentImage ? "bg-white" : "bg-white/30"
                 }`}
                 onClick={() => handleManualNavigation(() => goToImage(i))}
               ></button>

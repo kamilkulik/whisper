@@ -1,24 +1,33 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { useLocale } from '../contexts/LocaleContext';
-import { z } from 'zod';
-import DOMPurify from 'dompurify';
+import { useState, useEffect, useRef } from "react";
+import { useLocale } from "../contexts/LocaleContext";
+import { z } from "zod";
+import DOMPurify from "dompurify";
 
 // Validation schema
 const formSchema = z.object({
-  imie: z.string()
-    .min(2, 'Imię musi mieć co najmniej 2 znaki')
-    .max(50, 'Imię nie może być dłuższe niż 50 znaków')
-    .regex(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]+$/, 'Imię może zawierać tylko litery, spacje, myślniki i apostrofy'),
-  email: z.string()
-    .min(1, 'Email jest wymagany')
-    .max(254, 'Email jest za długi')
-    .email('Nieprawidłowy format email'),
-  numerTelefonu: z.string()
-    .min(6, 'Numer telefonu musi mieć co najmniej 6 cyfr')
-    .max(15, 'Numer telefonu nie może być dłuższy niż 15 cyfr')
-    .regex(/^[0-9\s\-\(\)\+]+$/, 'Numer telefonu może zawierać tylko cyfry, spacje, myślniki, nawiasy i znak plus')
+  imie: z
+    .string()
+    .min(2, "Imię musi mieć co najmniej 2 znaki")
+    .max(50, "Imię nie może być dłuższe niż 50 znaków")
+    .regex(
+      /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]+$/,
+      "Imię może zawierać tylko litery, spacje, myślniki i apostrofy",
+    ),
+  email: z
+    .string()
+    .min(1, "Email jest wymagany")
+    .max(254, "Email jest za długi")
+    .email("Nieprawidłowy format email"),
+  numerTelefonu: z
+    .string()
+    .min(6, "Numer telefonu musi mieć co najmniej 6 cyfr")
+    .max(15, "Numer telefonu nie może być dłuższy niż 15 cyfr")
+    .regex(
+      /^[0-9\s\-\(\)\+]+$/,
+      "Numer telefonu może zawierać tylko cyfry, spacje, myślniki, nawiasy i znak plus",
+    ),
 });
 
 type ValidationErrors = {
@@ -31,45 +40,47 @@ export default function ContactForm() {
   const { language, countryCode, isLoaded } = useLocale();
 
   const [formData, setFormData] = useState({
-    numerTelefonu: '',
-    email: '',
-    imie: '',
-    countryCode: '+48', // Default fallback
-    jezykWiadomosci: 'Polski', // Default fallback
-    acceptTerms: false
+    numerTelefonu: "",
+    email: "",
+    imie: "",
+    countryCode: "+48", // Default fallback
+    jezykWiadomosci: "Polski", // Default fallback
+    acceptTerms: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState('');
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [message, setMessage] = useState("");
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
+    {},
+  );
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const languageDropdownRef = useRef<HTMLDivElement>(null);
 
   const countryOptions = [
-    { code: '+48', name: 'Polska' },
-    { code: '+44', name: 'Wielka Brytania' },
-    { code: '+1', name: 'Stany Zjednoczone' },
-    { code: '+34', name: 'Hiszpania' },
-    { code: '+52', name: 'Meksyk' },
-    { code: '+56', name: 'Chile' },
-    { code: '+39', name: 'Włochy' }
+    { code: "+48", name: "Polska" },
+    { code: "+44", name: "Wielka Brytania" },
+    { code: "+1", name: "Stany Zjednoczone" },
+    { code: "+34", name: "Hiszpania" },
+    { code: "+52", name: "Meksyk" },
+    { code: "+56", name: "Chile" },
+    { code: "+39", name: "Włochy" },
   ];
 
   const languageOptions = [
-    { code: 'Polski', name: 'Polski' },
-    { code: 'Angielski', name: 'English' },
-    { code: 'Hiszpański', name: 'Español' },
-    { code: 'Włoski', name: 'Italiano' }
+    { code: "Polski", name: "Polski" },
+    { code: "Angielski", name: "English" },
+    { code: "Hiszpański", name: "Español" },
+    { code: "Włoski", name: "Italiano" },
   ];
 
   // Update form data when locale context is loaded
   useEffect(() => {
     if (isLoaded) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         countryCode: countryCode,
-        jezykWiadomosci: language
+        jezykWiadomosci: language,
       }));
     }
   }, [isLoaded, countryCode, language]);
@@ -77,32 +88,38 @@ export default function ContactForm() {
   // Handle clicking outside the dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+      if (
+        countryDropdownRef.current &&
+        !countryDropdownRef.current.contains(event.target as Node)
+      ) {
         setIsCountryDropdownOpen(false);
       }
-      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+      if (
+        languageDropdownRef.current &&
+        !languageDropdownRef.current.contains(event.target as Node)
+      ) {
         setIsLanguageDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   const handleCountrySelect = (countryCode: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      countryCode
+      countryCode,
     }));
     setIsCountryDropdownOpen(false);
   };
 
   const handleLanguageSelect = (language: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      jezykWiadomosci: language
+      jezykWiadomosci: language,
     }));
     setIsLanguageDropdownOpen(false);
   };
@@ -113,7 +130,10 @@ export default function ContactForm() {
   };
 
   // Validate single field
-  const validateField = (fieldName: keyof ValidationErrors, value: string): string | undefined => {
+  const validateField = (
+    fieldName: keyof ValidationErrors,
+    value: string,
+  ): string | undefined => {
     try {
       const fieldSchema = formSchema.shape[fieldName];
       fieldSchema.parse(value);
@@ -122,55 +142,60 @@ export default function ContactForm() {
       if (error instanceof z.ZodError) {
         return error.issues[0]?.message;
       }
-      return 'Błąd walidacji';
+      return "Błąd walidacji";
     }
   };
 
   // Handle input blur with validation and sanitization
-  const handleInputBlur = (fieldName: keyof ValidationErrors, value: string) => {
+  const handleInputBlur = (
+    fieldName: keyof ValidationErrors,
+    value: string,
+  ) => {
     const sanitizedValue = sanitizeInput(value);
     const error = validateField(fieldName, sanitizedValue);
-    
+
     // Update form data with sanitized value
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [fieldName]: sanitizedValue
+      [fieldName]: sanitizedValue,
     }));
 
     // Update validation errors
-    setValidationErrors(prev => ({
+    setValidationErrors((prev) => ({
       ...prev,
-      [fieldName]: error
+      [fieldName]: error,
     }));
   };
 
   // Clear validation error when user starts typing
   const clearValidationError = (fieldName: keyof ValidationErrors) => {
     if (validationErrors[fieldName]) {
-      setValidationErrors(prev => ({
+      setValidationErrors((prev) => ({
         ...prev,
-        [fieldName]: undefined
+        [fieldName]: undefined,
       }));
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
-    
-    setFormData(prev => ({
+
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
     // Validate terms and conditions acceptance
     if (!formData.acceptTerms) {
-      setMessage('Musisz zaakceptować regulamin usługi, aby kontynuować.');
+      setMessage("Musisz zaakceptować regulamin usługi, aby kontynuować.");
       return;
     }
 
@@ -178,7 +203,7 @@ export default function ContactForm() {
     const sanitizedData = {
       imie: sanitizeInput(formData.imie),
       email: sanitizeInput(formData.email.toLowerCase()),
-      numerTelefonu: sanitizeInput(formData.numerTelefonu)
+      numerTelefonu: sanitizeInput(formData.numerTelefonu),
     };
 
     const errors: ValidationErrors = {};
@@ -192,24 +217,24 @@ export default function ContactForm() {
     // If there are validation errors, show them and don't submit
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      setMessage('Proszę poprawić błędy w formularzu.');
+      setMessage("Proszę poprawić błędy w formularzu.");
       return;
     }
 
     // Update form data with sanitized values
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      ...sanitizedData
+      ...sanitizedData,
     }));
 
     setIsSubmitting(true);
 
     try {
       // First, save the contact information
-      const response = await fetch('/api/users', {
-        method: 'POST',
+      const response = await fetch("/api/users", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -217,41 +242,54 @@ export default function ContactForm() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Informacje zapisane! Przekierowywanie do kasy...');
-        
+        setMessage("Informacje zapisane! Przekierowywanie do kasy...");
+
         // Clear the form
-        setFormData({ numerTelefonu: '', email: '', imie: '', countryCode: countryCode, jezykWiadomosci: language, acceptTerms: false });
-        
+        setFormData({
+          numerTelefonu: "",
+          email: "",
+          imie: "",
+          countryCode: countryCode,
+          jezykWiadomosci: language,
+          acceptTerms: false,
+        });
+
         // Redirect to Stripe checkout after a short delay
         setTimeout(() => {
-          const form = document.createElement('form');
-          form.method = 'POST';
-          form.action = '/api/checkout_sessions';
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/api/checkout_sessions";
           document.body.appendChild(form);
           form.submit();
         }, 1500);
-        
       } else {
-        setMessage(data.error || 'Wystąpił błąd podczas wysyłania wiadomości.');
+        setMessage(data.error || "Wystąpił błąd podczas wysyłania wiadomości.");
       }
     } catch (error) {
-      setMessage('Wystąpił błąd podczas wysyłania wiadomości.');
+      setMessage("Wystąpił błąd podczas wysyłania wiadomości.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
-      <div className="mb-8">
-        <h3 className="text-2xl font-bold text-white mb-2">
+    <div
+      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
+      data-oid="tb00.87"
+    >
+      <div className="mb-8" data-oid="fv3gut-">
+        <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
           Zacznij otrzymywać wiadomości!
         </h3>
       </div>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="imie" className="block text-white font-medium mb-2 text-sm">
+
+      <form onSubmit={handleSubmit} className="space-y-4" data-oid="d937n0b">
+        <div data-oid="1x7_v4l">
+          <label
+            htmlFor="imie"
+            className="block text-white font-medium mb-2 text-sm"
+            data-oid="er2p-26"
+          >
             Imię *
           </label>
           <input
@@ -261,24 +299,32 @@ export default function ContactForm() {
             value={formData.imie}
             onChange={(e) => {
               handleChange(e);
-              clearValidationError('imie');
+              clearValidationError("imie");
             }}
-            onBlur={(e) => handleInputBlur('imie', e.target.value)}
+            onBlur={(e) => handleInputBlur("imie", e.target.value)}
             required
             className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
-              validationErrors.imie 
-                ? 'focus:ring-red-500/50 ring-2 ring-red-500/30' 
-                : 'focus:ring-white/30'
+              validationErrors.imie
+                ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                : "focus:ring-white/30"
             }`}
             placeholder="Wpisz swoje imię"
+            data-oid="6qn7m1j"
           />
+
           {validationErrors.imie && (
-            <p className="mt-1 text-sm text-red-300">{validationErrors.imie}</p>
+            <p className="mt-1 text-sm text-red-300" data-oid="669b2e6">
+              {validationErrors.imie}
+            </p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="email" className="block text-white font-medium mb-2 text-sm">
+        <div data-oid="u4p0sqc">
+          <label
+            htmlFor="email"
+            className="block text-white font-medium mb-2 text-sm"
+            data-oid="cvsh.:4"
+          >
             Adres email *
           </label>
           <input
@@ -288,50 +334,84 @@ export default function ContactForm() {
             value={formData.email}
             onChange={(e) => {
               handleChange(e);
-              clearValidationError('email');
+              clearValidationError("email");
             }}
-            onBlur={(e) => handleInputBlur('email', e.target.value)}
+            onBlur={(e) => handleInputBlur("email", e.target.value)}
             required
             className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
-              validationErrors.email 
-                ? 'focus:ring-red-500/50 ring-2 ring-red-500/30' 
-                : 'focus:ring-white/30'
+              validationErrors.email
+                ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                : "focus:ring-white/30"
             }`}
             placeholder="np. jan.kowalski@email.com"
+            data-oid="253.e9u"
           />
+
           {validationErrors.email && (
-            <p className="mt-1 text-sm text-red-300">{validationErrors.email}</p>
+            <p className="mt-1 text-sm text-red-300" data-oid="k51k.9b">
+              {validationErrors.email}
+            </p>
           )}
         </div>
 
-        <div className="grid grid-cols-[80px_1fr] gap-2">
-          <div className="h-full">
-            <label htmlFor="countryCode" className="block text-white font-medium mb-2 text-sm">
+        <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
+          <div className="h-full" data-oid="xbk7dq-">
+            <label
+              htmlFor="countryCode"
+              className="block text-white font-medium mb-2 text-sm"
+              data-oid="lotbw.t"
+            >
               Kod kraju *
             </label>
-            <div className="relative" ref={countryDropdownRef}>
+            <div
+              className="relative"
+              ref={countryDropdownRef}
+              data-oid="5z3y56l"
+            >
               <button
                 type="button"
                 onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
                 className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
+                data-oid="c7tii0."
               >
                 {formData.countryCode}
               </button>
-              <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                <svg className={`w-4 h-4 text-white transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <div
+                className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
+                data-oid="f6znpna"
+              >
+                <svg
+                  className={`w-4 h-4 text-white transition-transform ${isCountryDropdownOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  data-oid="y1g8mzi"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                    data-oid="ie97yww"
+                  />
                 </svg>
               </div>
               {isCountryDropdownOpen && (
-                <div className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60">
+                <div
+                  className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
+                  data-oid="u76tc5h"
+                >
                   {countryOptions.map((option) => (
                     <button
                       key={option.code}
                       type="button"
                       onClick={() => handleCountrySelect(option.code)}
                       className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
-                        formData.countryCode === option.code ? 'bg-gray-700' : ''
+                        formData.countryCode === option.code
+                          ? "bg-gray-700"
+                          : ""
                       }`}
+                      data-oid="jp414j."
                     >
                       {option.code} {option.name}
                     </button>
@@ -340,8 +420,12 @@ export default function ContactForm() {
               )}
             </div>
           </div>
-          <div className="h-full">
-            <label htmlFor="numerTelefonu" className="block text-white font-medium mb-2 text-sm">
+          <div className="h-full" data-oid="go9nv0c">
+            <label
+              htmlFor="numerTelefonu"
+              className="block text-white font-medium mb-2 text-sm"
+              data-oid="jits35v"
+            >
               Numer telefonu *
             </label>
             <input
@@ -351,50 +435,83 @@ export default function ContactForm() {
               value={formData.numerTelefonu}
               onChange={(e) => {
                 handleChange(e);
-                clearValidationError('numerTelefonu');
+                clearValidationError("numerTelefonu");
               }}
-              onBlur={(e) => handleInputBlur('numerTelefonu', e.target.value)}
+              onBlur={(e) => handleInputBlur("numerTelefonu", e.target.value)}
               required
               className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
-                validationErrors.numerTelefonu 
-                  ? 'focus:ring-red-500/50 ring-2 ring-red-500/30' 
-                  : 'focus:ring-white/30'
+                validationErrors.numerTelefonu
+                  ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                  : "focus:ring-white/30"
               }`}
               placeholder="np. 123 456 789"
+              data-oid="6a6jkxb"
             />
           </div>
         </div>
         {validationErrors.numerTelefonu && (
-          <p className="mt-1 text-sm text-red-300">{validationErrors.numerTelefonu}</p>
+          <p className="mt-1 text-sm text-red-300" data-oid="880w9:6">
+            {validationErrors.numerTelefonu}
+          </p>
         )}
 
-        <div>
-          <label htmlFor="jezykWiadomosci" className="block text-white font-medium mb-2 text-sm">
+        <div data-oid="isekqo7">
+          <label
+            htmlFor="jezykWiadomosci"
+            className="block text-white font-medium mb-2 text-sm"
+            data-oid="2ox.qfi"
+          >
             Język wiadomości *
           </label>
-          <div className="relative" ref={languageDropdownRef}>
+          <div
+            className="relative"
+            ref={languageDropdownRef}
+            data-oid="h.ueg:n"
+          >
             <button
               type="button"
               onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
               className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-10 text-left"
+              data-oid="c3lmv88"
             >
               {formData.jezykWiadomosci}
             </button>
-            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-              <svg className={`w-4 h-4 text-white transition-transform ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <div
+              className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
+              data-oid="inff.oj"
+            >
+              <svg
+                className={`w-4 h-4 text-white transition-transform ${isLanguageDropdownOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                data-oid="a.h8uxr"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                  data-oid="ql5uhso"
+                />
               </svg>
             </div>
             {isLanguageDropdownOpen && (
-              <div className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-full">
+              <div
+                className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-full"
+                data-oid="80si7nt"
+              >
                 {languageOptions.map((option) => (
                   <button
                     key={option.code}
                     type="button"
                     onClick={() => handleLanguageSelect(option.code)}
                     className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
-                      formData.jezykWiadomosci === option.code ? 'bg-gray-700' : ''
+                      formData.jezykWiadomosci === option.code
+                        ? "bg-gray-700"
+                        : ""
                     }`}
+                    data-oid=":i4l0zm"
                   >
                     {option.name}
                   </button>
@@ -404,19 +521,28 @@ export default function ContactForm() {
           </div>
         </div>
 
-              {/* Divider */}
-        <div className="my-6 flex items-center">
-          <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+        {/* Divider */}
+        <div className="my-6 flex items-center" data-oid=".8bq7bo">
+          <div
+            className="flex-1 border-t border-gray-300 dark:border-gray-600"
+            data-oid="-w4krbe"
+          ></div>
           {/* <span className="px-3 text-sm text-gray-500 dark:text-gray-400">lub</span> */}
-          <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+          <div
+            className="flex-1 border-t border-gray-300 dark:border-gray-600"
+            data-oid="121n8te"
+          ></div>
         </div>
 
         {/* Terms and Conditions Checkbox */}
-        <div className={`flex items-center space-x-3 ${
-          !formData.acceptTerms && message.includes('regulamin') 
-            ? 'p-3 border border-red-300 rounded-2xl bg-red-500/20' 
-            : ''
-        }`}>
+        <div
+          className={`flex items-center space-x-3 ${
+            !formData.acceptTerms && message.includes("regulamin")
+              ? "p-3 border border-red-300 rounded-2xl bg-red-500/20"
+              : ""
+          }`}
+          data-oid="jl32i:-"
+        >
           <input
             type="checkbox"
             id="acceptTerms"
@@ -425,18 +551,25 @@ export default function ContactForm() {
             onChange={handleChange}
             required
             className={`h-5 w-5 text-white focus:ring-white/30 rounded ${
-              !formData.acceptTerms && message.includes('regulamin')
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-white/30 bg-white/20'
+              !formData.acceptTerms && message.includes("regulamin")
+                ? "border-red-500 focus:ring-red-500"
+                : "border-white/30 bg-white/20"
             }`}
+            data-oid="5lzh77p"
           />
-          <label htmlFor="acceptTerms" className="text-sm text-white/90">
-            Akceptuję{' '}
-            <a 
-              href="/regulamin" 
-              target="_blank" 
+
+          <label
+            htmlFor="acceptTerms"
+            className="text-sm text-white/90"
+            data-oid="qbo8wve"
+          >
+            Akceptuję{" "}
+            <a
+              href="/regulamin"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-white underline hover:text-white/80"
+              data-oid="3mi774b"
             >
               regulamin usługi
             </a>
@@ -447,20 +580,24 @@ export default function ContactForm() {
           type="submit"
           disabled={isSubmitting}
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
+          data-oid="yomb8ur"
         >
-          {isSubmitting ? 'WYSYŁANIE...' : 'WYŚLIJ'}
+          {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ"}
         </button>
       </form>
 
       {message && (
-        <div className={`mt-4 p-4 rounded-2xl text-sm backdrop-blur-sm ${
-          message.includes('zapisane') 
-            ? 'bg-green-500/20 text-green-100 border border-green-400/30' 
-            : 'bg-red-500/20 text-red-100 border border-red-400/30'
-        }`}>
+        <div
+          className={`mt-4 p-4 rounded-2xl text-sm backdrop-blur-sm ${
+            message.includes("zapisane")
+              ? "bg-green-500/20 text-green-100 border border-green-400/30"
+              : "bg-red-500/20 text-red-100 border border-red-400/30"
+          }`}
+          data-oid="5_mxp_h"
+        >
           {message}
         </div>
       )}
     </div>
   );
-} 
+}
