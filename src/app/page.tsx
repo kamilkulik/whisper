@@ -5,6 +5,7 @@ import ContactForm from "./components/ContactForm";
 import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import ImageCarousel from "./components/ImageCarousel";
 import HowItWorks from "./components/HowItWorks";
+import PricingSection from "./components/PricingSection";
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -194,11 +195,11 @@ export default function Home() {
                       <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-400 rounded-full border-2 border-white"></div>
                     </div>
                     <div className="text-white">
-                      <p className="font-medium">
+                      {/* <p className="font-medium">
                         Join over 25,000 poetry lovers worldwide.
-                      </p>
+                      </p> */}
                       <p className="text-blue-200">
-                        Daily inspiration delivered to your inbox.
+                        Pierwszy szept dziś wieczorem o 20:59
                       </p>
                     </div>
                   </div>
@@ -242,16 +243,19 @@ export default function Home() {
                       </span>
                     </h2>
                     <p className="text-lg text-blue-200 leading-relaxed">
-                    To nie są przypadkowe cytaty. Każdy szept jest pisany ręcznie przez poetę, który od lat tworzy krótkie formy pełne emocji.
-                    <br />
-                    Są jak małe listy miłosne — tylko że mieszczą się w jednym SMS-ie. Idealne, by zakończyć dzień z uśmiechem.
+                      To nie są przypadkowe cytaty. Każdy szept jest pisany
+                      ręcznie przez poetę, który od lat tworzy krótkie formy
+                      pełne emocji.
+                      <br />
+                      Są jak małe listy miłosne — tylko że mieszczą się w jednym
+                      SMS-ie. Idealne, by zakończyć dzień z uśmiechem.
                     </p>
                     <div className="flex items-center space-x-4">
                       <button
                         onClick={handleStartJourneyWithScroll}
                         className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
                       >
-                        Rozpocznij Darmowy Trial
+                        Rozpocznij Okres Próbny
                       </button>
                       <div className="text-white text-sm">
                         <p className="font-medium">✓ Darmowy przez 7 dni</p>
@@ -268,6 +272,9 @@ export default function Home() {
 
           {/* Testimonials Section */}
           <TestimonialsCarousel testimonials={testimonials} />
+
+          {/* Pricing Section */}
+          <PricingSection onGetStarted={handleStartJourneyWithScroll} />
         </div>
       </div>
       {/* Contact Form Section */}
