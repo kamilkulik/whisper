@@ -27,7 +27,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
           <div className="bg-gray-700/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-600/50 transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 overflow-hidden flex flex-col">
             {/* Header Section */}
             <div className="bg-gray-600/70 px-8 py-6 text-center">
-              <h3 className="text-2xl font-bold text-white mb-2">
+              <h3 className="text-2xl font-extrabold text-white mb-2">
                 Okres Próbny
               </h3>
               <p className="text-gray-200 text-sm font-medium">7 DNI</p>
@@ -54,7 +54,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
             <div className="relative bg-gradient-to-br from-yellow-400/20 to-orange-400/20 backdrop-blur-sm rounded-2xl shadow-2xl border border-yellow-400/30 duration-300 hover:shadow-3xl overflow-hidden flex flex-col">
               {/* Header Section */}
               <div className="bg-gradient-to-r from-yellow-400/40 to-orange-400/40 px-8 py-6 text-center">
-                <h3 className="text-2xl font-bold text-white mb-2">
+                <h3 className="text-2xl font-extrabold text-white mb-2">
                   Jednorazowa Płatność
                 </h3>
                 <p className="text-yellow-100 text-sm font-medium">
@@ -84,7 +84,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
             <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-2xl shadow-2xl border border-blue-500/30 transition-all duration-300 hover:shadow-3xl overflow-hidden flex flex-col">
               {/* Header Section */}
               <div className="bg-blue-700/50 px-8 py-6 text-center">
-                <h3 className="text-2xl font-bold text-white mb-2">
+                <h3 className="text-2xl font-extrabold text-white mb-2">
                   Subskrypcja
                 </h3>
                 <p className="text-blue-100 text-sm font-medium">MIESIĘCZNA</p>
