@@ -156,12 +156,11 @@ export default function ConfirmationCodeForm() {
 
     try {
       // First, save the contact information
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await fetch("/api/confirmation-code", {
+        method: "GET",
+        body: new URLSearchParams({
+          phoneNumber: formData.numerTelefonu,
+        }).toString(),
       });
 
       const data = await response.json();
@@ -179,7 +178,7 @@ export default function ConfirmationCodeForm() {
         setTimeout(() => {
           const form = document.createElement("form");
           form.method = "POST";
-          form.action = "/api/checkout_sessions";
+          form.action = "/api/checkout-sessions";
           document.body.appendChild(form);
           form.submit();
         }, 1500);
@@ -322,7 +321,7 @@ export default function ConfirmationCodeForm() {
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
           data-oid="yomb8ur"
         >
-          {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ"}
+          {isSubmitting ? "WYSYŁANIE..." : "POTWIERDŹ NUMER"}
         </button>
       </form>
     </div>

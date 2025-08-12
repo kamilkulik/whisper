@@ -1,34 +1,11 @@
-import { smsapi } from "@/lib/smsapi";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (request: NextRequest) => {
-  const { searchParams } = new URL(request.url);
-  const confirmationCode = searchParams.get("confirmationCode");
-  const userId = searchParams.get("userId");
-
-  if (confirmationCode && userId) {
-    const user = await prisma.user.findUnique({
-      where: { id: parseInt(userId) },
-    });
-
-    let success = false;
-    if (
-      user?.confirmationCode === parseInt(confirmationCode) &&
-      user?.confirmationCodeExpires &&
-      user.confirmationCodeExpires > new Date()
-    ) {
-      success = true;
-    }
-
-    return NextResponse.json({ success });
-  }
-};
-
 interface UserData {
-  numerTelefonu: string;
+  phoneNumber: string;
   email: string;
-  imie: string;
+  name: string;
+  messageLanguage: string;
 }
 
 export const POST = async (request: NextRequest) => {
@@ -38,7 +15,12 @@ export const POST = async (request: NextRequest) => {
     body = await request.json();
 
     // Validate required fields
-    if (!body.numerTelefonu || !body.email || !body.imie) {
+    if (
+      !body.phoneNumber ||
+      !body.email ||
+      !body.name ||
+      !body.messageLanguage
+    ) {
       return NextResponse.json(
         { error: "Wszystkie pola są wymagane" },
         { status: 400 }
@@ -56,7 +38,7 @@ export const POST = async (request: NextRequest) => {
 
     // Validate phone number (basic validation for Polish numbers)
     const phoneRegex = /^(\+48|48)?[0-9]{9}$/;
-    const cleanPhone = body.numerTelefonu.replace(/\s+/g, "");
+    const cleanPhone = body.phoneNumber.replace(/\s+/g, "");
     if (!phoneRegex.test(cleanPhone)) {
       return NextResponse.json(
         { error: "Nieprawidłowy format numeru telefonu" },
@@ -74,8 +56,8 @@ export const POST = async (request: NextRequest) => {
       await prisma.user.update({
         where: { email: body.email },
         data: {
-          phoneNumber: body.numerTelefonu,
-          name: body.imie,
+          phoneNumber: body.phoneNumber,
+          name: body.name,
           updatedAt: new Date(),
         },
       });
@@ -83,9 +65,9 @@ export const POST = async (request: NextRequest) => {
       // Create new user
       await prisma.user.create({
         data: {
-          phoneNumber: body.numerTelefonu,
+          phoneNumber: body.phoneNumber,
           email: body.email,
-          name: body.imie,
+          name: body.name,
           premium: true,
         },
       });
@@ -97,7 +79,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     return NextResponse.json(
-      { message: "Wiadomość została pomyślnie zapisana" },
+      { message: "User data saved to database" },
       { status: 200 }
     );
   } catch (error) {
@@ -106,38 +88,5 @@ export const POST = async (request: NextRequest) => {
       { error: "Wystąpił błąd podczas przetwarzania wiadomości" },
       { status: 500 }
     );
-  }
-
-  try {
-    if (userId) {
-      const user = await prisma.user.findUnique({
-        where: { id: parseInt(userId) },
-      });
-
-      const phoneNumber = user?.phoneNumber;
-
-      if (!phoneNumber) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
-      }
-
-      // 6-digit code
-      const message = Math.floor(100000 + Math.random() * 900000);
-      console.log(`Sending SMS to ${user.phoneNumber}: ${message}`);
-      // const result = await smsapi.sms.sendSms(
-      //   `${user.phoneNumber}`,
-      //   message.message
-      // );
-      // console.log(result);
-      await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          confirmationCode: message,
-          confirmationCodeExpires: new Date(Date.now() + 1000 * 60 * 5),
-        },
-      });
-    }
-  } catch (error) {
-    // in case of message service failure log the error
-    console.error(`Failed to send message to user ${userId}:`, error);
   }
 };

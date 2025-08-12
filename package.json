@@ -20,6 +20,7 @@
     "server-only": "^0.0.1",
     "smsapi": "^2.1.1",
     "stripe": "^18.4.0",
+    "uuid": "^11.1.0",
     "zod": "^4.0.16"
   },
   "devDependencies": {

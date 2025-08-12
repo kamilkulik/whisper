@@ -10,12 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum LanguageEnum {
+  PL
+  EN
+  SP
+  IT
+}
+
 model Message {
-  id        Int       @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   message   String
+  language  LanguageEnum
   length    Int
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime?    @updatedAt @map("updated_at")
 
   // Relation to users who used this message
   users User[]
@@ -24,19 +32,20 @@ model Message {
 }
 
 model User {
-  id                      Int       @id @default(autoincrement())
-  confirmationCode        Int?      @map("confirmation_code")
-  confirmationCodeExpires DateTime? @map("confirmation_code_expires")
-  phoneNumber             String    @unique @map("phone_number")
-  phoneNumberVerified     Boolean   @default(false) @map("phone_number_verified")
-  email                   String    @unique
-  emailVerified           Boolean   @default(false) @map("email_verified")
+  id                      Int          @id @default(autoincrement())
+  confirmationCode        Int?         @map("confirmation_code")
+  confirmationCodeExpires DateTime?    @map("confirmation_code_expires")
+  phoneNumber             String       @unique @map("phone_number")
+  phoneNumberVerified     Boolean      @default(false) @map("phone_number_verified")
+  email                   String       @unique
+  emailVerified           Boolean      @default(false) @map("email_verified")
   name                    String
-  trialEnds               DateTime? @map("trial_ends")
-  premium                 Boolean   @default(false)
-  lastUsedMessageId       Int?      @map("last_used_message")
-  createdAt               DateTime  @default(now()) @map("created_at")
-  updatedAt               DateTime? @updatedAt @map("updated_at")
+  trialEnds               DateTime?    @map("trial_ends")
+  premium                 Boolean      @default(false)
+  lastUsedMessageId       Int?         @map("last_used_message")
+  messageLanguage         LanguageEnum @map("message_language")
+  createdAt               DateTime     @default(now()) @map("created_at")
+  updatedAt               DateTime?    @updatedAt @map("updated_at")
 
   // Relation to the last used message
   lastUsedMessage Message? @relation(fields: [lastUsedMessageId], references: [id])

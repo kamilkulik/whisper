@@ -1,47 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { smsapi } from '@/lib/smsapi';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { sendSms, smsapi } from "@/lib/smsapi";
 
 export const GET = async (request: NextRequest) => {
   try {
-    
     // Verify that this is a legitimate Vercel cron request
-    const authHeader = request.headers.get('authorization');
+    const authHeader = request.headers.get("authorization");
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const now = new Date();
     console.log(`Cron job executed at: ${now.toISOString()}`);
-    console.log('CET time:', now.toLocaleString('en-US', { timeZone: 'Europe/Warsaw' }));
+    console.log(
+      "CET time:",
+      now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })
+    );
 
     // 1. get all users who should receive a message
     const users = await prisma.user.findMany({
       where: {
-        OR: [
-          { premium: true },
-          { trialEnds: { lt: now } }
-        ]
-      }
+        OR: [{ premium: true }, { trialEnds: { lt: now } }],
+      },
     });
     console.log(`Found ${users.length} users to send messages to`);
 
     // 2. create a unique set of message ids which should be sent next to each user
     const usersWithNextMessage = users.map((user) => ({
       ...user,
-      next_message: (user.lastUsedMessageId || 0) + 1
+      next_message: (user.lastUsedMessageId || 0) + 1,
     }));
-    const nextMessages = new Set(usersWithNextMessage.map(user => user.next_message));
+    const nextMessages = new Set(
+      usersWithNextMessage.map((user) => user.next_message)
+    );
     console.log(`Found ${nextMessages.size} unique messages to send`);
 
     // 3. get all the messages which should be sent next to each user - convert to a hash table
     const messages = await prisma.message.findMany({
       where: {
-        id: { in: Array.from(nextMessages) }
-      }
+        id: { in: Array.from(nextMessages) },
+      },
     });
     const messagesHash = messages.reduce((acc: any, message: any) => {
       acc[message.id] = message;
@@ -53,15 +51,12 @@ export const GET = async (request: NextRequest) => {
       try {
         const message = messagesHash[user.next_message];
         if (message) {
-          // mock messageService for now to log to the console the message
-          console.log(`Sending SMS to ${user.phoneNumber}: ${message.message}`);
-          const result = await smsapi.sms.sendSms(`${user.phoneNumber}`, message.message);
-          console.log(result);
-          
+          await sendSms(user.phoneNumber, message.message);
+
           // update what message got sent
           await prisma.user.update({
             where: { id: user.id },
-            data: { lastUsedMessageId: user.next_message }
+            data: { lastUsedMessageId: user.next_message },
           });
         }
       } catch (error) {
@@ -69,23 +64,19 @@ export const GET = async (request: NextRequest) => {
         console.error(`Failed to send message to user ${user.id}:`, error);
       }
     }
-    
-    console.log('Daily cron job completed successfully');
+
+    console.log("Daily cron job completed successfully");
 
     return NextResponse.json(
-      { 
-        message: 'Daily cron job completed successfully',
+      {
+        message: "Daily cron job completed successfully",
         timestamp: now.toISOString(),
-        cetTime: now.toLocaleString('en-US', { timeZone: 'Europe/Warsaw' })
+        cetTime: now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" }),
       },
       { status: 200 }
     );
-
   } catch (error) {
-    console.error('Cron job error:', error);
-    return NextResponse.json(
-      { error: 'Cron job failed' },
-      { status: 500 }
-    );
+    console.error("Cron job error:", error);
+    return NextResponse.json({ error: "Cron job failed" }, { status: 500 });
   }
-}; 
+};
