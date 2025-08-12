@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { z } from "zod";
 import { useLocale } from "../contexts/LocaleContext";
+import ContactForm from "./ContactForm";
 
 type ValidationErrors = {
   numerTelefonu?: string;
@@ -137,6 +138,7 @@ export default function ConfirmationCodeForm() {
 
   // New state for confirmation code flow
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
   const [sessionId, setSessionId] = useState<string>("");
 
   const countryOptions = [
@@ -319,7 +321,7 @@ export default function ConfirmationCodeForm() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Numer telefonu potwierdzony! Przekierowywanie do kasy...");
+        setMessage("Numer telefonu potwierdzony!");
 
         // Clear localStorage and form state
         localStorage.removeItem("confirmationSessionId");
@@ -328,16 +330,8 @@ export default function ConfirmationCodeForm() {
           countryCode: countryCode,
         });
         setShowConfirmationCode(false);
+        setShowContactForm(true);
         setSessionId("");
-
-        // Redirect to Stripe checkout after a short delay
-        setTimeout(() => {
-          const form = document.createElement("form");
-          form.method = "POST";
-          form.action = "/api/checkout-sessions";
-          document.body.appendChild(form);
-          form.submit();
-        }, 1500);
       } else {
         setMessage(
           data.error || "Nieprawidłowy kod weryfikacyjny. Spróbuj ponownie."
@@ -363,6 +357,11 @@ export default function ConfirmationCodeForm() {
       }));
     }
   };
+
+  // If showing contact form, render the ContactForm component
+  if (showContactForm) {
+    return <ContactForm />;
+  }
 
   // If showing confirmation code, render the grid component
   if (showConfirmationCode) {

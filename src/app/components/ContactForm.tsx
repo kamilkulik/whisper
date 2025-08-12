@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocale } from "../contexts/LocaleContext";
 import { z } from "zod";
 import DOMPurify from "dompurify";
+import { SupportedLanguagesEnum } from "@prisma/client";
 
 // Validation schema
 const formSchema = z.object({
@@ -46,10 +47,10 @@ export default function ContactForm() {
   const languageDropdownRef = useRef<HTMLDivElement>(null);
 
   const languageOptions = [
-    { code: "Polski", name: "Polski" },
-    { code: "Angielski", name: "English" },
-    { code: "Hiszpański", name: "Español" },
-    { code: "Włoski", name: "Italiano" },
+    { code: SupportedLanguagesEnum.PL, name: "Polski" },
+    { code: SupportedLanguagesEnum.EN, name: "English" },
+    { code: SupportedLanguagesEnum.ES, name: "Español" },
+    { code: SupportedLanguagesEnum.IT, name: "Italiano" },
   ];
 
   // Update form data when locale context is loaded
