@@ -13,59 +13,37 @@ const formSchema = z.object({
     .max(50, "Imię nie może być dłuższe niż 50 znaków")
     .regex(
       /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]+$/,
-      "Imię może zawierać tylko litery, spacje, myślniki i apostrofy",
+      "Imię może zawierać tylko litery, spacje, myślniki i apostrofy"
     ),
   email: z
     .string()
     .min(1, "Email jest wymagany")
     .max(254, "Email jest za długi")
     .email("Nieprawidłowy format email"),
-  numerTelefonu: z
-    .string()
-    .min(6, "Numer telefonu musi mieć co najmniej 6 cyfr")
-    .max(15, "Numer telefonu nie może być dłuższy niż 15 cyfr")
-    .regex(
-      /^[0-9\s\-\(\)\+]+$/,
-      "Numer telefonu może zawierać tylko cyfry, spacje, myślniki, nawiasy i znak plus",
-    ),
 });
 
 type ValidationErrors = {
   imie?: string;
   email?: string;
-  numerTelefonu?: string;
 };
 
 export default function ContactForm() {
   const { language, countryCode, isLoaded } = useLocale();
 
   const [formData, setFormData] = useState({
-    numerTelefonu: "",
     email: "",
     imie: "",
-    countryCode: "+48", // Default fallback
     jezykWiadomosci: "Polski", // Default fallback
     acceptTerms: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
-    {},
+    {}
   );
-  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
-  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-  const countryDropdownRef = useRef<HTMLDivElement>(null);
-  const languageDropdownRef = useRef<HTMLDivElement>(null);
 
-  const countryOptions = [
-    { code: "+48", name: "Polska" },
-    { code: "+44", name: "Wielka Brytania" },
-    { code: "+1", name: "Stany Zjednoczone" },
-    { code: "+34", name: "Hiszpania" },
-    { code: "+52", name: "Meksyk" },
-    { code: "+56", name: "Chile" },
-    { code: "+39", name: "Włochy" },
-  ];
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const languageDropdownRef = useRef<HTMLDivElement>(null);
 
   const languageOptions = [
     { code: "Polski", name: "Polski" },
@@ -85,37 +63,6 @@ export default function ContactForm() {
     }
   }, [isLoaded, countryCode, language]);
 
-  // Handle clicking outside the dropdowns
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        countryDropdownRef.current &&
-        !countryDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsCountryDropdownOpen(false);
-      }
-      if (
-        languageDropdownRef.current &&
-        !languageDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsLanguageDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleCountrySelect = (countryCode: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      countryCode,
-    }));
-    setIsCountryDropdownOpen(false);
-  };
-
   const handleLanguageSelect = (language: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -132,7 +79,7 @@ export default function ContactForm() {
   // Validate single field
   const validateField = (
     fieldName: keyof ValidationErrors,
-    value: string,
+    value: string
   ): string | undefined => {
     try {
       const fieldSchema = formSchema.shape[fieldName];
@@ -149,7 +96,7 @@ export default function ContactForm() {
   // Handle input blur with validation and sanitization
   const handleInputBlur = (
     fieldName: keyof ValidationErrors,
-    value: string,
+    value: string
   ) => {
     const sanitizedValue = sanitizeInput(value);
     const error = validateField(fieldName, sanitizedValue);
@@ -178,7 +125,7 @@ export default function ContactForm() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -203,7 +150,6 @@ export default function ContactForm() {
     const sanitizedData = {
       imie: sanitizeInput(formData.imie),
       email: sanitizeInput(formData.email.toLowerCase()),
-      numerTelefonu: sanitizeInput(formData.numerTelefonu),
     };
 
     const errors: ValidationErrors = {};
@@ -246,10 +192,8 @@ export default function ContactForm() {
 
         // Clear the form
         setFormData({
-          numerTelefonu: "",
           email: "",
           imie: "",
-          countryCode: countryCode,
           jezykWiadomosci: language,
           acceptTerms: false,
         });
@@ -354,107 +298,6 @@ export default function ContactForm() {
           )}
         </div>
 
-        <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
-          <div className="h-full" data-oid="xbk7dq-">
-            <label
-              htmlFor="countryCode"
-              className="block text-white font-medium mb-2 text-sm"
-              data-oid="lotbw.t"
-            >
-              Kod kraju *
-            </label>
-            <div
-              className="relative"
-              ref={countryDropdownRef}
-              data-oid="5z3y56l"
-            >
-              <button
-                type="button"
-                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
-                data-oid="c7tii0."
-              >
-                {formData.countryCode}
-              </button>
-              <div
-                className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
-                data-oid="f6znpna"
-              >
-                <svg
-                  className={`w-4 h-4 text-white transition-transform ${isCountryDropdownOpen ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  data-oid="y1g8mzi"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                    data-oid="ie97yww"
-                  />
-                </svg>
-              </div>
-              {isCountryDropdownOpen && (
-                <div
-                  className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
-                  data-oid="u76tc5h"
-                >
-                  {countryOptions.map((option) => (
-                    <button
-                      key={option.code}
-                      type="button"
-                      onClick={() => handleCountrySelect(option.code)}
-                      className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
-                        formData.countryCode === option.code
-                          ? "bg-gray-700"
-                          : ""
-                      }`}
-                      data-oid="jp414j."
-                    >
-                      {option.code} {option.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="h-full" data-oid="go9nv0c">
-            <label
-              htmlFor="numerTelefonu"
-              className="block text-white font-medium mb-2 text-sm"
-              data-oid="jits35v"
-            >
-              Numer telefonu *
-            </label>
-            <input
-              type="tel"
-              id="numerTelefonu"
-              name="numerTelefonu"
-              value={formData.numerTelefonu}
-              onChange={(e) => {
-                handleChange(e);
-                clearValidationError("numerTelefonu");
-              }}
-              onBlur={(e) => handleInputBlur("numerTelefonu", e.target.value)}
-              required
-              className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
-                validationErrors.numerTelefonu
-                  ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                  : "focus:ring-white/30"
-              }`}
-              placeholder="np. 123 456 789"
-              data-oid="6a6jkxb"
-            />
-          </div>
-        </div>
-        {validationErrors.numerTelefonu && (
-          <p className="mt-1 text-sm text-red-300" data-oid="880w9:6">
-            {validationErrors.numerTelefonu}
-          </p>
-        )}
-
         <div data-oid="isekqo7">
           <label
             htmlFor="jezykWiadomosci"
@@ -481,7 +324,9 @@ export default function ContactForm() {
               data-oid="inff.oj"
             >
               <svg
-                className={`w-4 h-4 text-white transition-transform ${isLanguageDropdownOpen ? "rotate-180" : ""}`}
+                className={`w-4 h-4 text-white transition-transform ${
+                  isLanguageDropdownOpen ? "rotate-180" : ""
+                }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
