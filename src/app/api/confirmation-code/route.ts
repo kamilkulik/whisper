@@ -29,6 +29,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 
   const { confirmationCode, confirmationCodeExpires, sessionId } =
     generateConfiramtionCodeDetails();
+
   temporarySessionIdCache.set(sessionId, {
     confirmationCode,
     confirmationCodeExpires,
@@ -38,13 +39,13 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   console.log(`Sending confirmation code to user: ${confirmationCode}`);
   await sendSms(phoneNumber, confirmationCode.toString());
 
-  return NextResponse.json(sessionId);
+  return NextResponse.json({ sessionId });
 };
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
-  const confirmationCode = body.get("confirmationCode");
-  const sessionId = body.get("sessionId");
+  const confirmationCode = body["confirmationCode"];
+  const sessionId = body["sessionId"];
 
   if (confirmationCode && sessionId) {
     const cachedSessionDetails = temporarySessionIdCache.get(sessionId);

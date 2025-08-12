@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ContactForm from "./components/ContactForm";
+import ConfirmationCodeForm from "./components/ConfirmationCodeForm";
 import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import ImageCarousel from "./components/ImageCarousel";
 import HowItWorks from "./components/HowItWorks";
@@ -286,7 +286,7 @@ export default function Home() {
                 id="contact-form-container"
                 className={`relative z-50 ${isFormShaking ? "shake-form" : ""}`}
               >
-                <ContactForm />
+                <ConfirmationCodeForm />
               </div>
             </div>
           </div>

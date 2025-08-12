@@ -19,6 +19,108 @@ const formSchema = z.object({
     ),
 });
 
+// Confirmation Code Grid Component
+function ConfirmationCodeGrid({
+  onCodeComplete,
+  isSubmitting,
+}: {
+  onCodeComplete: (code: string) => void;
+  isSubmitting: boolean;
+}) {
+  const [code, setCode] = useState<string[]>(new Array(6).fill(""));
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const handleInputChange = (index: number, value: string) => {
+    // Only allow single digit
+    if (value.length > 1) return;
+
+    // Only allow numbers
+    if (!/^\d*$/.test(value)) return;
+
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    // Move to next input if value is entered
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    // Check if all digits are filled
+    if (
+      newCode.every((digit) => digit !== "") &&
+      newCode.join("").length === 6
+    ) {
+      onCodeComplete(newCode.join(""));
+    }
+  };
+
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    // Move to previous input on backspace if current input is empty
+    if (e.key === "Backspace" && !code[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text");
+    const digits = pastedData.replace(/\D/g, "").slice(0, 6).split("");
+
+    if (digits.length === 6) {
+      const newCode = [...code];
+      digits.forEach((digit, index) => {
+        newCode[index] = digit;
+      });
+      setCode(newCode);
+      onCodeComplete(newCode.join(""));
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <h3 className="text-xl font-bold text-white mb-2">
+          Wprowadź kod weryfikacyjny
+        </h3>
+        <p className="text-white/80 text-sm">
+          Wprowadź 6-cyfrowy kod wysłany na Twój numer telefonu
+        </p>
+      </div>
+
+      <div className="flex justify-center gap-3">
+        {code.map((digit, index) => (
+          <input
+            key={index}
+            ref={(el) => {
+              inputRefs.current[index] = el;
+            }}
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            value={digit}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+            onPaste={handlePaste}
+            disabled={isSubmitting}
+            className="w-12 h-12 text-center bg-white/20 border-0 rounded-xl text-white text-lg font-bold focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm disabled:opacity-50"
+            autoFocus={index === 0}
+          />
+        ))}
+      </div>
+
+      {isSubmitting && (
+        <div className="text-center">
+          <p className="text-white/80 text-sm">Weryfikowanie kodu...</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ConfirmationCodeForm() {
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -32,6 +134,10 @@ export default function ConfirmationCodeForm() {
     numerTelefonu: "",
     countryCode: "+48",
   });
+
+  // New state for confirmation code flow
+  const [showConfirmationCode, setShowConfirmationCode] = useState(false);
+  const [sessionId, setSessionId] = useState<string>("");
 
   const countryOptions = [
     { code: "+48", name: "Polska" },
@@ -122,7 +228,7 @@ export default function ConfirmationCodeForm() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
 
@@ -155,24 +261,74 @@ export default function ConfirmationCodeForm() {
     setIsSubmitting(true);
 
     try {
-      // First, save the contact information
+      // Request confirmation code
+      const params = new URLSearchParams({
+        phoneNumber: formData.numerTelefonu,
+      });
+      const response = await fetch(
+        `/api/confirmation-code?${params.toString()}`,
+        {
+          method: "GET",
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Save sessionId to localStorage
+        localStorage.setItem("confirmationSessionId", data.sessionId);
+        setSessionId(data.sessionId);
+        setShowConfirmationCode(true);
+        setMessage("Kod weryfikacyjny został wysłany na Twój numer telefonu.");
+      } else {
+        setMessage(
+          data.error || "Wystąpił błąd podczas wysyłania kodu weryfikacyjnego."
+        );
+      }
+    } catch (error) {
+      setMessage("Wystąpił błąd podczas wysyłania kodu weryfikacyjnego.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleConfirmationCodeComplete = async (confirmationCode: string) => {
+    setIsSubmitting(true);
+    setMessage("");
+
+    try {
+      // Get sessionId from localStorage
+      const storedSessionId = localStorage.getItem("confirmationSessionId");
+      if (!storedSessionId) {
+        setMessage("Błąd sesji. Proszę spróbować ponownie.");
+        setIsSubmitting(false);
+        return;
+      }
+
       const response = await fetch("/api/confirmation-code", {
-        method: "GET",
-        body: new URLSearchParams({
-          phoneNumber: formData.numerTelefonu,
-        }).toString(),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          confirmationCode: parseInt(confirmationCode, 10),
+          sessionId: storedSessionId,
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Informacje zapisane! Przekierowywanie do kasy...");
+        setMessage("Numer telefonu potwierdzony! Przekierowywanie do kasy...");
 
-        // Clear the form
+        // Clear localStorage and form state
+        localStorage.removeItem("confirmationSessionId");
         setFormData({
           numerTelefonu: "",
           countryCode: countryCode,
         });
+        setShowConfirmationCode(false);
+        setSessionId("");
 
         // Redirect to Stripe checkout after a short delay
         setTimeout(() => {
@@ -183,10 +339,16 @@ export default function ConfirmationCodeForm() {
           form.submit();
         }, 1500);
       } else {
-        setMessage(data.error || "Wystąpił błąd podczas wysyłania wiadomości.");
+        setMessage(
+          data.error || "Nieprawidłowy kod weryfikacyjny. Spróbuj ponownie."
+        );
+        // Clear localStorage on error to force new session
+        localStorage.removeItem("confirmationSessionId");
       }
     } catch (error) {
-      setMessage("Wystąpił błąd podczas wysyłania wiadomości.");
+      setMessage("Wystąpił błąd podczas weryfikacji kodu.");
+      // Clear localStorage on error to force new session
+      localStorage.removeItem("confirmationSessionId");
     } finally {
       setIsSubmitting(false);
     }
@@ -202,6 +364,32 @@ export default function ConfirmationCodeForm() {
     }
   };
 
+  // If showing confirmation code, render the grid component
+  if (showConfirmationCode) {
+    return (
+      <div
+        className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
+        data-oid="tb00.87"
+      >
+        <ConfirmationCodeGrid
+          onCodeComplete={handleConfirmationCodeComplete}
+          isSubmitting={isSubmitting}
+        />
+        {message && (
+          <div className="mt-4 text-center">
+            <p
+              className={`text-sm ${
+                message.includes("błąd") ? "text-red-300" : "text-green-300"
+              }`}
+            >
+              {message}
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
@@ -209,10 +397,14 @@ export default function ConfirmationCodeForm() {
     >
       <div className="mb-8" data-oid="fv3gut-">
         <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
-          Zacznij otrzymywać wiadomości!
+          Zacznij otrzymywać wiadomości!
         </h3>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4" data-oid="d937n0b">
+      <form
+        onSubmit={handlePhoneSubmit}
+        className="space-y-4"
+        data-oid="d937n0b"
+      >
         <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
           <div className="h-full" data-oid="xbk7dq-">
             <label
@@ -321,9 +513,20 @@ export default function ConfirmationCodeForm() {
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
           data-oid="yomb8ur"
         >
-          {isSubmitting ? "WYSYŁANIE..." : "POTWIERDŹ NUMER"}
+          {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ KOD WERYFIKACYJNY"}
         </button>
       </form>
+      {message && (
+        <div className="mt-4 text-center">
+          <p
+            className={`text-sm ${
+              message.includes("błąd") ? "text-red-300" : "text-green-300"
+            }`}
+          >
+            {message}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
