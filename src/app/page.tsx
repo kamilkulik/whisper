@@ -13,6 +13,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [isFormShaking, setIsFormShaking] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -119,7 +120,7 @@ export default function Home() {
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
         {/* Navigation Bar */}
         <nav
-          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          className={`fixed top-0 left-0 right-0 z-[200] transition-all duration-300 ${
             scrolled
               ? "bg-black/20 backdrop-blur-md shadow-lg"
               : "bg-transparent"
@@ -281,13 +282,13 @@ export default function Home() {
         </div>
       </div>
       {/* Contact Form Section */}
-      <div className="bg-[#2A031E] text-white relative overflow-hidden z-50">
-        <div className="relative py-16 z-50">
+      <div className="bg-[#2A031E] text-white relative overflow-hidden z-0">
+        <div className="relative py-16 z-10">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex justify-center">
               <div
                 id="contact-form-container"
-                className={`relative z-50 ${isFormShaking ? "shake-form" : ""}`}
+                className={`relative z-10 ${isFormShaking ? "shake-form" : ""}`}
               >
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -299,10 +300,13 @@ export default function Home() {
                     layout
                   >
                     {showContactForm ? (
-                      <ContactForm />
+                      <ContactForm verifiedPhoneNumber={verifiedPhoneNumber} />
                     ) : (
                       <ConfirmationCodeForm
-                        onShowContactForm={() => setShowContactForm(true)}
+                        onShowContactForm={(phone) => {
+                          setVerifiedPhoneNumber(phone);
+                          setShowContactForm(true);
+                        }}
                       />
                     )}
                   </motion.div>
@@ -313,7 +317,7 @@ export default function Home() {
         </div>
         {/* Footer */}
         {/* Footer Background Orbs */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-3xl"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/15 rounded-full blur-3xl"></div>

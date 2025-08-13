@@ -8,6 +8,14 @@ import { SupportedLanguagesEnum } from "@prisma/client";
 
 // Validation schema
 const formSchema = z.object({
+  numerTelefonu: z
+    .string()
+    .min(6, "Numer telefonu musi mieć co najmniej 6 cyfr")
+    .max(15, "Numer telefonu nie może być dłuższy niż 15 cyfr")
+    .regex(
+      /^[0-9\s\-]+$/,
+      "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
+    ),
   imie: z
     .string()
     .min(2, "Imię musi mieć co najmniej 2 znaki")
@@ -28,7 +36,11 @@ type ValidationErrors = {
   email?: string;
 };
 
-export default function ContactForm() {
+export default function ContactForm({
+  verifiedPhoneNumber = "",
+}: {
+  verifiedPhoneNumber?: string;
+}) {
   const { language, countryCode, isLoaded } = useLocale();
 
   const [formData, setFormData] = useState({
@@ -36,6 +48,7 @@ export default function ContactForm() {
     imie: "",
     jezykWiadomosci: "Polski", // Default fallback
     acceptTerms: false,
+    numerTelefonu: verifiedPhoneNumber,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
@@ -151,11 +164,15 @@ export default function ContactForm() {
     const sanitizedData = {
       imie: sanitizeInput(formData.imie),
       email: sanitizeInput(formData.email.toLowerCase()),
+      numerTelefonu: sanitizeInput(formData.numerTelefonu || ""),
     };
 
     const errors: ValidationErrors = {};
     Object.entries(sanitizedData).forEach(([key, value]) => {
-      const error = validateField(key as keyof ValidationErrors, value);
+      const error = validateField(
+        key as keyof ValidationErrors,
+        value as string
+      );
       if (error) {
         errors[key as keyof ValidationErrors] = error;
       }
@@ -165,6 +182,7 @@ export default function ContactForm() {
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       setMessage("Proszę poprawić błędy w formularzu.");
+      console.log(errors);
       return;
     }
 
@@ -183,7 +201,12 @@ export default function ContactForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          imie: sanitizedData.imie,
+          email: sanitizedData.email,
+          numerTelefonu: sanitizedData.numerTelefonu,
+          messageLanguage: formData.jezykWiadomosci,
+        }),
       });
 
       const data = await response.json();
@@ -197,13 +220,14 @@ export default function ContactForm() {
           imie: "",
           jezykWiadomosci: language,
           acceptTerms: false,
+          numerTelefonu: verifiedPhoneNumber,
         });
 
         // Redirect to Stripe checkout after a short delay
         setTimeout(() => {
           const form = document.createElement("form");
           form.method = "POST";
-          form.action = "/api/checkout_sessions";
+          form.action = "/api/checkout-sessions";
           document.body.appendChild(form);
           form.submit();
         }, 1500);

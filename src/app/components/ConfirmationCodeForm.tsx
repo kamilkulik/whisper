@@ -123,10 +123,202 @@ function ConfirmationCodeGrid({
   );
 }
 
+// Success message component (moved outside to avoid remounts on each render)
+function SuccessMessage() {
+  return (
+    <div className="text-center space-y-6">
+      <div className="flex justify-center">
+        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+          <svg
+            className="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </div>
+      </div>
+      <div>
+        <h3 className="text-2xl font-bold text-white mb-2">
+          Numer potwierdzony!
+        </h3>
+        <p className="text-white/80 text-sm">
+          Twój numer telefonu został pomyślnie zweryfikowany.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type PhoneFormProps = {
+  formData: { numerTelefonu: string; countryCode: string };
+  isCountryDropdownOpen: boolean;
+  countryDropdownRef: React.RefObject<HTMLDivElement | null>;
+  countryOptions: { code: string; name: string }[];
+  validationErrors: ValidationErrors;
+  isSubmitting: boolean;
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
+  clearValidationError: (fieldName: keyof ValidationErrors) => void;
+  handleInputBlur: (fieldName: keyof ValidationErrors, value: string) => void;
+  handleCountrySelect: (countryCode: string) => void;
+  handlePhoneSubmit: (e: React.FormEvent) => void;
+  onToggleCountryDropdown: () => void;
+};
+
+// Phone form moved outside to keep a stable component identity (prevents focus loss)
+function PhoneForm({
+  formData,
+  isCountryDropdownOpen,
+  countryDropdownRef,
+  countryOptions,
+  validationErrors,
+  isSubmitting,
+  handleChange,
+  clearValidationError,
+  handleInputBlur,
+  handleCountrySelect,
+  handlePhoneSubmit,
+  onToggleCountryDropdown,
+}: PhoneFormProps) {
+  return (
+    <>
+      <div className="mb-8" data-oid="fv3gut-">
+        <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
+          Zacznij otrzymywać wiadomości!
+        </h3>
+      </div>
+      <form
+        onSubmit={handlePhoneSubmit}
+        className="space-y-4"
+        data-oid="d937n0b"
+      >
+        <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
+          <div className="h-full" data-oid="xbk7dq-">
+            <label
+              htmlFor="countryCode"
+              className="block text-white font-medium mb-2 text-sm"
+              data-oid="lotbw.t"
+            >
+              Kod kraju *
+            </label>
+            <div
+              className="relative"
+              ref={countryDropdownRef}
+              data-oid="5z3y56l"
+            >
+              <button
+                type="button"
+                onClick={onToggleCountryDropdown}
+                className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
+                data-oid="c7tii0."
+              >
+                {formData.countryCode}
+              </button>
+              <div
+                className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
+                data-oid="f6znpna"
+              >
+                <svg
+                  className={`w-4 h-4 text-white transition-transform ${
+                    isCountryDropdownOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  data-oid="y1g8mzi"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                    data-oid="ie97yww"
+                  />
+                </svg>
+              </div>
+              {isCountryDropdownOpen && (
+                <div
+                  className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
+                  data-oid="u76tc5h"
+                >
+                  {countryOptions.map((option) => (
+                    <button
+                      key={option.code}
+                      type="button"
+                      onClick={() => handleCountrySelect(option.code)}
+                      className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
+                        formData.countryCode === option.code
+                          ? "bg-gray-700"
+                          : ""
+                      }`}
+                      data-oid="jp414j."
+                    >
+                      {option.code} {option.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="h-full" data-oid="go9nv0c">
+            <label
+              htmlFor="numerTelefonu"
+              className="block text-white font-medium mb-2 text-sm"
+              data-oid="jits35v"
+            >
+              Numer telefonu *
+            </label>
+            <input
+              type="tel"
+              id="numerTelefonu"
+              name="numerTelefonu"
+              value={formData.numerTelefonu}
+              onChange={(e) => {
+                handleChange(e);
+                clearValidationError("numerTelefonu");
+              }}
+              onBlur={(e) => handleInputBlur("numerTelefonu", e.target.value)}
+              required
+              className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+                validationErrors.numerTelefonu
+                  ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                  : "focus:ring-white/30"
+              }`}
+              placeholder="np. 123 456 789"
+              data-oid="6a6jkxb"
+            />
+          </div>
+        </div>
+        {validationErrors.numerTelefonu && (
+          <p className="mt-1 text-sm text-red-300" data-oid="880w9:6">
+            {validationErrors.numerTelefonu}
+          </p>
+        )}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
+          data-oid="yomb8ur"
+        >
+          {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ KOD WERYFIKACYJNY"}
+        </button>
+      </form>
+    </>
+  );
+}
+
 export default function ConfirmationCodeForm({
   onShowContactForm,
 }: {
-  onShowContactForm?: () => void;
+  onShowContactForm?: (verifiedPhoneNumber: string) => void;
 }) {
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -347,7 +539,10 @@ export default function ConfirmationCodeForm({
         // Show success message for 2 seconds, then show contact form
         setTimeout(() => {
           setShowSuccessMessage(false);
-          if (onShowContactForm) onShowContactForm();
+          if (onShowContactForm) {
+            const sanitizedPhone = (formData.numerTelefonu || "").trim();
+            onShowContactForm(sanitizedPhone);
+          }
         }, 2000);
       } else {
         setMessage(
@@ -375,165 +570,6 @@ export default function ConfirmationCodeForm({
     }
   };
 
-  // Contact form is handled by parent via onShowContactForm
-
-  // Success message component
-  const SuccessMessage = () => (
-    <div className="text-center space-y-6">
-      <div className="flex justify-center">
-        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
-          <svg
-            className="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        </div>
-      </div>
-      <div>
-        <h3 className="text-2xl font-bold text-white mb-2">
-          Numer potwierdzony!
-        </h3>
-        <p className="text-white/80 text-sm">
-          Twój numer telefonu został pomyślnie zweryfikowany.
-        </p>
-      </div>
-    </div>
-  );
-
-  const PhoneForm = () => (
-    <>
-      <div className="mb-8" data-oid="fv3gut-">
-        <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
-          Zacznij otrzymywać wiadomości!
-        </h3>
-      </div>
-      <form
-        onSubmit={handlePhoneSubmit}
-        className="space-y-4"
-        data-oid="d937n0b"
-      >
-        <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
-          <div className="h-full" data-oid="xbk7dq-">
-            <label
-              htmlFor="countryCode"
-              className="block text-white font-medium mb-2 text-sm"
-              data-oid="lotbw.t"
-            >
-              Kod kraju *
-            </label>
-            <div
-              className="relative"
-              ref={countryDropdownRef}
-              data-oid="5z3y56l"
-            >
-              <button
-                type="button"
-                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
-                data-oid="c7tii0."
-              >
-                {formData.countryCode}
-              </button>
-              <div
-                className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
-                data-oid="f6znpna"
-              >
-                <svg
-                  className={`w-4 h-4 text-white transition-transform ${
-                    isCountryDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  data-oid="y1g8mzi"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                    data-oid="ie97yww"
-                  />
-                </svg>
-              </div>
-              {isCountryDropdownOpen && (
-                <div
-                  className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
-                  data-oid="u76tc5h"
-                >
-                  {countryOptions.map((option) => (
-                    <button
-                      key={option.code}
-                      type="button"
-                      onClick={() => handleCountrySelect(option.code)}
-                      className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
-                        formData.countryCode === option.code
-                          ? "bg-gray-700"
-                          : ""
-                      }`}
-                      data-oid="jp414j."
-                    >
-                      {option.code} {option.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="h-full" data-oid="go9nv0c">
-            <label
-              htmlFor="numerTelefonu"
-              className="block text-white font-medium mb-2 text-sm"
-              data-oid="jits35v"
-            >
-              Numer telefonu *
-            </label>
-            <input
-              type="tel"
-              id="numerTelefonu"
-              name="numerTelefonu"
-              value={formData.numerTelefonu}
-              onChange={(e) => {
-                handleChange(e);
-                clearValidationError("numerTelefonu");
-              }}
-              onBlur={(e) => handleInputBlur("numerTelefonu", e.target.value)}
-              required
-              className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
-                validationErrors.numerTelefonu
-                  ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                  : "focus:ring-white/30"
-              }`}
-              placeholder="np. 123 456 789"
-              data-oid="6a6jkxb"
-            />
-          </div>
-        </div>
-        {validationErrors.numerTelefonu && (
-          <p className="mt-1 text-sm text-red-300" data-oid="880w9:6">
-            {validationErrors.numerTelefonu}
-          </p>
-        )}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
-          data-oid="yomb8ur"
-        >
-          {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ KOD WERYFIKACYJNY"}
-        </button>
-      </form>
-    </>
-  );
-
   return (
     <div
       className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50"
@@ -548,7 +584,24 @@ export default function ConfirmationCodeForm({
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           layout
         >
-          {!showConfirmationCode && !showSuccessMessage && <PhoneForm />}
+          {!showConfirmationCode && !showSuccessMessage && (
+            <PhoneForm
+              formData={formData}
+              isCountryDropdownOpen={isCountryDropdownOpen}
+              countryDropdownRef={countryDropdownRef}
+              countryOptions={countryOptions}
+              validationErrors={validationErrors}
+              isSubmitting={isSubmitting}
+              handleChange={handleChange}
+              clearValidationError={clearValidationError}
+              handleInputBlur={handleInputBlur}
+              handleCountrySelect={handleCountrySelect}
+              handlePhoneSubmit={handlePhoneSubmit}
+              onToggleCountryDropdown={() =>
+                setIsCountryDropdownOpen(!isCountryDropdownOpen)
+              }
+            />
+          )}
           {showConfirmationCode && (
             <ConfirmationCodeGrid
               onCodeComplete={handleConfirmationCodeComplete}
