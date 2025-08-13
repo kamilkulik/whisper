@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from "react";
 import ConfirmationCodeForm from "./components/ConfirmationCodeForm";
+import ContactForm from "./components/ContactForm";
 import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import ImageCarousel from "./components/ImageCarousel";
 import HowItWorks from "./components/HowItWorks";
 import PricingSection from "./components/PricingSection";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [isFormShaking, setIsFormShaking] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -286,7 +289,24 @@ export default function Home() {
                 id="contact-form-container"
                 className={`relative z-50 ${isFormShaking ? "shake-form" : ""}`}
               >
-                <ConfirmationCodeForm />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={showContactForm ? "contact" : "confirm"}
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    layout
+                  >
+                    {showContactForm ? (
+                      <ContactForm />
+                    ) : (
+                      <ConfirmationCodeForm
+                        onShowContactForm={() => setShowContactForm(true)}
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </div>

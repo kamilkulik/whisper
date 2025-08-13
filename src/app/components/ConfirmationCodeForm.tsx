@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { z } from "zod";
 import { useLocale } from "../contexts/LocaleContext";
-import ContactForm from "./ContactForm";
+// ContactForm is switched at the parent level; no import/render here
+import { AnimatePresence, motion } from "framer-motion";
 
 type ValidationErrors = {
   numerTelefonu?: string;
@@ -122,7 +123,11 @@ function ConfirmationCodeGrid({
   );
 }
 
-export default function ConfirmationCodeForm() {
+export default function ConfirmationCodeForm({
+  onShowContactForm,
+}: {
+  onShowContactForm?: () => void;
+}) {
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [message, setMessage] = useState("");
   const countryDropdownRef = useRef<HTMLDivElement>(null);
@@ -138,9 +143,14 @@ export default function ConfirmationCodeForm() {
 
   // New state for confirmation code flow
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
-  const [showContactForm, setShowContactForm] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [sessionId, setSessionId] = useState<string>("");
+
+  const stateKey = showSuccessMessage
+    ? "success"
+    : showConfirmationCode
+    ? "code"
+    : "phone";
 
   const countryOptions = [
     { code: "+48", name: "Polska" },
@@ -337,7 +347,7 @@ export default function ConfirmationCodeForm() {
         // Show success message for 2 seconds, then show contact form
         setTimeout(() => {
           setShowSuccessMessage(false);
-          setShowContactForm(true);
+          if (onShowContactForm) onShowContactForm();
         }, 2000);
       } else {
         setMessage(
@@ -365,10 +375,7 @@ export default function ConfirmationCodeForm() {
     }
   };
 
-  // If showing contact form, render the ContactForm component
-  if (showContactForm) {
-    return <ContactForm />;
-  }
+  // Contact form is handled by parent via onShowContactForm
 
   // Success message component
   const SuccessMessage = () => (
@@ -529,28 +536,39 @@ export default function ConfirmationCodeForm() {
 
   return (
     <div
-      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
+      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50"
       data-oid="tb00.87"
     >
-      {!showConfirmationCode && !showSuccessMessage && <PhoneForm />}
-      {showConfirmationCode && (
-        <ConfirmationCodeGrid
-          onCodeComplete={handleConfirmationCodeComplete}
-          isSubmitting={isSubmitting}
-        />
-      )}
-      {showSuccessMessage && <SuccessMessage />}
-      {message && (
-        <div className="mt-4 text-center">
-          <p
-            className={`text-sm ${
-              message.includes("błąd") ? "text-red-300" : "text-green-300"
-            }`}
-          >
-            {message}
-          </p>
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={stateKey}
+          initial={{ opacity: 0, scale: 0.98, y: 8 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.98, y: -8 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          layout
+        >
+          {!showConfirmationCode && !showSuccessMessage && <PhoneForm />}
+          {showConfirmationCode && (
+            <ConfirmationCodeGrid
+              onCodeComplete={handleConfirmationCodeComplete}
+              isSubmitting={isSubmitting}
+            />
+          )}
+          {showSuccessMessage && <SuccessMessage />}
+          {message && (
+            <div className="mt-4 text-center">
+              <p
+                className={`text-sm ${
+                  message.includes("błąd") ? "text-red-300" : "text-green-300"
+                }`}
+              >
+                {message}
+              </p>
+            </div>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
