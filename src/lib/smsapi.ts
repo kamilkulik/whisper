@@ -92,6 +92,12 @@ class SmsPlanetClient implements SmsClientInterface {
   }
 }
 
+class LocalSmsClient implements SmsClientInterface {
+  async sendSms(phoneNumber: string, message: string): Promise<void> {
+    console.log(`Sending SMS to ${phoneNumber}: ${message}`);
+  }
+}
+
 export async function sendSms(phoneNumber: string, message: string) {
   const configuredSmsClient = process.env.SMS_API_PROVIDER;
 
@@ -103,6 +109,10 @@ export async function sendSms(phoneNumber: string, message: string) {
     case "smsplanet":
       const smsPlanetClient = new SmsPlanetClient();
       await smsPlanetClient.sendSms(phoneNumber, message);
+      break;
+    case "local":
+      const localSmsClient = new LocalSmsClient();
+      await localSmsClient.sendSms(phoneNumber, message);
       break;
     default:
       throw new Error(`Unsupported SMS API provider: ${configuredSmsClient}`);

@@ -139,6 +139,7 @@ export default function ConfirmationCodeForm() {
   // New state for confirmation code flow
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [sessionId, setSessionId] = useState<string>("");
 
   const countryOptions = [
@@ -322,6 +323,8 @@ export default function ConfirmationCodeForm() {
 
       if (response.ok) {
         setMessage("Numer telefonu potwierdzony!");
+        setShowConfirmationCode(false);
+        setShowSuccessMessage(true);
 
         // Clear localStorage and form state
         localStorage.removeItem("confirmationSessionId");
@@ -329,9 +332,13 @@ export default function ConfirmationCodeForm() {
           numerTelefonu: "",
           countryCode: countryCode,
         });
-        setShowConfirmationCode(false);
-        setShowContactForm(true);
         setSessionId("");
+
+        // Show success message for 2 seconds, then show contact form
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+          setShowContactForm(true);
+        }, 2000);
       } else {
         setMessage(
           data.error || "Nieprawidłowy kod weryfikacyjny. Spróbuj ponownie."
@@ -363,11 +370,54 @@ export default function ConfirmationCodeForm() {
     return <ContactForm />;
   }
 
+  // Success message component
+  const SuccessMessage = () => (
+    <div className="text-center space-y-6">
+      <div className="flex justify-center">
+        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+          <svg
+            className="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </div>
+      </div>
+      <div>
+        <h3 className="text-2xl font-bold text-white mb-2">
+          Numer potwierdzony!
+        </h3>
+        <p className="text-white/80 text-sm">
+          Twój numer telefonu został pomyślnie zweryfikowany.
+        </p>
+      </div>
+    </div>
+  );
+
+  // If showing success message, render the success component
+  if (showSuccessMessage) {
+    return (
+      <div
+        className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
+        data-oid="tb00.87"
+      >
+        <SuccessMessage />
+      </div>
+    );
+  }
+
   // If showing confirmation code, render the grid component
   if (showConfirmationCode) {
     return (
       <div
-        className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
+        className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
         data-oid="tb00.87"
       >
         <ConfirmationCodeGrid
@@ -375,7 +425,7 @@ export default function ConfirmationCodeForm() {
           isSubmitting={isSubmitting}
         />
         {message && (
-          <div className="mt-4 text-center">
+          <div className="mt-6 text-center">
             <p
               className={`text-sm ${
                 message.includes("błąd") ? "text-red-300" : "text-green-300"
@@ -391,7 +441,7 @@ export default function ConfirmationCodeForm() {
 
   return (
     <div
-      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
+      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
       data-oid="tb00.87"
     >
       <div className="mb-8" data-oid="fv3gut-">
