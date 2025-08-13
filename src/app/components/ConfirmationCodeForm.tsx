@@ -401,49 +401,8 @@ export default function ConfirmationCodeForm() {
     </div>
   );
 
-  // If showing success message, render the success component
-  if (showSuccessMessage) {
-    return (
-      <div
-        className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
-        data-oid="tb00.87"
-      >
-        <SuccessMessage />
-      </div>
-    );
-  }
-
-  // If showing confirmation code, render the grid component
-  if (showConfirmationCode) {
-    return (
-      <div
-        className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
-        data-oid="tb00.87"
-      >
-        <ConfirmationCodeGrid
-          onCodeComplete={handleConfirmationCodeComplete}
-          isSubmitting={isSubmitting}
-        />
-        {message && (
-          <div className="mt-6 text-center">
-            <p
-              className={`text-sm ${
-                message.includes("błąd") ? "text-red-300" : "text-green-300"
-              }`}
-            >
-              {message}
-            </p>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
-      data-oid="tb00.87"
-    >
+  const PhoneForm = () => (
+    <>
       <div className="mb-8" data-oid="fv3gut-">
         <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
           Zacznij otrzymywać wiadomości!
@@ -565,6 +524,22 @@ export default function ConfirmationCodeForm() {
           {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ KOD WERYFIKACYJNY"}
         </button>
       </form>
+    </>
+  );
+
+  return (
+    <div
+      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50 transition-all duration-700 ease-in-out"
+      data-oid="tb00.87"
+    >
+      {!showConfirmationCode && !showSuccessMessage && <PhoneForm />}
+      {showConfirmationCode && (
+        <ConfirmationCodeGrid
+          onCodeComplete={handleConfirmationCodeComplete}
+          isSubmitting={isSubmitting}
+        />
+      )}
+      {showSuccessMessage && <SuccessMessage />}
       {message && (
         <div className="mt-4 text-center">
           <p
