@@ -43,10 +43,13 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   }, [images.length, resetTimer]);
 
   return (
-    <div className="relative h-full flex items-center justify-center" style={{
-      filter:
-        "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-    }}>
+    <div
+      className="relative h-full flex items-center justify-center"
+      style={{
+        filter:
+          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+      }}
+    >
       <div className="relative w-full max-w-2xl">
         <div className="relative group">
           {/* Floating Navigation Arrows */}
@@ -85,19 +88,19 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           </button>
 
           {/* Image Content with Slide Transition */}
-          <div className="overflow-hidden rounded-2xl shadow-2xl h-[600px]">
+          <div className="overflow-hidden rounded-2xl shadow-2xl w-full max-w-lg mx-auto">
             <div
-              className="flex items-start h-full transition-transform duration-1500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+              className="flex transition-transform duration-1500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
               style={{ transform: `translateX(-${currentImage * 100}%)` }}
             >
               {images.map((image, index) => (
-                <div key={index} className="w-full h-full flex-shrink-0">
+                <div key={index} className="w-full flex-shrink-0">
                   <Image
                     src={image.src}
                     alt={image.alt}
                     width={800}
                     height={1000}
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto object-contain object-center"
                     priority={index === 0}
                   />
                 </div>

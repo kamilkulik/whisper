@@ -21,86 +21,98 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
         {/* Steps Cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-12" data-oid="m29183j">
           {/* Step 1 */}
-          <div 
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20" 
+          <div
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
             data-oid="cx_uel0"
           >
             {/* Photo */}
-            <div 
+            <div
               className="w-full h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
               data-oid="2k9yuv8"
             >
-              <img 
-                src="/process_1.png" 
-                alt="Ciesz się chwilą" 
-                className="w-full h-full object-cover"
+              <img
+                src="/process_1.png"
+                alt="Ciesz się chwilą"
+                className="w-full h-full object-cover object-top"
               />
             </div>
-            
+
             <h3
               className="text-xl font-bold text-white mb-4 text-center"
               data-oid="f751mx4"
             >
               Zapisz się w 30 sekund
             </h3>
-            <p className="text-blue-200 text-sm text-center leading-relaxed" data-oid="x8z2y01">
-              Podaj numer telefonu i gotowe. Prosty formularz, który wypełnisz w mniej niż minutę.
+            <p
+              className="text-blue-200 text-sm text-center leading-relaxed"
+              data-oid="x8z2y01"
+            >
+              Podaj numer telefonu i gotowe. Prosty formularz, który wypełnisz w
+              mniej niż minutę.
             </p>
           </div>
 
           {/* Step 2 */}
-          <div 
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20" 
+          <div
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
             data-oid="q5qffge"
           >
             {/* Photo */}
-            <div 
+            <div
               className="w-full h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
               data-oid="2k9yuv8"
             >
-              <img 
-                src="/process_2.png" 
-                alt="Ciesz się chwilą" 
-                className="w-full h-full object-cover"
+              <img
+                src="/process_2.png"
+                alt="Ciesz się chwilą"
+                className="w-full h-full object-cover object-top"
               />
             </div>
-            
+
             <h3
               className="text-xl font-bold text-white mb-4 text-center"
               data-oid="04_897m"
             >
               Codziennie wieczorem o 20:59
             </h3>
-            <p className="text-blue-200 text-sm text-center leading-relaxed" data-oid="w6hltyq">
-              Dostajesz wiadomość tylko dla Ciebie. Każdego dnia, punktualnie o tej samej porze.
+            <p
+              className="text-blue-200 text-sm text-center leading-relaxed"
+              data-oid="w6hltyq"
+            >
+              Dostajesz wiadomość tylko dla Ciebie. Każdego dnia, punktualnie o
+              tej samej porze.
             </p>
           </div>
 
           {/* Step 3 */}
-          <div 
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20" 
+          <div
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
             data-oid="ctl:6vg"
           >
             {/* Photo */}
-            <div 
+            <div
               className="w-full h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
               data-oid="2k9yuv8"
             >
-              <img 
-                src="/process_3.jpg" 
-                alt="Ciesz się chwilą" 
-                className="w-full h-full object-cover"
+              <img
+                src="/process_3.jpg"
+                alt="Ciesz się chwilą"
+                className="w-full h-full object-cover object-top"
               />
             </div>
-            
+
             <h3
               className="text-xl font-bold text-white mb-4 text-center"
               data-oid="_od5h0g"
             >
               Ciesz się chwilą
             </h3>
-            <p className="text-blue-200 text-sm text-center leading-relaxed" data-oid="njb5q2h">
-              Czytaj, uśmiechnij się, zachowaj dla siebie lub wyślij dalej. To Twoja chwila spokoju.
+            <p
+              className="text-blue-200 text-sm text-center leading-relaxed"
+              data-oid="njb5q2h"
+            >
+              Czytaj, uśmiechnij się, zachowaj dla siebie lub wyślij dalej. To
+              Twoja chwila spokoju.
             </p>
           </div>
         </div>

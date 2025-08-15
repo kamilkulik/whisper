@@ -214,8 +214,6 @@ export default function ContactForm({
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Informacje zapisane! Przekierowywanie do kasy...");
-
         // Clear the form
         setFormData({
           email: "",
@@ -225,31 +223,42 @@ export default function ContactForm({
           numerTelefonu: verifiedPhoneNumber,
         });
 
-        // Redirect to Stripe checkout after a short delay
-        setTimeout(async () => {
-          try {
-            const checkoutResponse = await fetch("/api/checkout-sessions", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                productType: selectedProduct || "trial",
-              }),
-            });
+        // If it's a trial, redirect to trial success page
+        if (selectedProduct === "trial") {
+          setMessage("Informacje zapisane! Przekierowywanie...");
+          setTimeout(() => {
+            window.location.href = `/trial-success?email=${encodeURIComponent(
+              sanitizedData.email
+            )}`;
+          }, 1500);
+        } else {
+          // For other products, redirect to Stripe checkout
+          setMessage("Informacje zapisane! Przekierowywanie do kasy...");
+          setTimeout(async () => {
+            try {
+              const checkoutResponse = await fetch("/api/checkout-sessions", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  productType: selectedProduct || "trial",
+                }),
+              });
 
-            if (checkoutResponse.ok) {
-              const { url } = await checkoutResponse.json();
-              if (url) {
-                window.location.href = url;
+              if (checkoutResponse.ok) {
+                const { url } = await checkoutResponse.json();
+                if (url) {
+                  window.location.href = url;
+                }
+              } else {
+                setMessage("Wystąpił błąd podczas tworzenia sesji płatności.");
               }
-            } else {
+            } catch (error) {
               setMessage("Wystąpił błąd podczas tworzenia sesji płatności.");
             }
-          } catch (error) {
-            setMessage("Wystąpił błąd podczas tworzenia sesji płatności.");
-          }
-        }, 1500);
+          }, 1500);
+        }
       } else {
         setMessage(data.error || "Wystąpił błąd podczas wysyłania wiadomości.");
       }
