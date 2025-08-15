@@ -39,7 +39,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   console.log(`Sending confirmation code to user: ${confirmationCode}`);
   await sendSms(phoneNumber, confirmationCode.toString());
 
-  return NextResponse.json({ sessionId });
+  return NextResponse.json({ sessionId, confirmationCodeExpires });
 };
 
 export const POST = async (request: NextRequest) => {

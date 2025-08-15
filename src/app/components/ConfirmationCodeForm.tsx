@@ -482,6 +482,10 @@ export default function ConfirmationCodeForm({
       if (response.ok) {
         // Save sessionId to localStorage
         localStorage.setItem("confirmationSessionId", data.sessionId);
+        localStorage.setItem(
+          "confirmationCodeExpires",
+          data.confirmationCodeExpires
+        );
         setSessionId(data.sessionId);
         setShowConfirmationCode(true);
         setMessage("Kod weryfikacyjny został wysłany na Twój numer telefonu.");
@@ -530,6 +534,7 @@ export default function ConfirmationCodeForm({
 
         // Clear localStorage and form state
         localStorage.removeItem("confirmationSessionId");
+        localStorage.removeItem("confirmationCodeExpires");
         setFormData({
           numerTelefonu: "",
           countryCode: countryCode,

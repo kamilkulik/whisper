@@ -33,6 +33,24 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle modal deep links - scroll to pricing section when modal is present
+  useEffect(() => {
+    if (modal) {
+      // Small delay to ensure the page is fully loaded
+      const timer = setTimeout(() => {
+        const pricingSection = document.querySelector("#pricing-section");
+        if (pricingSection) {
+          pricingSection.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [modal]);
+
   // Testimonial data
   const testimonials = [
     {
