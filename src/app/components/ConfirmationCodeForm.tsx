@@ -31,6 +31,46 @@ function ConfirmationCodeGrid({
 }) {
   const [code, setCode] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+
+  // Countdown timer effect
+  useEffect(() => {
+    const expiresAt = localStorage.getItem("confirmationCodeExpires");
+    if (!expiresAt) {
+      return;
+    }
+
+    const updateTimer = () => {
+      const now = Date.now();
+      // Parse the Date string from localStorage
+      const expirationTime = new Date(expiresAt).getTime();
+      const remaining = Math.max(0, Math.floor((expirationTime - now) / 1000));
+
+      if (remaining <= 0) {
+        // Code expired - clear localStorage and reset form
+        localStorage.removeItem("confirmationSessionId");
+        localStorage.removeItem("confirmationCodeExpires");
+        window.location.reload(); // Simple way to reset to phone input
+        return;
+      }
+
+      setTimeLeft(remaining);
+    };
+
+    // Update immediately
+    updateTimer();
+
+    // Update every second
+    const interval = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
 
   const handleInputChange = (index: number, value: string) => {
     // Only allow single digit
@@ -84,6 +124,12 @@ function ConfirmationCodeGrid({
 
   return (
     <div className="space-y-6">
+      {/* Countdown Timer */}
+      <div className="text-center mb-4">
+        <p className="text-white/80 text-sm mb-2">Kod wygaśnie za:</p>
+        <p className="text-white font-bold text-lg">{formatTime(timeLeft)}</p>
+      </div>
+
       <div className="text-center">
         <h3 className="text-xl font-bold text-white mb-2">
           Wprowadź kod weryfikacyjny

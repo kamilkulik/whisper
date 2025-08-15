@@ -13,7 +13,7 @@ const temporarySessionIdCache = new Map<
 function generateConfiramtionCodeDetails() {
   return {
     confirmationCode: Math.floor(100000 + Math.random() * 900000),
-    confirmationCodeExpires: new Date(Date.now() + 1000 * 60 * 5), // 5 minutes
+    confirmationCodeExpires: new Date(Date.now() + 1000 * 60 * 1), // 1 minute
     sessionId: uuidv4(),
   };
 }
