@@ -1,15 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import ConfirmationCodeForm from "./components/ConfirmationCodeForm";
 import ContactForm from "./components/ContactForm";
 import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import ImageCarousel from "./components/ImageCarousel";
 import HowItWorks from "./components/HowItWorks";
 import PricingSection from "./components/PricingSection";
+import { ModalWrapper } from "./components/ModalWrapper";
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { modal?: string };
+}) {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [isFormShaking, setIsFormShaking] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
@@ -17,6 +24,9 @@ export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<
     "trial" | "one-time" | "subscription" | null
   >(null);
+
+  // Get modal from search params
+  const modal = searchParams.modal;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,32 +105,29 @@ export default function Home() {
     // Set the selected product
     setSelectedProduct(productType || "trial");
 
-    // Smooth scroll to the contact form
-    const formContainer = document.querySelector("#contact-form-container");
-    if (formContainer) {
-      formContainer.scrollIntoView({
+    // Navigate to modal instead of scrolling
+    router.push(`/?modal=phone`);
+  };
+
+  const handleNavigateToPricing = () => {
+    // Smooth scroll to the pricing section
+    const pricingSection = document.querySelector("#pricing-section");
+    if (pricingSection) {
+      pricingSection.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
+  };
 
-    // Add a delay before focusing and shaking to allow scroll to complete
-    setTimeout(() => {
-      // Focus the first input field in the contact form
-      const firstInput = document.querySelector("#imie") as HTMLInputElement;
-      if (firstInput) {
-        firstInput.focus();
-        console.log("Input focused after scroll"); // Debug log
-      }
+  const handleModalClose = () => {
+    router.push("/");
+  };
 
-      // Trigger shake animation
-      console.log("Setting shake to true after scroll"); // Debug log
-      setIsFormShaking(true);
-      setTimeout(() => {
-        console.log("Setting shake to false"); // Debug log
-        setIsFormShaking(false);
-      }, 600); // Animation duration
-    }, 800); // Wait for scroll to complete
+  const handleShowContactForm = (phone: string) => {
+    setVerifiedPhoneNumber(phone);
+    setShowContactForm(true);
+    router.push(`/?modal=contact`);
   };
 
   return (
@@ -150,7 +157,7 @@ export default function Home() {
                 Log in
               </a>
               <button
-                onClick={handleStartJourneyWithScroll}
+                onClick={handleNavigateToPricing}
                 className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors inline-block cursor-pointer"
               >
                 Subscribe Now
@@ -194,7 +201,7 @@ export default function Home() {
                   </p>
 
                   <button
-                    onClick={handleStartJourneyWithScroll}
+                    onClick={handleNavigateToPricing}
                     className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
                   >
                     Wyślij mi pierwszy szept &gt;
@@ -226,7 +233,7 @@ export default function Home() {
           </div>
 
           {/* How It Works Section */}
-          <HowItWorks onGetStarted={handleStartJourneyWithScroll} />
+          <HowItWorks onGetStarted={handleNavigateToPricing} />
 
           {/* Smartphone Notification Section */}
           <div className="relative min-h-[80vh] flex items-center">
@@ -264,7 +271,7 @@ export default function Home() {
                     </p>
                     <div className="flex items-center space-x-4">
                       <button
-                        onClick={handleStartJourneyWithScroll}
+                        onClick={handleNavigateToPricing}
                         className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
                       >
                         Rozpocznij Okres Próbny
@@ -286,42 +293,30 @@ export default function Home() {
           <TestimonialsCarousel testimonials={testimonials} />
 
           {/* Pricing Section */}
-          <PricingSection onGetStarted={handleStartJourneyWithScroll} />
+          <div id="pricing-section">
+            <PricingSection onGetStarted={handleStartJourneyWithScroll} />
+          </div>
         </div>
       </div>
-      {/* Contact Form Section */}
+      {/* Contact Form Section - Now handled by modals */}
       <div className="bg-[#2A031E] text-white relative overflow-hidden z-0">
         <div className="relative py-16 z-10">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex justify-center">
-              <div
-                id="contact-form-container"
-                className={`relative z-10 ${isFormShaking ? "shake-form" : ""}`}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={showContactForm ? "contact" : "confirm"}
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                    layout
-                  >
-                    {showContactForm ? (
-                      <ContactForm
-                        verifiedPhoneNumber={verifiedPhoneNumber}
-                        selectedProduct={selectedProduct}
-                      />
-                    ) : (
-                      <ConfirmationCodeForm
-                        onShowContactForm={(phone) => {
-                          setVerifiedPhoneNumber(phone);
-                          setShowContactForm(true);
-                        }}
-                      />
-                    )}
-                  </motion.div>
-                </AnimatePresence>
+              <div className="text-center">
+                <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+                  Gotowy na swój pierwszy szept?
+                </h2>
+                <p className="text-xl text-blue-200 mb-8">
+                  Dołącz do tysięcy czytelników, którzy każdego wieczoru
+                  otrzymują ciepłe słowa
+                </p>
+                <button
+                  onClick={handleNavigateToPricing}
+                  className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                >
+                  Rozpocznij darmowy okres próbny
+                </button>
               </div>
             </div>
           </div>
@@ -500,6 +495,26 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Modal Overlays */}
+      {modal === "phone" && (
+        <ModalWrapper isOpen={true} onClose={handleModalClose} modalId="phone">
+          <ConfirmationCodeForm onShowContactForm={handleShowContactForm} />
+        </ModalWrapper>
+      )}
+
+      {modal === "contact" && (
+        <ModalWrapper
+          isOpen={true}
+          onClose={handleModalClose}
+          modalId="contact"
+        >
+          <ContactForm
+            verifiedPhoneNumber={verifiedPhoneNumber}
+            selectedProduct={selectedProduct}
+          />
+        </ModalWrapper>
+      )}
     </>
   );
 }

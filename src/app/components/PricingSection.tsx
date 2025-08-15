@@ -48,7 +48,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
                 onClick={() => onGetStarted("trial")}
                 className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                Rozpocznij darmowy okres próbny
+                Rozpocznij okres próbny
               </button>
             </div>
           </div>
@@ -133,16 +133,6 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Bottom CTA - Keep for fallback */}
-        <div className="text-center mb-8">
-          <button
-            onClick={() => onGetStarted("trial")}
-            className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-12 py-4 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            Rozpocznij okres próbny
-          </button>
         </div>
       </div>
     </div>

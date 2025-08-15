@@ -38,8 +38,10 @@ type ValidationErrors = {
 
 export default function ContactForm({
   verifiedPhoneNumber = "",
+  selectedProduct = null,
 }: {
   verifiedPhoneNumber?: string;
+  selectedProduct?: "trial" | "one-time" | "subscription" | null;
 }) {
   const { language, countryCode, isLoaded } = useLocale();
 
