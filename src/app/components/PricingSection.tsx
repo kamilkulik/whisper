@@ -1,7 +1,7 @@
 "use client";
 
 interface PricingSectionProps {
-  onGetStarted: () => void;
+  onGetStarted: (productType?: "trial" | "one-time" | "subscription") => void;
 }
 
 export default function PricingSection({ onGetStarted }: PricingSectionProps) {
@@ -41,6 +41,16 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
               </div>
               <p className="text-gray-400 text-base text-center">przez 7 dni</p>
             </div>
+
+            {/* Button Section */}
+            <div className="px-8 pb-8">
+              <button
+                onClick={() => onGetStarted("trial")}
+                className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                Rozpocznij darmowy okres próbny
+              </button>
+            </div>
           </div>
 
           {/* One-time Payment - Most Popular */}
@@ -69,6 +79,16 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
                   <span className="text-2xl text-gray-300">zł</span>
                 </div>
                 <p className="text-gray-400 text-base">jednorazowo</p>
+              </div>
+
+              {/* Button Section */}
+              <div className="px-8 pb-8">
+                <button
+                  onClick={() => onGetStarted("one-time")}
+                  className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                >
+                  Kup za 19 zł
+                </button>
               </div>
             </div>
           </div>
@@ -101,14 +121,24 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
                   równowartość 228 zł/rok
                 </p>
               </div>
+
+              {/* Button Section */}
+              <div className="px-8 pb-8">
+                <button
+                  onClick={() => onGetStarted("subscription")}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                >
+                  Rozpocznij subskrypcję
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom CTA */}
+        {/* Bottom CTA - Keep for fallback */}
         <div className="text-center mb-8">
           <button
-            onClick={onGetStarted}
+            onClick={() => onGetStarted("trial")}
             className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-12 py-4 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
           >
             Rozpocznij okres próbny

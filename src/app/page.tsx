@@ -14,6 +14,9 @@ export default function Home() {
   const [isFormShaking, setIsFormShaking] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<
+    "trial" | "one-time" | "subscription" | null
+  >(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,8 +87,13 @@ export default function Home() {
     { src: "/szept_3.png", alt: "Wieczorny Szept Image 3" },
   ];
 
-  const handleStartJourneyWithScroll = () => {
-    console.log("Start Journey with scroll clicked!"); // Debug log
+  const handleStartJourneyWithScroll = (
+    productType?: "trial" | "one-time" | "subscription"
+  ) => {
+    console.log("Start Journey with scroll clicked!", productType); // Debug log
+
+    // Set the selected product
+    setSelectedProduct(productType || "trial");
 
     // Smooth scroll to the contact form
     const formContainer = document.querySelector("#contact-form-container");
@@ -300,7 +308,10 @@ export default function Home() {
                     layout
                   >
                     {showContactForm ? (
-                      <ContactForm verifiedPhoneNumber={verifiedPhoneNumber} />
+                      <ContactForm
+                        verifiedPhoneNumber={verifiedPhoneNumber}
+                        selectedProduct={selectedProduct}
+                      />
                     ) : (
                       <ConfirmationCodeForm
                         onShowContactForm={(phone) => {
