@@ -226,12 +226,29 @@ export default function ContactForm({
         });
 
         // Redirect to Stripe checkout after a short delay
-        setTimeout(() => {
-          const form = document.createElement("form");
-          form.method = "POST";
-          form.action = "/api/checkout-sessions";
-          document.body.appendChild(form);
-          form.submit();
+        setTimeout(async () => {
+          try {
+            const checkoutResponse = await fetch("/api/checkout-sessions", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                productType: selectedProduct || "trial",
+              }),
+            });
+
+            if (checkoutResponse.ok) {
+              const { url } = await checkoutResponse.json();
+              if (url) {
+                window.location.href = url;
+              }
+            } else {
+              setMessage("Wystąpił błąd podczas tworzenia sesji płatności.");
+            }
+          } catch (error) {
+            setMessage("Wystąpił błąd podczas tworzenia sesji płatności.");
+          }
         }, 1500);
       } else {
         setMessage(data.error || "Wystąpił błąd podczas wysyłania wiadomości.");

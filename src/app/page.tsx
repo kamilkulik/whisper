@@ -9,24 +9,19 @@ import ImageCarousel from "./components/ImageCarousel";
 import HowItWorks from "./components/HowItWorks";
 import PricingSection from "./components/PricingSection";
 import { ModalWrapper } from "./components/ModalWrapper";
-import { AnimatePresence, motion } from "framer-motion";
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { modal?: string };
-}) {
+export default function Home() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
-  const [isFormShaking, setIsFormShaking] = useState(false);
-  const [showContactForm, setShowContactForm] = useState(false);
+  // const [showContactForm, setShowContactForm] = useState(false);
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<
     "trial" | "one-time" | "subscription" | null
   >(null);
 
   // Get modal from search params
-  const modal = searchParams.modal;
+  const searchParams = useSearchParams();
+  const modal = searchParams.get("modal");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,8 +100,8 @@ export default function Home({
     // Set the selected product
     setSelectedProduct(productType || "trial");
 
-    // Navigate to modal instead of scrolling
-    router.push(`/?modal=phone`);
+    // Navigate to modal without scrolling to top
+    router.push(`/?modal=phone`, { scroll: false });
   };
 
   const handleNavigateToPricing = () => {
@@ -121,13 +116,13 @@ export default function Home({
   };
 
   const handleModalClose = () => {
-    router.push("/");
+    router.push("/", { scroll: false });
   };
 
   const handleShowContactForm = (phone: string) => {
     setVerifiedPhoneNumber(phone);
-    setShowContactForm(true);
-    router.push(`/?modal=contact`);
+    // setShowContactForm(true);
+    router.push(`/?modal=contact`, { scroll: false });
   };
 
   return (
