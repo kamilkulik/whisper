@@ -17,7 +17,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="pl">
       <body className={`${montserrat.variable} antialiased font-montserrat`}>
         <LocaleProvider>{children}</LocaleProvider>
       </body>
