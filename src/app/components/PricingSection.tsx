@@ -57,7 +57,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
           <div className="relative hover:shadow-3xl hover:-translate-y-2 transition-all">
             {/* Popular Badge */}
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-              <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold">
+              <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-6 py-2 rounded-full text-sm font-bold whitespace-nowrap">
                 najczęściej wybierany
               </div>
             </div>

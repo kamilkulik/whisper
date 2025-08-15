@@ -222,9 +222,24 @@ export default function Home() {
 
                   <div className="flex items-center space-x-4 pt-8">
                     <div className="flex -space-x-2">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full border-2 border-white"></div>
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-full border-2 border-white"></div>
-                      <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-400 rounded-full border-2 border-white"></div>
+                      <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden">
+                        <img
+                          src="/face_1.png"
+                          className="w-full h-full object-cover object-center"
+                        />
+                      </div>
+                      <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden">
+                        <img
+                          src="/face_2.png"
+                          className="w-full h-full object-cover object-center"
+                        />
+                      </div>
+                      <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden">
+                        <img
+                          src="/face_3.png"
+                          className="w-full h-full object-cover object-center"
+                        />
+                      </div>
                     </div>
                     <div className="text-white">
                       {/* <p className="font-medium">
@@ -251,7 +266,58 @@ export default function Home() {
           {/* Smartphone Notification Section */}
           <div className="relative min-h-[80vh] flex items-center">
             <div className="max-w-7xl mx-auto px-6 w-full">
-              <div className="grid lg:grid-cols-5 gap-12 items-center">
+              {/* Mobile Layout: Title, Image, Copy */}
+              <div className="lg:hidden space-y-6">
+                {/* Title */}
+                <div className="text-center">
+                  <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
+                    Słowa, które zostają z Tobą na{" "}
+                    <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      długo
+                    </span>
+                  </h2>
+                </div>
+
+                {/* Image */}
+                <div className="relative flex justify-center items-center h-[400px]">
+                  <img
+                    src="/szept_4.png"
+                    alt="Smartphone showing Wieczorny Szept notification"
+                    className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                    style={{
+                      filter:
+                        "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                    }}
+                  />
+                </div>
+
+                {/* Copy */}
+                <div className="space-y-4">
+                  <p className="text-lg text-blue-200 leading-relaxed">
+                    To nie są przypadkowe cytaty. Każdy szept jest pisany
+                    ręcznie przez poetę, który od lat tworzy krótkie formy pełne
+                    emocji.
+                    <br />
+                    Są jak małe listy miłosne — tylko że mieszczą się w jednym
+                    SMS-ie. Idealne, by zakończyć dzień z uśmiechem.
+                  </p>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={handleNavigateToPricing}
+                      className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
+                    >
+                      Rozpocznij Okres Próbny
+                    </button>
+                    <div className="text-white text-sm">
+                      <p className="font-medium">✓ Darmowy przez 7 dni</p>
+                      <p className="text-blue-200">✓ Anuluj w każdej chwili</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Layout: Image, Copy */}
+              <div className="hidden lg:grid lg:grid-cols-5 gap-12 items-center">
                 {/* Left Side - Smartphone Image */}
                 <div className="relative flex justify-center items-center h-[550px] lg:col-span-3">
                   <img
