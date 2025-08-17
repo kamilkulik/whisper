@@ -150,7 +150,7 @@ export default function Home() {
     router.push("/", { scroll: false });
     // Small delay to ensure modal closes, then redirect to user page
     setTimeout(() => {
-      router.push(`/user/${userId}`);
+      router.push(`/dashboard}`);
     }, 100);
   };
 

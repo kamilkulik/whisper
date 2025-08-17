@@ -65,28 +65,56 @@ export const POST = async (request: NextRequest) => {
   const confirmationCode = body["confirmationCode"];
   const sessionId = body["sessionId"];
 
-  if (confirmationCode && sessionId) {
-    const cachedSessionDetails = temporarySessionIdCache.get(sessionId);
+  if (!confirmationCode || !sessionId) {
+    return NextResponse.json(
+      { error: "confirmationCode and sessionId are required" },
+      { status: 400 }
+    );
+  }
 
-    if (
-      !cachedSessionDetails ||
-      !cachedSessionDetails.confirmationCode ||
-      !cachedSessionDetails.confirmationCodeExpires
-    ) {
-      return NextResponse.json(
-        { error: "Invalid sessionId or confirmationCode" },
-        { status: 400 }
-      );
-    }
+  const cachedSessionDetails = temporarySessionIdCache.get(sessionId);
 
-    let success = false;
-    if (
-      cachedSessionDetails.confirmationCode === confirmationCode &&
-      cachedSessionDetails.confirmationCodeExpires > new Date()
-    ) {
-      success = true;
-    }
+  if (
+    !cachedSessionDetails ||
+    !cachedSessionDetails.confirmationCode ||
+    !cachedSessionDetails.confirmationCodeExpires
+  ) {
+    return NextResponse.json(
+      { error: "Invalid sessionId or confirmationCode" },
+      { status: 400 }
+    );
+  }
 
-    return NextResponse.json({ success });
+  // Check if code is valid and not expired
+  if (
+    cachedSessionDetails.confirmationCode === confirmationCode &&
+    cachedSessionDetails.confirmationCodeExpires > new Date()
+  ) {
+    // Create a new session ID for the authenticated session
+    const authenticatedSessionId = uuidv4();
+
+    // Create response with success
+    const response = NextResponse.json({ success: true });
+
+    // Set secure session cookie
+    response.cookies.set({
+      name: "sessionId",
+      value: authenticatedSessionId,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
+
+    // Clean up the temporary session
+    temporarySessionIdCache.delete(sessionId);
+
+    return response;
+  } else {
+    return NextResponse.json(
+      { error: "Invalid or expired confirmation code" },
+      { status: 400 }
+    );
   }
 };
