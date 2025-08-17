@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { SupportedLanguagesEnum } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 interface UserData {
@@ -69,6 +70,7 @@ export const POST = async (request: NextRequest) => {
           email: body.email,
           name: body.name,
           premium: true,
+          messageLanguage: body.messageLanguage as SupportedLanguagesEnum,
         },
       });
     }

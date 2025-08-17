@@ -1,4 +1,4 @@
-import ConfirmationCodeForm from "../components/ConfirmationCodeForm";
+import ConfirmationCodeForm from "../_components/ConfirmationCodeForm";
 
 export default function PhonePage() {
   return (

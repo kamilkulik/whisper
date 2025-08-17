@@ -1,11 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { headers } from "next/headers";
 
 import { stripe } from "@/lib/stripe";
 
-export async function POST(request: Request) {
+export interface CheckoutSessionsPayload {
+  productType: "trial" | "one-time" | "subscription";
+  email: string;
+}
+
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body: CheckoutSessionsPayload = await request.json();
     const { productType } = body;
 
     const headersList = await headers();
@@ -49,6 +54,7 @@ export async function POST(request: Request) {
 
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
+      customer_email: body.email,
       line_items: [
         {
           price: config.price,

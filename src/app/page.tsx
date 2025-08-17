@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import ConfirmationCodeForm from "./components/ConfirmationCodeForm";
-import ContactForm from "./components/ContactForm";
-import TestimonialsCarousel from "./components/TestimonialsCarousel";
-import ImageCarousel from "./components/ImageCarousel";
-import HowItWorks from "./components/HowItWorks";
-import PricingSection from "./components/PricingSection";
-import { ModalWrapper } from "./components/ModalWrapper";
+import ConfirmationCodeForm from "./_components/ConfirmationCodeForm";
+import ContactForm from "./_components/ContactForm";
+import TestimonialsCarousel from "./_components/TestimonialsCarousel";
+import ImageCarousel from "./_components/ImageCarousel";
+import HowItWorks from "./_components/HowItWorks";
+import PricingSection from "./_components/PricingSection";
+import { ModalWrapper } from "./_components/ModalWrapper";
 
 export default function Home() {
   const router = useRouter();
@@ -164,7 +164,7 @@ export default function Home() {
 
             <div className="flex items-center space-x-6">
               <a
-                href="#"
+                href="/user/login"
                 className="text-white hover:text-blue-200 transition-colors"
               >
                 Log in

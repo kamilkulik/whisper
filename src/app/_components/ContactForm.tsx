@@ -5,6 +5,7 @@ import { useLocale } from "../contexts/LocaleContext";
 import { z } from "zod";
 import DOMPurify from "dompurify";
 import { SupportedLanguagesEnum } from "@prisma/client";
+import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 
 // Validation schema
 const formSchema = z.object({
@@ -234,6 +235,10 @@ export default function ContactForm({
         } else {
           // For other products, redirect to Stripe checkout
           setMessage("Informacje zapisane! Przekierowywanie do kasy...");
+          const checkoutSessionsPayload: CheckoutSessionsPayload = {
+            productType: selectedProduct || "trial",
+            email: sanitizedData.email,
+          };
           setTimeout(async () => {
             try {
               const checkoutResponse = await fetch("/api/checkout-sessions", {
@@ -241,9 +246,7 @@ export default function ContactForm({
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                  productType: selectedProduct || "trial",
-                }),
+                body: JSON.stringify(checkoutSessionsPayload),
               });
 
               if (checkoutResponse.ok) {
