@@ -1,3 +1,4 @@
+import { sendEmail } from "@/lib/emailapi";
 import { sendSms } from "@/lib/smsapi";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
@@ -43,7 +44,11 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       `Sending confirmation code to email: ${email} - Code: ${confirmationCode}`
     );
     // For now, just log the email sending (you can implement email sending later)
-    // await sendEmail(email, confirmationCode.toString());
+    await sendEmail(
+      email,
+      "Wieczorny szept - kod potwierdzający",
+      confirmationCode.toString()
+    );
   } else if (phoneNumber) {
     // TODO: send confirmation code to user via sms
     console.log(
