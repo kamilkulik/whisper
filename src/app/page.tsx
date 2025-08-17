@@ -143,6 +143,17 @@ export default function Home() {
     router.push(`/?modal=contact`, { scroll: false });
   };
 
+  const handleLoginSuccess = (userId: string) => {
+    // Redirect to user page after successful login
+    console.log("handleLoginSuccess called with userId:", userId);
+    // Close the modal first, then redirect
+    router.push("/", { scroll: false });
+    // Small delay to ensure modal closes, then redirect to user page
+    setTimeout(() => {
+      router.push(`/user/${userId}`);
+    }, 100);
+  };
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
@@ -163,12 +174,12 @@ export default function Home() {
             </div>
 
             <div className="flex items-center space-x-6">
-              <a
-                href="/user/login"
+              <button
+                onClick={() => router.push("/?modal=login", { scroll: false })}
                 className="text-white hover:text-blue-200 transition-colors"
               >
                 Log in
-              </a>
+              </button>
               <button
                 onClick={handleNavigateToPricing}
                 className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors inline-block cursor-pointer"
@@ -579,6 +590,16 @@ export default function Home() {
       {modal === "phone" && (
         <ModalWrapper isOpen={true} onClose={handleModalClose} modalId="phone">
           <ConfirmationCodeForm onShowContactForm={handleShowContactForm} />
+        </ModalWrapper>
+      )}
+
+      {modal === "login" && (
+        <ModalWrapper isOpen={true} onClose={handleModalClose} modalId="login">
+          <ConfirmationCodeForm
+            onLoginSuccess={handleLoginSuccess}
+            isLoginMode={true}
+            isEmailMode={true}
+          />
         </ModalWrapper>
       )}
 

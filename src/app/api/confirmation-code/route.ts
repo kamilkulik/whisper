@@ -20,9 +20,11 @@ function generateConfiramtionCodeDetails() {
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const phoneNumber = request.nextUrl.searchParams.get("phoneNumber");
-  if (!phoneNumber) {
+  const email = request.nextUrl.searchParams.get("email");
+
+  if (!phoneNumber && !email) {
     return NextResponse.json(
-      { error: "Phone number is required" },
+      { error: "Phone number or email is required" },
       { status: 400 }
     );
   }
@@ -35,9 +37,20 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     confirmationCodeExpires,
   });
 
-  // TODO: send confirmation code to user via sms
-  console.log(`Sending confirmation code to user: ${confirmationCode}`);
-  await sendSms(phoneNumber, confirmationCode.toString());
+  if (email) {
+    // TODO: send confirmation code to user via email
+    console.log(
+      `Sending confirmation code to email: ${email} - Code: ${confirmationCode}`
+    );
+    // For now, just log the email sending (you can implement email sending later)
+    // await sendEmail(email, confirmationCode.toString());
+  } else if (phoneNumber) {
+    // TODO: send confirmation code to user via sms
+    console.log(
+      `Sending confirmation code to phone: ${phoneNumber} - Code: ${confirmationCode}`
+    );
+    await sendSms(phoneNumber, confirmationCode.toString());
+  }
 
   return NextResponse.json({ sessionId, confirmationCodeExpires });
 };

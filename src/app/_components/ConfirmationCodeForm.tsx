@@ -7,10 +7,11 @@ import { AnimatePresence, motion } from "framer-motion";
 
 type ValidationErrors = {
   numerTelefonu?: string;
+  email?: string;
 };
 
-// Validation schema
-const formSchema = z.object({
+// Validation schemas
+const phoneSchema = z.object({
   numerTelefonu: z
     .string()
     .min(6, "Numer telefonu musi mieć co najmniej 6 cyfr")
@@ -19,6 +20,13 @@ const formSchema = z.object({
       /^[0-9\s\-]+$/,
       "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
     ),
+});
+
+const emailSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email jest wymagany")
+    .email("Nieprawidłowy format email"),
 });
 
 // Confirmation Code Grid Component
@@ -170,7 +178,7 @@ function ConfirmationCodeGrid({
 }
 
 // Success message component (moved outside to avoid remounts on each render)
-function SuccessMessage() {
+function SuccessMessage({ isLoginMode = false }: { isLoginMode?: boolean }) {
   return (
     <div className="text-center space-y-6">
       <div className="flex justify-center">
@@ -192,10 +200,12 @@ function SuccessMessage() {
       </div>
       <div>
         <h3 className="text-2xl font-bold text-white mb-2">
-          Numer potwierdzony!
+          {isLoginMode ? "Logowanie udane!" : "Numer potwierdzony!"}
         </h3>
         <p className="text-white/80 text-sm">
-          Twój numer telefonu został pomyślnie zweryfikowany.
+          {isLoginMode
+            ? "Zostałeś pomyślnie zalogowany do swojego konta."
+            : "Twój numer telefonu został pomyślnie zweryfikowany."}
         </p>
       </div>
     </div>
@@ -203,12 +213,14 @@ function SuccessMessage() {
 }
 
 type PhoneFormProps = {
-  formData: { numerTelefonu: string; countryCode: string };
+  formData: { numerTelefonu: string; email: string; countryCode: string };
   isCountryDropdownOpen: boolean;
   countryDropdownRef: React.RefObject<HTMLDivElement | null>;
   countryOptions: { code: string; name: string }[];
   validationErrors: ValidationErrors;
   isSubmitting: boolean;
+  isLoginMode: boolean;
+  isEmailMode: boolean;
   handleChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
@@ -227,6 +239,8 @@ function PhoneForm({
   countryOptions,
   validationErrors,
   isSubmitting,
+  isLoginMode,
+  isEmailMode,
   handleChange,
   clearValidationError,
   handleInputBlur,
@@ -238,7 +252,9 @@ function PhoneForm({
     <>
       <div className="mb-8" data-oid="fv3gut-">
         <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
-          Zacznij otrzymywać wiadomości!
+          {isLoginMode
+            ? "Zaloguj się do swojego konta"
+            : "Zacznij otrzymywać wiadomości!"}
         </h3>
       </div>
       <form
@@ -246,107 +262,145 @@ function PhoneForm({
         className="space-y-4"
         data-oid="d937n0b"
       >
-        <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
-          <div className="h-full" data-oid="xbk7dq-">
-            <label
-              htmlFor="countryCode"
-              className="block text-white font-medium mb-2 text-sm"
-              data-oid="lotbw.t"
-            >
-              Kod kraju *
-            </label>
-            <div
-              className="relative"
-              ref={countryDropdownRef}
-              data-oid="5z3y56l"
-            >
-              <button
-                type="button"
-                onClick={onToggleCountryDropdown}
-                className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
-                data-oid="c7tii0."
-              >
-                {formData.countryCode}
-              </button>
-              <div
-                className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
-                data-oid="f6znpna"
-              >
-                <svg
-                  className={`w-4 h-4 text-white transition-transform ${
-                    isCountryDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  data-oid="y1g8mzi"
+        {!isEmailMode ? (
+          <>
+            <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
+              <div className="h-full" data-oid="xbk7dq-">
+                <label
+                  htmlFor="countryCode"
+                  className="block text-white font-medium mb-2 text-sm"
+                  data-oid="lotbw.t"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                    data-oid="ie97yww"
-                  />
-                </svg>
-              </div>
-              {isCountryDropdownOpen && (
+                  Kod kraju *
+                </label>
                 <div
-                  className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
-                  data-oid="u76tc5h"
+                  className="relative"
+                  ref={countryDropdownRef}
+                  data-oid="5z3y56l"
                 >
-                  {countryOptions.map((option) => (
-                    <button
-                      key={option.code}
-                      type="button"
-                      onClick={() => handleCountrySelect(option.code)}
-                      className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
-                        formData.countryCode === option.code
-                          ? "bg-gray-700"
-                          : ""
+                  <button
+                    type="button"
+                    onClick={onToggleCountryDropdown}
+                    className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
+                    data-oid="c7tii0."
+                  >
+                    {formData.countryCode}
+                  </button>
+                  <div
+                    className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
+                    data-oid="f6znpna"
+                  >
+                    <svg
+                      className={`w-4 h-4 text-white transition-transform ${
+                        isCountryDropdownOpen ? "rotate-180" : ""
                       }`}
-                      data-oid="jp414j."
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      data-oid="y1g8mzi"
                     >
-                      {option.code} {option.name}
-                    </button>
-                  ))}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                        data-oid="ie97yww"
+                      />
+                    </svg>
+                  </div>
+                  {isCountryDropdownOpen && (
+                    <div
+                      className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
+                      data-oid="u76tc5h"
+                    >
+                      {countryOptions.map((option) => (
+                        <button
+                          key={option.code}
+                          type="button"
+                          onClick={() => handleCountrySelect(option.code)}
+                          className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
+                            formData.countryCode === option.code
+                              ? "bg-gray-700"
+                              : ""
+                          }`}
+                          data-oid="jp414j."
+                        >
+                          {option.code} {option.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
+              <div className="h-full" data-oid="go9nv0c">
+                <label
+                  htmlFor="numerTelefonu"
+                  className="block text-white font-medium mb-2 text-sm"
+                  data-oid="jits35v"
+                >
+                  Numer telefonu *
+                </label>
+                <input
+                  type="tel"
+                  id="numerTelefonu"
+                  name="numerTelefonu"
+                  value={formData.numerTelefonu}
+                  onChange={(e) => {
+                    handleChange(e);
+                    clearValidationError("numerTelefonu");
+                  }}
+                  onBlur={(e) =>
+                    handleInputBlur("numerTelefonu", e.target.value)
+                  }
+                  required
+                  className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+                    validationErrors.numerTelefonu
+                      ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                      : "focus:ring-white/30"
+                  }`}
+                  placeholder="np. 123 456 789"
+                  data-oid="6a6jkxb"
+                />
+              </div>
             </div>
-          </div>
-          <div className="h-full" data-oid="go9nv0c">
+            {validationErrors.numerTelefonu && (
+              <p className="mt-1 text-sm text-red-300" data-oid="880w9:6">
+                {validationErrors.numerTelefonu}
+              </p>
+            )}
+          </>
+        ) : (
+          <div>
             <label
-              htmlFor="numerTelefonu"
+              htmlFor="email"
               className="block text-white font-medium mb-2 text-sm"
-              data-oid="jits35v"
             >
-              Numer telefonu *
+              Adres email *
             </label>
             <input
-              type="tel"
-              id="numerTelefonu"
-              name="numerTelefonu"
-              value={formData.numerTelefonu}
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
               onChange={(e) => {
                 handleChange(e);
-                clearValidationError("numerTelefonu");
+                clearValidationError("email");
               }}
-              onBlur={(e) => handleInputBlur("numerTelefonu", e.target.value)}
+              onBlur={(e) => handleInputBlur("email", e.target.value)}
               required
-              className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
-                validationErrors.numerTelefonu
+              className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+                validationErrors.email
                   ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                   : "focus:ring-white/30"
               }`}
-              placeholder="np. 123 456 789"
-              data-oid="6a6jkxb"
+              placeholder="np. jan.kowalski@email.com"
             />
+            {validationErrors.email && (
+              <p className="mt-1 text-sm text-red-300">
+                {validationErrors.email}
+              </p>
+            )}
           </div>
-        </div>
-        {validationErrors.numerTelefonu && (
-          <p className="mt-1 text-sm text-red-300" data-oid="880w9:6">
-            {validationErrors.numerTelefonu}
-          </p>
         )}
         <button
           type="submit"
@@ -354,7 +408,11 @@ function PhoneForm({
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
           data-oid="yomb8ur"
         >
-          {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ KOD WERYFIKACYJNY"}
+          {isSubmitting
+            ? "WYSYŁANIE..."
+            : isLoginMode
+            ? "WYŚLIJ KOD LOGOWANIA"
+            : "WYŚLIJ KOD WERYFIKACYJNY"}
         </button>
       </form>
     </>
@@ -363,8 +421,14 @@ function PhoneForm({
 
 export default function ConfirmationCodeForm({
   onShowContactForm,
+  onLoginSuccess,
+  isLoginMode = false,
+  isEmailMode = false,
 }: {
   onShowContactForm?: (verifiedPhoneNumber: string) => void;
+  onLoginSuccess?: (userId: string) => void;
+  isLoginMode?: boolean;
+  isEmailMode?: boolean;
 }) {
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -376,6 +440,7 @@ export default function ConfirmationCodeForm({
   const { countryCode } = useLocale();
   const [formData, setFormData] = useState({
     numerTelefonu: "",
+    email: "",
     countryCode: "+48",
   });
 
@@ -423,7 +488,7 @@ export default function ConfirmationCodeForm({
     value: string
   ) => {
     const sanitizedValue = sanitizeInput(value);
-    const error = validateField(fieldName, sanitizedValue);
+    const error = validateField(fieldName, sanitizedValue, isEmailMode);
 
     // Update form data with sanitized value
     setFormData((prev) => ({
@@ -453,14 +518,27 @@ export default function ConfirmationCodeForm({
 
   const validateField = (
     fieldName: keyof ValidationErrors,
-    value: string
+    value: string,
+    isEmailMode: boolean
   ): string | undefined => {
+    console.log("validateField called:", { fieldName, value, isEmailMode });
     try {
-      const fieldSchema = formSchema.shape[fieldName];
+      let fieldSchema;
+      if (isEmailMode && fieldName === "email") {
+        fieldSchema = emailSchema.shape.email;
+        console.log("Using email schema");
+      } else if (!isEmailMode && fieldName === "numerTelefonu") {
+        fieldSchema = phoneSchema.shape.numerTelefonu;
+        console.log("Using phone schema");
+      } else {
+        console.log("Unknown field or mode mismatch");
+        return "Nieznane pole";
+      }
       fieldSchema.parse(value);
       return undefined; // No error
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.log("Validation error:", error.issues[0]?.message);
         return error.issues[0]?.message;
       }
       return "Błąd walidacji";
@@ -483,15 +561,24 @@ export default function ConfirmationCodeForm({
     e.preventDefault();
     setMessage("");
 
-    // Validate all input fields
-    const sanitizedData = {
-      numerTelefonu: sanitizeInput(formData.numerTelefonu),
-    };
+    // Validate all input fields based on mode
+    const sanitizedData = isEmailMode
+      ? { email: sanitizeInput(formData.email) }
+      : { numerTelefonu: sanitizeInput(formData.numerTelefonu) };
+
+    console.log("Form submission - isEmailMode:", isEmailMode);
+    console.log("Sanitized data:", sanitizedData);
 
     const errors: ValidationErrors = {};
     Object.entries(sanitizedData).forEach(([key, value]) => {
-      const error = validateField(key as keyof ValidationErrors, value);
+      console.log("Validating field:", key, "with value:", value);
+      const error = validateField(
+        key as keyof ValidationErrors,
+        value,
+        isEmailMode
+      );
       if (error) {
+        console.log("Validation error for", key, ":", error);
         errors[key as keyof ValidationErrors] = error;
       }
     });
@@ -513,9 +600,13 @@ export default function ConfirmationCodeForm({
 
     try {
       // Request confirmation code
-      const params = new URLSearchParams({
-        phoneNumber: formData.numerTelefonu,
-      });
+      const params = new URLSearchParams();
+      if (isEmailMode) {
+        params.append("email", formData.email);
+      } else {
+        params.append("phoneNumber", formData.numerTelefonu);
+      }
+
       const response = await fetch(
         `/api/confirmation-code?${params.toString()}`,
         {
@@ -534,7 +625,11 @@ export default function ConfirmationCodeForm({
         );
         setSessionId(data.sessionId);
         setShowConfirmationCode(true);
-        setMessage("Kod weryfikacyjny został wysłany na Twój numer telefonu.");
+        setMessage(
+          isEmailMode
+            ? "Kod weryfikacyjny został wysłany na Twój adres email."
+            : "Kod weryfikacyjny został wysłany na Twój numer telefonu."
+        );
       } else {
         setMessage(
           data.error || "Wystąpił błąd podczas wysyłania kodu weryfikacyjnego."
@@ -574,27 +669,55 @@ export default function ConfirmationCodeForm({
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Numer telefonu potwierdzony!");
-        setShowConfirmationCode(false);
-        setShowSuccessMessage(true);
+        if (isLoginMode) {
+          // Handle login success
+          setMessage("Logowanie udane!");
+          setShowConfirmationCode(false);
+          setShowSuccessMessage(true);
 
-        // Clear localStorage and form state
-        localStorage.removeItem("confirmationSessionId");
-        localStorage.removeItem("confirmationCodeExpires");
-        setFormData({
-          numerTelefonu: "",
-          countryCode: countryCode,
-        });
-        setSessionId("");
+          // Clear localStorage
+          localStorage.removeItem("confirmationSessionId");
+          localStorage.removeItem("confirmationCodeExpires");
 
-        // Show success message for 2 seconds, then show contact form
-        setTimeout(() => {
-          setShowSuccessMessage(false);
-          if (onShowContactForm) {
-            const sanitizedPhone = (formData.numerTelefonu || "").trim();
-            onShowContactForm(sanitizedPhone);
-          }
-        }, 2000);
+          // Show success message for 2 seconds, then redirect to user page
+          setTimeout(() => {
+            setShowSuccessMessage(false);
+            // For now, use a default userId or the phone/email as identifier
+            const userId =
+              data.userId ||
+              (isEmailMode
+                ? formData.email
+                : formData.numerTelefonu.replace(/\D/g, ""));
+            console.log("Login successful, redirecting to user page:", userId);
+            if (onLoginSuccess) {
+              onLoginSuccess(userId);
+            }
+          }, 2000);
+        } else {
+          // Handle signup success (existing flow)
+          setMessage("Numer telefonu potwierdzony!");
+          setShowConfirmationCode(false);
+          setShowSuccessMessage(true);
+
+          // Clear localStorage and form state
+          localStorage.removeItem("confirmationSessionId");
+          localStorage.removeItem("confirmationCodeExpires");
+          setFormData({
+            numerTelefonu: "",
+            email: "",
+            countryCode: countryCode,
+          });
+          setSessionId("");
+
+          // Show success message for 2 seconds, then show contact form
+          setTimeout(() => {
+            setShowSuccessMessage(false);
+            if (onShowContactForm) {
+              const sanitizedPhone = (formData.numerTelefonu || "").trim();
+              onShowContactForm(sanitizedPhone);
+            }
+          }, 2000);
+        }
       } else {
         setMessage(
           data.error || "Nieprawidłowy kod weryfikacyjny. Spróbuj ponownie."
@@ -643,6 +766,8 @@ export default function ConfirmationCodeForm({
               countryOptions={countryOptions}
               validationErrors={validationErrors}
               isSubmitting={isSubmitting}
+              isLoginMode={isLoginMode}
+              isEmailMode={isEmailMode}
               handleChange={handleChange}
               clearValidationError={clearValidationError}
               handleInputBlur={handleInputBlur}
@@ -659,7 +784,7 @@ export default function ConfirmationCodeForm({
               isSubmitting={isSubmitting}
             />
           )}
-          {showSuccessMessage && <SuccessMessage />}
+          {showSuccessMessage && <SuccessMessage isLoginMode={isLoginMode} />}
           {message && (
             <div className="mt-4 text-center">
               <p
