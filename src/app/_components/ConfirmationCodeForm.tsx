@@ -679,19 +679,11 @@ export default function ConfirmationCodeForm({
           localStorage.removeItem("confirmationSessionId");
           localStorage.removeItem("confirmationCodeExpires");
 
-          // Show success message for 2 seconds, then redirect to user page
+          // Show success message for 2 seconds, then redirect to dashboard
           setTimeout(() => {
             setShowSuccessMessage(false);
-            // For now, use a default userId or the phone/email as identifier
-            const userId =
-              data.userId ||
-              (isEmailMode
-                ? formData.email
-                : formData.numerTelefonu.replace(/\D/g, ""));
-            console.log("Login successful, redirecting to user page:", userId);
-            if (onLoginSuccess) {
-              onLoginSuccess(userId);
-            }
+            // Redirect to dashboard - the session cookie will be set by the API
+            window.location.href = "/dashboard";
           }, 2000);
         } else {
           // Handle signup success (existing flow)

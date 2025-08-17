@@ -143,17 +143,6 @@ export default function Home() {
     router.push(`/?modal=contact`, { scroll: false });
   };
 
-  const handleLoginSuccess = (userId: string) => {
-    // Redirect to user page after successful login
-    console.log("handleLoginSuccess called with userId:", userId);
-    // Close the modal first, then redirect
-    router.push("/", { scroll: false });
-    // Small delay to ensure modal closes, then redirect to user page
-    setTimeout(() => {
-      router.push(`/dashboard}`);
-    }, 100);
-  };
-
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
@@ -595,11 +584,7 @@ export default function Home() {
 
       {modal === "login" && (
         <ModalWrapper isOpen={true} onClose={handleModalClose} modalId="login">
-          <ConfirmationCodeForm
-            onLoginSuccess={handleLoginSuccess}
-            isLoginMode={true}
-            isEmailMode={true}
-          />
+          <ConfirmationCodeForm isLoginMode={true} isEmailMode={true} />
         </ModalWrapper>
       )}
 
