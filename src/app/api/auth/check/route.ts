@@ -1,14 +1,25 @@
+import "server-only";
+
+import { getUserFromSessionId } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const sessionId = request.cookies.get("sessionId");
+  try {
+    const sessionId = request.cookies.get("sessionId");
 
-  if (sessionId) {
-    // TODO: Validate session against your session store
-    // For now, we'll just check if the cookie exists
-    // In production, you'd validate against a database or Redis store
-    return NextResponse.json({ authenticated: true });
-  } else {
+    if (!sessionId) {
+      return NextResponse.json({ authenticated: false });
+    }
+
+    const user = await getUserFromSessionId(sessionId.value);
+
+    if (user && user.sessionId === sessionId.value) {
+      return NextResponse.json({ authenticated: true });
+    } else {
+      return NextResponse.json({ authenticated: false });
+    }
+  } catch (error) {
+    console.error("Error checking authentication:", error);
     return NextResponse.json({ authenticated: false });
   }
 }
