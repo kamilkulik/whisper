@@ -10,19 +10,19 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-export function getUserFromEmail(email: string) {
+export async function getUserFromEmail(email: string) {
   return prisma.user.findUnique({
     where: { email },
   });
 }
 
-export function getUserFromPhone(phone: string) {
+export async function getUserFromPhone(phone: string) {
   return prisma.user.findUnique({
     where: { phoneNumber: phone },
   });
 }
 
-export function getUserFromSessionId(sessionId: string) {
+export async function getUserFromSessionId(sessionId: string) {
   return prisma.user.findUnique({
     where: { sessionId },
   });

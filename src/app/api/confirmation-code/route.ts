@@ -69,6 +69,8 @@ export const POST = async (request: NextRequest) => {
   const phoneNumber = body["phoneNumber"];
   const isLoginMode = body["isLoginMode"];
 
+  console.log(JSON.stringify(body, null, 2));
+
   if (!confirmationCode || !sessionId) {
     return NextResponse.json(
       { error: "confirmationCode and sessionId are required" },
@@ -103,13 +105,19 @@ export const POST = async (request: NextRequest) => {
           where: { email },
         });
 
+        console.log("existing user", existingUser);
+
         if (existingUser) {
-          await prisma.user.update({
-            where: { email },
-            data: {
-              sessionId: authenticatedSessionId,
-            },
-          });
+          try {
+            await prisma.user.update({
+              where: { email },
+              data: {
+                sessionId: authenticatedSessionId,
+              },
+            });
+          } catch (err) {
+            console.error("Error saving to the db", err);
+          }
         } else {
           // need to redirect to the signup form
           return NextResponse.redirect(
@@ -125,10 +133,14 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (existingUser) {
-          await prisma.user.update({
-            where: { phoneNumber },
-            data: { sessionId: authenticatedSessionId },
-          });
+          try {
+            await prisma.user.update({
+              where: { phoneNumber },
+              data: { sessionId: authenticatedSessionId },
+            });
+          } catch (err) {
+            console.error("Error saving to the db", err);
+          }
         } else {
           // need to redirect to the signup form
           return NextResponse.redirect(

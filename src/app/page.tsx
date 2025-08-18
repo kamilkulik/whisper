@@ -147,7 +147,6 @@ export default function Home() {
     try {
       // Check if user is already logged in via API
       const response = await fetch("/api/auth/check");
-      console.log("response", response);
       const data = await response.json();
 
       if (data.authenticated) {

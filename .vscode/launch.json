@@ -7,11 +7,8 @@
       "request": "launch",
       "command": "pnpm dev",
       "skipFiles": ["<node_internals>/**"],
-      "env": {
-        "NODE_OPTIONS": "--inspect"
-      },
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/app",
+      "cwd": "${workspaceFolder}",
     },
     {
       "type": "node",

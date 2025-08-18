@@ -61,6 +61,8 @@ export const POST = async (request: NextRequest) => {
       });
     } else {
       // Create new user
+      const sessionId = request.cookies.get("sessionId")?.value;
+      console.log("sessionId", sessionId);
       await prisma.user.create({
         data: {
           phoneNumber: body.numerTelefonu,
@@ -68,6 +70,7 @@ export const POST = async (request: NextRequest) => {
           name: body.imie,
           premium: true,
           messageLanguage: body.messageLanguage,
+          sessionId,
         },
       });
     }
