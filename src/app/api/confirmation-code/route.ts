@@ -1,4 +1,5 @@
 import { sendEmail } from "@/lib/emailapi";
+import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
@@ -39,31 +40,34 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   });
 
   if (email) {
-    // TODO: send confirmation code to user via email
-    console.log(
-      `Sending confirmation code to email: ${email} - Code: ${confirmationCode}`
-    );
-    // For now, just log the email sending (you can implement email sending later)
     await sendEmail(
       email,
       "Wieczorny szept - kod potwierdzający",
       confirmationCode.toString()
     );
   } else if (phoneNumber) {
-    // TODO: send confirmation code to user via sms
-    console.log(
-      `Sending confirmation code to phone: ${phoneNumber} - Code: ${confirmationCode}`
-    );
     await sendSms(phoneNumber, confirmationCode.toString());
   }
 
   return NextResponse.json({ sessionId, confirmationCodeExpires });
 };
 
+/**
+ * POST /api/confirmation-code
+ * Will check whether the confirmation code matches that saved in
+ * temporarySessionIdCache
+ * If yes, will return to the user http only cookie which will expire in 7 days
+ * If no, will return 400
+ * With that cookies in the users browser, they will be able to navigate into the dashboard
+ * without having to go through the login process again
+ */
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
   const confirmationCode = body["confirmationCode"];
   const sessionId = body["sessionId"];
+  const email = body["email"];
+  const phoneNumber = body["phoneNumber"];
+  const isLoginMode = body["isLoginMode"];
 
   if (!confirmationCode || !sessionId) {
     return NextResponse.json(
@@ -92,6 +96,50 @@ export const POST = async (request: NextRequest) => {
   ) {
     // Create a new session ID for the authenticated session
     const authenticatedSessionId = uuidv4();
+
+    if (isLoginMode) {
+      if (email) {
+        const existingUser = await prisma.user.findUnique({
+          where: { email },
+        });
+
+        if (existingUser) {
+          await prisma.user.update({
+            where: { email },
+            data: {
+              sessionId: authenticatedSessionId,
+            },
+          });
+        } else {
+          // need to redirect to the signup form
+          return NextResponse.redirect(
+            new URL("/?modal=contact", request.url),
+            {
+              status: 302,
+            }
+          );
+        }
+      } else if (phoneNumber) {
+        const existingUser = await prisma.user.findUnique({
+          where: { phoneNumber },
+        });
+
+        if (existingUser) {
+          await prisma.user.update({
+            where: { phoneNumber },
+            data: { sessionId: authenticatedSessionId },
+          });
+        } else {
+          // need to redirect to the signup form
+          return NextResponse.redirect(
+            new URL("/?modal=contact", request.url),
+            {
+              status: 302,
+            }
+          );
+        }
+      }
+    }
 
     // Create response with success
     const response = NextResponse.json({ success: true });

@@ -143,6 +143,26 @@ export default function Home() {
     router.push(`/?modal=contact`, { scroll: false });
   };
 
+  const handleLoginClick = async () => {
+    try {
+      // Check if user is already logged in via API
+      const response = await fetch("/api/auth/check");
+      const data = await response.json();
+
+      if (data.authenticated) {
+        // User is already logged in, redirect to dashboard
+        router.push("/dashboard");
+      } else {
+        // User is not logged in, show login modal
+        router.push("/?modal=login", { scroll: false });
+      }
+    } catch (error) {
+      console.error("Error checking authentication status:", error);
+      // Fallback to showing login modal
+      router.push("/?modal=login", { scroll: false });
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
@@ -164,7 +184,7 @@ export default function Home() {
 
             <div className="flex items-center space-x-6">
               <button
-                onClick={() => router.push("/?modal=login", { scroll: false })}
+                onClick={handleLoginClick}
                 className="text-white hover:text-blue-200 transition-colors"
               >
                 Log in

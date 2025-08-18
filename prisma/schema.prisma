@@ -44,6 +44,7 @@ model User {
   premium                 Boolean                @default(false)
   lastUsedMessageId       Int?                   @map("last_used_message")
   messageLanguage         SupportedLanguagesEnum @map("message_language")
+  sessionId               String?                @unique @map("session_id")
   createdAt               DateTime               @default(now()) @map("created_at")
   updatedAt               DateTime?              @updatedAt @map("updated_at")
 

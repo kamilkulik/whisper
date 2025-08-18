@@ -663,6 +663,10 @@ export default function ConfirmationCodeForm({
         body: JSON.stringify({
           confirmationCode: parseInt(confirmationCode, 10),
           sessionId: storedSessionId,
+          ...(isEmailMode
+            ? { email: formData.email }
+            : { phoneNumber: formData.numerTelefonu }),
+          isLoginMode,
         }),
       });
 

@@ -19,20 +19,7 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
-            Witaj w Wieczorny Szept
-          </h1>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h2 className="text-xl font-semibold text-blue-900 mb-2">
-                Twój Status
-              </h2>
-              <p className="text-blue-700">
-                Jesteś zalogowany i gotowy do otrzymywania szeptów.
-              </p>
-            </div>
-
             <div className="bg-green-50 p-4 rounded-lg">
               <h2 className="text-xl font-semibold text-green-900 mb-2">
                 Następny Szept
