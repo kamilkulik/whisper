@@ -62,7 +62,6 @@ export const POST = async (request: NextRequest) => {
     } else {
       // Create new user
       const sessionId = request.cookies.get("sessionId")?.value;
-      console.log("sessionId", sessionId);
       await prisma.user.create({
         data: {
           phoneNumber: body.numerTelefonu,

@@ -17,6 +17,25 @@ enum SupportedLanguagesEnum {
   IT
 }
 
+enum SubscriptionType {
+  ONE_TIME
+  MONTHLY
+}
+
+enum PaymentProvider {
+  STRIPE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PENDING
+  EXPIRED
+  FAILED
+  REFUNDED
+  PAUSED
+}
+
 model Message {
   id        Int                    @id @default(autoincrement())
   message   String
@@ -49,7 +68,26 @@ model User {
   updatedAt               DateTime?              @updatedAt @map("updated_at")
 
   // Relation to the last used message
-  lastUsedMessage Message? @relation(fields: [lastUsedMessageId], references: [id])
+  lastUsedMessage Message?       @relation(fields: [lastUsedMessageId], references: [id])
+  Subscription    Subscription[]
 
   @@map("users")
+}
+
+model Subscription {
+  id              Int                @id @default(autoincrement())
+  paymentProvider PaymentProvider    @default(STRIPE)
+  paymentId       String             @map("payment_id")
+  userId          Int                @map("user_id")
+  user            User               @relation(fields: [userId], references: [id])
+  type            SubscriptionType
+  status          SubscriptionStatus
+  dateCancelled   DateTime?          @map("date_cancelled")
+  dateStarted     DateTime           @map("date_started")
+  dateRefunded    DateTime?          @map("date_refunded")
+  dateExpires     DateTime           @map("date_expires")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime?          @updatedAt @map("updated_at")
+
+  @@map("subscriptions")
 }
