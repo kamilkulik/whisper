@@ -67,13 +67,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   }, [images.length, resetTimer]);
 
   return (
-    <div
-      className="relative h-full flex items-center justify-center"
-      style={{
-        filter:
-          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-      }}
-    >
+    <div className="relative h-full flex items-center justify-center">
       <div className="relative w-full max-w-2xl">
         <div className="relative group">
           {/* Floating Navigation Arrows */}
