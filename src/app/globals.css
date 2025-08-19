@@ -122,3 +122,25 @@ body {
 .shake-form {
   animation: shake 0.8s ease-in-out !important;
 }
+
+/* Carousel animations for smooth transitions */
+.carousel-inner-container {
+  position: relative;
+  width: 100%;
+}
+
+.carousel-slide {
+  display: flex;
+  transition: transform 1500ms ease-in-out;
+  will-change: transform;
+}
+
+/* Next direction animations */
+.carousel-inner-container.next .carousel-slide {
+  transition: transform 1500ms ease-in-out;
+}
+
+/* Previous direction animations */
+.carousel-inner-container.previous .carousel-slide {
+  transition: transform 1500ms ease-in-out;
+}

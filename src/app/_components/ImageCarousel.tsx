@@ -14,18 +14,32 @@ interface ImageCarouselProps {
 
 export default function ImageCarousel({ images }: ImageCarouselProps) {
   const [currentImage, setCurrentImage] = useState(0);
+  const [direction, setDirection] = useState<"next" | "previous">("next");
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [resetTimer, setResetTimer] = useState(0);
 
   const nextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % images.length);
+    if (!isTransitioning) {
+      setDirection("next");
+      setIsTransitioning(true);
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }
   };
 
   const prevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+    if (!isTransitioning) {
+      setDirection("previous");
+      setIsTransitioning(true);
+      setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+    }
   };
 
   const goToImage = (index: number) => {
-    setCurrentImage(index);
+    if (!isTransitioning && index !== currentImage) {
+      setDirection(index > currentImage ? "next" : "previous");
+      setIsTransitioning(true);
+      setCurrentImage(index);
+    }
   };
 
   const handleManualNavigation = (navigationFn: () => void) => {
@@ -33,11 +47,21 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
     setResetTimer((prev) => prev + 1); // Trigger timer reset
   };
 
+  // Reset transition state after animation completes
+  useEffect(() => {
+    if (isTransitioning) {
+      const timer = setTimeout(() => {
+        setIsTransitioning(false);
+      }, 1500); // Match the CSS transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [isTransitioning]);
+
   // Auto-advance carousel every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       nextImage();
-    }, 5000); // 5 seconds
+    }, 3000); // 5 seconds
 
     return () => clearInterval(interval);
   }, [images.length, resetTimer]);
@@ -87,23 +111,27 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
             </svg>
           </button>
 
-          {/* Image Content with CSS-only Slide Transition */}
+          {/* Image Content with Directional Slide Transition */}
           <div className="overflow-hidden rounded-2xl shadow-2xl w-full max-w-lg mx-auto">
-            <div
-              className="flex transition-transform duration-800 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-              style={{ transform: `translateX(-${currentImage * 100}%)` }}
-            >
-              {images.map((image, index) => (
-                <div key={index} className="w-full flex-shrink-0">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    width={800}
-                    height={1000}
-                    className="w-full h-auto object-contain object-center"
-                  />
-                </div>
-              ))}
+            <div className={`carousel-inner-container ${direction}`}>
+              <div
+                className="carousel-slide"
+                style={{
+                  transform: `translateX(-${currentImage * 100}%)`,
+                }}
+              >
+                {images.map((image, index) => (
+                  <div key={index} className="w-full flex-shrink-0">
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      width={800}
+                      height={1000}
+                      className="w-full h-auto object-contain object-center"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

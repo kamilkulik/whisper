@@ -88,8 +88,11 @@ export default function TestimonialsCarousel({
           {/* Testimonial Content with Slide Transition */}
           <div className="overflow-hidden">
             <div
-              className="flex transition-transform duration-1500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-              style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
+              className="flex transition-transform ease-out"
+              style={{
+                transform: `translateX(-${currentTestimonial * 100}%)`,
+                transitionDuration: "2s",
+              }}
             >
               {testimonials.map((testimonial, index) => (
                 <div
