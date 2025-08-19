@@ -24,7 +24,7 @@ export default function TestimonialsCarousel({
 
   const prevTestimonial = () => {
     setCurrentTestimonial(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length
     );
   };
 

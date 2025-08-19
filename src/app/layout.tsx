@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "./contexts/LocaleContext";
+import { Suspense } from "react";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body className={`${montserrat.variable} antialiased font-montserrat`}>
-        <LocaleProvider>{children}</LocaleProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+          <LocaleProvider>{children}</LocaleProvider>
+        </Suspense>
       </body>
     </html>
   );

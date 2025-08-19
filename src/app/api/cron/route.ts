@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { sendSms, smsapi } from "@/lib/smsapi";
+import { sendSms } from "@/lib/smsapi";
 
 export const GET = async (request: NextRequest) => {
   try {

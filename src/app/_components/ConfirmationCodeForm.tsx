@@ -1,9 +1,10 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { z } from "zod";
 import { useLocale } from "../contexts/LocaleContext";
 // ContactForm is switched at the parent level; no import/render here
-import { AnimatePresence, motion } from "framer-motion";
 
 type ValidationErrors = {
   numerTelefonu?: string;
@@ -745,55 +746,49 @@ export default function ConfirmationCodeForm({
       className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50"
       data-oid="tb00.87"
     >
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={stateKey}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          layout
-        >
-          {!showConfirmationCode && !showSuccessMessage && (
-            <PhoneForm
-              formData={formData}
-              isCountryDropdownOpen={isCountryDropdownOpen}
-              countryDropdownRef={countryDropdownRef}
-              countryOptions={countryOptions}
-              validationErrors={validationErrors}
-              isSubmitting={isSubmitting}
-              isLoginMode={isLoginMode}
-              isEmailMode={isEmailMode}
-              handleChange={handleChange}
-              clearValidationError={clearValidationError}
-              handleInputBlur={handleInputBlur}
-              handleCountrySelect={handleCountrySelect}
-              handlePhoneSubmit={handlePhoneSubmit}
-              onToggleCountryDropdown={() =>
-                setIsCountryDropdownOpen(!isCountryDropdownOpen)
-              }
-            />
-          )}
-          {showConfirmationCode && (
-            <ConfirmationCodeGrid
-              onCodeComplete={handleConfirmationCodeComplete}
-              isSubmitting={isSubmitting}
-            />
-          )}
-          {showSuccessMessage && <SuccessMessage isLoginMode={isLoginMode} />}
-          {message && (
-            <div className="mt-4 text-center">
-              <p
-                className={`text-sm ${
-                  message.includes("błąd") ? "text-red-300" : "text-green-300"
-                }`}
-              >
-                {message}
-              </p>
-            </div>
-          )}
-        </motion.div>
-      </AnimatePresence>
+      <div
+        key={stateKey}
+        className="transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+      >
+        {!showConfirmationCode && !showSuccessMessage && (
+          <PhoneForm
+            formData={formData}
+            isCountryDropdownOpen={isCountryDropdownOpen}
+            countryDropdownRef={countryDropdownRef}
+            countryOptions={countryOptions}
+            validationErrors={validationErrors}
+            isSubmitting={isSubmitting}
+            isLoginMode={isLoginMode}
+            isEmailMode={isEmailMode}
+            handleChange={handleChange}
+            clearValidationError={clearValidationError}
+            handleInputBlur={handleInputBlur}
+            handleCountrySelect={handleCountrySelect}
+            handlePhoneSubmit={handlePhoneSubmit}
+            onToggleCountryDropdown={() =>
+              setIsCountryDropdownOpen(!isCountryDropdownOpen)
+            }
+          />
+        )}
+        {showConfirmationCode && (
+          <ConfirmationCodeGrid
+            onCodeComplete={handleConfirmationCodeComplete}
+            isSubmitting={isSubmitting}
+          />
+        )}
+        {showSuccessMessage && <SuccessMessage isLoginMode={isLoginMode} />}
+        {message && (
+          <div className="mt-4 text-center">
+            <p
+              className={`text-sm ${
+                message.includes("błąd") ? "text-red-300" : "text-green-300"
+              }`}
+            >
+              {message}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

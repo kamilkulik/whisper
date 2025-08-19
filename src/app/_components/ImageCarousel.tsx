@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface ImageSlide {
   src: string;
@@ -88,18 +87,11 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
             </svg>
           </button>
 
-          {/* Image Content with Framer Motion Slide Transition */}
+          {/* Image Content with CSS-only Slide Transition */}
           <div className="overflow-hidden rounded-2xl shadow-2xl w-full max-w-lg mx-auto">
-            <motion.div
-              className="flex"
-              animate={{ x: `-${currentImage * 100}%` }}
-              transition={{
-                duration: 0.8,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                type: "spring",
-                stiffness: 100,
-                damping: 20,
-              }}
+            <div
+              className="flex transition-transform duration-800 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+              style={{ transform: `translateX(-${currentImage * 100}%)` }}
             >
               {images.map((image, index) => (
                 <div key={index} className="w-full flex-shrink-0">
@@ -112,7 +104,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
                   />
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
           {/* Pagination Dots */}

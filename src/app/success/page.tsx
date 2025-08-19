@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 export default async function Success({
   searchParams,
 }: {
-  searchParams: { session_id: string };
+  searchParams: Promise<{ session_id: string }>;
 }) {
   const { session_id } = await searchParams;
 

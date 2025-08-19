@@ -165,7 +165,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
+      <div className="bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] relative">
         {/* Navigation Bar */}
         <nav
           className={`fixed top-0 left-0 right-0 z-[200] transition-all duration-300 ${
@@ -202,7 +202,7 @@ export default function Home() {
         {/* Main Content - All sections with continuous background */}
         <div className="">
           {/* Hero Section */}
-          <div className="relative min-h-screen">
+          <div className="relative">
             {/* Hero Background Orbs */}
             <div className="absolute inset-0">
               <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/40 rounded-full blur-2xl heartbeat"></div>
@@ -398,13 +398,13 @@ export default function Home() {
         </div>
       </div>
       {/* Contact Form Section - Now handled by modals */}
-      <div className="bg-[#2A031E] text-white relative overflow-hidden z-0">
-        <div className="relative py-16 z-10">
+      <div className="bg-[#2A031E] text-white relative overflow-hidden">
+        <div className="relative py-16">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex justify-center">
               <div className="text-center">
                 <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-                  Gotowy na swój pierwszy szept?
+                  Gotowa/y na swój pierwszy szept?
                 </h2>
                 <p className="text-xl text-blue-200 mb-8">
                   Dołącz do tysięcy czytelników, którzy każdego wieczoru
@@ -422,7 +422,7 @@ export default function Home() {
         </div>
         {/* Footer */}
         {/* Footer Background Orbs */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-3xl"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/15 rounded-full blur-3xl"></div>

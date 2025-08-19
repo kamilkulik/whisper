@@ -1,9 +1,8 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ModalWrapperProps {
   isOpen: boolean;
@@ -21,6 +20,7 @@ export function ModalWrapper({
   title,
 }: ModalWrapperProps) {
   const router = useRouter();
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleClose = () => {
     // Navigate back to the main page without modal
@@ -40,61 +40,68 @@ export function ModalWrapper({
     return () => window.removeEventListener("popstate", handlePopState);
   }, [isOpen, onClose]);
 
+  // Handle animation states
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      const timer = setTimeout(() => setIsVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <AnimatePresence>
-          {isOpen && (
-            <>
-              <Dialog.Overlay asChild>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-                />
-              </Dialog.Overlay>
-              <Dialog.Title asChild>
-                <Dialog.Content asChild>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                  >
-                    <div className="relative w-full max-w-md">
-                      {/* Close button */}
-                      <Dialog.Close asChild>
-                        <button
-                          className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors z-10"
-                          aria-label="Close modal"
+        {isVisible && (
+          <>
+            <Dialog.Overlay asChild>
+              <div
+                className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300 ${
+                  isOpen ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            </Dialog.Overlay>
+            <Dialog.Title asChild>
+              <Dialog.Content asChild>
+                <div
+                  className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
+                    isOpen
+                      ? "opacity-100 scale-100 translate-y-0"
+                      : "opacity-0 scale-95 translate-y-5"
+                  }`}
+                >
+                  <div className="relative w-full max-w-md">
+                    {/* Close button */}
+                    <Dialog.Close asChild>
+                      <button
+                        className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors z-10"
+                        aria-label="Close modal"
+                      >
+                        <svg
+                          className="w-8 h-8"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          <svg
-                            className="w-8 h-8"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </Dialog.Close>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </Dialog.Close>
 
-                      {/* Modal content */}
-                      <div className="relative">{children}</div>
-                    </div>
-                  </motion.div>
-                </Dialog.Content>
-              </Dialog.Title>
-            </>
-          )}
-        </AnimatePresence>
+                    {/* Modal content */}
+                    <div className="relative">{children}</div>
+                  </div>
+                </div>
+              </Dialog.Content>
+            </Dialog.Title>
+          </>
+        )}
       </Dialog.Portal>
     </Dialog.Root>
   );
