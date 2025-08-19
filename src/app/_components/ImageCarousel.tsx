@@ -103,13 +103,12 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
             >
               {images.map((image, index) => (
                 <div key={index} className="w-full flex-shrink-0">
-                  <Image
+                  <img
                     src={image.src}
                     alt={image.alt}
                     width={800}
                     height={1000}
                     className="w-full h-auto object-contain object-center"
-                    priority={index === 0}
                   />
                 </div>
               ))}

@@ -6,6 +6,12 @@
   --foreground: #171717;
 }
 
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
 /* Responsive font scaling - scales the entire document */
 html {
   /* Base font size: 1rem = 10px (62.5% of 16px) */
@@ -44,22 +50,8 @@ html {
   }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-montserrat);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
+  box-sizing: border-box;
   font-family: var(--font-montserrat), sans-serif;
   font-size: 1.6rem; /* 16px base font size */
   line-height: 1.6;
