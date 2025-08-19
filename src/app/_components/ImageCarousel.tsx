@@ -67,7 +67,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   }, [images.length, resetTimer]);
 
   return (
-    <div className="relative h-full flex items-center justify-center">
+    <div className="relative h-full flex items-center justify-center p-0 md:p-12 min-[1200px]:p-24">
       {/** required for dots to be at the bottom */}
       <div className="relative group">
         {/* Floating Navigation Arrows */}
