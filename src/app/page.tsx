@@ -210,8 +210,8 @@ export default function Home() {
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-3xl"></div>
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-6 py-12 pt-32">
-              <div className="grid lg:grid-cols-5 gap-2 items-center min-h-[80vh]">
+            <div className="relative max-w-7xl mx-auto px-6 pt-32 md:pt-16 lg:pt-24">
+              <div className="grid lg:grid-cols-5 gap-8 lg:gap-2 items-center min-h-[80vh]">
                 {/* Left Side - Content */}
                 <div className="lg:col-span-2 space-y-8">
                   <div>
@@ -273,7 +273,7 @@ export default function Home() {
                 </div>
 
                 {/* Right Side - Image Carousel */}
-                <div className="lg:col-span-3 relative">
+                <div className="mt-12 lg:mt-0 lg:col-span-3 relative">
                   <ImageCarousel images={carouselImages} />
                 </div>
               </div>
