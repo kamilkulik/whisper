@@ -1,0 +1,116 @@
+/* Rem-based font size utilities that work with responsive scaling */
+
+/* Headings */
+.text-h1 {
+  font-size: 3.6rem; /* 36px on desktop, scales down on smaller screens */
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.text-h2 {
+  font-size: 3rem; /* 30px on desktop */
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-size: 2.4rem; /* 24px on desktop */
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-h4 {
+  font-size: 2rem; /* 20px on desktop */
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.text-h5 {
+  font-size: 1.8rem; /* 18px on desktop */
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.text-h6 {
+  font-size: 1.6rem; /* 16px on desktop */
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Body text */
+.text-body {
+  font-size: 1.6rem; /* 16px on desktop */
+  line-height: 1.6;
+}
+
+.text-body-large {
+  font-size: 1.8rem; /* 18px on desktop */
+  line-height: 1.6;
+}
+
+.text-body-small {
+  font-size: 1.4rem; /* 14px on desktop */
+  line-height: 1.5;
+}
+
+.text-caption {
+  font-size: 1.2rem; /* 12px on desktop */
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+/* Interactive elements */
+.text-button {
+  font-size: 1.6rem; /* 16px on desktop */
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.text-input {
+  font-size: 1.6rem; /* 16px on desktop */
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 1.4rem; /* 14px on desktop */
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.text-nav {
+  font-size: 1.6rem; /* 16px on desktop */
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Form elements */
+.text-form-label {
+  font-size: 1.4rem; /* 14px on desktop */
+  line-height: 1.5;
+  font-weight: 500;
+  color: #374151;
+}
+
+.text-form-error {
+  font-size: 1.2rem; /* 12px on desktop */
+  line-height: 1.4;
+  color: #dc2626;
+}
+
+.text-form-help {
+  font-size: 1.2rem; /* 12px on desktop */
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+/* Link styles */
+.text-link {
+  font-size: 1.6rem; /* 16px on desktop */
+  line-height: 1.5;
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.text-link:hover {
+  color: #1d4ed8;
+}
