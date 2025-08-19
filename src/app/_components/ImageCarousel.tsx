@@ -68,7 +68,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
 
   return (
     <div className="relative h-full flex items-center justify-center">
-      <div className="relative w-full max-w-2xl">
+      <div className="relative w-full max-w-3xl">
         <div className="relative group">
           {/* Floating Navigation Arrows */}
           <button

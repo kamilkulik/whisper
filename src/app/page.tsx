@@ -211,7 +211,7 @@ export default function Home() {
             </div>
 
             <div className="relative max-w-7xl mx-auto px-6 py-12 pt-32">
-              <div className="grid lg:grid-cols-5 gap-12 items-center min-h-[80vh]">
+              <div className="grid lg:grid-cols-5 gap-2 items-center min-h-[80vh]">
                 {/* Left Side - Content */}
                 <div className="lg:col-span-2 space-y-8">
                   <div>
