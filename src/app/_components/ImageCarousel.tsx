@@ -57,14 +57,16 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
     }
   }, [isTransitioning]);
 
-  // Auto-advance carousel every 5 seconds
+  // Auto-advance carousel every 3 seconds
   useEffect(() => {
+    if (isTransitioning) return; // Don't auto-advance while transitioning
+
     const interval = setInterval(() => {
       nextImage();
-    }, 3000); // 5 seconds
+    }, 3000); // 3 seconds
 
     return () => clearInterval(interval);
-  }, [images.length, resetTimer]);
+  }, [images.length, resetTimer, isTransitioning]);
 
   return (
     <div className="relative h-full flex items-center justify-center p-0 md:p-12 min-[1200px]:p-24">

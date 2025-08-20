@@ -108,6 +108,7 @@ export default function Home() {
     { src: "/szept_1.png", alt: "Wieczorny Szept Image 1" },
     { src: "/szept_2.png", alt: "Wieczorny Szept Image 2" },
     { src: "/szept_3.png", alt: "Wieczorny Szept Image 3" },
+    { src: "/szept_4.png", alt: "Wieczorny Szept Image 4" },
   ];
 
   const handleStartJourneyWithScroll = (
