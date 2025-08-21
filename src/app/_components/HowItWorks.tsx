@@ -22,7 +22,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
         <div className="grid md:grid-cols-3 gap-8 mb-12" data-oid="m29183j">
           {/* Step 1 */}
           <div
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
+            className="flex flex-col justify-between bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
             data-oid="cx_uel0"
           >
             {/* Photo */}
@@ -38,13 +38,13 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
             </div>
 
             <h3
-              className="text-xl font-bold text-white mb-4 text-center"
+              className="text-3xl lg:text-2xl font-bold text-white mb-4 text-center"
               data-oid="f751mx4"
             >
               Zapisz się w 30 sekund
             </h3>
             <p
-              className="text-blue-200 text-sm text-center leading-relaxed"
+              className="text-blue-200 ms:max-md:text-2xl md:max-lg:text-xl lg:text-xl text-center leading-relaxed"
               data-oid="x8z2y01"
             >
               Podaj numer telefonu i gotowe. Prosty formularz, który wypełnisz w
@@ -54,7 +54,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
 
           {/* Step 2 */}
           <div
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
+            className="flex flex-col justify-between bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
             data-oid="q5qffge"
           >
             {/* Photo */}
@@ -70,13 +70,13 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
             </div>
 
             <h3
-              className="text-xl font-bold text-white mb-4 text-center"
+              className="text-3xl lg:text-2xl font-bold text-white mb-4 text-center"
               data-oid="04_897m"
             >
               Codziennie wieczorem o 20:59
             </h3>
             <p
-              className="text-blue-200 text-sm text-center leading-relaxed"
+              className="text-blue-200 ms:max-md:text-2xl md:max-lg:text-xl lg:text-xl text-center leading-relaxed"
               data-oid="w6hltyq"
             >
               Dostajesz wiadomość tylko dla Ciebie. Każdego dnia, punktualnie o
@@ -86,7 +86,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
 
           {/* Step 3 */}
           <div
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
+            className="flex flex-col justify-between bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 hover:bg-white/15 border border-white/20"
             data-oid="ctl:6vg"
           >
             {/* Photo */}
@@ -102,13 +102,13 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
             </div>
 
             <h3
-              className="text-xl font-bold text-white mb-4 text-center"
+              className="text-3xl lg:text-2xl font-bold text-white mb-4 text-center"
               data-oid="_od5h0g"
             >
               Ciesz się chwilą
             </h3>
             <p
-              className="text-blue-200 text-sm text-center leading-relaxed"
+              className="text-blue-200 ms:max-md:text-2xl md:max-lg:text-xl lg:text-xl text-center leading-relaxed"
               data-oid="njb5q2h"
             >
               Czytaj, uśmiechnij się, zachowaj dla siebie lub wyślij dalej. To
@@ -119,15 +119,15 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
 
         {/* Mini CTA */}
         <div className="text-center mb-8" data-oid="my9c93g">
-          <p className="text-lg text-white mb-6" data-oid="k8wphqe">
+          <p className="text-xl text-white mb-6" data-oid="k8wphqe">
             Tak proste, że pierwszą wiadomość możesz mieć już dziś
           </p>
           <button
             onClick={onGetStarted}
-            className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+            className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
             data-oid="-w0zi67"
           >
-            Wyślij mi pierwszy szept &gt;
+            Wyślij mi pierwszy szept
           </button>
         </div>
 

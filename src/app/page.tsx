@@ -211,7 +211,7 @@ export default function Home() {
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-3xl"></div>
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-6 pt-32 md:pt-16 lg:pt-24">
+            <div className="relative max-w-7xl mx-auto px-6 pt-32 md:max-lg:pt-32 md:pt-16 lg:pt-16">
               <div className="grid lg:grid-cols-5 gap-8 lg:gap-2 items-center min-h-[80vh]">
                 {/* Left Side - Content */}
                 <div className="lg:col-span-2 space-y-8">
@@ -225,9 +225,10 @@ export default function Home() {
                     </h1>
                   </div>
 
-                  <p className="text-xl text-white leading-relaxed">
-                    Krótka wiadomość, pełna ciepła i magii słów. Każdego
-                    wieczoru, o tej samej porze.
+                  <p className="text-xl text-white leading-relaxed md:max-lg:text-2xl">
+                    Krótka wiadomość, pełna ciepła i magii słów.
+                    <br />
+                    Każdego wieczoru, o tej samej porze.
                     <br />
                     Darmowy dostęp przez 7 dni.
                     <br />
@@ -287,10 +288,9 @@ export default function Home() {
           {/* Smartphone Notification Section */}
           <div className="relative min-h-[80vh] flex items-center">
             <div className="max-w-7xl mx-auto px-6 w-full">
-              {/* Mobile Layout: Title, Image, Copy */}
-              <div className="lg:hidden space-y-6">
-                {/* Title */}
-                <div className="text-center">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
+                {/* Title - Mobile Only */}
+                <div className="lg:hidden text-center">
                   <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
                     Słowa, które zostają z Tobą na{" "}
                     <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -300,7 +300,7 @@ export default function Home() {
                 </div>
 
                 {/* Image */}
-                <div className="relative flex justify-center items-center h-[400px]">
+                <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
                   <img
                     src="/szept_4.png"
                     alt="Smartphone showing Wieczorny Szept notification"
@@ -312,8 +312,18 @@ export default function Home() {
                   />
                 </div>
 
-                {/* Copy */}
-                <div className="space-y-4">
+                {/* Content */}
+                <div className="space-y-4 lg:col-span-2 lg:h-[550px] lg:flex lg:flex-col lg:justify-center">
+                  {/* Title - Desktop Only */}
+                  <div className="hidden lg:block">
+                    <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
+                      Słowa, które zostają z Tobą na{" "}
+                      <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        długo
+                      </span>
+                    </h2>
+                  </div>
+
                   <p className="text-lg text-blue-200 leading-relaxed">
                     To nie są przypadkowe cytaty. Każdy szept jest pisany
                     ręcznie przez poetę, który od lat tworzy krótkie formy pełne
@@ -322,6 +332,7 @@ export default function Home() {
                     Są jak małe listy miłosne — tylko że mieszczą się w jednym
                     SMS-ie. Idealne, by zakończyć dzień z uśmiechem.
                   </p>
+
                   <div className="flex items-center space-x-4">
                     <button
                       onClick={handleNavigateToPricing}
@@ -332,56 +343,6 @@ export default function Home() {
                     <div className="text-white text-sm">
                       <p className="font-medium">✓ Darmowy przez 7 dni</p>
                       <p className="text-blue-200">✓ Anuluj w każdej chwili</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Desktop Layout: Image, Copy */}
-              <div className="hidden lg:grid lg:grid-cols-5 gap-12 items-center">
-                {/* Left Side - Smartphone Image */}
-                <div className="relative flex justify-center items-center h-[550px] lg:col-span-3">
-                  <img
-                    src="/szept_4.png"
-                    alt="Smartphone showing Wieczorny Szept notification"
-                    className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                    style={{
-                      filter:
-                        "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                    }}
-                  />
-                </div>
-
-                {/* Right Side - Polish Copy */}
-                <div className="h-[550px] overflow-hidden flex flex-col justify-center lg:col-span-2">
-                  <div className="space-y-4 max-h-full">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
-                      Słowa, które zostają z Tobą na{" "}
-                      <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        długo
-                      </span>
-                    </h2>
-                    <p className="text-lg text-blue-200 leading-relaxed">
-                      To nie są przypadkowe cytaty. Każdy szept jest pisany
-                      ręcznie przez poetę, który od lat tworzy krótkie formy
-                      pełne emocji.
-                      <br />
-                      Są jak małe listy miłosne — tylko że mieszczą się w jednym
-                      SMS-ie. Idealne, by zakończyć dzień z uśmiechem.
-                    </p>
-                    <div className="flex items-center space-x-4">
-                      <button
-                        onClick={handleNavigateToPricing}
-                        className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
-                      >
-                        Rozpocznij Okres Próbny
-                      </button>
-                      <div className="text-white text-sm">
-                        <p className="font-medium">✓ Darmowy przez 7 dni</p>
-                        <p className="text-blue-200">
-                          ✓ Anuluj w każdej chwili
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>

@@ -40,7 +40,7 @@ html {
 @media (max-width: 899px) and (min-width: 600px) {
   html {
     /* 1rem = 8px (50% of 16px) */
-    font-size: 65%;
+    font-size: 75%;
   }
 }
 
