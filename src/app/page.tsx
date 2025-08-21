@@ -347,7 +347,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* Contact Form Section - Now handled by modals */}
+      {/* Contact Form Section */}
       <div className="bg-[#2A031E] text-white relative overflow-hidden">
         <div className="relative py-16">
           <div className="max-w-7xl mx-auto px-6">
