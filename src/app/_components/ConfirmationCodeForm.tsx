@@ -252,10 +252,13 @@ function PhoneForm({
   return (
     <>
       <div className="mb-8" data-oid="fv3gut-">
-        <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
+        <h3
+          className="text-2xl font-bold text-center text-white"
+          data-oid="8cie_js"
+        >
           {isLoginMode
             ? "Zaloguj się do swojego konta"
-            : "Zacznij otrzymywać wiadomości!"}
+            : "Zacznijmy od potwierdzenia Twojego numeru telefonu"}
         </h3>
       </div>
       <form
@@ -269,7 +272,7 @@ function PhoneForm({
               <div className="flex flex-col h-full" data-oid="xbk7dq-">
                 <label
                   htmlFor="countryCode"
-                  className="block text-white font-medium mb-2 text-sm"
+                  className="block text-white font-medium mb-2 text-xl"
                   data-oid="lotbw.t"
                 >
                   Kod kraju *
@@ -282,13 +285,13 @@ function PhoneForm({
                   <button
                     type="button"
                     onClick={onToggleCountryDropdown}
-                    className="w-20 h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-8 text-left text-sm"
+                    className="w-20 h-12 pl-6 pr-20 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm text-left text-xl"
                     data-oid="c7tii0."
                   >
                     {formData.countryCode}
                   </button>
                   <div
-                    className="relative right-6 pointer-events-none "
+                    className="relative right-8 pointer-events-none "
                     data-oid="f6znpna"
                   >
                     <svg
@@ -311,7 +314,7 @@ function PhoneForm({
                   </div>
                   {isCountryDropdownOpen && (
                     <div
-                      className="absolute top-full left-0 mt-2 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
+                      className="absolute top-full left-0 mt-2 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-80"
                       data-oid="u76tc5h"
                     >
                       {countryOptions.map((option) => (
@@ -319,7 +322,7 @@ function PhoneForm({
                           key={option.code}
                           type="button"
                           onClick={() => handleCountrySelect(option.code)}
-                          className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-sm ${
+                          className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-2xl ${
                             formData.countryCode === option.code
                               ? "bg-gray-700"
                               : ""
@@ -333,10 +336,10 @@ function PhoneForm({
                   )}
                 </div>
               </div>
-              <div className="h-full" data-oid="go9nv0c">
+              <div className="h-full ml-4" data-oid="go9nv0c">
                 <label
                   htmlFor="numerTelefonu"
-                  className="block text-white font-medium mb-2 text-sm"
+                  className="block text-white font-medium mb-2 text-xl"
                   data-oid="jits35v"
                 >
                   Numer telefonu *
@@ -354,7 +357,7 @@ function PhoneForm({
                     handleInputBlur("numerTelefonu", e.target.value)
                   }
                   required
-                  className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+                  className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white text-xl placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${
                     validationErrors.numerTelefonu
                       ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                       : "focus:ring-white/30"
@@ -406,7 +409,7 @@ function PhoneForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
+          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-xl shadow-lg"
           data-oid="yomb8ur"
         >
           {isSubmitting
