@@ -56,50 +56,39 @@ export function ModalWrapper({
         {isVisible && (
           <>
             <Dialog.Overlay asChild>
-              <div
-                className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300 ${
-                  isOpen ? "opacity-100" : "opacity-0"
-                }`}
-              />
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300" />
             </Dialog.Overlay>
-            <Dialog.Title asChild>
-              <Dialog.Content asChild>
-                <div
-                  className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
-                    isOpen
-                      ? "opacity-100 scale-100 translate-y-0"
-                      : "opacity-0 scale-95 translate-y-5"
-                  }`}
-                >
-                  <div className="relative w-full max-w-md">
-                    {/* Close button */}
-                    <Dialog.Close asChild>
-                      <button
-                        className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors z-10"
-                        aria-label="Close modal"
+            <Dialog.Title asChild />
+            <Dialog.Content asChild>
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300">
+                <div className="relative">
+                  {/* Close button */}
+                  <Dialog.Close asChild>
+                    <button
+                      className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors z-10"
+                      aria-label="Close modal"
+                    >
+                      <svg
+                        className="w-8 h-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        <svg
-                          className="w-8 h-8"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </Dialog.Close>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </Dialog.Close>
 
-                    {/* Modal content */}
-                    <div className="relative">{children}</div>
-                  </div>
+                  {/* Modal content */}
+                  <div className="relative">{children}</div>
                 </div>
-              </Dialog.Content>
-            </Dialog.Title>
+              </div>
+            </Dialog.Content>
           </>
         )}
       </Dialog.Portal>

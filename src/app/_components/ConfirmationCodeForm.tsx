@@ -260,13 +260,13 @@ function PhoneForm({
       </div>
       <form
         onSubmit={handlePhoneSubmit}
-        className="space-y-4"
+        className="space-y-8"
         data-oid="d937n0b"
       >
         {!isEmailMode ? (
           <>
-            <div className="grid grid-cols-[80px_1fr] gap-2" data-oid="mk2pw2b">
-              <div className="h-full" data-oid="xbk7dq-">
+            <div className="flex" data-oid="mk2pw2b">
+              <div className="flex flex-col h-full" data-oid="xbk7dq-">
                 <label
                   htmlFor="countryCode"
                   className="block text-white font-medium mb-2 text-sm"
@@ -275,7 +275,7 @@ function PhoneForm({
                   Kod kraju *
                 </label>
                 <div
-                  className="relative"
+                  className="relative flex items-center"
                   ref={countryDropdownRef}
                   data-oid="5z3y56l"
                 >
@@ -288,7 +288,7 @@ function PhoneForm({
                     {formData.countryCode}
                   </button>
                   <div
-                    className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
+                    className="relative right-6 pointer-events-none "
                     data-oid="f6znpna"
                   >
                     <svg
@@ -311,7 +311,7 @@ function PhoneForm({
                   </div>
                   {isCountryDropdownOpen && (
                     <div
-                      className="absolute top-full mt-1 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
+                      className="absolute top-full left-0 mt-2 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-60"
                       data-oid="u76tc5h"
                     >
                       {countryOptions.map((option) => (
@@ -354,7 +354,7 @@ function PhoneForm({
                     handleInputBlur("numerTelefonu", e.target.value)
                   }
                   required
-                  className={`h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+                  className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
                     validationErrors.numerTelefonu
                       ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                       : "focus:ring-white/30"
@@ -743,7 +743,7 @@ export default function ConfirmationCodeForm({
 
   return (
     <div
-      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50"
+      className="max-w-lg mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50"
       data-oid="tb00.87"
     >
       <div
