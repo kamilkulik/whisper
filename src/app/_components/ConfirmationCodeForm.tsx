@@ -45,6 +45,7 @@ function ConfirmationCodeGrid({
   // Countdown timer effect
   useEffect(() => {
     const expiresAt = localStorage.getItem("confirmationCodeExpires");
+    // const expiresAt = "2025-09-21T17:46:01.187Z";
     if (!expiresAt) {
       return;
     }
@@ -135,17 +136,15 @@ function ConfirmationCodeGrid({
     <div className="space-y-6">
       {/* Countdown Timer */}
       <div className="text-center mb-4">
-        <p className="text-white/80 text-sm mb-2">Kod wygaśnie za:</p>
-        <p className="text-white font-bold text-lg">{formatTime(timeLeft)}</p>
+        <p className="text-white/80 text-xl mb-2">Kod wygaśnie za:</p>
+        <p className="text-white font-bold text-2xl">{formatTime(timeLeft)}</p>
       </div>
 
       <div className="text-center">
         <h3 className="text-xl font-bold text-white mb-2">
-          Wprowadź kod weryfikacyjny
+          Wprowadź 6-cyfrowy kod
         </h3>
-        <p className="text-white/80 text-sm">
-          Wprowadź 6-cyfrowy kod wysłany na Twój numer telefonu
-        </p>
+        <p className="text-white/80 text-lg">Wysłany na Twój numer telefonu</p>
       </div>
 
       <div className="flex justify-center gap-3">
@@ -163,7 +162,7 @@ function ConfirmationCodeGrid({
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
             disabled={isSubmitting}
-            className="w-12 h-12 text-center bg-white/20 border-0 rounded-xl text-white text-lg font-bold focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm disabled:opacity-50"
+            className="w-12 h-12 text-center bg-white/20 border-0 rounded-xl text-white text-xl font-bold focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm disabled:opacity-50"
             autoFocus={index === 0}
           />
         ))}
@@ -171,7 +170,7 @@ function ConfirmationCodeGrid({
 
       {isSubmitting && (
         <div className="text-center">
-          <p className="text-white/80 text-sm">Weryfikowanie kodu...</p>
+          <p className="text-white/80 text-lg">Weryfikowanie kodu...</p>
         </div>
       )}
     </div>
@@ -203,7 +202,7 @@ function SuccessMessage({ isLoginMode = false }: { isLoginMode?: boolean }) {
         <h3 className="text-2xl font-bold text-white mb-2">
           {isLoginMode ? "Logowanie udane!" : "Numer potwierdzony!"}
         </h3>
-        <p className="text-white/80 text-sm">
+        <p className="text-white/80 text-lg">
           {isLoginMode
             ? "Zostałeś pomyślnie zalogowany do swojego konta."
             : "Twój numer telefonu został pomyślnie zweryfikowany."}
@@ -692,7 +691,7 @@ export default function ConfirmationCodeForm({
             setShowSuccessMessage(false);
             // Redirect to dashboard - the session cookie will be set by the API
             window.location.href = "/dashboard";
-          }, 2000);
+          }, 2500);
         } else {
           // Handle signup success (existing flow)
           setMessage("Numer telefonu potwierdzony!");
@@ -783,8 +782,10 @@ export default function ConfirmationCodeForm({
         {message && (
           <div className="mt-4 text-center">
             <p
-              className={`text-sm ${
-                message.includes("błąd") ? "text-red-300" : "text-green-300"
+              className={`text-lg ${
+                message.toLowerCase().includes("błąd")
+                  ? "text-red-300"
+                  : "text-green-300"
               }`}
             >
               {message}
