@@ -376,7 +376,7 @@ function PhoneForm({
           <div>
             <label
               htmlFor="email"
-              className="block text-white font-medium mb-2 text-sm"
+              className="block text-white font-medium mb-2 text-xl"
             >
               Adres email *
             </label>
@@ -391,7 +391,7 @@ function PhoneForm({
               }}
               onBlur={(e) => handleInputBlur("email", e.target.value)}
               required
-              className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+              className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl ${
                 validationErrors.email
                   ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                   : "focus:ring-white/30"

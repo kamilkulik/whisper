@@ -277,20 +277,24 @@ export default function ContactForm({
       className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
       data-oid="tb00.87"
     >
-      <div className="mb-8" data-oid="fv3gut-">
+      <div className="mb-8 lg:mb-4" data-oid="fv3gut-">
         <h3
-          className="text-3xl text-center font-bold text-white mb-2"
+          className="text-3xl lg:text-2xl text-center font-bold text-white mb-2"
           data-oid="8cie_js"
         >
           Potrzebujemy jeszcze kilku informacji
         </h3>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8" data-oid="d937n0b">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-8 lg:space-y-4"
+        data-oid="d937n0b"
+      >
         <div data-oid="1x7_v4l">
           <label
             htmlFor="imie"
-            className="block text-white font-medium mb-2 text-xl"
+            className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="er2p-26"
           >
             Imię *
@@ -306,7 +310,7 @@ export default function ContactForm({
             }}
             onBlur={(e) => handleInputBlur("imie", e.target.value)}
             required
-            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${
+            className={`w-full px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl lg:text-base ${
               validationErrors.imie
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
@@ -325,7 +329,7 @@ export default function ContactForm({
         <div data-oid="u4p0sqc">
           <label
             htmlFor="email"
-            className="block text-white font-medium mb-2 text-xl"
+            className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="cvsh.:4"
           >
             Adres email *
@@ -341,7 +345,7 @@ export default function ContactForm({
             }}
             onBlur={(e) => handleInputBlur("email", e.target.value)}
             required
-            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${
+            className={`w-full px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl lg:text-base ${
               validationErrors.email
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
@@ -360,7 +364,7 @@ export default function ContactForm({
         <div data-oid="isekqo7">
           <label
             htmlFor="jezykWiadomosci"
-            className="block text-white font-medium mb-2 text-xl"
+            className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="2ox.qfi"
           >
             Język wiadomości *
@@ -373,10 +377,12 @@ export default function ContactForm({
             <button
               type="button"
               onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-              className="w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-10 text-left"
+              className="w-full px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-10 text-left lg:text-base"
               data-oid="c3lmv88"
             >
-              {formData.jezykWiadomosci}
+              {languageOptions.find(
+                (option) => option.code === formData.jezykWiadomosci
+              )?.name || formData.jezykWiadomosci}
             </button>
             <div
               className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
@@ -483,7 +489,7 @@ export default function ContactForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-lg shadow-lg"
+          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-xl shadow-lg"
           data-oid="yomb8ur"
         >
           {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ"}
