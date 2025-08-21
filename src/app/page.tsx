@@ -381,68 +381,11 @@ export default function Home() {
         {/* Main Footer Content */}
         <div className="relative pt-16 pb-8">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="grid md:grid-cols-3 gap-12 mb-12">
-              {/* Left Column - More Info */}
-              <div>
-                <h3 className="text-2xl font-bold mb-8 elegant-text">
-                  Więcej Informacji
-                </h3>
-                <ul className="space-y-4">
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Logowanie
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Daty Wysyłki
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Druk Prezentowy
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Tapety do Pobrania
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Rozszerzone Materiały
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Kontakt
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
+            <div className="grid md:grid-cols-5 gap-12 mb-12 px-12">
               {/* Middle Column - Links */}
-              <div>
+              <div className="col-span-2">
                 <h3 className="text-2xl font-bold mb-8 elegant-text">
-                  Doświadczenie
+                  Dowiedz się więcej
                 </h3>
                 <ul className="space-y-4">
                   <li>
@@ -469,27 +412,11 @@ export default function Home() {
                       Zwroty i Refundacje
                     </a>
                   </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Zastrzeżenia
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      Polityka Wysyłki
-                    </a>
-                  </li>
                 </ul>
               </div>
 
               {/* Right Column - Newsletter */}
-              <div>
+              <div className="col-span-3">
                 <h3 className="text-2xl font-bold mb-8 elegant-text">
                   Newsletter
                 </h3>
@@ -518,27 +445,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="text-white/60 text-sm">
-                © 2024 Wieczorny Szept. Wszelkie prawa zastrzeżone.
-              </div>
-              <div className="flex space-x-6 text-sm">
-                <a
-                  href="#"
-                  className="text-white/60 hover:text-white transition-colors"
-                >
-                  Regulamin
-                </a>
-                <a
-                  href="#"
-                  className="text-white/60 hover:text-white transition-colors"
-                >
-                  Polityka Prywatności
-                </a>
-                <a
-                  href="#"
-                  className="text-white/60 hover:text-white transition-colors"
-                >
-                  Bezpieczeństwo
-                </a>
+                © 2025 Wieczorny Szept. Wszelkie prawa zastrzeżone.
               </div>
             </div>
           </div>
