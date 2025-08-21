@@ -278,16 +278,19 @@ export default function ContactForm({
       data-oid="tb00.87"
     >
       <div className="mb-8" data-oid="fv3gut-">
-        <h3 className="text-2xl font-bold text-white mb-2" data-oid="8cie_js">
-          Zacznij otrzymywać wiadomości!
+        <h3
+          className="text-3xl text-center font-bold text-white mb-2"
+          data-oid="8cie_js"
+        >
+          Potrzebujemy jeszcze kilku informacji
         </h3>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4" data-oid="d937n0b">
+      <form onSubmit={handleSubmit} className="space-y-8" data-oid="d937n0b">
         <div data-oid="1x7_v4l">
           <label
             htmlFor="imie"
-            className="block text-white font-medium mb-2 text-sm"
+            className="block text-white font-medium mb-2 text-xl"
             data-oid="er2p-26"
           >
             Imię *
@@ -303,7 +306,7 @@ export default function ContactForm({
             }}
             onBlur={(e) => handleInputBlur("imie", e.target.value)}
             required
-            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${
               validationErrors.imie
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
@@ -322,7 +325,7 @@ export default function ContactForm({
         <div data-oid="u4p0sqc">
           <label
             htmlFor="email"
-            className="block text-white font-medium mb-2 text-sm"
+            className="block text-white font-medium mb-2 text-xl"
             data-oid="cvsh.:4"
           >
             Adres email *
@@ -338,7 +341,7 @@ export default function ContactForm({
             }}
             onBlur={(e) => handleInputBlur("email", e.target.value)}
             required
-            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm ${
+            className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${
               validationErrors.email
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
@@ -357,7 +360,7 @@ export default function ContactForm({
         <div data-oid="isekqo7">
           <label
             htmlFor="jezykWiadomosci"
-            className="block text-white font-medium mb-2 text-sm"
+            className="block text-white font-medium mb-2 text-xl"
             data-oid="2ox.qfi"
           >
             Język wiadomości *
@@ -461,7 +464,7 @@ export default function ContactForm({
 
           <label
             htmlFor="acceptTerms"
-            className="text-sm text-white/90"
+            className="text-lg text-white/90"
             data-oid="qbo8wve"
           >
             Akceptuję{" "}
