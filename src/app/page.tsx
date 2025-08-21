@@ -287,18 +287,8 @@ export default function Home() {
 
           {/* Smartphone Notification Section */}
           <div className="relative min-h-[80vh] flex items-center">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
-                {/* Title - Mobile Only */}
-                <div className="lg:hidden text-center">
-                  <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
-                    Słowa, które zostają z Tobą na{" "}
-                    <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                      długo
-                    </span>
-                  </h2>
-                </div>
-
+            <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
                 {/* Image */}
                 <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
                   <img
@@ -313,34 +303,32 @@ export default function Home() {
                 </div>
 
                 {/* Content */}
-                <div className="space-y-4 lg:col-span-2 lg:h-[550px] lg:flex lg:flex-col lg:justify-center">
-                  {/* Title - Desktop Only */}
-                  <div className="hidden lg:block">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
-                      Słowa, które zostają z Tobą na{" "}
-                      <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        długo
-                      </span>
-                    </h2>
-                  </div>
+                <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                  <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                    Słowa, które zostają z Tobą na{" "}
+                    <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      długo
+                    </span>
+                  </h2>
 
-                  <p className="text-lg text-blue-200 leading-relaxed">
+                  <p className="text-2xl lg:text-xl text-blue-200 text-justify leading-relaxed">
                     To nie są przypadkowe cytaty. Każdy szept jest pisany
                     ręcznie przez poetę, który od lat tworzy krótkie formy pełne
                     emocji.
+                    <br />
                     <br />
                     Są jak małe listy miłosne — tylko że mieszczą się w jednym
                     SMS-ie. Idealne, by zakończyć dzień z uśmiechem.
                   </p>
 
-                  <div className="flex items-center space-x-4">
+                  <div className="flex flex-col md:max-lg:flex-row md:max-lg:space-x-8 md:max-lg:justify-center items-center">
                     <button
                       onClick={handleNavigateToPricing}
-                      className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
+                      className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
                     >
                       Rozpocznij Okres Próbny
                     </button>
-                    <div className="text-white text-sm">
+                    <div className="text-white text-2xl lg:text-xl mt-4">
                       <p className="font-medium">✓ Darmowy przez 7 dni</p>
                       <p className="text-blue-200">✓ Anuluj w każdej chwili</p>
                     </div>

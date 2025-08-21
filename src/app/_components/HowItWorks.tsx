@@ -162,7 +162,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
                 />
               </svg>
               <span
-                className="text-green-400 text-sm font-medium"
+                className="text-green-400 text-lg font-medium"
                 data-oid="lvp06st"
               >
                 Twój numer telefonu jest bezpieczny
