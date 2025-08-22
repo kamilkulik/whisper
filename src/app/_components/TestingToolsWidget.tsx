@@ -58,7 +58,7 @@ export default function TestingToolsWidget({
         style={{
           transform: isExpanded
             ? "translateX(0)"
-            : "translateX(calc(100% - 60px))",
+            : "translateX(calc(100% - 0px ))",
         }}
       >
         {/* Handle - positioned on the left side */}
