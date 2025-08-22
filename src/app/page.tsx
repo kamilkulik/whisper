@@ -9,6 +9,7 @@ import ImageCarousel from "./_components/ImageCarousel";
 import HowItWorks from "./_components/HowItWorks";
 import PricingSection from "./_components/PricingSection";
 import { ModalWrapper } from "./_components/ModalWrapper";
+import TestingToolsWrapper from "./_components/TestingToolsWrapper";
 
 export default function Home() {
   const router = useRouter();
@@ -477,6 +478,9 @@ export default function Home() {
           />
         </ModalWrapper>
       )}
+
+      {/* Testing Tools Widget */}
+      <TestingToolsWrapper />
     </>
   );
 }

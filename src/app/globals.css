@@ -98,6 +98,13 @@ body {
   animation: heartbeat 2s ease-in-out infinite;
 }
 
+/* Vertical text writing mode for testing tools widget */
+.writing-mode-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+
 /* Shake animation */
 @keyframes shake {
   0%,
