@@ -166,7 +166,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className="relative">
       <div className="bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] relative">
         {/* Navigation Bar */}
         <nav
@@ -481,6 +481,6 @@ export default function Home() {
 
       {/* Testing Tools Widget */}
       <TestingToolsWrapper />
-    </>
+    </div>
   );
 }
