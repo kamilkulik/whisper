@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { User } from "@prisma/client";
 import { sendEmail } from "@/lib/emailapi";
 import { sessionIdCache } from "../utils/sessionIdCache";
+import { csfrProtection } from "../utils/csfrProtection";
 
 export type UserData = Omit<
   User,
@@ -25,6 +26,9 @@ export const POST = async (request: NextRequest) => {
         { status: 401 }
       );
     }
+
+    csfrProtection(request);
+
     const body: UserData = await request.json();
     const cachedSessionId = sessionIdCache.get(body.phoneNumber);
 

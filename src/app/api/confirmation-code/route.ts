@@ -4,6 +4,7 @@ import { sendSms } from "@/lib/smsapi";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "../utils/sessionIdCache";
+import { generateCsrfToken } from "../utils/csfrProtection";
 
 const temporarySessionIdCache = new Map<
   string,
@@ -164,6 +165,16 @@ export const POST = async (request: NextRequest) => {
       value: authenticatedSessionId,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Only secure in production
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
+
+    response.cookies.set({
+      name: "x-csrf-token",
+      value: generateCsrfToken(authenticatedSessionId),
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",

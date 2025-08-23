@@ -20,11 +20,13 @@ class SessionIdCache {
       console.log("Missing key or value", key, value);
       return;
     }
-    console.log("set", key, value);
+
     this.cache.set(key, value);
+    console.log(`sessionId saved for key: ${key}`, this.get(key));
 
     // set cache to expire in 2 minutes
     setTimeout(() => {
+      console.log(`sessionId deleted for key: ${key}`, this.get(key));
       this.cache.delete(key);
     }, 120000);
   }
