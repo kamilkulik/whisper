@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
+import { sessionIdCache } from "../utils/sessionIdCache";
 
 const temporarySessionIdCache = new Map<
   string,
@@ -155,6 +156,7 @@ export const POST = async (request: NextRequest) => {
 
     // Create response with success
     const response = NextResponse.json({ success: true });
+    sessionIdCache.set(phoneNumber, authenticatedSessionId);
 
     // Set secure session cookie
     response.cookies.set({

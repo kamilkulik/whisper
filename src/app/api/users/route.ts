@@ -1,20 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { SupportedLanguagesEnum } from "@prisma/client";
+import { User } from "@prisma/client";
+import { sendEmail } from "@/lib/emailapi";
+import { sessionIdCache } from "../utils/sessionIdCache";
 
-interface UserData {
-  numerTelefonu: string;
-  email: string;
-  imie: string;
-  messageLanguage: SupportedLanguagesEnum;
-}
+export type UserData = Omit<
+  User,
+  | "id"
+  | "confirmationCode"
+  | "confirmationCodeExpires"
+  | "lastUsedMessageId"
+  | "sessionId"
+  | "createdAt"
+  | "updatedAt"
+  | "trialEnds"
+>;
 
 export const POST = async (request: NextRequest) => {
   try {
+    const sessionId = request.cookies.get("sessionId")?.value;
+    if (!sessionId) {
+      return NextResponse.json(
+        { error: "Unauthorized - No valid session" },
+        { status: 401 }
+      );
+    }
     const body: UserData = await request.json();
+    const cachedSessionId = sessionIdCache.get(body.phoneNumber);
+
+    if (cachedSessionId !== sessionId) {
+      return NextResponse.json(
+        { error: "Unauthorized - No valid session" },
+        { status: 401 }
+      );
+    }
 
     // Validate required fields
-    if (!body.numerTelefonu || !body.email || !body.imie) {
+    if (!body.phoneNumber || !body.email || !body.name) {
       return NextResponse.json(
         { error: "Wszystkie pola są wymagane" },
         { status: 400 }
@@ -32,9 +54,9 @@ export const POST = async (request: NextRequest) => {
 
     // Validate phone number (accepts international country codes)
     const phoneRegex = /^(\+[1-9]\d{0,3})?[0-9\s\-]{6,15}$/;
-    const cleanPhone = body.numerTelefonu.replace(/[\s\-]/g, "");
+    const cleanPhone = body.phoneNumber.replace(/[\s\-]/g, "");
     if (
-      !phoneRegex.test(body.numerTelefonu) ||
+      !phoneRegex.test(body.phoneNumber) ||
       cleanPhone.length < 6 ||
       cleanPhone.length > 18
     ) {
@@ -45,31 +67,58 @@ export const POST = async (request: NextRequest) => {
     }
 
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email: body.email },
+    const existingEmailUser = await prisma.user.findUnique({
+      where: {
+        email: body.email,
+      },
     });
 
-    if (existingUser) {
+    const existingPhoneNumberUser = await prisma.user.findUnique({
+      where: {
+        phoneNumber: body.phoneNumber,
+      },
+    });
+
+    if (existingEmailUser || existingPhoneNumberUser) {
+      // check if they already used trial
+      const triesToUseTrialAgain =
+        (!!existingEmailUser?.trialEnds ||
+          !!existingPhoneNumberUser?.trialEnds) &&
+        !body.premium;
+
+      if (triesToUseTrialAgain) {
+        return NextResponse.json(
+          { error: "Bład. Z okresu próbnego można skorzystać tylko raz" },
+          { status: 400 }
+        );
+      }
+
       // Update existing user
       await prisma.user.update({
-        where: { email: body.email },
+        where: { email: body.phoneNumber },
         data: {
-          phoneNumber: body.numerTelefonu,
-          name: body.imie,
+          phoneNumber: body.email,
+          name: body.name,
           updatedAt: new Date(),
+          premium: body.premium,
         },
       });
     } else {
       // Create new user
-      const sessionId = request.cookies.get("sessionId")?.value;
+      console.log(JSON.stringify(body, null, 2));
       await prisma.user.create({
         data: {
-          phoneNumber: body.numerTelefonu,
           email: body.email,
-          name: body.imie,
-          premium: true,
+          emailVerified: body.emailVerified,
           messageLanguage: body.messageLanguage,
+          name: body.name,
+          phoneNumber: body.phoneNumber,
+          phoneNumberVerified: body.phoneNumberVerified,
+          premium: body.premium,
           sessionId,
+          trialEnds: !body.premium
+            ? new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
+            : null,
         },
       });
     }
@@ -78,6 +127,12 @@ export const POST = async (request: NextRequest) => {
       timestamp: new Date().toISOString(),
       data: body,
     });
+
+    // send email to user
+    const email = body.email;
+    const name = body.name;
+    const message = `Witaj ${name}, dziękujemy za rejestrację w naszej aplikacji. Kliknij w link aby zweryfikować swój email: ${process.env.NEXT_PUBLIC_APP_URL}/verify-email?email=${email}`;
+    await sendEmail(email, message, "Zweryfikuje swój email");
 
     return NextResponse.json(
       { message: "Wiadomość została pomyślnie zapisana" },

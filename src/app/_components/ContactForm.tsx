@@ -6,10 +6,15 @@ import { z } from "zod";
 import DOMPurify from "dompurify";
 import { SupportedLanguagesEnum } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
+import {
+  GatheredUserData,
+  prepSaveUserBody,
+  Product,
+} from "./utils/saveUserBodyPrep";
 
 // Validation schema
 const formSchema = z.object({
-  numerTelefonu: z
+  phoneNumber: z
     .string()
     .min(6, "Numer telefonu musi mieć co najmniej 6 cyfr")
     .max(15, "Numer telefonu nie może być dłuższy niż 15 cyfr")
@@ -17,7 +22,7 @@ const formSchema = z.object({
       /^[0-9\s\-]+$/,
       "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
     ),
-  imie: z
+  name: z
     .string()
     .min(2, "Imię musi mieć co najmniej 2 znaki")
     .max(50, "Imię nie może być dłuższe niż 50 znaków")
@@ -33,25 +38,28 @@ const formSchema = z.object({
 });
 
 type ValidationErrors = {
-  imie?: string;
+  name?: string;
   email?: string;
 };
 
 export default function ContactForm({
   verifiedPhoneNumber = "",
-  selectedProduct = null,
+  selectedProduct,
 }: {
   verifiedPhoneNumber?: string;
-  selectedProduct?: "trial" | "one-time" | "subscription" | null;
+  selectedProduct: Product;
 }) {
   const { language, countryCode, isLoaded } = useLocale();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    imie: "",
-    jezykWiadomosci: "Polski", // Default fallback
+  const [formData, setFormData] = useState<
+    GatheredUserData & { acceptTerms: boolean }
+  >({
     acceptTerms: false,
-    numerTelefonu: verifiedPhoneNumber,
+    email: "",
+    messageLanguage: SupportedLanguagesEnum.PL, // Default fallback
+    name: "",
+    phoneNumber: verifiedPhoneNumber,
+    product: "trial",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
@@ -75,15 +83,17 @@ export default function ContactForm({
       setFormData((prev) => ({
         ...prev,
         countryCode: countryCode,
-        jezykWiadomosci: language,
+        messageLanguage:
+          languageOptions.find((o) => o.name === language)?.code ||
+          SupportedLanguagesEnum.PL,
       }));
     }
   }, [isLoaded, countryCode, language]);
 
-  const handleLanguageSelect = (language: string) => {
+  const handleLanguageSelect = (language: SupportedLanguagesEnum) => {
     setFormData((prev) => ({
       ...prev,
-      jezykWiadomosci: language,
+      messageLanguage: language,
     }));
     setIsLanguageDropdownOpen(false);
   };
@@ -165,9 +175,9 @@ export default function ContactForm({
 
     // Validate all input fields
     const sanitizedData = {
-      imie: sanitizeInput(formData.imie),
+      name: sanitizeInput(formData.name),
       email: sanitizeInput(formData.email.toLowerCase()),
-      numerTelefonu: sanitizeInput(formData.numerTelefonu || ""),
+      phoneNumber: sanitizeInput(formData.phoneNumber || ""),
     };
 
     const errors: ValidationErrors = {};
@@ -199,17 +209,19 @@ export default function ContactForm({
 
     try {
       // First, save the contact information
+      const body = prepSaveUserBody({
+        email: sanitizedData.email,
+        messageLanguage: formData.messageLanguage,
+        name: sanitizedData.name,
+        phoneNumber: sanitizedData.phoneNumber,
+        product: selectedProduct,
+      });
       const response = await fetch("/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          imie: sanitizedData.imie,
-          email: sanitizedData.email,
-          numerTelefonu: sanitizedData.numerTelefonu,
-          messageLanguage: formData.jezykWiadomosci,
-        }),
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();
@@ -218,10 +230,11 @@ export default function ContactForm({
         // Clear the form
         setFormData({
           email: "",
-          imie: "",
-          jezykWiadomosci: language,
+          name: "",
+          messageLanguage: SupportedLanguagesEnum.PL,
           acceptTerms: false,
-          numerTelefonu: verifiedPhoneNumber,
+          phoneNumber: verifiedPhoneNumber,
+          product: "trial",
         });
 
         // If it's a trial, redirect to trial success page
@@ -293,7 +306,7 @@ export default function ContactForm({
       >
         <div data-oid="1x7_v4l">
           <label
-            htmlFor="imie"
+            htmlFor="name"
             className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="er2p-26"
           >
@@ -301,17 +314,17 @@ export default function ContactForm({
           </label>
           <input
             type="text"
-            id="imie"
-            name="imie"
-            value={formData.imie}
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={(e) => {
               handleChange(e);
-              clearValidationError("imie");
+              clearValidationError("name");
             }}
-            onBlur={(e) => handleInputBlur("imie", e.target.value)}
+            onBlur={(e) => handleInputBlur("name", e.target.value)}
             required
             className={`w-full px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl lg:text-base ${
-              validationErrors.imie
+              validationErrors.name
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
             }`}
@@ -319,9 +332,9 @@ export default function ContactForm({
             data-oid="6qn7m1j"
           />
 
-          {validationErrors.imie && (
+          {validationErrors.name && (
             <p className="mt-1 text-sm text-red-300" data-oid="669b2e6">
-              {validationErrors.imie}
+              {validationErrors.name}
             </p>
           )}
         </div>
@@ -363,7 +376,7 @@ export default function ContactForm({
 
         <div data-oid="isekqo7">
           <label
-            htmlFor="jezykWiadomosci"
+            htmlFor="messageLanguage"
             className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="2ox.qfi"
           >
@@ -381,8 +394,8 @@ export default function ContactForm({
               data-oid="c3lmv88"
             >
               {languageOptions.find(
-                (option) => option.code === formData.jezykWiadomosci
-              )?.name || formData.jezykWiadomosci}
+                (option) => option.code === formData.messageLanguage
+              )?.name || formData.messageLanguage}
             </button>
             <div
               className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
@@ -417,7 +430,7 @@ export default function ContactForm({
                     type="button"
                     onClick={() => handleLanguageSelect(option.code)}
                     className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
-                      formData.jezykWiadomosci === option.code
+                      formData.messageLanguage === option.code
                         ? "bg-gray-700"
                         : ""
                     }`}

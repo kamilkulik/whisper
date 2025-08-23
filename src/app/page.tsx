@@ -10,15 +10,14 @@ import HowItWorks from "./_components/HowItWorks";
 import PricingSection from "./_components/PricingSection";
 import { ModalWrapper } from "./_components/ModalWrapper";
 import TestingToolsWrapper from "./_components/TestingToolsWrapper";
+import { Product } from "./_components/utils/saveUserBodyPrep";
 
 export default function Home() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   // const [showContactForm, setShowContactForm] = useState(false);
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState<
-    "trial" | "one-time" | "subscription" | null
-  >(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product>("trial");
 
   // Get modal from search params
   const searchParams = useSearchParams();

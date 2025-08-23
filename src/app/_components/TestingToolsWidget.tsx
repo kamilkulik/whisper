@@ -75,7 +75,9 @@ export default function TestingToolsWidget({
 
             <div className="space-y-4">
               <div className="bg-gray-700/50 rounded-lg p-4">
-                <h2 className="font-semibold mb-2">Environment Status</h2>
+                <h2 className="font-semibold mb-2 text-lg">
+                  Environment Status
+                </h2>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>SMS Provider:</span>
@@ -89,10 +91,35 @@ export default function TestingToolsWidget({
               </div>
 
               <div className="bg-gray-700/50 rounded-lg p-4">
-                <h4 className="font-semibold mb-2">Quick Actions</h4>
+                <h4 className="font-semibold mb-2  text-lg">Quick Actions</h4>
                 <div className="space-y-2">
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm transition-colors">
-                    Test SMS Send
+                  <button
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm transition-colors"
+                    onClick={async () => {
+                      try {
+                        const response = await fetch("/api/cron");
+                        if (response.ok) {
+                          const result = await response.json();
+                          console.log(
+                            "Cron job executed successfully:",
+                            result
+                          );
+                          alert("SMS sent to all users successfully!");
+                        } else {
+                          const error = await response.json();
+                          console.error("Cron job failed:", error);
+                          alert(
+                            "Failed to send SMS: " +
+                              (error.error || "Unknown error")
+                          );
+                        }
+                      } catch (error) {
+                        console.error("Error calling cron endpoint:", error);
+                        alert("Error calling cron endpoint: " + error);
+                      }
+                    }}
+                  >
+                    Wyślij sms do wszystkich
                   </button>
                   <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm transition-colors">
                     Test Email Send
@@ -104,7 +131,7 @@ export default function TestingToolsWidget({
               </div>
 
               <div className="bg-gray-700/50 rounded-lg p-4">
-                <h4 className="font-semibold mb-2">Debug Info</h4>
+                <h4 className="font-semibold mb-2 text-lg">Debug Info</h4>
                 <div className="text-xs text-gray-300 space-y-1">
                   <div>Mode: Development</div>
                   <div>Timestamp: {new Date().toLocaleTimeString()}</div>

@@ -4,10 +4,17 @@ import { sendSms } from "@/lib/smsapi";
 
 export const GET = async (request: NextRequest) => {
   try {
-    // Verify that this is a legitimate Vercel cron request
-    const authHeader = request.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // Skip authorization check if in local mode
+    const smsProvider = process.env.SMS_API_PROVIDER;
+    const emailProvider = process.env.EMAIL_API_PROVIDER;
+    const isLocalMode = smsProvider === "local" && emailProvider === "local";
+
+    if (!isLocalMode) {
+      // Verify that this is a legitimate Vercel cron request
+      const authHeader = request.headers.get("authorization");
+      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
 
     const now = new Date();
@@ -51,6 +58,7 @@ export const GET = async (request: NextRequest) => {
       try {
         const message = messagesHash[user.next_message];
         if (message) {
+          console.log(`Sending message to user ${user.id}: ${message.message}`);
           await sendSms(user.phoneNumber, message.message);
 
           // update what message got sent
