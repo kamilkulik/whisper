@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
+import { SubscriptionStatus, User } from "@prisma/client";
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -25,11 +26,18 @@ export const GET = async (request: NextRequest) => {
     );
 
     // 1. get all users who should receive a message
-    const users = await prisma.user.findMany({
-      where: {
-        OR: [{ premium: true }, { trialEnds: { lt: now } }],
-      },
-    });
+    const users: User[] = await prisma.$queryRaw`
+      SELECT u.* 
+      FROM users u 
+      LEFT JOIN subscriptions s ON s.user_id = u.id 
+      AND s.status = '${SubscriptionStatus.ACTIVE}' 
+      AND s.date_expires > NOW() 
+      WHERE ( 
+        u.trial_ends > NOW() OR
+        s.id IS NOT NULL
+      );
+    `;
+
     console.log(`Found ${users.length} users to send messages to`);
 
     // 2. create a unique set of message ids which should be sent next to each user
