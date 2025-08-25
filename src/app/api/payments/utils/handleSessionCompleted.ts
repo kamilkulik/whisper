@@ -1,23 +1,18 @@
 import "server-only";
-// import { CheckoutSessionCompletedEvent } from "./subscriptionFactory";
 import { prisma } from "@/lib/prisma";
-import {
-  PaymentProvider,
-  SubscriptionStatus,
-  SubscriptionType,
-} from "@prisma/client";
 import Stripe from "stripe";
+import { subscriptionFactory } from "./subscriptionFactory";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session
 ) {
   const {
-    id,
-    amount_total,
+    amount_total: amountTotal,
     currency,
     customer_email,
     created,
     payment_status,
+    payment_intent,
     status: sessionStatus,
   } = eventData;
 
@@ -35,21 +30,19 @@ export async function handleSessionCompleted(
     throw new Error("User not found");
   }
 
-  const productType = eventData.metadata?.productType || "";
-  const subscriptionType =
-    productType === SubscriptionType.MONTHLY
-      ? SubscriptionType.MONTHLY
-      : SubscriptionType.ONE_TIME;
-  const expiresIn30DaysAt = new Date(created * 1000 + 30 * 24 * 60 * 60 * 1000);
+  const subscriptionData = subscriptionFactory({
+    amountTotal: amountTotal || 0,
+    created,
+    currency: currency || "",
+    paymentIntent: payment_intent?.toString() || "",
+    paymentStatus: payment_status || "",
+    productType: eventData.metadata?.productType || "",
+    sessionStatus: sessionStatus || "",
+    user,
+  });
+
   const subscription = await prisma.subscription.create({
-    data: {
-      userId: user.id,
-      paymentProvider: PaymentProvider.STRIPE,
-      type: subscriptionType,
-      status: SubscriptionStatus.ACTIVE,
-      dateStarted: new Date(created * 1000),
-      dateExpires: expiresIn30DaysAt,
-    },
+    data: subscriptionData,
   });
 
   // TODO: Send email to user with subscription details

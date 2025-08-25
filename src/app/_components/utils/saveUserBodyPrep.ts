@@ -1,4 +1,4 @@
-import { SubscriptionType, SupportedLanguagesEnum, User } from "@prisma/client";
+import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { UserData } from "@/app/api/users/route";
 
 export interface GatheredUserData {

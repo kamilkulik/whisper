@@ -77,7 +77,10 @@ model User {
 
 model Subscription {
   id              Int                @id @default(autoincrement())
+  amountTotal     Int                @map("amount_total")
+  currency        String             @map("currency")
   paymentProvider PaymentProvider    @default(STRIPE)
+  paymentId       String?            @map("payment_id")
   userId          Int                @map("user_id")
   user            User               @relation(fields: [userId], references: [id])
   type            SubscriptionType

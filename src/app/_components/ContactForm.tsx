@@ -237,9 +237,7 @@ export default function ContactForm({
         if (selectedProduct === SubscriptionType.TRIAL) {
           setMessage("Informacje zapisane! Przekierowywanie...");
           setTimeout(() => {
-            window.location.href = `/trial-success?email=${encodeURIComponent(
-              sanitizedData.email
-            )}`;
+            window.location.href = "/trial-success";
           }, 1500);
         } else {
           // For other products, redirect to Stripe checkout

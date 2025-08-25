@@ -10,14 +10,15 @@ import HowItWorks from "./_components/HowItWorks";
 import PricingSection from "./_components/PricingSection";
 import { ModalWrapper } from "./_components/ModalWrapper";
 import TestingToolsWrapper from "./_components/TestingToolsWrapper";
-import { Product } from "./_components/utils/saveUserBodyPrep";
+import { SubscriptionType } from "@prisma/client";
 
 export default function Home() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
-  // const [showContactForm, setShowContactForm] = useState(false);
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState<Product>("trial");
+  const [selectedProduct, setSelectedProduct] = useState<SubscriptionType>(
+    SubscriptionType.TRIAL
+  );
 
   // Get modal from search params
   const searchParams = useSearchParams();
@@ -111,13 +112,11 @@ export default function Home() {
     { src: "/szept_4.png", alt: "Wieczorny Szept Image 4" },
   ];
 
-  const handleStartJourneyWithScroll = (
-    productType?: "trial" | "one-time" | "subscription"
-  ) => {
+  const handleStartJourneyWithScroll = (productType?: SubscriptionType) => {
     console.log("Start Journey with scroll clicked!", productType); // Debug log
 
     // Set the selected product
-    setSelectedProduct(productType || "trial");
+    setSelectedProduct(productType || SubscriptionType.TRIAL);
 
     // Navigate to modal without scrolling to top
     router.push(`/?modal=phone`, { scroll: false });

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { User } from "@prisma/client";
+import { SubscriptionType, User } from "@prisma/client";
 import { sendEmail } from "@/lib/emailapi";
 import { sessionIdCache } from "../utils/sessionIdCache";
 import { csfrProtection } from "../utils/csfrProtection";
+import { createSubscription } from "../payments/utils/createSubscription";
 
 export type UserData = Omit<
   User,
@@ -110,7 +111,7 @@ export const POST = async (request: NextRequest) => {
     } else {
       // Create new user
       console.log(JSON.stringify(body, null, 2));
-      await prisma.user.create({
+      const savedUser = await prisma.user.create({
         data: {
           email: body.email,
           emailVerified: body.emailVerified,
@@ -125,6 +126,19 @@ export const POST = async (request: NextRequest) => {
             : null,
         },
       });
+
+      if (!savedUser.premium && savedUser.trialEnds) {
+        await createSubscription({
+          amountTotal: 0,
+          currency: "",
+          created: new Date().getTime(),
+          paymentIntent: "",
+          paymentStatus: "paid",
+          productType: SubscriptionType.TRIAL,
+          sessionStatus: "complete",
+          user: savedUser,
+        });
+      }
     }
 
     console.log("User data saved to database:", {
