@@ -1,13 +1,12 @@
-import { SupportedLanguagesEnum, User } from "@prisma/client";
+import { SubscriptionType, SupportedLanguagesEnum, User } from "@prisma/client";
 import { UserData } from "@/app/api/users/route";
 
-export type Product = "trial" | "one-time" | "subscription";
 export interface GatheredUserData {
   email: string;
   messageLanguage: SupportedLanguagesEnum;
   name: string;
   phoneNumber: string;
-  product: Product;
+  product: SubscriptionType;
 }
 
 export function prepSaveUserBody({
@@ -17,7 +16,7 @@ export function prepSaveUserBody({
   phoneNumber,
   product,
 }: GatheredUserData): UserData {
-  const premium = product !== "trial";
+  const premium = product !== SubscriptionType.TRIAL;
 
   return {
     email,

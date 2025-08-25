@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe, stripeWebhookSecret } from "@/lib/stripe";
 import { Buffer } from "node:buffer";
+import { handleSessionCompleted } from "../utils/handleSessionCompleted";
 
 export const config = {
   api: {
@@ -103,26 +104,28 @@ export async function POST(request: NextRequest) {
 
       // Handle the event
       switch (event.type) {
+        // for NOW, let's focus on handling on checkout session completed
         case "checkout.session.completed":
           const checkoutSession = event.data.object;
           console.log(
             `CheckoutSession for ${checkoutSession.amount_total} was successful!`
           );
+          handleSessionCompleted(checkoutSession);
           break;
-        case "payment_intent.succeeded":
-          const paymentIntent = event.data.object;
-          console.log(
-            `PaymentIntent for ${paymentIntent.amount} was successful!`
-          );
-          // Then define and call a method to handle the successful payment intent.
-          // handlePaymentIntentSucceeded(paymentIntent);
-          break;
-        case "payment_method.attached":
-          const paymentMethod = event.data.object;
-          console.log(`PaymentMethod ${paymentMethod.id} was attached`);
-          // Then define and call a method to handle the successful attachment of a PaymentMethod.
-          // handlePaymentMethodAttached(paymentMethod);
-          break;
+        // case "payment_intent.succeeded":
+        //   const paymentIntent = event.data.object;
+        //   console.log(
+        //     `PaymentIntent for ${paymentIntent.amount} was successful!`
+        //   );
+        //   // Then define and call a method to handle the successful payment intent.
+        //   // handlePaymentIntentSucceeded(paymentIntent);
+        //   break;
+        // case "payment_method.attached":
+        //   const paymentMethod = event.data.object;
+        //   console.log(`PaymentMethod ${paymentMethod.id} was attached`);
+        //   // Then define and call a method to handle the successful attachment of a PaymentMethod.
+        //   // handlePaymentMethodAttached(paymentMethod);
+        //   break;
         default:
           // Unexpected event type (shouldn't reach here due to validation above)
           console.log(`Unhandled event type ${event.type}.`);

@@ -2,9 +2,10 @@ import { NextResponse, NextRequest } from "next/server";
 import { headers } from "next/headers";
 
 import { stripe } from "@/lib/stripe";
+import { SubscriptionType } from "@prisma/client";
 
 export interface CheckoutSessionsPayload {
-  productType: "trial" | "one-time" | "subscription";
+  productType: SubscriptionType;
   email: string;
 }
 
@@ -54,7 +55,11 @@ export async function POST(request: NextRequest) {
 
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
+      client_reference_id: "id_uzytkownika",
       customer_email: body.email,
+      metadata: {
+        productType: productType.toString(),
+      },
       line_items: [
         {
           price: config.price,

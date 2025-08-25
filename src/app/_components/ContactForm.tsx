@@ -4,13 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { useLocale } from "../contexts/LocaleContext";
 import { z } from "zod";
 import DOMPurify from "dompurify";
-import { SupportedLanguagesEnum } from "@prisma/client";
+import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
-import {
-  GatheredUserData,
-  prepSaveUserBody,
-  Product,
-} from "./utils/saveUserBodyPrep";
+import { GatheredUserData, prepSaveUserBody } from "./utils/saveUserBodyPrep";
 
 // Validation schema
 const formSchema = z.object({
@@ -47,7 +43,7 @@ export default function ContactForm({
   selectedProduct,
 }: {
   verifiedPhoneNumber?: string;
-  selectedProduct: Product;
+  selectedProduct: SubscriptionType;
 }) {
   const { language, countryCode, isLoaded } = useLocale();
 
@@ -59,7 +55,7 @@ export default function ContactForm({
     messageLanguage: SupportedLanguagesEnum.PL, // Default fallback
     name: "",
     phoneNumber: verifiedPhoneNumber,
-    product: "trial",
+    product: SubscriptionType.TRIAL,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
@@ -234,11 +230,11 @@ export default function ContactForm({
           messageLanguage: SupportedLanguagesEnum.PL,
           acceptTerms: false,
           phoneNumber: verifiedPhoneNumber,
-          product: "trial",
+          product: SubscriptionType.TRIAL,
         });
 
         // If it's a trial, redirect to trial success page
-        if (selectedProduct === "trial") {
+        if (selectedProduct === SubscriptionType.TRIAL) {
           setMessage("Informacje zapisane! Przekierowywanie...");
           setTimeout(() => {
             window.location.href = `/trial-success?email=${encodeURIComponent(
@@ -249,7 +245,7 @@ export default function ContactForm({
           // For other products, redirect to Stripe checkout
           setMessage("Informacje zapisane! Przekierowywanie do kasy...");
           const checkoutSessionsPayload: CheckoutSessionsPayload = {
-            productType: selectedProduct || "trial",
+            productType: selectedProduct || SubscriptionType.TRIAL,
             email: sanitizedData.email,
           };
           setTimeout(async () => {
