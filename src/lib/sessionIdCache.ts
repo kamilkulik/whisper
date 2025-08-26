@@ -34,8 +34,8 @@ class SessionIdCache {
       // Upsert the key-value pair - this will create or update the existing key
       await this.prismaClient.keyValue.upsert({
         where: { key },
-        update: { value },
-        create: { key, value },
+        update: { value, expiresAt: new Date(Date.now() + 2 * 60 * 1000) },
+        create: { key, value, expiresAt: new Date(Date.now() + 2 * 60 * 1000) },
       });
 
       console.log(

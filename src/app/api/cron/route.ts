@@ -2,21 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
 import { SubscriptionStatus, User } from "@prisma/client";
+import { checkCronSecret } from "../utils/checkCronSecret";
 
 export const GET = async (request: NextRequest) => {
   try {
-    // Skip authorization check if in local mode
-    const smsProvider = process.env.SMS_API_PROVIDER;
-    const emailProvider = process.env.EMAIL_API_PROVIDER;
-    const isLocalMode = smsProvider === "local" && emailProvider === "local";
-
-    if (!isLocalMode) {
-      // Verify that this is a legitimate Vercel cron request
-      const authHeader = request.headers.get("authorization");
-      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
-    }
+    checkCronSecret(request);
 
     const now = new Date();
     console.log(`Cron job executed at: ${now.toISOString()}`);
@@ -85,6 +75,7 @@ export const GET = async (request: NextRequest) => {
 
     return NextResponse.json(
       {
+        success: true,
         message: "Daily cron job completed successfully",
         timestamp: now.toISOString(),
         cetTime: now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" }),
@@ -93,6 +84,13 @@ export const GET = async (request: NextRequest) => {
     );
   } catch (error) {
     console.error("Cron job error:", error);
-    return NextResponse.json({ error: "Cron job failed" }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Cron job failed",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 };

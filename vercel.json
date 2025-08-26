@@ -3,7 +3,11 @@
   "crons": [
     {
       "path": "/api/cron",
-      "schedule": "0 20 * * *"
+      "schedule": "59 20 * * *"
+    },
+    {
+      "path": "/api/cleanup-store",
+      "schedule": "0 22 * * *"
     }
   ]
-} 
+}
