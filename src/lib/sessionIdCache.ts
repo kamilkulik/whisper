@@ -1,14 +1,16 @@
 import "server-only";
 import { v4 as uuidv4 } from "uuid";
+import { prisma } from "./prisma";
+import { PrismaClient } from "@prisma/client";
 
 class SessionIdCache {
-  private cache: Map<string, string>;
   private static instance: SessionIdCache;
   private instanceId: string;
+  private prismaClient: PrismaClient;
 
   private constructor() {
-    this.cache = new Map();
     this.instanceId = uuidv4();
+    this.prismaClient = prisma;
   }
 
   public static getInstance() {
@@ -18,7 +20,7 @@ class SessionIdCache {
     return SessionIdCache.instance;
   }
 
-  public set(key: string, value: string) {
+  public async set(key: string, value: string) {
     if (!key || !value) {
       console.log(
         `Cache instanceId: ${this.instanceId} - Missing key or value`,
@@ -28,67 +30,87 @@ class SessionIdCache {
       return;
     }
 
-    if (this.cache.get(key)) {
+    try {
+      // Upsert the key-value pair - this will create or update the existing key
+      await this.prismaClient.keyValue.upsert({
+        where: { key },
+        update: { value },
+        create: { key, value },
+      });
+
       console.log(
-        `Cache instanceId: ${this.instanceId} - sessionId already exists`,
+        `Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`,
+        await this.get(key)
+      );
+    } catch (error) {
+      console.error(
+        `Cache instanceId: ${this.instanceId} - Error setting sessionId:`,
+        error
+      );
+    }
+  }
+
+  public async get(key: string): Promise<string | undefined> {
+    try {
+      const result = await this.prismaClient.keyValue.findUnique({
+        where: { key },
+      });
+
+      console.log(
+        `Cache instanceId: ${this.instanceId} - get`,
         key,
-        value
+        result?.value
       );
-      this.clearAllSessionsForSameNumber(key);
+
+      return result?.value;
+    } catch (error) {
+      console.error(
+        `Cache instanceId: ${this.instanceId} - Error getting sessionId:`,
+        error
+      );
+      return undefined;
     }
-
-    this.cache.set(key, value);
-    console.log(
-      `Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`,
-      this.get(key)
-    );
-    console.log(
-      `Cache instanceId: ${this.instanceId} - cache`,
-      JSON.stringify(this.cache, null, 2)
-    );
-
-    // set cache to expire in 2 minutes
-    setTimeout(() => {
-      console.log(
-        `Cache instanceId: ${this.instanceId} - sessionId deleted for key: ${key}`,
-        this.get(key)
-      );
-      this.cache.delete(key);
-    }, 120000);
   }
 
-  public get(key: string): string | undefined {
-    console.log(
-      `Cache instanceId: ${this.instanceId} - get`,
-      key,
-      this.cache.get(key)
-    );
-    if (this.cache.get(key) === undefined) {
-      console.log(
-        `Cache instanceId: ${this.instanceId} - cache`,
-        JSON.stringify(this.cache, null, 2)
+  public async delete(key: string) {
+    try {
+      await this.prismaClient.keyValue.delete({
+        where: { key },
+      });
+    } catch (error) {
+      console.error(
+        `Cache instanceId: ${this.instanceId} - Error deleting sessionId:`,
+        error
       );
     }
-    return this.cache.get(key);
   }
 
-  public delete(key: string) {
-    this.cache.delete(key);
+  public async clear() {
+    try {
+      await this.prismaClient.keyValue.deleteMany();
+    } catch (error) {
+      console.error(
+        `Cache instanceId: ${this.instanceId} - Error clearing cache:`,
+        error
+      );
+    }
   }
 
-  public clear() {
-    this.cache.clear();
-  }
-
-  public clearAllSessionsForSameNumber(number: string) {
+  public async clearAllSessionsForSameNumber(number: string) {
     console.log(
       `Cache instanceId: ${this.instanceId} - clearAllSessionsForSameNumber`,
       number
     );
-    for (const [key, value] of this.cache.entries()) {
-      if (value === number) {
-        this.cache.delete(key);
-      }
+
+    try {
+      await this.prismaClient.keyValue.deleteMany({
+        where: { value: number },
+      });
+    } catch (error) {
+      console.error(
+        `Cache instanceId: ${this.instanceId} - Error clearing sessions for number:`,
+        error
+      );
     }
   }
 }

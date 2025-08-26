@@ -94,3 +94,13 @@ model Subscription {
 
   @@map("subscriptions")
 }
+
+model KeyValue {
+  id        Int       @id @default(autoincrement())
+  key       String    @unique
+  value     String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("key_values")
+}
