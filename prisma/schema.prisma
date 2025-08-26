@@ -99,6 +99,7 @@ model KeyValue {
   id        Int       @id @default(autoincrement())
   key       String    @unique
   value     String
+  expiresAt DateTime? @map("expires_at")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
 
