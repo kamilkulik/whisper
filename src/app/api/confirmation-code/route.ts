@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
-import { sessionIdCache } from "../utils/sessionIdCache";
+import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../utils/csfrProtection";
 
 const temporarySessionIdCache = new Map<
@@ -68,7 +68,7 @@ export const POST = async (request: NextRequest) => {
   const confirmationCode = body["confirmationCode"];
   const sessionId = body["sessionId"];
   const email = body["email"];
-  const phoneNumber = body["phoneNumber"];
+  const phoneNumber = body?.phoneNumber?.toString();
   const isLoginMode = body["isLoginMode"];
 
   console.log(JSON.stringify(body, null, 2));

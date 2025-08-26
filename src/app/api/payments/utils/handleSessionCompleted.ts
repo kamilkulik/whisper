@@ -32,7 +32,7 @@ export async function handleSessionCompleted(
 
   const subscriptionData = subscriptionFactory({
     amountTotal: amountTotal || 0,
-    created,
+    created: created * 1000,
     currency: currency || "",
     paymentIntent: payment_intent?.toString() || "",
     paymentStatus: payment_status || "",

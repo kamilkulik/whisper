@@ -59,8 +59,8 @@ export function subscriptionFactory({
   | "type"
   | "userId"
 > {
-  const expiresIn7DaysAt = new Date(created * 1000 + 7 * 24 * 60 * 60 * 1000);
-  const expiresIn30DaysAt = new Date(created * 1000 + 30 * 24 * 60 * 60 * 1000);
+  const expiresIn7DaysAt = new Date(created + 7 * 24 * 60 * 60 * 1000);
+  const expiresIn30DaysAt = new Date(created + 30 * 24 * 60 * 60 * 1000);
   const subscriptionType = getSubscriptionType(productType);
   const subscriptionStatus = getSubscriptionStatus(
     paymentStatus,
@@ -76,7 +76,7 @@ export function subscriptionFactory({
     amountTotal: amountTotal || 0,
     currency: currency || "",
     dateExpires,
-    dateStarted: new Date(created * 1000),
+    dateStarted: new Date(created),
     paymentId: paymentIntent?.toString() || "",
     paymentProvider: PaymentProvider.STRIPE,
     status: subscriptionStatus,

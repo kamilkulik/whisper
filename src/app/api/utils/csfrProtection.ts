@@ -47,7 +47,7 @@ export function csfrProtection(request: NextRequest): NextResponse | void {
         Buffer.from(expectedHmac, "hex")
       );
 
-      console.log("tokensMatch", tokensMatch);
+      console.log("csfr tokensMatch", tokensMatch);
       if (!tokensMatch) {
         return NextResponse.json(
           { error: "CSRF token is invalid" },

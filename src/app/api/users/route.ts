@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { SubscriptionType, User } from "@prisma/client";
 import { sendEmail } from "@/lib/emailapi";
-import { sessionIdCache } from "../utils/sessionIdCache";
+import { sessionIdCache } from "@/lib/sessionIdCache";
 import { csfrProtection } from "../utils/csfrProtection";
 import { createSubscription } from "../payments/utils/createSubscription";
 

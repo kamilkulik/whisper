@@ -14,6 +14,23 @@ export async function createSubscription({
   sessionStatus,
   user,
 }: SubscriptionFactoryInput): Promise<void> {
+  console.log(
+    "createSubscription",
+    JSON.stringify(
+      {
+        amountTotal,
+        currency,
+        created,
+        paymentIntent,
+        paymentStatus,
+        productType,
+        sessionStatus,
+        user,
+      },
+      null,
+      2
+    )
+  );
   const subscriptionData = subscriptionFactory({
     amountTotal,
     currency,
@@ -24,6 +41,8 @@ export async function createSubscription({
     sessionStatus,
     user,
   });
+
+  console.log("subscriptionData", JSON.stringify(subscriptionData, null, 2));
 
   try {
     await prisma.subscription.create({
