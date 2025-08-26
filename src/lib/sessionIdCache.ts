@@ -52,8 +52,10 @@ class SessionIdCache {
 
   public async get(key: string): Promise<string | undefined> {
     try {
-      const result = await this.prismaClient.keyValue.findUnique({
-        where: { key },
+      const result = await this.prismaClient.keyValue.findFirst({
+        where: {
+          AND: [{ key }, { expiresAt: { gt: new Date() } }],
+        },
       });
 
       console.log(
