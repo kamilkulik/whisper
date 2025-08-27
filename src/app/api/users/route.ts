@@ -18,6 +18,126 @@ export type UserData = Omit<
   | "trialEnds"
 >;
 
+export const PUT = async (request: NextRequest) => {
+  try {
+    const sessionId = request.cookies.get("sessionId")?.value;
+    if (!sessionId) {
+      return NextResponse.json(
+        { error: "Unauthorized - No valid session" },
+        { status: 401 }
+      );
+    }
+
+    // Get user from session
+    const user = await prisma.user.findUnique({
+      where: { sessionId },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized - No valid session" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const { email, phoneNumber, messageLanguage } = body;
+
+    // Validate that at least one field is provided
+    if (!email && !phoneNumber && !messageLanguage) {
+      return NextResponse.json(
+        { error: "Przynajmniej jedno pole musi być wypełnione" },
+        { status: 400 }
+      );
+    }
+
+    // Prepare update data
+    const updateData: any = {
+      updatedAt: new Date(),
+    };
+
+    // Validate and add email if provided
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return NextResponse.json(
+          { error: "Nieprawidłowy format email" },
+          { status: 400 }
+        );
+      }
+
+      // Check if email is already taken by another user
+      const existingEmailUser = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (existingEmailUser && existingEmailUser.id !== user.id) {
+        return NextResponse.json(
+          { error: "Ten email jest już używany przez innego użytkownika" },
+          { status: 400 }
+        );
+      }
+
+      updateData.email = email;
+    }
+
+    // Validate and add phone number if provided
+    if (phoneNumber) {
+      const phoneRegex = /^(\+[1-9]\d{0,3})?[0-9\s\-]{6,15}$/;
+      const cleanPhone = phoneNumber.replace(/[\s\-]/g, "");
+      if (
+        !phoneRegex.test(phoneNumber) ||
+        cleanPhone.length < 6 ||
+        cleanPhone.length > 18
+      ) {
+        return NextResponse.json(
+          { error: "Nieprawidłowy format numeru telefonu" },
+          { status: 400 }
+        );
+      }
+
+      // Check if phone number is already taken by another user
+      const existingPhoneUser = await prisma.user.findUnique({
+        where: { phoneNumber },
+      });
+
+      if (existingPhoneUser && existingPhoneUser.id !== user.id) {
+        return NextResponse.json(
+          {
+            error:
+              "Ten numer telefonu jest już używany przez innego użytkownika",
+          },
+          { status: 400 }
+        );
+      }
+
+      updateData.phoneNumber = phoneNumber;
+    }
+
+    // Add message language if provided
+    if (messageLanguage) {
+      updateData.messageLanguage = messageLanguage;
+    }
+
+    // Update user
+    await prisma.user.update({
+      where: { id: user.id },
+      data: updateData,
+    });
+
+    return NextResponse.json(
+      { message: "Dane zostały zaktualizowane pomyślnie" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    return NextResponse.json(
+      { error: "Wystąpił błąd podczas aktualizacji danych" },
+      { status: 500 }
+    );
+  }
+};
+
 export const POST = async (request: NextRequest) => {
   try {
     const sessionId = request.cookies.get("sessionId")?.value;

@@ -1,7 +1,54 @@
 // server component
 import { getUserFromSessionId, prisma } from "@/lib/prisma";
+import {
+  Subscription,
+  SubscriptionStatus,
+  SubscriptionType,
+} from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+function subscriptionTypeToText(type: SubscriptionType | undefined) {
+  switch (type) {
+    case SubscriptionType.ONE_TIME:
+      return "30 dni";
+    case SubscriptionType.MONTHLY:
+      return "Miesięczna";
+    case SubscriptionType.TRIAL:
+      return "Okres próbny 7 dni";
+    default:
+      return "Nieznany";
+  }
+}
+
+function nextMessageTime(subscription: Subscription): {
+  isSubscribed: boolean;
+  message: string;
+} {
+  let isSubscribed = false;
+  let message = "";
+  if (
+    subscription.status === SubscriptionStatus.ACTIVE &&
+    subscription.dateExpires > new Date()
+  ) {
+    isSubscribed = true;
+    message = `Otrzymasz swój następny szept ${
+      new Date() > new Date("20:59") ? "jutro" : "dzisiaj"
+    } o`;
+  } else {
+    message = "Nie masz aktywnej subskrypcji";
+  }
+
+  return { isSubscribed, message };
+}
+
+function subscriptionStatusToText(subscription: Subscription) {
+  if (subscription.status === SubscriptionStatus.ACTIVE) {
+    return "Aktywna";
+  } else {
+    return "Nieaktywna";
+  }
+}
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
@@ -17,6 +64,12 @@ export default async function DashboardPage() {
     redirect("/?modal=login");
   }
 
+  const subscription = await prisma.subscription.findFirst({
+    where: {
+      userId: userFromSession.id,
+    },
+  });
+
   return (
     <div className="max-w-4xl mx-auto px-4">
       <div className="bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
@@ -24,34 +77,50 @@ export default async function DashboardPage() {
           <h1 className="text-3xl font-bold text-white mb-2">
             Panel Użytkownika
           </h1>
-          <p className="text-white/80">
-            Witaj, {userFromSession.name}! Zarządzaj swoimi ustawieniami i
-            subskrypcją
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-            <h2 className="text-xl font-semibold text-white mb-3">
-              Następny Szept
-            </h2>
-            <p className="text-white/90 mb-4">
-              {`Otrzymasz swój następny szept ${
-                new Date() > new Date("20:59") ? "jutro" : "dzisiaj"
-              } o`}
-            </p>
-            <div className="text-2xl font-bold text-yellow-400">20:59</div>
+            {nextMessageTime(subscription!).isSubscribed ? (
+              <>
+                <p className="text-white/90 mb-4">
+                  {nextMessageTime(subscription!).message}
+                </p>
+                <div className="text-2xl font-bold text-yellow-400">20:59</div>
+              </>
+            ) : (
+              <p className="text-white/90 mb-4">
+                {nextMessageTime(subscription!).message}
+              </p>
+            )}
           </div>
 
           <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-            <h2 className="text-xl font-semibold text-white mb-3">
-              Status Subskrypcji
-            </h2>
-            <p className="text-white/90 mb-4">Twoja subskrypcja jest aktywna</p>
+            <p className="text-white/90 mb-4">Twoja subskrypcja to:</p>
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/20 border border-green-400/30">
-              <span className="text-green-400 font-medium text-sm">
-                {userFromSession.premium ? "Premium" : "Trial"}
+              <span className="text-green-400 font-medium text-2xl">
+                {subscriptionTypeToText(subscription?.type)}
               </span>
+            </div>
+            {subscription?.dateExpires && (
+              <p className="text-white/80 mt-3 text-2xl">
+                Wygasa:{" "}
+                {subscription.dateExpires.toLocaleDateString("pl-PL", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+            )}
+            <div className="mt-6">
+              <a
+                href="/subscribe"
+                className="inline-block bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+              >
+                Przedłuż teraz
+              </a>
             </div>
           </div>
         </div>
@@ -60,32 +129,20 @@ export default async function DashboardPage() {
           <h2 className="text-2xl font-semibold text-white mb-6">Ustawienia</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
-              <span className="font-medium text-white">Email</span>
-              <span className="text-white/80">{userFromSession.email}</span>
+              <a
+                href="/dashboard/user-settings"
+                className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+              >
+                Zmień email i telefon →
+              </a>
             </div>
             <div className="flex items-center justify-between p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
-              <span className="font-medium text-white">Telefon</span>
-              <span className="text-white/80">
-                {userFromSession.phoneNumber}
-              </span>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
-              <span className="font-medium text-white">Język wiadomości</span>
-              <span className="text-white/80">
-                {userFromSession.messageLanguage}
-              </span>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
-              <span className="font-medium text-white">
-                Godzina dostarczania
-              </span>
-              <span className="text-white/80">20:59</span>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
-              <span className="font-medium text-white">Status subskrypcji</span>
-              <span className="text-green-400 font-medium">
-                {userFromSession.premium ? "Premium" : "Trial"}
-              </span>
+              <a
+                href="/dashboard/message-settings"
+                className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+              >
+                Zmień język wiadomości →
+              </a>
             </div>
           </div>
         </div>

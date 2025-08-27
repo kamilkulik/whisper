@@ -187,7 +187,7 @@ export default function Home() {
                 onClick={handleLoginClick}
                 className="text-white hover:text-blue-200 transition-colors"
               >
-                Log in
+                Logowanie
               </button>
               <button
                 onClick={handleNavigateToPricing}
