@@ -34,9 +34,9 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Handle modal deep links - scroll to pricing section when modal is present (except login)
+  // Handle modal deep links - scroll to pricing section when modal is present (except login and contact)
   useEffect(() => {
-    if (modal && modal !== "login") {
+    if (modal && modal !== "login" && modal !== "contact") {
       // Small delay to ensure the page is fully loaded
       const timer = setTimeout(() => {
         const pricingSection = document.querySelector("#pricing-section");
