@@ -2,6 +2,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import Stripe from "stripe";
 import { subscriptionFactory } from "./subscriptionFactory";
+import { SubscriptionType } from "@prisma/client";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session
@@ -30,6 +31,24 @@ export async function handleSessionCompleted(
     throw new Error("User not found");
   }
 
+  // see if the uesr had a trial subscription
+  const trialSubscription = await prisma.subscription.findFirst({
+    where: {
+      userId: user.id,
+      type: SubscriptionType.TRIAL,
+    },
+  });
+
+  // if there is a trial - just remove the subscription - premium is created instead
+  if (trialSubscription) {
+    await prisma.subscription.delete({
+      where: {
+        id: trialSubscription.id,
+      },
+    });
+  }
+
+  // create premium subscription
   const subscriptionData = subscriptionFactory({
     amountTotal: amountTotal || 0,
     created: created * 1000,
