@@ -124,8 +124,11 @@ export const POST = async (request: NextRequest) => {
           }
         } else {
           console.log("no existing user", email, " - redirecting to signup");
-          // need to redirect to the signup form
-          redirect("/?modal=contact");
+          // return raw 307 redirect with desition /?modal=contact
+          return NextResponse.json({
+            redirectUrl: "/?modal=contact",
+            status: 307,
+          });
         }
       } else if (phoneNumber) {
         const existingUser = await prisma.user.findUnique({
@@ -149,7 +152,10 @@ export const POST = async (request: NextRequest) => {
             phoneNumber,
             " - redirecting to signup"
           );
-          redirect("/?modal=contact");
+          return NextResponse.json({
+            redirectUrl: "/?modal=contact",
+            status: 307,
+          });
         }
       }
     }

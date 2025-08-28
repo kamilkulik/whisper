@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { z } from "zod";
 import { useLocale } from "../contexts/LocaleContext";
+import { useRouter } from "next/navigation";
 // ContactForm is switched at the parent level; no import/render here
 
 type ValidationErrors = {
@@ -433,6 +434,7 @@ export default function ConfirmationCodeForm({
   isLoginMode?: boolean;
   isEmailMode?: boolean;
 }) {
+  const router = useRouter();
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [message, setMessage] = useState("");
   const countryDropdownRef = useRef<HTMLDivElement>(null);
@@ -673,7 +675,21 @@ export default function ConfirmationCodeForm({
         }),
       });
 
+      const responseData = await response.json();
+      // Handle 307 redirect for non-existing users FIRST
+      if (responseData.status == 307) {
+        const redirectUrl = responseData.redirectUrl;
+        if (redirectUrl) {
+          // Use router to navigate to the new modal
+          // This will properly close the current modal and open the new one
+          router.push(redirectUrl);
+          return;
+        }
+      }
+
+      // Only try to parse JSON if it's not a redirect
       const data = await response.json();
+      console.log("responseData", JSON.stringify(data, null, 2));
 
       if (response.ok) {
         if (isLoginMode) {
