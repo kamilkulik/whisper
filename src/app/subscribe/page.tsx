@@ -28,7 +28,7 @@ export default async function SubscribePage() {
     <div className="flex flex-col items-center mb-3">
       <a
         href="/dashboard"
-        className="flex items-center text-white/80 hover:text-white transition-colors duration-200 mr-6 absolute left-10 top-20"
+        className="z-10 flex items-center text-white/80 hover:text-white transition-colors duration-200 mr-6 absolute left-10 top-20"
       >
         <svg
           className="w-5 h-5 mr-2"
@@ -44,7 +44,7 @@ export default async function SubscribePage() {
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        Powrót do panelu
+        <span>Powrót</span>
       </a>
       <PricingSection />
     </div>

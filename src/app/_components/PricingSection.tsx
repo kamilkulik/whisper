@@ -5,6 +5,7 @@ import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 
 interface PricingSectionProps {
   onGetStarted?: (productType?: SubscriptionType) => void;
+  showTrial?: boolean;
 }
 
 async function navigateToCheckout(productType: SubscriptionType) {
@@ -37,7 +38,10 @@ async function navigateToCheckout(productType: SubscriptionType) {
   }
 }
 
-export default function PricingSection({ onGetStarted }: PricingSectionProps) {
+export default function PricingSection({
+  onGetStarted,
+  showTrial = false,
+}: PricingSectionProps) {
   let handleGetStarter;
 
   if (onGetStarted) {
@@ -63,38 +67,50 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {/* Free Trial */}
-          <div className="bg-gray-700/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-600/50 transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 overflow-hidden flex flex-col h-full">
-            {/* Header Section */}
-            <div className="bg-gray-600/70 px-8 py-6 text-center">
-              <h3 className="text-3xl md:text-2xl font-extrabold text-white mb-2">
-                Okres Próbny
-              </h3>
-              <p className="text-gray-200 text-lg md:text-sm font-medium">
-                7 DNI
-              </p>
-            </div>
+        <div
+          className={`grid gap-8 mb-12 ${
+            showTrial
+              ? "md:grid-cols-3"
+              : "md:grid-cols-2 md:max-w-4xl md:mx-auto"
+          }`}
+        >
+          {showTrial && (
+            <>
+              {/* Free Trial */}
+              <div className="bg-gray-700/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-600/50 transition-all duration-300 hover:shadow-3xl hover:-translate-y-2 overflow-hidden flex flex-col h-full">
+                {/* Header Section */}
+                <div className="bg-gray-600/70 px-8 py-6 text-center">
+                  <h3 className="text-3xl md:text-2xl font-extrabold text-white mb-2">
+                    Okres Próbny
+                  </h3>
+                  <p className="text-gray-200 text-lg md:text-sm font-medium">
+                    7 DNI
+                  </p>
+                </div>
 
-            {/* Content Section */}
-            <div className="grid place-content-center grow py-8">
-              <div className="flex items-baseline">
-                <span className="text-8xl font-bold text-white">0</span>
-                <span className="text-2xl text-gray-300">zł</span>
+                {/* Content Section */}
+                <div className="grid place-content-center grow py-8">
+                  <div className="flex items-baseline">
+                    <span className="text-8xl font-bold text-white">0</span>
+                    <span className="text-2xl text-gray-300">zł</span>
+                  </div>
+                  <p className="text-gray-400 text-lg text-center">
+                    przez 7 dni
+                  </p>
+                </div>
+
+                {/* Button Section */}
+                <div className="px-8 pb-8">
+                  <button
+                    onClick={() => handleGetStarter(SubscriptionType.TRIAL)}
+                    className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    Rozpocznij okres próbny
+                  </button>
+                </div>
               </div>
-              <p className="text-gray-400 text-lg text-center">przez 7 dni</p>
-            </div>
-
-            {/* Button Section */}
-            <div className="px-8 pb-8">
-              <button
-                onClick={() => handleGetStarter(SubscriptionType.TRIAL)}
-                className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                Rozpocznij okres próbny
-              </button>
-            </div>
-          </div>
+            </>
+          )}
 
           {/* One-time Payment - Most Popular */}
           <div className="relative hover:shadow-3xl hover:-translate-y-2 transition-all ">
