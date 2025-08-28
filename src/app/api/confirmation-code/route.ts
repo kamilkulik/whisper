@@ -1,3 +1,5 @@
+"use server";
+
 import { sendEmail } from "@/lib/emailapi";
 import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
@@ -5,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../utils/csfrProtection";
+import { redirect } from "next/navigation";
 
 const temporarySessionIdCache = new Map<
   string,
@@ -107,9 +110,8 @@ export const POST = async (request: NextRequest) => {
           where: { email },
         });
 
-        console.log("existing user", existingUser);
-
         if (existingUser) {
+          console.log("existing user", email);
           try {
             await prisma.user.update({
               where: { email },
@@ -121,13 +123,9 @@ export const POST = async (request: NextRequest) => {
             console.error("Error saving to the db", err);
           }
         } else {
+          console.log("no existing user", email, " - redirecting to signup");
           // need to redirect to the signup form
-          return NextResponse.redirect(
-            new URL("/?modal=contact", request.url),
-            {
-              status: 302,
-            }
-          );
+          redirect("/?modal=contact");
         }
       } else if (phoneNumber) {
         const existingUser = await prisma.user.findUnique({
@@ -135,6 +133,7 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (existingUser) {
+          console.log("existing user", phoneNumber);
           try {
             await prisma.user.update({
               where: { phoneNumber },
@@ -145,12 +144,12 @@ export const POST = async (request: NextRequest) => {
           }
         } else {
           // need to redirect to the signup form
-          return NextResponse.redirect(
-            new URL("/?modal=contact", request.url),
-            {
-              status: 302,
-            }
+          console.log(
+            "no existing user",
+            phoneNumber,
+            " - redirecting to signup"
           );
+          redirect("/?modal=contact");
         }
       }
     }

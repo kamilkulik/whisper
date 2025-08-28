@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       // Get the signature sent by Stripe
       const signature = request.headers.get("stripe-signature");
       if (!signature) {
-        console.log("⚠️  No signature found in webhook request");
+        console.error("⚠️  No signature found in webhook request");
         return NextResponse.json(
           { error: "No signature found" },
           { status: 400 }
@@ -83,17 +83,19 @@ export async function POST(request: NextRequest) {
           signature,
           stripeWebhookSecret
         );
-        console.log("stripe event", event);
         console.log(`✅ Webhook signature verified for event: ${event.type}`);
       } catch (err: any) {
-        console.log(`⚠️  Webhook signature verification failed.`, err.message);
+        console.error(
+          `⚠️  Webhook signature verification failed.`,
+          err.message
+        );
         return NextResponse.json(
           { error: "Webhook signature verification failed" },
           { status: 400 }
         );
       }
 
-      // Validate event type for additional security
+      // Validate event type for additional security`
       if (!ALLOWED_EVENT_TYPES.includes(event.type)) {
         console.log(`⚠️  Unexpected event type: ${event.type}`);
         return NextResponse.json(
