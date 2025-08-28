@@ -3,7 +3,6 @@ import { getUserFromSessionId } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PricingSection from "../_components/PricingSection";
-import { SubscriptionType } from "@prisma/client";
 
 export default async function SubscribePage() {
   const cookieStore = await cookies();
@@ -18,11 +17,6 @@ export default async function SubscribePage() {
   if (!userFromSession) {
     redirect("/?modal=login");
   }
-
-  const handleStartJourney = (productType?: SubscriptionType) => {
-    // This will be handled by the PricingSection component
-    console.log("Start Journey clicked!", productType);
-  };
 
   return (
     <div className="flex flex-col items-center mb-3">

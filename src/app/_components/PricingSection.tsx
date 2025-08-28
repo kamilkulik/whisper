@@ -2,6 +2,7 @@
 
 import { SubscriptionType } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
+import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 
 interface PricingSectionProps {
   onGetStarted?: (productType?: SubscriptionType) => void;
@@ -9,9 +10,16 @@ interface PricingSectionProps {
 }
 
 async function navigateToCheckout(productType: SubscriptionType) {
-  const sessionIdCookie = { value: "123" };
-  // const user = await getUserFromSessionId(sessionIdCookie.value);
-  const userEmail = "test@test.com";
+  const userEmail = await userEmailFromCookie();
+
+  if (!userEmail) {
+    console.error("User email not found");
+    return;
+  }
+
+  console.log("userEmail", userEmail);
+  console.log("productType", productType);
+
   try {
     const checkoutSessionsPayload: CheckoutSessionsPayload = {
       productType: productType || SubscriptionType.TRIAL,
@@ -102,7 +110,9 @@ export default function PricingSection({
                 {/* Button Section */}
                 <div className="px-8 pb-8">
                   <button
-                    onClick={() => handleGetStarter(SubscriptionType.TRIAL)}
+                    onClick={async () =>
+                      await handleGetStarter(SubscriptionType.TRIAL)
+                    }
                     className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     Rozpocznij okres próbny
@@ -143,7 +153,9 @@ export default function PricingSection({
               {/* Button Section */}
               <div className="px-8 pb-8">
                 <button
-                  onClick={() => handleGetStarter(SubscriptionType.ONE_TIME)}
+                  onClick={async () =>
+                    await handleGetStarter(SubscriptionType.ONE_TIME)
+                  }
                   className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Kup za 19 zł
@@ -184,7 +196,9 @@ export default function PricingSection({
               {/* Button Section */}
               <div className="px-8 pb-8">
                 <button
-                  onClick={() => handleGetStarter(SubscriptionType.MONTHLY)}
+                  onClick={async () =>
+                    await handleGetStarter(SubscriptionType.MONTHLY)
+                  }
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Rozpocznij subskrypcję
