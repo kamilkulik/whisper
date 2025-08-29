@@ -43,7 +43,7 @@ export default function ContactForm({
   selectedProduct,
 }: {
   verifiedPhoneNumber?: string;
-  selectedProduct: SubscriptionType;
+  selectedProduct: SubscriptionType | null;
 }) {
   const { language, countryCode, isLoaded } = useLocale();
 
@@ -233,8 +233,14 @@ export default function ContactForm({
           product: SubscriptionType.TRIAL,
         });
 
-        // If it's a trial, redirect to trial success page
-        if (selectedProduct === SubscriptionType.TRIAL) {
+        // redirect to the pricing page
+        if (selectedProduct === null) {
+          setMessage("Informacje zapisane! Przekierowywanie...");
+          setTimeout(() => {
+            window.location.href = "/subscribe";
+          }, 1500);
+          // If it's a trial, redirect to trial success page
+        } else if (selectedProduct === SubscriptionType.TRIAL) {
           setMessage("Informacje zapisane! Przekierowywanie...");
           setTimeout(() => {
             window.location.href = "/trial-success";

@@ -285,6 +285,7 @@ export default function ConfirmationCodeForm({
       const responseData = await response.json();
       // Handle 307 redirect for non-existing users FIRST
       if (responseData.status == 307) {
+        console.log("Redirecting to:", responseData.redirectUrl);
         const redirectUrl = responseData.redirectUrl;
         if (redirectUrl) {
           // Use router to navigate to the new modal
@@ -294,12 +295,9 @@ export default function ConfirmationCodeForm({
         }
       }
 
-      // Only try to parse JSON if it's not a redirect
-      const data = await response.json();
-      console.log("responseData", JSON.stringify(data, null, 2));
-
       if (response.ok) {
         if (isLoginMode) {
+          console.log("Login mode");
           // Handle login success
           setMessage("Logowanie udane!");
           setShowConfirmationCode(false);
@@ -316,6 +314,7 @@ export default function ConfirmationCodeForm({
             window.location.href = "/dashboard";
           }, 2500);
         } else {
+          console.log("Signup mode");
           // Handle signup success (existing flow)
           setMessage("Numer telefonu potwierdzony!");
           setShowConfirmationCode(false);
@@ -342,13 +341,15 @@ export default function ConfirmationCodeForm({
         }
       } else {
         setMessage(
-          data.error || "Nieprawidłowy kod weryfikacyjny. Spróbuj ponownie."
+          responseData.error ||
+            "Nieprawidłowy kod weryfikacyjny. Spróbuj ponownie."
         );
         // Clear localStorage on error to force new session
         localStorage.removeItem("confirmationSessionId");
       }
     } catch (error) {
       setMessage("Wystąpił błąd podczas weryfikacji kodu.");
+      console.error("ConfirmationCodeForm error:", error);
       // Clear localStorage on error to force new session
       localStorage.removeItem("confirmationSessionId");
     } finally {

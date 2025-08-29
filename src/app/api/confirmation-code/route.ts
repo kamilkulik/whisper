@@ -124,9 +124,9 @@ export const POST = async (request: NextRequest) => {
           }
         } else {
           console.log("no existing user", email, " - redirecting to signup");
-          // return raw 307 redirect with desition /?modal=contact
+          // return raw 307 redirect with desition /?modal=phone
           return NextResponse.json({
-            redirectUrl: "/?modal=contact",
+            redirectUrl: "/?modal=phone",
             status: 307,
           });
         }
@@ -153,7 +153,7 @@ export const POST = async (request: NextRequest) => {
             " - redirecting to signup"
           );
           return NextResponse.json({
-            redirectUrl: "/?modal=contact",
+            redirectUrl: "/?modal=phone",
             status: 307,
           });
         }

@@ -16,9 +16,8 @@ export default function Home() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState<SubscriptionType>(
-    SubscriptionType.TRIAL
-  );
+  const [selectedProduct, setSelectedProduct] =
+    useState<SubscriptionType | null>(null);
 
   // Get modal from search params
   const searchParams = useSearchParams();

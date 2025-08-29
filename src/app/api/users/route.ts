@@ -220,7 +220,7 @@ export const POST = async (request: NextRequest) => {
 
       // Update existing user
       await prisma.user.update({
-        where: { email: body.phoneNumber },
+        where: { phoneNumber: body.phoneNumber },
         data: {
           phoneNumber: body.email,
           name: body.name,

@@ -6,7 +6,7 @@ export interface GatheredUserData {
   messageLanguage: SupportedLanguagesEnum;
   name: string;
   phoneNumber: string;
-  product: SubscriptionType;
+  product: SubscriptionType | null;
 }
 
 export function prepSaveUserBody({
