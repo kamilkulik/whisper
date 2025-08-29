@@ -18,6 +18,10 @@ export async function shouldShowTrial() {
     return false;
   }
 
+  if (user.trialEnds) {
+    return false;
+  }
+
   const subscription = await getSubscriptionFromUserId(user.id);
 
   if (!subscription) {

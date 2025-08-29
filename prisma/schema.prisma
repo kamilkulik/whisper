@@ -88,7 +88,7 @@ model Subscription {
   dateCancelled   DateTime?          @map("date_cancelled")
   dateStarted     DateTime           @map("date_started")
   dateRefunded    DateTime?          @map("date_refunded")
-  dateExpires     DateTime           @map("date_expires")
+  dateExpires     DateTime?          @map("date_expires")
   createdAt       DateTime           @default(now()) @map("created_at")
   updatedAt       DateTime?          @updatedAt @map("updated_at")
 

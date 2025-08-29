@@ -31,6 +31,7 @@ export async function getUserFromSessionId(sessionId: string) {
 export async function getSubscriptionFromUserId(userId: number) {
   return prisma.subscription.findFirst({
     where: { userId },
+    orderBy: { createdAt: "desc" },
   });
 }
 

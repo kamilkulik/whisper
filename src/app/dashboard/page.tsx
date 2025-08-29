@@ -9,7 +9,20 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import CancelSubscriptionButton from "../_components/CancelSubscriptionButton";
 
-function subscriptionTypeToText(type: SubscriptionType | undefined) {
+function subscriptionTypeToText(subscription: Subscription | null) {
+  if (!subscription) {
+    return "Brak subskrypcji";
+  }
+
+  const { type, status } = subscription;
+
+  switch (status) {
+    case SubscriptionStatus.CANCELLED:
+      return "Anulowana";
+    case SubscriptionStatus.EXPIRED:
+      return "Wygasła";
+  }
+
   switch (type) {
     case SubscriptionType.ONE_TIME:
       return "30 dni";
@@ -30,6 +43,7 @@ function nextMessageTime(subscription: Subscription): {
   let message = "";
   if (
     subscription?.status === SubscriptionStatus.ACTIVE &&
+    subscription?.dateExpires &&
     subscription?.dateExpires > new Date()
   ) {
     isSubscribed = true;
@@ -51,6 +65,16 @@ function subscriptionStatusToText(subscription: Subscription) {
   }
 }
 
+function findLatestSubscription(subscriptions: Subscription[]): Subscription {
+  return subscriptions.reduce((latest, current) =>
+    latest.createdAt && current.createdAt
+      ? latest.createdAt > current.createdAt
+        ? latest
+        : current
+      : latest
+  );
+}
+
 export default async function DashboardPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId");
@@ -65,11 +89,12 @@ export default async function DashboardPage() {
     redirect("/?modal=login");
   }
 
-  const subscription = await prisma.subscription.findFirst({
+  const allSubscriptions = await prisma.subscription.findMany({
     where: {
       userId: userFromSession.id,
     },
   });
+  const subscription = findLatestSubscription(allSubscriptions);
 
   return (
     <>
@@ -120,27 +145,29 @@ export default async function DashboardPage() {
             </div>
 
             <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-              <p className="text-white/90 mb-4">Twoja subskrypcja to:</p>
+              <p className="text-white/90 mb-4">Twoja subskrypcja:</p>
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/20 border border-green-400/30">
                 <span className="text-green-400 font-medium text-2xl">
-                  {subscriptionTypeToText(subscription?.type)}
+                  {subscriptionTypeToText(subscription)}
                 </span>
               </div>
-              {subscription?.dateExpires && (
-                <p className="text-white/80 mt-3 text-2xl">
-                  {subscription?.type === SubscriptionType.MONTHLY
-                    ? "Odnawia się"
-                    : "Wygasa"}{" "}
-                  {subscription?.dateExpires.toLocaleDateString("pl-PL", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-              )}
-              {subscription?.type === SubscriptionType.MONTHLY ? (
+              {subscription?.dateExpires &&
+                subscription.status === SubscriptionStatus.ACTIVE && (
+                  <p className="text-white/80 mt-3 text-2xl">
+                    {subscription?.type === SubscriptionType.MONTHLY
+                      ? "Odnawia się"
+                      : "Wygasa"}{" "}
+                    {subscription?.dateExpires.toLocaleDateString("pl-PL", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                )}
+              {subscription?.type === SubscriptionType.MONTHLY &&
+              subscription?.status === SubscriptionStatus.ACTIVE ? (
                 <CancelSubscriptionButton />
               ) : (
                 // TODO encapsulate button into its own component
