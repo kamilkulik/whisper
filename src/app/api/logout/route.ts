@@ -1,18 +1,23 @@
+import { deleteSession } from "@/lib/prisma";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const response = NextResponse.json({ success: true });
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get("sessionId");
 
+  if (!sessionId) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  // delete cookie from db
+  await deleteSession(sessionId.value);
   // Clear the session cookie
-  response.cookies.set({
-    name: "sessionId",
-    value: "",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 0, // Expire immediately
-    path: "/",
-  });
+  cookieStore.delete("sessionId");
 
-  return response;
+  // Clear the x-csrf-token cookie
+  cookieStore.delete("x-csrf-token");
+
+  // Redirect to home page
+  return NextResponse.redirect(new URL("/", request.url));
 }

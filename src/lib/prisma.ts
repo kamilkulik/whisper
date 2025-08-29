@@ -27,3 +27,16 @@ export async function getUserFromSessionId(sessionId: string) {
     where: { sessionId },
   });
 }
+
+export async function getSubscriptionFromUserId(userId: number) {
+  return prisma.subscription.findFirst({
+    where: { userId },
+  });
+}
+
+export async function deleteSession(sessionId: string) {
+  return prisma.user.update({
+    where: { sessionId },
+    data: { sessionId: null },
+  });
+}

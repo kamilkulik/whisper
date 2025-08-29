@@ -3,6 +3,8 @@
 import { SubscriptionType } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
+import { useEffect, useState } from "react";
+import { shouldShowTrial } from "../_actions/showTrial";
 
 interface PricingSectionProps {
   onGetStarted?: (productType?: SubscriptionType) => void;
@@ -46,10 +48,19 @@ async function navigateToCheckout(productType: SubscriptionType) {
   }
 }
 
-export default function PricingSection({
+export default async function PricingSection({
   onGetStarted,
-  showTrial = false,
 }: PricingSectionProps) {
+  const [showTrial, setShowTrial] = useState(false);
+
+  useEffect(() => {
+    const fetchShowTrial = async () => {
+      const showTrial = await shouldShowTrial();
+      setShowTrial(showTrial);
+    };
+    fetchShowTrial();
+  }, []);
+
   let handleGetStarter;
 
   if (onGetStarted) {

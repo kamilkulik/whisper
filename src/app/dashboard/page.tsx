@@ -17,7 +17,7 @@ function subscriptionTypeToText(type: SubscriptionType | undefined) {
     case SubscriptionType.TRIAL:
       return "Okres próbny 7 dni";
     default:
-      return "Nieznany";
+      return "Brak subskrypcji";
   }
 }
 
@@ -28,8 +28,8 @@ function nextMessageTime(subscription: Subscription): {
   let isSubscribed = false;
   let message = "";
   if (
-    subscription.status === SubscriptionStatus.ACTIVE &&
-    subscription.dateExpires > new Date()
+    subscription?.status === SubscriptionStatus.ACTIVE &&
+    subscription?.dateExpires > new Date()
   ) {
     isSubscribed = true;
     message = `Otrzymasz swój następny szept ${
@@ -142,7 +142,9 @@ export default async function DashboardPage() {
                   href="/subscribe"
                   className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
                 >
-                  Przedłuż teraz
+                  {subscription?.status === SubscriptionStatus.ACTIVE
+                    ? "Przedłuż teraz"
+                    : "Kup teraz"}
                 </a>
               </div>
             </div>
