@@ -48,9 +48,7 @@ async function navigateToCheckout(productType: SubscriptionType) {
   }
 }
 
-export default async function PricingSection({
-  onGetStarted,
-}: PricingSectionProps) {
+export default function PricingSection({ onGetStarted }: PricingSectionProps) {
   const [showTrial, setShowTrial] = useState(false);
 
   useEffect(() => {
