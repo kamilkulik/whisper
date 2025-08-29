@@ -53,8 +53,8 @@ export default function CancelSubscriptionButton() {
           onClose={handleCloseModal}
           modalId="cancel-confirmation"
         >
-          <div className="bg-white rounded-2xl p-8 max-w-md mx-auto shadow-2xl">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <div className="bg-white/80 dark:bg-gray-800/80 rounded-2xl shadow-xl p-12 backdrop-blur-sm max-w-md mx-auto">
+            <h3 className="text-2xl font-bold text-white/80 mb-6 text-center">
               Czy na pewno chcesz wstrzymać otrzymywanie wiadomości?
             </h3>
 
