@@ -127,7 +127,9 @@ export default async function DashboardPage() {
               </div>
               {subscription?.dateExpires && (
                 <p className="text-white/80 mt-3 text-2xl">
-                  Wygasa:{" "}
+                  {subscription.type === SubscriptionType.MONTHLY
+                    ? "Odnawia się"
+                    : "Wygasa"}{" "}
                   {subscription.dateExpires.toLocaleDateString("pl-PL", {
                     year: "numeric",
                     month: "long",

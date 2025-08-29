@@ -1,55 +1,20 @@
 "use client";
 
 import { SubscriptionType } from "@prisma/client";
-import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
-import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useEffect, useState } from "react";
 import { shouldShowTrial } from "../_actions/showTrial";
+import { navigateToCheckout } from "../_actions/navigateToCheckout";
+import { useRouter } from "next/navigation";
+import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 
 interface PricingSectionProps {
   onGetStarted?: (productType?: SubscriptionType) => void;
   showTrial?: boolean;
 }
 
-async function navigateToCheckout(productType: SubscriptionType) {
-  const userEmail = await userEmailFromCookie();
-
-  if (!userEmail) {
-    console.error("User email not found");
-    return;
-  }
-
-  console.log("userEmail", userEmail);
-  console.log("productType", productType);
-
-  try {
-    const checkoutSessionsPayload: CheckoutSessionsPayload = {
-      productType: productType || SubscriptionType.TRIAL,
-      email: userEmail,
-    };
-    const checkoutResponse = await fetch("/api/checkout-sessions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(checkoutSessionsPayload),
-    });
-
-    if (checkoutResponse.ok) {
-      const { url } = await checkoutResponse.json();
-      if (url) {
-        window.location.href = url;
-      }
-    } else {
-      console.error("Wystąpił błąd podczas tworzenia sesji płatności.");
-    }
-  } catch (error) {
-    console.error("Wystąpił błąd podczas tworzenia sesji płatności.");
-  }
-}
-
 export default function PricingSection({ onGetStarted }: PricingSectionProps) {
   const [showTrial, setShowTrial] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchShowTrial = async () => {
@@ -59,13 +24,24 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
     fetchShowTrial();
   }, []);
 
-  let handleGetStarter;
+  const handleClick = (product: SubscriptionType) => async () => {
+    const userEmailFromSessionCookie = await userEmailFromCookie();
+    console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
 
-  if (onGetStarted) {
-    handleGetStarter = onGetStarted;
-  } else {
-    handleGetStarter = navigateToCheckout;
-  }
+    if (userEmailFromSessionCookie) {
+      navigateToCheckout(product, userEmailFromSessionCookie);
+    } else {
+      router.push(`/?modal=phone`, { scroll: false });
+    }
+  };
+
+  // let handleGetStarter;
+
+  // if (onGetStarted) {
+  //   handleGetStarter = onGetStarted;
+  // } else {
+  //   handleGetStarter = navigateToCheckout;
+  // }
 
   return (
     <div className="relative py-20">
@@ -119,9 +95,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
                 {/* Button Section */}
                 <div className="px-8 pb-8">
                   <button
-                    onClick={async () =>
-                      await handleGetStarter(SubscriptionType.TRIAL)
-                    }
+                    onClick={handleClick(SubscriptionType.TRIAL)}
                     className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     Rozpocznij okres próbny
@@ -162,9 +136,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
               {/* Button Section */}
               <div className="px-8 pb-8">
                 <button
-                  onClick={async () =>
-                    await handleGetStarter(SubscriptionType.ONE_TIME)
-                  }
+                  onClick={handleClick(SubscriptionType.ONE_TIME)}
                   className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Kup za 19 zł
@@ -205,9 +177,7 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
               {/* Button Section */}
               <div className="px-8 pb-8">
                 <button
-                  onClick={async () =>
-                    await handleGetStarter(SubscriptionType.MONTHLY)
-                  }
+                  onClick={handleClick(SubscriptionType.MONTHLY)}
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Rozpocznij subskrypcję
