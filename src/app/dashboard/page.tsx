@@ -7,6 +7,7 @@ import {
 } from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import CancelSubscriptionButton from "../_components/CancelSubscriptionButton";
 
 function subscriptionTypeToText(type: SubscriptionType | undefined) {
   switch (type) {
@@ -69,16 +70,6 @@ export default async function DashboardPage() {
       userId: userFromSession.id,
     },
   });
-
-  const cancelSubscription = async () => {
-    const response = await fetch("/api/subscriptions", {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      redirect("/");
-    }
-  };
 
   return (
     <>
@@ -150,13 +141,7 @@ export default async function DashboardPage() {
                 </p>
               )}
               {subscription?.type === SubscriptionType.MONTHLY ? (
-                // TODO encapsulate button into its own component
-                <button
-                  onClick={cancelSubscription}
-                  className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
-                >
-                  Anuluj subskrypcję
-                </button>
+                <CancelSubscriptionButton />
               ) : (
                 // TODO encapsulate button into its own component
                 <div className="mt-6">

@@ -1,8 +1,5 @@
-import {
-  getSubscriptionFromUserId,
-  getUserFromSessionId,
-  prisma,
-} from "@/lib/prisma";
+import { getUserFromSessionId, prisma } from "@/lib/prisma";
+import { SubscriptionStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(request: NextRequest) {
@@ -18,17 +15,14 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const subscription = await getSubscriptionFromUserId(userFromSessionId.id);
-
-  if (!subscription) {
-    return NextResponse.json(
-      { error: "Subscription not found" },
-      { status: 404 }
-    );
-  }
-
-  await prisma.subscription.delete({
-    where: { id: subscription.id },
+  await prisma.subscription.update({
+    where: {
+      id: userFromSessionId.id,
+    },
+    data: {
+      status: SubscriptionStatus.CANCELLED,
+      dateCancelled: new Date(),
+    },
   });
 
   return NextResponse.json(
