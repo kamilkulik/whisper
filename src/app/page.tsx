@@ -233,6 +233,7 @@ export default function Home() {
                     Możesz anulować w każdej chwili.
                   </p>
 
+                  {/** Encapsulate button into its own component */}
                   <button
                     onClick={handleNavigateToPricing}
                     className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
