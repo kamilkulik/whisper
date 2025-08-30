@@ -77,6 +77,7 @@ model User {
 
 model Subscription {
   id              Int                @id @default(autoincrement())
+  subscriptionId  String?            @map("subscription_id") // missing for trial subs
   amountTotal     Int                @map("amount_total")
   currency        String             @map("currency")
   paymentProvider PaymentProvider    @default(STRIPE)

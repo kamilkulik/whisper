@@ -4,6 +4,7 @@ import {
   SubscriptionFactoryInput,
 } from "./subscriptionFactory";
 
+// used primarily for TRIAL subscription
 export async function createSubscription({
   amountTotal,
   currency,

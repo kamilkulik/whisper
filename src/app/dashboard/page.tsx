@@ -94,7 +94,10 @@ export default async function DashboardPage() {
       userId: userFromSession.id,
     },
   });
-  const subscription = findLatestSubscription(allSubscriptions);
+  let subscription = null;
+  if (allSubscriptions.length > 0) {
+    subscription = findLatestSubscription(allSubscriptions);
+  }
 
   return (
     <>

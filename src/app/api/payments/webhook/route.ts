@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, stripeWebhookSecret } from "@/lib/stripe";
 import { Buffer } from "node:buffer";
 import { handleSessionCompleted } from "../utils/handleSessionCompleted";
+import { handleSubscriptionUpdated } from "../utils/handleSubscriptionCancelled";
 
 export const config = {
   api: {
@@ -54,6 +55,8 @@ const ALLOWED_EVENT_TYPES = [
   "payment_intent.created", // Occurs when a payment intent is created
   "payment_intent.payment_failed", // Occurs when a payment attempt fails
   "payment_method.attached", // Occurs when a payment method is attached
+  // "customer.subscription.deleted", // Occurs when a subscription is cancelled immediately
+  "customer.subscription.updated", // Occurs when a subscription is cancelled at the period end
 ];
 
 /**
@@ -110,9 +113,16 @@ export async function POST(request: NextRequest) {
         case "checkout.session.completed":
           const checkoutSession = event.data.object;
           console.log(
-            `CheckoutSession for ${checkoutSession.amount_total} was successful!`
+            `✅ CheckoutSession for ${checkoutSession.amount_total} was successful!`
           );
           handleSessionCompleted(checkoutSession);
+          break;
+        case "customer.subscription.updated":
+          const subscription = event.data.object;
+          console.log(
+            `✅ Subscription ${subscription.id} was updated (scheduled to be cancelled at the period end)!`
+          );
+          handleSubscriptionUpdated(subscription);
           break;
         // case "payment_intent.succeeded":
         //   const paymentIntent = event.data.object;

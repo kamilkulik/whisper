@@ -32,26 +32,21 @@ export async function POST(request: NextRequest) {
 
     // Define product configurations based on product type
     const productConfigs = {
-      trial: {
-        price: "price_1RtLzh0JWfkzhBgp0ZDaEYyO", // Free trial price
-        mode: "payment" as const,
-        quantity: 1,
-      },
-      "one-time": {
+      [SubscriptionType.ONE_TIME]: {
         price: "price_1RtLzh0JWfkzhBgp0ZDaEYyO", // One-time payment price
         mode: "payment" as const,
         quantity: 1,
       },
-      subscription: {
+      [SubscriptionType.MONTHLY]: {
         price: "price_1RwGZm0JWfkzhBgpFj7IcYev", // Subscription price
         mode: "subscription" as const,
         quantity: 1,
       },
     };
 
-    const config =
-      productConfigs[productType as keyof typeof productConfigs] ||
-      productConfigs.trial;
+    const config = productConfigs[productType as keyof typeof productConfigs];
+
+    console.log("--- IMPORTANT --- config", config);
 
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
