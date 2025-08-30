@@ -1,6 +1,6 @@
 import "server-only";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Subscription } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -28,8 +28,10 @@ export async function getUserFromSessionId(sessionId: string) {
   });
 }
 
-export async function getSubscriptionFromUserId(userId: number) {
-  return prisma.subscription.findFirst({
+export async function getLatestSubscriptionFromUserId(
+  userId: number
+): Promise<Subscription[] | []> {
+  return prisma.subscription.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
   });

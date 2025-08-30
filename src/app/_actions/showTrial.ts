@@ -1,6 +1,9 @@
 "use server";
 
-import { getSubscriptionFromUserId, getUserFromSessionId } from "@/lib/prisma";
+import {
+  getLatestSubscriptionFromUserId,
+  getUserFromSessionId,
+} from "@/lib/prisma";
 import { SubscriptionType } from "@prisma/client";
 import { cookies } from "next/headers";
 
@@ -22,7 +25,7 @@ export async function shouldShowTrial() {
     return false;
   }
 
-  const subscription = await getSubscriptionFromUserId(user.id);
+  const subscription = await getLatestSubscriptionFromUserId(user.id);
 
   if (!subscription) {
     return true;

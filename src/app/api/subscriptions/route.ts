@@ -1,5 +1,5 @@
 import {
-  getSubscriptionFromUserId,
+  getLatestSubscriptionFromUserId,
   getUserFromSessionId,
   prisma,
 } from "@/lib/prisma";
@@ -44,16 +44,21 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const subscription = await getSubscriptionFromUserId(userFromSessionId.id);
+    const subscriptions = await getLatestSubscriptionFromUserId(
+      userFromSessionId.id
+    );
 
-    if (!subscription || !subscription.subscriptionId) {
+    if (subscriptions.length === 0 || !subscriptions[0].subscriptionId) {
       return NextResponse.json(
         { error: "Subscription not found" },
         { status: 404 }
       );
     }
 
-    await cancelAtPeriodEnd(subscription.subscriptionId, subscription.id);
+    await cancelAtPeriodEnd(
+      subscriptions[0].subscriptionId,
+      subscriptions[0].id
+    );
 
     return NextResponse.json(
       { message: "Subscription cancelled" },
