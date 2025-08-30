@@ -3,7 +3,7 @@ import { subscriptionFactory } from "./subscriptionFactory";
 import Stripe from "stripe";
 import { SubscriptionType } from "@prisma/client";
 import { stripe } from "@/lib/stripe";
-import { getSubscriptionTypeByPriceId, productConfigs } from "@/lib/consts";
+import { getSubscriptionTypeByPriceId } from "@/lib/consts";
 
 export async function handleSubscriptionCreated(
   eventData: Stripe.Subscription
