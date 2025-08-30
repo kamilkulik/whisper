@@ -1,3 +1,4 @@
+import { getSubscriptionType } from "@/lib/consts";
 import {
   PaymentProvider,
   Subscription,
@@ -7,54 +8,23 @@ import {
 } from "@prisma/client";
 
 export interface SubscriptionFactoryInput {
-  amountTotal: number;
-  currency: string;
   created: number;
-  paymentIntent: string;
-  paymentStatus: string;
   productType: string;
-  sessionStatus: string;
+  subscriptionId: string;
   user: User;
 }
 
-function getSubscriptionType(productType: string): SubscriptionType {
-  switch (productType) {
-    case SubscriptionType.MONTHLY.toString():
-      return SubscriptionType.MONTHLY;
-    case SubscriptionType.ONE_TIME.toString():
-      return SubscriptionType.ONE_TIME;
-    default:
-      return SubscriptionType.TRIAL;
-  }
-}
-
-function getSubscriptionStatus(
-  paymentStatus: string,
-  sessionStatus: string
-): SubscriptionStatus {
-  if (paymentStatus === "paid" && sessionStatus === "complete") {
-    return SubscriptionStatus.ACTIVE;
-  }
-  return SubscriptionStatus.FAILED;
-}
-
 export function subscriptionFactory({
-  amountTotal,
-  currency,
   created,
-  paymentIntent,
-  paymentStatus,
   productType,
-  sessionStatus,
+  subscriptionId,
   user,
 }: SubscriptionFactoryInput): Pick<
   Subscription,
-  | "amountTotal"
-  | "currency"
   | "dateExpires"
   | "dateStarted"
-  | "paymentId"
   | "paymentProvider"
+  | "subscriptionId"
   | "status"
   | "type"
   | "userId"
@@ -62,10 +32,6 @@ export function subscriptionFactory({
   const expiresIn7DaysAt = new Date(created + 7 * 24 * 60 * 60 * 1000);
   const expiresIn30DaysAt = new Date(created + 30 * 24 * 60 * 60 * 1000);
   const subscriptionType = getSubscriptionType(productType);
-  const subscriptionStatus = getSubscriptionStatus(
-    paymentStatus,
-    sessionStatus
-  );
 
   const dateExpires =
     subscriptionType === SubscriptionType.TRIAL
@@ -73,13 +39,11 @@ export function subscriptionFactory({
       : expiresIn30DaysAt;
 
   return {
-    amountTotal: amountTotal || 0,
-    currency: currency || "",
     dateExpires,
     dateStarted: new Date(created),
-    paymentId: paymentIntent?.toString() || "",
     paymentProvider: PaymentProvider.STRIPE,
-    status: subscriptionStatus,
+    status: SubscriptionStatus.ACTIVE,
+    subscriptionId,
     type: subscriptionType,
     userId: user.id,
   };

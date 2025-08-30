@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 
 import { stripe } from "@/lib/stripe";
 import { SubscriptionType } from "@prisma/client";
+import { productConfigs } from "@/lib/consts";
 
 export interface CheckoutSessionsPayload {
   productType: SubscriptionType;
@@ -29,20 +30,6 @@ export async function POST(request: NextRequest) {
     if (!origin.startsWith("http://") && !origin.startsWith("https://")) {
       origin = `https://${origin}`;
     }
-
-    // Define product configurations based on product type
-    const productConfigs = {
-      [SubscriptionType.ONE_TIME]: {
-        price: "price_1RtLzh0JWfkzhBgp0ZDaEYyO", // One-time payment price
-        mode: "payment" as const,
-        quantity: 1,
-      },
-      [SubscriptionType.MONTHLY]: {
-        price: "price_1RwGZm0JWfkzhBgpFj7IcYev", // Subscription price
-        mode: "subscription" as const,
-        quantity: 1,
-      },
-    };
 
     const config = productConfigs[productType as keyof typeof productConfigs];
 

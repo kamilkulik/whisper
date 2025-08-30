@@ -3,6 +3,7 @@ import {
   subscriptionFactory,
   SubscriptionFactoryInput,
 } from "./subscriptionFactory";
+import { Subscription } from "@prisma/client";
 
 // used primarily for TRIAL subscription
 export async function createSubscription({
@@ -14,7 +15,7 @@ export async function createSubscription({
   productType,
   sessionStatus,
   user,
-}: SubscriptionFactoryInput): Promise<void> {
+}: SubscriptionFactoryInput): Promise<Subscription> {
   console.log(
     "createSubscription",
     JSON.stringify(
@@ -46,9 +47,11 @@ export async function createSubscription({
   console.log("subscriptionData", JSON.stringify(subscriptionData, null, 2));
 
   try {
-    await prisma.subscription.create({
+    const subscription = await prisma.subscription.create({
       data: subscriptionData,
     });
+
+    return subscription;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to create subscription");

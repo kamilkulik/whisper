@@ -3,6 +3,7 @@ import { stripe, stripeWebhookSecret } from "@/lib/stripe";
 import { Buffer } from "node:buffer";
 import { handleSessionCompleted } from "../utils/handleSessionCompleted";
 import { handleSubscriptionUpdated } from "../utils/handleSubscriptionCancelled";
+import { handleSubscriptionCreated } from "../utils/handleSubscriptionCreated";
 
 export const config = {
   api: {
@@ -123,6 +124,11 @@ export async function POST(request: NextRequest) {
             `✅ Subscription ${subscription.id} was updated (scheduled to be cancelled at the period end)!`
           );
           handleSubscriptionUpdated(subscription);
+          break;
+        case "customer.subscription.created":
+          const subscriptionCreated = event.data.object;
+          console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);
+          handleSubscriptionCreated(subscriptionCreated);
           break;
         // case "payment_intent.succeeded":
         //   const paymentIntent = event.data.object;

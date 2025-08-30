@@ -12,7 +12,7 @@ interface PricingSectionProps {
   showTrial?: boolean;
 }
 
-export default function PricingSection({ onGetStarted }: PricingSectionProps) {
+export default function PricingSection(props: PricingSectionProps) {
   const [showTrial, setShowTrial] = useState(false);
   const router = useRouter();
 
@@ -29,19 +29,17 @@ export default function PricingSection({ onGetStarted }: PricingSectionProps) {
     console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
 
     if (userEmailFromSessionCookie) {
-      navigateToCheckout(product, userEmailFromSessionCookie);
+      const result = await navigateToCheckout(
+        product,
+        userEmailFromSessionCookie
+      );
+      if (result?.success) {
+        router.push("/trial-success");
+      }
     } else {
       router.push(`/?modal=phone`, { scroll: false });
     }
   };
-
-  // let handleGetStarter;
-
-  // if (onGetStarted) {
-  //   handleGetStarter = onGetStarted;
-  // } else {
-  //   handleGetStarter = navigateToCheckout;
-  // }
 
   return (
     <div className="relative py-20">

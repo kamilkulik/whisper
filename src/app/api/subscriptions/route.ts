@@ -46,7 +46,7 @@ export async function DELETE(request: NextRequest) {
 
     const subscription = await getSubscriptionFromUserId(userFromSessionId.id);
 
-    if (!subscription) {
+    if (!subscription || !subscription.subscriptionId) {
       return NextResponse.json(
         { error: "Subscription not found" },
         { status: 404 }
