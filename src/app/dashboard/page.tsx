@@ -50,6 +50,23 @@ function nextMessageTime(subscription: Subscription): {
     message = `Otrzymasz swój następny szept ${
       new Date() > new Date("20:59") ? "jutro" : "dzisiaj"
     } o`;
+  } else if (
+    subscription?.status === SubscriptionStatus.CANCELLED &&
+    subscription?.dateExpires
+  ) {
+    message = "Subskrypcja została anulowana";
+    const lastSheptDate = subscription?.dateExpires;
+
+    if (lastSheptDate > new Date()) {
+      message += " ostatni szept:";
+      message += ` ${lastSheptDate.toLocaleDateString("pl-PL", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+    }
   } else {
     message = "Nie masz aktywnej subskrypcji";
   }
@@ -170,7 +187,8 @@ export default async function DashboardPage() {
                   </p>
                 )}
               {subscription?.type === SubscriptionType.MONTHLY &&
-              subscription?.status === SubscriptionStatus.ACTIVE ? (
+              subscription?.status === SubscriptionStatus.ACTIVE &&
+              subscription?.dateCancelled === null ? (
                 <CancelSubscriptionButton />
               ) : (
                 // TODO encapsulate button into its own component

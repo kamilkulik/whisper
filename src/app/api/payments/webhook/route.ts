@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, stripeWebhookSecret } from "@/lib/stripe";
 import { Buffer } from "node:buffer";
 import { handleSessionCompleted } from "../utils/handleSessionCompleted";
-import { handleSubscriptionUpdated } from "../utils/handleSubscriptionCancelled";
+import { handleSubscriptionUpdated } from "../utils/handleSubscriptionUpdated";
 import { handleSubscriptionCreated } from "../utils/handleSubscriptionCreated";
 
 export const config = {
@@ -120,9 +120,7 @@ export async function POST(request: NextRequest) {
           break;
         case "customer.subscription.updated":
           const subscription = event.data.object;
-          console.log(
-            `✅ Subscription ${subscription.id} was updated (scheduled to be cancelled at the period end)!`
-          );
+          console.log(`✅ Subscription ${subscription.id} was updated`);
           handleSubscriptionUpdated(subscription);
           break;
         case "customer.subscription.created":
