@@ -249,13 +249,9 @@ export const POST = async (request: NextRequest) => {
 
       if (!savedUser.premium && savedUser.trialEnds) {
         await createSubscription({
-          amountTotal: 0,
-          currency: "",
           created: new Date().getTime(),
-          paymentIntent: "",
-          paymentStatus: "paid",
           productType: SubscriptionType.TRIAL,
-          sessionStatus: "complete",
+          subscriptionId: "",
           user: savedUser,
         });
       }
@@ -270,7 +266,7 @@ export const POST = async (request: NextRequest) => {
     const email = body.email;
     const name = body.name;
     const message = `Witaj ${name}, dziękujemy za rejestrację w naszej aplikacji. Kliknij w link aby zweryfikować swój email: ${process.env.NEXT_PUBLIC_APP_URL}/verify-email?email=${email}`;
-    await sendEmail(email, message, "Zweryfikuje swój email");
+    await sendEmail(email, "Zweryfikuje swój email", message, "welcome");
 
     return NextResponse.json(
       { message: "Wiadomość została pomyślnie zapisana" },

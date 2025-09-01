@@ -7,26 +7,17 @@ import { Subscription } from "@prisma/client";
 
 // used primarily for TRIAL subscription
 export async function createSubscription({
-  amountTotal,
-  currency,
   created,
-  paymentIntent,
-  paymentStatus,
   productType,
-  sessionStatus,
+  subscriptionId,
   user,
 }: SubscriptionFactoryInput): Promise<Subscription> {
   console.log(
     "createSubscription",
     JSON.stringify(
       {
-        amountTotal,
-        currency,
         created,
-        paymentIntent,
-        paymentStatus,
         productType,
-        sessionStatus,
         user,
       },
       null,
@@ -34,13 +25,9 @@ export async function createSubscription({
     )
   );
   const subscriptionData = subscriptionFactory({
-    amountTotal,
-    currency,
     created,
-    paymentIntent,
-    paymentStatus,
     productType,
-    sessionStatus,
+    subscriptionId,
     user,
   });
 
