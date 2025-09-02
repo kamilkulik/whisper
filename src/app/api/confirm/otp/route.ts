@@ -6,7 +6,7 @@ import { sendSms } from "@/lib/smsapi";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "@/lib/sessionIdCache";
-import { generateCsrfToken } from "../utils/csfrProtection";
+import { generateCsrfToken } from "../../utils/csfrProtection";
 import { redirect } from "next/navigation";
 
 const temporarySessionIdCache = new Map<
@@ -50,7 +50,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       subject: "Wieczorny szept - kod potwierdzający",
       message: confirmationCode.toString(),
       verificationCode: confirmationCode.toString(),
-      template: "confirmation-code-via-email",
+      template: "confirm/otp-via-email",
     });
   } else if (phoneNumber) {
     await sendSms(phoneNumber, confirmationCode.toString());
@@ -60,7 +60,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 };
 
 /**
- * POST /api/confirmation-code
+ * POST /api/confirm/otp
  * Will check whether the confirmation code matches that saved in
  * temporarySessionIdCache
  * If yes, will return to the user http only cookie which will expire in 7 days

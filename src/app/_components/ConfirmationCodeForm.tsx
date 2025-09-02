@@ -219,12 +219,9 @@ export default function ConfirmationCodeForm({
         params.append("phoneNumber", formData.numerTelefonu);
       }
 
-      const response = await fetch(
-        `/api/confirmation-code?${params.toString()}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`/api/confirm/otp?${params.toString()}`, {
+        method: "GET",
+      });
 
       const data = await response.json();
 
@@ -267,7 +264,7 @@ export default function ConfirmationCodeForm({
         return;
       }
 
-      const response = await fetch("/api/confirmation-code", {
+      const response = await fetch("/api/confirm/otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

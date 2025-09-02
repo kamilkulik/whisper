@@ -22,7 +22,7 @@ export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Confirm Email</Preview>
+        <Preview>Potwierdź swój adres email</Preview>
         <Container style={container}>
           <Section style={coverSection}>
             <Section style={imageSection}>
@@ -34,34 +34,36 @@ export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
               /> */}
             </Section>
             <Section style={upperSection}>
-              <Heading style={h1}>Weryfikacja adresu email</Heading>
+              <Heading style={h1}>Potwierdź swój adres email</Heading>
               <Text style={mainText}>
-                Dziękujemy za rozpoczęcie procesu tworzenia nowego konta
-                Wieczorny Szept. Chcemy się upewnić, że to ty. Prosimy o
-                wprowadzenie następującego kodu weryfikacyjnego, gdy zostaniesz
-                poproszony. Jeśli nie chcesz tworzyć konta, możesz zignorować tę
-                wiadomość.
+                Dziękujemy za rozpoczęcie rejestracji w serwisie Wieczorny
+                Szept. Aby potwierdzić swój adres email, kliknij w poniższy
+                link. Jeśli nie zakładasz konta, zignoruj tę wiadomość.
               </Text>
               <Section style={verificationSection}>
-                <Text style={verifyText}>Kod weryfikacyjny</Text>
+                <Text style={verifyText}>Jednorazowy link potwierdzający</Text>
 
-                <Text style={codeText}>{verificationLink}</Text>
+                <Link href={verificationLink} style={codeText}>
+                  Potwierdz email
+                </Link>
                 <Text style={validityText}>
-                  (Ten kod jest ważny przez 2 minuty)
+                  (ten link jest ważny przez 24 godziny)
                 </Text>
               </Section>
             </Section>
             <Hr />
             <Section style={lowerSection}>
               <Text style={cautionText}>
-                Wieczorny Szept nigdy nie wysyła wiadomości e-mail i nie poprosi
-                o ujawnienie lub weryfikację hasła, karty kredytowej, lub numeru
-                konta bankowego.
+                Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których
+                prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub
+                numeru konta bankowego.
               </Text>
             </Section>
           </Section>
           <Text style={footerText}>
-            Ta wiadomość została wygenerowana i wysłana przez Wieczorny Szept,
+            {
+              "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept. Nasz "
+            }
             <Link
               href="https://wieczornyszept.pl/regulamin"
               target="_blank"
@@ -69,9 +71,7 @@ export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
             >
               regulamin
             </Link>
-            <Link href="https://wieczornyszept.pl" target="_blank" style={link}>
-              Wieczorny Szept
-            </Link>
+            {" oraz "}
             <Link
               href="https://wieczornyszept.pl/polityka-prywatnosci"
               target="_blank"
@@ -101,24 +101,25 @@ const container = {
 const h1 = {
   color: "#333",
   fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "20px",
   fontWeight: "bold",
   marginBottom: "15px",
+  textAlign: "center" as const,
 };
 
 const link = {
   color: "#2754C5",
   fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  fontSize: "14px",
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "12px",
   textDecoration: "underline",
 };
 
 const text = {
   color: "#333",
   fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "14px",
   margin: "24px 0",
 };
@@ -141,6 +142,7 @@ const footerText = {
   ...text,
   fontSize: "12px",
   padding: "0 20px",
+  textAlign: "left" as const,
 };
 
 const verifyText = {
@@ -170,6 +172,10 @@ const verificationSection = {
   justifyContent: "center",
 };
 
-const mainText = { ...text, marginBottom: "14px" };
+const mainText = {
+  ...text,
+  marginBottom: "18px",
+  textAlign: "left" as const,
+};
 
-const cautionText = { ...text, margin: "0px" };
+const cautionText = { ...text, margin: "0px", textAlign: "left" as const };
