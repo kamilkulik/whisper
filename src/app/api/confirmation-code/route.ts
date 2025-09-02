@@ -45,11 +45,13 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   });
 
   if (email) {
-    await sendEmail(
-      email,
-      "Wieczorny szept - kod potwierdzający",
-      confirmationCode.toString()
-    );
+    await sendEmail({
+      to: email,
+      subject: "Wieczorny szept - kod potwierdzający",
+      message: confirmationCode.toString(),
+      verificationCode: confirmationCode.toString(),
+      template: "confirmation-code-via-email",
+    });
   } else if (phoneNumber) {
     await sendSms(phoneNumber, confirmationCode.toString());
   }

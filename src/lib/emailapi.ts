@@ -1,16 +1,24 @@
 import "server-only";
+
 import { CreateEmailResponseSuccess, Resend } from "resend";
-import { WelcomeEmail } from "./email-templates/welcome";
-import { ConfirmEmail } from "./email-templates/confirm-email";
+import {
+  ConfirmCodeViaEmail,
+  ConfirmEmail,
+  PaymentLink,
+  WelcomeEmail,
+  EmailProps,
+  SendEmailProps,
+} from "./email-templates";
 
 interface EmailClientInterface {
-  sendEmail(
-    to: string,
-    subject: string,
-    message: string,
-    template: React.ReactElement
-  ): Promise<CreateEmailResponseSuccess>;
+  sendEmail(props: EmailProps): Promise<CreateEmailResponseSuccess>;
 }
+
+export type EmailTemplate =
+  | "confirm-email"
+  | "confirmation-code-via-email"
+  | "payment-link"
+  | "welcome";
 
 class ResendEmailClient implements EmailClientInterface {
   private readonly apiKey: string;
@@ -27,17 +35,17 @@ class ResendEmailClient implements EmailClientInterface {
     this.resend = new Resend(this.apiKey);
   }
 
-  async sendEmail(
-    to: string,
-    subject: string,
-    message: string,
-    template: React.ReactElement
-  ): Promise<CreateEmailResponseSuccess> {
+  async sendEmail({
+    to,
+    subject,
+    message,
+    template,
+  }: SendEmailProps): Promise<CreateEmailResponseSuccess> {
     try {
       const { data, error } = await this.resend.emails.send({
         from: this.fromEmail,
-        to: [to],
-        subject: subject,
+        to,
+        subject,
         react: template,
       });
 
@@ -58,12 +66,8 @@ class ResendEmailClient implements EmailClientInterface {
 }
 
 class LocalEmailClient implements EmailClientInterface {
-  async sendEmail(
-    to: string,
-    subject: string,
-    message: string,
-    template: React.ReactElement
-  ): Promise<CreateEmailResponseSuccess> {
+  async sendEmail(props: SendEmailProps): Promise<CreateEmailResponseSuccess> {
+    const { to, subject, message } = props;
     console.log(`[LOCAL] Sending email to ${to}: ${subject}`);
     console.log(`[LOCAL] Message: ${message}`);
 
@@ -73,25 +77,24 @@ class LocalEmailClient implements EmailClientInterface {
   }
 }
 
-export async function sendEmail(
-  to: string,
-  subject: string,
-  message: string,
-  template: string | null
-) {
+export async function sendEmail(props: SendEmailProps) {
   const configuredEmailClient = process.env.EMAIL_API_PROVIDER;
+  const { template } = props;
   let templateToUse: React.ReactElement;
 
   switch (template) {
     case "welcome":
       templateToUse = WelcomeEmail({
-        userName: "User",
-        confirmEmailUrl: "https://example.com/verify-email?email=" + to,
+        userName: props.userName,
       });
       break;
     case "confirm-email":
       templateToUse = ConfirmEmail({
-        userName: "User",
+        verificationLink: "",
+      });
+      break;
+    case "confirmation-code-via-email":
+      templateToUse = ConfirmCodeViaEmail({
         verificationCode: "",
       });
       break;
@@ -104,11 +107,11 @@ export async function sendEmail(
   switch (configuredEmailClient) {
     case "resend":
       const resendEmailClient = new ResendEmailClient();
-      await resendEmailClient.sendEmail(to, subject, message, templateToUse);
+      await resendEmailClient.sendEmail(props);
       break;
     case "local":
       const localEmailClient = new LocalEmailClient();
-      await localEmailClient.sendEmail(to, subject, message, templateToUse);
+      await localEmailClient.sendEmail(props);
       break;
     default:
       throw new Error(

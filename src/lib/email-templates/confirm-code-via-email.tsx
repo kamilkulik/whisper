@@ -11,13 +11,15 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-import { ConfirmEmailProps } from "./types";
+import { ConfirmationCodeViaEmailProps } from "./types";
 
 // const baseUrl = process.env.VERCEL_URL
 //   ? `https://${process.env.VERCEL_URL}`
 //   : "";
 
-export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
+export function ConfirmCodeViaEmail({
+  verificationCode,
+}: ConfirmationCodeViaEmailProps) {
   return (
     <Html>
       <Head />
@@ -45,7 +47,7 @@ export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
               <Section style={verificationSection}>
                 <Text style={verifyText}>Kod weryfikacyjny</Text>
 
-                <Text style={codeText}>{verificationLink}</Text>
+                <Text style={codeText}>{verificationCode}</Text>
                 <Text style={validityText}>
                   (Ten kod jest ważny przez 2 minuty)
                 </Text>

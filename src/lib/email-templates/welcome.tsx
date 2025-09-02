@@ -11,24 +11,17 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { WelcomeEmailProps } from "./types";
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-export const WelcomeEmail = ({
-  userName,
-  confirmEmailUrl,
-  preview,
-}: {
-  userName: string;
-  confirmEmailUrl: string;
-  preview?: string;
-}) => (
+export const WelcomeEmail = ({ userName }: WelcomeEmailProps) => (
   <Html>
     <Head />
     <Body style={main}>
-      <Preview>{preview ?? "Welcome to Wieczorny Szept"}</Preview>
+      <Preview>{"Wieczorny Szept - Witaj w naszej aplikacji"}</Preview>
       <Container style={container}>
         <Section style={box}>
           {/* <Img
