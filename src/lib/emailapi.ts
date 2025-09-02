@@ -8,10 +8,11 @@ import {
   WelcomeEmail,
   EmailProps,
   SendEmailProps,
+  SendEmailClientProps,
 } from "./email-templates";
 
 interface EmailClientInterface {
-  sendEmail(props: EmailProps): Promise<CreateEmailResponseSuccess>;
+  sendEmail(props: SendEmailClientProps): Promise<CreateEmailResponseSuccess>;
 }
 
 export type EmailTemplate =
@@ -40,7 +41,7 @@ class ResendEmailClient implements EmailClientInterface {
     subject,
     message,
     template,
-  }: SendEmailProps): Promise<CreateEmailResponseSuccess> {
+  }: SendEmailClientProps): Promise<CreateEmailResponseSuccess> {
     try {
       const { data, error } = await this.resend.emails.send({
         from: this.fromEmail,
@@ -66,7 +67,9 @@ class ResendEmailClient implements EmailClientInterface {
 }
 
 class LocalEmailClient implements EmailClientInterface {
-  async sendEmail(props: SendEmailProps): Promise<CreateEmailResponseSuccess> {
+  async sendEmail(
+    props: SendEmailClientProps
+  ): Promise<CreateEmailResponseSuccess> {
     const { to, subject, message } = props;
     console.log(`[LOCAL] Sending email to ${to}: ${subject}`);
     console.log(`[LOCAL] Message: ${message}`);
@@ -90,28 +93,39 @@ export async function sendEmail(props: SendEmailProps) {
       break;
     case "confirm-email":
       templateToUse = ConfirmEmail({
-        verificationLink: "",
+        verificationLink:
+          props.verificationLink ?? "https://wieczornyszept.pl/verify-email",
       });
       break;
     case "confirmation-code-via-email":
       templateToUse = ConfirmCodeViaEmail({
-        verificationCode: "",
+        verificationCode: props.verificationCode ?? "421341",
+      });
+      break;
+    case "payment-link":
+      templateToUse = PaymentLink({
+        paymentLinkUrl:
+          props.paymentLinkUrl ?? "https://wieczornyszept.pl/payment-link",
       });
       break;
     default:
       throw new Error(`Unsupported template: ${template}`);
   }
 
-  console.log("templateToUse", templateToUse);
-
   switch (configuredEmailClient) {
     case "resend":
       const resendEmailClient = new ResendEmailClient();
-      await resendEmailClient.sendEmail(props);
+      await resendEmailClient.sendEmail({
+        ...props,
+        template: templateToUse,
+      });
       break;
     case "local":
       const localEmailClient = new LocalEmailClient();
-      await localEmailClient.sendEmail(props);
+      await localEmailClient.sendEmail({
+        ...props,
+        template: templateToUse,
+      });
       break;
     default:
       throw new Error(

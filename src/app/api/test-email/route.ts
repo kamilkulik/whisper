@@ -1,9 +1,23 @@
 import { EmailTemplate, sendEmail } from "@/lib/emailapi";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (request: NextRequest) => {
-  const queryParams = request.nextUrl.searchParams;
-  const template = queryParams.get("template");
+export const POST = async (request: NextRequest) => {
+  const requestBody: {
+    template: EmailTemplate;
+    to: string;
+    userName?: string;
+    verificationLink?: string;
+    verificationCode?: string;
+    paymentLinkUrl?: string;
+  } = await request.json();
+  const {
+    template,
+    to,
+    userName,
+    verificationLink,
+    verificationCode,
+    paymentLinkUrl,
+  } = requestBody;
 
   if (!template) {
     return NextResponse.json(
@@ -22,14 +36,15 @@ export const GET = async (request: NextRequest) => {
   }
 
   await sendEmail({
-    to: "kulikkamil@icloud.com",
+    to: to ?? "kulikkamil@icloud.com",
     subject: "Test Email",
     message: "This is a test email",
-    template: template as EmailTemplate,
-    userName: "Kamil Kulik",
-    verificationLink: "https://wieczornyszept.pl/verify-email",
-    verificationCode: "123456",
-    paymentLinkUrl: "https://wieczornyszept.pl/payment-link",
+    template,
+    userName: userName ?? "Kamil Kulik",
+    verificationLink:
+      verificationLink ?? "https://wieczornyszept.pl/verify-email",
+    verificationCode: verificationCode ?? "123456",
+    paymentLinkUrl: paymentLinkUrl ?? "https://wieczornyszept.pl/payment-link",
   });
   return NextResponse.json({ message: "Email sent" });
 };

@@ -52,6 +52,10 @@ export type SendWelcomeEmail = BaseEmailProps &
     template: "welcome";
   };
 
+export type SendEmailClientProps = {
+  template: React.ReactElement;
+} & BaseEmailProps;
+
 export type SendEmailProps =
   | SendConfirmEmail
   | SendConfirmationCodeViaEmail
