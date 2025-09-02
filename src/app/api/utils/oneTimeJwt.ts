@@ -74,3 +74,16 @@ export async function verifyOneTimeToken(
     throw new Error("Token verification failed");
   }
 }
+
+export async function generateOneTimeUrl(userId: string, userEmail: string) {
+  try {
+    const token = await generateOneTimeToken(userId, userEmail);
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000";
+    return `${baseUrl}/api/confirm/email?token=${token}`;
+  } catch (error) {
+    console.error("Failed to generate JWT token:", error);
+    throw new Error("Failed to generate verification token");
+  }
+}

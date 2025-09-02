@@ -1,6 +1,6 @@
 import { EmailTemplate, sendEmail } from "@/lib/emailapi";
 import { NextRequest, NextResponse } from "next/server";
-import { generateOneTimeToken } from "../utils/oneTimeJwt";
+import { generateOneTimeUrl } from "../utils/oneTimeJwt";
 
 export const POST = async (request: NextRequest) => {
   const requestBody: {
@@ -53,19 +53,7 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    try {
-      const token = await generateOneTimeToken(userId, userEmail);
-      const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost:3000";
-      finalVerificationLink = `${baseUrl}/api/confirm/email?token=${token}`;
-    } catch (error) {
-      console.error("Failed to generate JWT token:", error);
-      return NextResponse.json(
-        { message: "Failed to generate verification token" },
-        { status: 500 }
-      );
-    }
+    finalVerificationLink = await generateOneTimeUrl(userId, userEmail);
   }
 
   await sendEmail({

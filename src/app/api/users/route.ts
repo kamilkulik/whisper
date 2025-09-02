@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/emailapi";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { csfrProtection } from "../utils/csfrProtection";
 import { createSubscription } from "../payments/utils/createSubscription";
+import { generateOneTimeUrl } from "../utils/oneTimeJwt";
 
 export type UserData = Omit<
   User,
@@ -255,18 +256,26 @@ export const POST = async (request: NextRequest) => {
           user: savedUser,
         });
       }
+
+      // send email to user
+      const email = body.email;
+      const name = body.name;
+      await sendEmail({
+        to: email,
+        subject: "Zweryfikuj swój email",
+        message: `Witaj ${name}, dziękujemy za rejestrację w naszej aplikacji. Kliknij w link aby zweryfikować swój email: ${process.env.NEXT_PUBLIC_APP_URL}/verify-email?email=${email}`,
+        verificationLink: await generateOneTimeUrl(
+          savedUser.id.toString(),
+          email
+        ),
+        template: "confirm-email",
+      });
     }
 
     console.log("User data saved to database:", {
       timestamp: new Date().toISOString(),
       data: body,
     });
-
-    // send email to user
-    const email = body.email;
-    const name = body.name;
-    const message = `Witaj ${name}, dziękujemy za rejestrację w naszej aplikacji. Kliknij w link aby zweryfikować swój email: ${process.env.NEXT_PUBLIC_APP_URL}/verify-email?email=${email}`;
-    await sendEmail(email, "Zweryfikuje swój email", message, "welcome");
 
     return NextResponse.json(
       { message: "Wiadomość została pomyślnie zapisana" },
