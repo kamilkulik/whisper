@@ -43,7 +43,7 @@ export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
               <Section style={verificationSection}>
                 <Text style={verifyText}>Jednorazowy link potwierdzający</Text>
 
-                <Link href={verificationLink} style={codeText}>
+                <Link href={verificationLink} style={linkText}>
                   Potwierdz email
                 </Link>
                 <Text style={validityText}>
@@ -152,12 +152,18 @@ const verifyText = {
   textAlign: "center" as const,
 };
 
-const codeText = {
+const linkText = {
   ...text,
   fontWeight: "bold",
-  fontSize: "36px",
-  margin: "10px 0",
+  fontSize: "18px",
+  margin: "20px auto",
   textAlign: "center" as const,
+  backgroundColor: "#312e81",
+  color: "#ffffff",
+  padding: "15px 30px",
+  borderRadius: "8px",
+  textDecoration: "none",
+  display: "block",
 };
 
 const validityText = {

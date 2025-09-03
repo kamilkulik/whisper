@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getUserDataFromSession } from "../_actions/testing";
 
 interface TestingToolsWidgetProps {
   isVisible: boolean;
@@ -11,11 +12,37 @@ export default function TestingToolsWidget({
 }: TestingToolsWidgetProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [sessionIdFromCookie, setSessionIdFromCookie] = useState<string | null>(
+    null
+  );
 
   // Reset expanded state when component mounts
   useEffect(() => {
     setIsExpanded(false);
     setIsHovered(false);
+  }, []);
+
+  // Fetch user data when component mounts
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setLoading(true);
+      try {
+        const data = await getUserDataFromSession();
+        setUserData(data);
+        // Set sessionId from server response if available
+        if (data?.sessionId) {
+          setSessionIdFromCookie(data.sessionId);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   // Auto-expand on hover, retract when not hovered
@@ -90,7 +117,7 @@ export default function TestingToolsWidget({
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 rounded-lg p-4">
+              {/* <div className="bg-gray-700/50 rounded-lg p-4">
                 <h4 className="font-semibold mb-2  text-lg">Quick Actions</h4>
                 <div className="space-y-2">
                   <button
@@ -128,7 +155,7 @@ export default function TestingToolsWidget({
                     Clear Test Data
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               <div className="bg-gray-700/50 rounded-lg p-4">
                 <h4 className="font-semibold mb-2 text-lg">Debug Info</h4>
@@ -137,6 +164,104 @@ export default function TestingToolsWidget({
                   <div>Timestamp: {new Date().toLocaleTimeString()}</div>
                   <div>
                     User Agent: {navigator.userAgent.substring(0, 50)}...
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-gray-600">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold text-sm">
+                        Session Info:
+                      </span>
+                      <button
+                        onClick={async () => {
+                          setLoading(true);
+                          try {
+                            const data = await getUserDataFromSession();
+                            setUserData(data);
+                          } catch (error) {
+                            console.error("Error refreshing user data:", error);
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}
+                        className="text-xs bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded"
+                        disabled={loading}
+                      >
+                        {loading ? "..." : "↻"}
+                      </button>
+                    </div>
+
+                    {/* Session ID from cookies */}
+                    <div className="mb-2 p-2 bg-gray-600/30 rounded">
+                      <div className="text-xs text-gray-400 mb-1">
+                        Session ID (from cookie):
+                      </div>
+                      <div className="font-mono text-xs text-green-400 break-all">
+                        {sessionIdFromCookie
+                          ? sessionIdFromCookie
+                          : "No session ID found"}
+                      </div>
+                    </div>
+
+                    {loading ? (
+                      <div className="text-blue-400">Loading...</div>
+                    ) : userData?.error ? (
+                      <div className="text-red-400">{userData.error}</div>
+                    ) : userData ? (
+                      <div className="space-y-1">
+                        <div className="flex justify-between">
+                          <span>Session ID (verified):</span>
+                          <span className="text-green-400 font-mono text-xs">
+                            {userData.sessionId.substring(0, 8)}...
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Name:</span>
+                          <span className="text-green-400">
+                            {userData.user.name}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Email:</span>
+                          <span className="text-green-400">
+                            {userData.user.email}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Email Verified:</span>
+                          <span
+                            className={
+                              userData.user.emailVerified
+                                ? "text-green-400"
+                                : "text-red-400"
+                            }
+                          >
+                            {userData.user.emailVerified ? "Yes" : "No"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Phone:</span>
+                          <span className="text-green-400">
+                            {userData.user.phoneNumber}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Phone Verified:</span>
+                          <span
+                            className={
+                              userData.user.phoneVerified
+                                ? "text-green-400"
+                                : "text-red-400"
+                            }
+                          >
+                            {userData.user.phoneVerified ? "Yes" : "No"}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-yellow-400">
+                        No user data available
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

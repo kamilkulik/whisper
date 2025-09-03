@@ -50,7 +50,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       subject: "Wieczorny szept - kod potwierdzający",
       message: confirmationCode.toString(),
       verificationCode: confirmationCode.toString(),
-      template: "confirm/otp-via-email",
+      template: "confirmation-code-via-email",
     });
   } else if (phoneNumber) {
     await sendSms(phoneNumber, confirmationCode.toString());
@@ -170,7 +170,7 @@ export const POST = async (request: NextRequest) => {
     response.cookies.set({
       name: "sessionId",
       value: authenticatedSessionId,
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production", // Only secure in production
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
