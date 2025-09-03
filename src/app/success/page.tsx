@@ -39,7 +39,7 @@ export default async function Success({
           <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
             <div className="flex items-center space-x-8">
               <div className="text-white font-bold text-xl">
-                ▲ WIECZORNY SZEPT
+                WIECZORNY SZEPT 🌙
               </div>
             </div>
           </div>

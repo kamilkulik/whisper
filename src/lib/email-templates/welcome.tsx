@@ -1,8 +1,8 @@
 import {
   Body,
-  Button,
   Container,
   Head,
+  Heading,
   Hr,
   Html,
   Img,
@@ -13,153 +13,170 @@ import {
 } from "@react-email/components";
 import { WelcomeEmailProps } from "./types";
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+const baseUrl = process.env.SZEPT_URL
+  ? `https://${process.env.SZEPT_URL}`
+  : "http://localhost:3000";
 
-export const WelcomeEmail = ({ userName }: WelcomeEmailProps) => (
-  <Html>
-    <Head />
-    <Body style={main}>
-      <Preview>{"Wieczorny Szept - Witaj w naszej aplikacji"}</Preview>
-      <Container style={container}>
-        <Section style={box}>
-          {/* <Img
-            src={`${baseUrl}/static/stripe-logo.png`}
-            width="49"
-            height="21"
-            alt="Stripe"
-          /> */}
-          <Hr style={hr} />
-          <Text style={paragraph}>
-            Thanks for submitting your account information. You're now ready to
-            make live transactions with Stripe!
-          </Text>
-          <Text style={paragraph}>
-            You can view your payments and a variety of other information about
-            your account right from your dashboard.
-          </Text>
-          <Button style={button} href="https://dashboard.stripe.com/login">
-            View your Stripe Dashboard
-          </Button>
-          <Hr style={hr} />
-          <Text style={paragraph}>
-            If you haven't finished your integration, you might find our{" "}
+export function WelcomeEmail(props: WelcomeEmailProps) {
+  return (
+    <Html>
+      <Head />
+      <Body style={main}>
+        <Preview>Witamy w serwisie Wieczorny Szept</Preview>
+        <Container style={container}>
+          <Section style={coverSection}>
+            <Section style={imageSection}>
+              {/* <Img
+                src={`${baseUrl}/static/aws-logo.png`}
+                width="75"
+                height="45"
+                alt="AWS's Logo"
+              /> */}
+            </Section>
+            <Section style={upperSection}>
+              <Heading style={h1}>Witamy w serwisie Wieczorny Szept</Heading>
+              <Text style={mainText}>
+                Droga Czytelniczo, Drogi Czytelniku, <br />
+                <br />
+                Cieszymy się z okazanego nam zaufania i rozpoczęcia subskrypcji
+                Wieczornego Szeptu.
+                <br />
+                Od dziś, każdego wieczoru o 20:59, otrzymasz wiadomość, która
+                ogrzeje Twoje serce i przyniesie chwilę spokoju.
+              </Text>
+              <Text style={mainText}>
+                Twoją subskrypcją możesz zarządzać w dowolnym momencie w{" "}
+                <Link href={`${baseUrl}/dashboard`} style={dashboardLink}>
+                  Panelu Użytkownika
+                </Link>
+                .
+              </Text>
+              <Text style={bottomText}>
+                Dziękujemy, że jesteś z nami. Niech każdy szept będzie dla
+                Ciebie źródłem uśmiechu i refleksji.
+                <br />
+                <br />Z serdecznymi pozdrowieniami,
+                <br />
+                Zespół Wieczornego Szeptu 🌙
+              </Text>
+            </Section>
+            <Hr />
+            <Section style={lowerSection}>
+              <Text style={cautionText}>
+                Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których
+                prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub
+                numeru konta bankowego.
+              </Text>
+            </Section>
+          </Section>
+          <Text style={footerText}>
+            {
+              "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept. Nasz "
+            }
             <Link
-              style={anchor}
-              href="https://docs.stripe.com/dashboard/basics"
+              href="https://wieczornyszept.pl/regulamin"
+              target="_blank"
+              style={link}
             >
-              docs
-            </Link>{" "}
-            handy.
-          </Text>
-          <Text style={paragraph}>
-            Once you're ready to start accepting payments, you'll just need to
-            use your live{" "}
+              regulamin
+            </Link>
+            {" oraz "}
             <Link
-              style={anchor}
-              href="https://dashboard.stripe.com/login?redirect=%2Fapikeys"
+              href="https://wieczornyszept.pl/polityka-prywatnosci"
+              target="_blank"
+              style={link}
             >
-              API keys
-            </Link>{" "}
-            instead of your test API keys. Your account can simultaneously be
-            used for both test and live requests, so you can continue testing
-            while accepting live payments. Check out our{" "}
-            <Link
-              style={anchor}
-              href="https://docs.stripe.com/dashboard/basics"
-            >
-              tutorial about account basics
+              polityka prywatności
             </Link>
             .
           </Text>
-          <Text style={paragraph}>
-            Finally, we've put together a{" "}
-            <Link
-              style={anchor}
-              href="https://docs.stripe.com/get-started/checklist/website"
-            >
-              quick checklist
-            </Link>{" "}
-            to ensure your website conforms to card network standards.
-          </Text>
-          <Text style={paragraph}>
-            We'll be here to help you with any step along the way. You can find
-            answers to most questions and get in touch with us on our{" "}
-            <Link style={anchor} href="https://support.stripe.com">
-              support site
-            </Link>
-            .
-          </Text>
-          <Text style={paragraph}>— The Stripe team</Text>
-          <Hr style={hr} />
-          <Text style={footer}>
-            Stripe, 354 Oyster Point Blvd, South San Francisco, CA 94080
-          </Text>
-        </Section>
-      </Container>
-    </Body>
-  </Html>
-);
-
-export default WelcomeEmail;
+        </Container>
+      </Body>
+    </Html>
+  );
+}
 
 const main = {
-  backgroundColor: "#f6f9fc",
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
+  backgroundColor: "#fff",
+  color: "#212121",
 };
 
 const container = {
-  backgroundColor: "#ffffff",
+  padding: "20px",
   margin: "0 auto",
-  padding: "20px 0 48px",
-  marginBottom: "64px",
+  backgroundColor: "#eee",
 };
 
-const box = {
-  padding: "0 48px",
+const h1 = {
+  color: "#333",
+  fontFamily:
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "20px",
+  fontWeight: "bold",
+  marginBottom: "15px",
+  textAlign: "center" as const,
 };
 
-const hr = {
-  borderColor: "#e6ebf1",
-  margin: "20px 0",
+const link = {
+  color: "#2754C5",
+  fontFamily:
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "12px",
+  textDecoration: "underline",
 };
 
-const paragraph = {
-  color: "#525f7f",
+const dashboardLink = {
+  color: "#2754C5",
+  fontFamily:
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "14px",
+  textDecoration: "underline",
+};
 
-  fontSize: "16px",
-  lineHeight: "24px",
+const text = {
+  color: "#333",
+  fontFamily:
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "14px",
+  margin: "24px 0",
+};
+
+const imageSection = {
+  backgroundColor: "#252f3d",
+  display: "flex",
+  padding: "20px 0",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const coverSection = { backgroundColor: "#fff" };
+
+const upperSection = { padding: "25px 35px" };
+
+const lowerSection = { padding: "25px 35px" };
+
+const footerText = {
+  ...text,
+  fontSize: "12px",
+  padding: "0 20px",
   textAlign: "left" as const,
 };
 
-const anchor = {
-  color: "#556cd6",
+const mainText = {
+  ...text,
+  marginBottom: "12px",
+  textAlign: "left" as const,
 };
 
-const button = {
-  borderRadius: "8px",
-  fontSize: "16px",
-  fontWeight: "bold",
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "block",
-  padding: "10px",
-  paddingTop: "0.5rem",
-  paddingBottom: "0.5rem",
-  paddingLeft: "1.5rem",
-  paddingRight: "1.5rem",
-  color: "#111827",
-  backgroundImage: "linear-gradient(to right, var(--tw-gradient-stops))",
-  backgroundColor: "#FBBF24",
-  "&:hover": {
-    backgroundColor: "#FCD34D",
-  },
+const bottomText = {
+  ...text,
+  marginBottom: "18px",
+  textAlign: "left" as const,
 };
 
-const footer = {
-  color: "#8898aa",
+const cautionText = {
+  ...text,
   fontSize: "12px",
-  lineHeight: "16px",
+  margin: "0px",
+  textAlign: "left" as const,
 };

@@ -13,7 +13,7 @@ export type ConfirmationCodeViaEmailProps = {
 };
 
 export type WelcomeEmailProps = {
-  userName: string;
+  userName?: string;
 };
 
 export type PaymentLinkProps = {

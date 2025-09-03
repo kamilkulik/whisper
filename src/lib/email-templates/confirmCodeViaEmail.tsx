@@ -178,4 +178,9 @@ const mainText = {
   textAlign: "left" as const,
 };
 
-const cautionText = { ...text, margin: "0px", textAlign: "left" as const };
+const cautionText = {
+  ...text,
+  fontSize: "12px",
+  margin: "0px",
+  textAlign: "left" as const,
+};
