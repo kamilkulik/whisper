@@ -19,15 +19,20 @@ export async function handleSubscriptionUpdated(
 ) {
   console.log(`💰💰💰 Subscription ${subscription.id} was updated`);
 
-  await prisma.subscription.update({
-    where: {
-      id: parseInt(subscription.metadata?.subscriptionId),
-    },
-    data: {
-      status: stripeStatusToPrismaStatus(subscription.status),
-      dateCancelled: subscription.canceled_at
-        ? new Date(subscription.canceled_at * 1000)
-        : null,
-    },
-  });
+  try {
+    await prisma.subscription.update({
+      where: {
+        id: parseInt(subscription.metadata?.subscriptionId),
+      },
+      data: {
+        status: stripeStatusToPrismaStatus(subscription.status),
+        dateCancelled: subscription.canceled_at
+          ? new Date(subscription.canceled_at * 1000)
+          : null,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating subscription", error);
+    throw new Error("Error updating subscription");
+  }
 }

@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import { SubscriptionType } from "@prisma/client";
 import { stripe } from "@/lib/stripe";
 import { getSubscriptionTypeByPriceId } from "@/lib/consts";
+import { sendEmail } from "@/lib/emailapi";
 
 export async function handleSubscriptionCreated(
   eventData: Stripe.Subscription
@@ -77,10 +78,25 @@ export async function handleSubscriptionCreated(
     user,
   });
 
-  const subscription = await prisma.subscription.create({
-    data: subscriptionData,
-  });
+  try {
+    const subscription = await prisma.subscription.create({
+      data: subscriptionData,
+    });
+    console.log(JSON.stringify(subscription, null, 2));
+  } catch (error) {
+    console.error("Error creating subscription", error);
+    throw new Error("Error creating subscription");
+  }
 
-  // TODO: Send email to user with subscription details
-  console.log(JSON.stringify(subscription, null, 2));
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: "Witamy w serwisie Wieczorny Szept",
+      message: "Witamy w serwisie Wieczorny Szept",
+      template: "welcome",
+    });
+  } catch (error) {
+    console.error("Error sending email", error);
+    throw new Error("Error sending email");
+  }
 }
