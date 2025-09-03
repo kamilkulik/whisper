@@ -5,10 +5,14 @@ import { getUserDataFromSession } from "../_actions/testing";
 
 interface TestingToolsWidgetProps {
   isVisible: boolean;
+  emailProvider: string;
+  smsProvider: string;
 }
 
 export default function TestingToolsWidget({
   isVisible,
+  emailProvider,
+  smsProvider,
 }: TestingToolsWidgetProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -108,11 +112,11 @@ export default function TestingToolsWidget({
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>SMS Provider:</span>
-                    <span className="text-green-400">Local</span>
+                    <span className="text-green-400">{smsProvider}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Email Provider:</span>
-                    <span className="text-green-400">Local</span>
+                    <span className="text-green-400">{emailProvider}</span>
                   </div>
                 </div>
               </div>

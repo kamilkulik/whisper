@@ -3,14 +3,21 @@
 import { getUserFromSessionId } from "@/lib/prisma";
 import { cookies } from "next/headers";
 
-export async function isTestingModeEnabled(): Promise<boolean> {
-  const smsProvider = process.env.SMS_API_PROVIDER;
-  const emailProvider = process.env.EMAIL_API_PROVIDER;
+export async function isTestingModeEnabled(): Promise<{
+  isTestingModeEnabled: boolean;
+  smsProvider: string;
+  emailProvider: string;
+}> {
+  const smsProvider = process.env.SMS_API_PROVIDER || "local";
+  const emailProvider = process.env.EMAIL_API_PROVIDER || "local";
 
-  return (
-    (smsProvider === "local" && emailProvider === "local") ||
-    (smsProvider === "local" && emailProvider === "resend")
-  );
+  return {
+    isTestingModeEnabled:
+      (smsProvider === "local" && emailProvider === "local") ||
+      (smsProvider === "local" && emailProvider === "resend"),
+    smsProvider,
+    emailProvider,
+  };
 }
 
 export async function getUserDataFromSession() {
