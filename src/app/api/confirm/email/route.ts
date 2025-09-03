@@ -69,7 +69,11 @@ export async function GET(request: NextRequest) {
         email: claims.userEmail,
       });
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=already-verified", request.url)
+        new URL(
+          "/email-confirmation?status=already-verified&email=" +
+            claims.userEmail,
+          request.url
+        )
       );
     }
 
