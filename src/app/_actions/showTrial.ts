@@ -12,13 +12,13 @@ export async function shouldShowTrial() {
   const sessionId = cookieStore.get("sessionId");
 
   if (!sessionId) {
-    return false;
+    return true;
   }
 
   const user = await getUserFromSessionId(sessionId.value);
 
   if (!user) {
-    return false;
+    return true;
   }
 
   if (user.trialEnds) {
@@ -27,11 +27,11 @@ export async function shouldShowTrial() {
 
   const subscription = await getLatestSubscriptionFromUserId(user.id);
 
-  if (!subscription) {
+  if (!subscription || subscription.length === 0) {
     return true;
   }
 
-  if (subscription?.type === SubscriptionType.TRIAL) {
+  if (subscription[0].type === SubscriptionType.TRIAL) {
     return false;
   }
 
