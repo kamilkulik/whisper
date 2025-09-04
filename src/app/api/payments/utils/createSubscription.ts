@@ -5,7 +5,6 @@ import {
 } from "./subscriptionFactory";
 import { Subscription } from "@prisma/client";
 
-// used primarily for TRIAL subscription
 export async function createSubscription({
   created,
   productType,

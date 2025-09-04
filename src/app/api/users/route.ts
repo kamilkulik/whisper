@@ -74,7 +74,7 @@ export const PUT = async (request: NextRequest) => {
 
       if (existingEmailUser && existingEmailUser.id !== user.id) {
         return NextResponse.json(
-          { error: "Ten email jest już używany przez innego użytkownika" },
+          { error: "Nie mozesz uzyc tego emaila" },
           { status: 400 }
         );
       }
@@ -105,8 +105,7 @@ export const PUT = async (request: NextRequest) => {
       if (existingPhoneUser && existingPhoneUser.id !== user.id) {
         return NextResponse.json(
           {
-            error:
-              "Ten numer telefonu jest już używany przez innego użytkownika",
+            error: "Nie mozesz uzyc tego numeru telefonu",
           },
           { status: 400 }
         );
@@ -131,7 +130,7 @@ export const PUT = async (request: NextRequest) => {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error updating user data:", error);
+    console.error("[ users PUT ] Error updating user data:", error);
     return NextResponse.json(
       { error: "Wystąpił błąd podczas aktualizacji danych" },
       { status: 500 }
@@ -230,8 +229,7 @@ export const POST = async (request: NextRequest) => {
         },
       });
     } else {
-      // Create new user
-      console.log(JSON.stringify(body, null, 2));
+      /** CREATE NEW USER FLOW START */
       const savedUser = await prisma.user.create({
         data: {
           email: body.email,
@@ -248,30 +246,51 @@ export const POST = async (request: NextRequest) => {
         },
       });
 
+      // if the new user is not premium and has a trial ends, create a trial subscription
       if (!savedUser.premium && savedUser.trialEnds) {
-        await createSubscription({
-          created: new Date().getTime(),
-          productType: SubscriptionType.TRIAL,
-          subscriptionId: "",
-          user: savedUser,
-        });
+        try {
+          const trialSubscription = await createSubscription({
+            created: new Date().getTime(),
+            productType: SubscriptionType.TRIAL,
+            subscriptionId: "",
+            user: savedUser,
+          });
+
+          try {
+            await sendEmail({
+              to: savedUser.email,
+              subject: "Witamy w serwisie Wieczorny Szept",
+              template: "welcome",
+              subscriptionType: trialSubscription.type,
+            });
+          } catch (error) {
+            console.error(
+              "[ users POST ] Error sending welcome email to new user",
+              error
+            );
+          }
+        } catch (error) {
+          console.error(
+            "[ users POST ] Error creating trial subscription for new user",
+            error
+          );
+        }
       }
 
-      // send email to user
-      const email = body.email;
-      const name = body.name;
+      // send email to new user for them to verify their email
       await sendEmail({
-        to: email,
+        to: savedUser.email,
         subject: "Zweryfikuj swój email",
         verificationLink: await generateOneTimeUrl(
           savedUser.id.toString(),
-          email
+          savedUser.email
         ),
         template: "confirm-email",
       });
     }
+    /** CREATE NEW USER FLOW END */
 
-    console.log("User data saved to database:", {
+    console.log("[ users POST ] User data saved to database:", {
       timestamp: new Date().toISOString(),
       data: body,
     });
@@ -281,7 +300,7 @@ export const POST = async (request: NextRequest) => {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error processing user data:", error);
+    console.error("[ users POST ] Error processing user data:", error);
     return NextResponse.json(
       { error: "Wystąpił błąd podczas przetwarzania wiadomości" },
       { status: 500 }
