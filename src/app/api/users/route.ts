@@ -229,7 +229,11 @@ export const POST = async (request: NextRequest) => {
         },
       });
     } else {
-      /** CREATE NEW USER FLOW START */
+      /**
+       *
+       * CREATE NEW USER FLOW START
+       *
+       * */
       const savedUser = await prisma.user.create({
         data: {
           email: body.email,

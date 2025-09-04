@@ -36,19 +36,33 @@ export function WelcomeEmail(props: WelcomeEmailProps) {
               /> */}
             </Section>
             <Section style={upperSection}>
-              <Heading style={h1}>Witamy w serwisie Wieczorny Szept</Heading>
+              {/* <Heading style={h1}>Witamy w serwisie Wieczorny Szept</Heading> */}
               <Text style={mainText}>
                 Droga Czytelniczo, Drogi Czytelniku, <br />
                 <br />
                 {subscriptionType === SubscriptionType.ONE_TIME
                   ? "Cieszymy się z okazanego nam zaufania i rozpoczęcia 30 dniowej, jednorazowej subskrypcji Wieczornego Szeptu."
+                  : subscriptionType === SubscriptionType.TRIAL
+                  ? "Cieszymy się z okazanego nam zaufania i rozpoczęcia okresu próbnego Wieczornego Szeptu."
                   : "Cieszymy się z okazanego nam zaufania i rozpoczęcia subskrypcji Wieczornego Szeptu."}
                 <br />
                 {subscriptionType === SubscriptionType.ONE_TIME
                   ? "Od dziś, każdego wieczoru o 20:59 przez kolejne 30 dni, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju."
+                  : subscriptionType === SubscriptionType.TRIAL
+                  ? "Od dziś, każdego wieczoru o 20:59 przez kolejne 7 dni, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju."
                   : "Od dziś, każdego wieczoru o 20:59, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju."}
               </Text>
-              {subscriptionType === SubscriptionType.ONE_TIME ? null : (
+              {subscriptionType === SubscriptionType.TRIAL ? (
+                <Text style={mainText}>
+                  Aby kontynuować otrzymywanie wiadomości po upływie okresu
+                  próbnego, musisz dokonać zakupu płatnej subskrypcji. Możesz to
+                  zrobić w{" "}
+                  <Link href={`${baseUrl}/dashboard`} style={dashboardLink}>
+                    Panelu Użytkownika
+                  </Link>
+                  .
+                </Text>
+              ) : subscriptionType === SubscriptionType.ONE_TIME ? null : (
                 <Text style={mainText}>
                   Twoją subskrypcją możesz zarządzać w dowolnym momencie w{" "}
                   <Link href={`${baseUrl}/dashboard`} style={dashboardLink}>
