@@ -2,8 +2,6 @@ import { prisma } from "@/lib/prisma";
 import { subscriptionFactory } from "./subscriptionFactory";
 import Stripe from "stripe";
 import { SubscriptionType } from "@prisma/client";
-import { stripe } from "@/lib/stripe";
-import { getSubscriptionTypeByPriceId } from "@/lib/consts";
 import { sendEmail } from "@/lib/emailapi";
 
 export async function handlePaymentIntentSucceeded(
@@ -70,8 +68,8 @@ export async function handlePaymentIntentSucceeded(
     await sendEmail({
       to: user.email,
       subject: "Witamy w serwisie Wieczorny Szept",
-      message: "Witamy w serwisie Wieczorny Szept",
       template: "welcome",
+      subscriptionType: SubscriptionType.ONE_TIME,
     });
   } catch (error) {
     console.error("Error sending email", error);

@@ -92,8 +92,8 @@ export async function handleSubscriptionCreated(
     await sendEmail({
       to: user.email,
       subject: "Witamy w serwisie Wieczorny Szept",
-      message: "Witamy w serwisie Wieczorny Szept",
       template: "welcome",
+      subscriptionType: productType,
     });
   } catch (error) {
     console.error("Error sending email", error);

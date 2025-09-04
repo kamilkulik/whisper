@@ -263,7 +263,6 @@ export const POST = async (request: NextRequest) => {
       await sendEmail({
         to: email,
         subject: "Zweryfikuj swój email",
-        message: `Witaj ${name}, dziękujemy za rejestrację w naszej aplikacji. Kliknij w link aby zweryfikować swój email: ${process.env.NEXT_PUBLIC_APP_URL}/verify-email?email=${email}`,
         verificationLink: await generateOneTimeUrl(
           savedUser.id.toString(),
           email

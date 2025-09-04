@@ -12,17 +12,19 @@ import {
   Text,
 } from "@react-email/components";
 import { WelcomeEmailProps } from "./types";
+import { SubscriptionType } from "@prisma/client";
 
 const baseUrl = process.env.SZEPT_URL
   ? `https://${process.env.SZEPT_URL}`
   : "http://localhost:3000";
 
 export function WelcomeEmail(props: WelcomeEmailProps) {
+  const { subscriptionType } = props;
+
   return (
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Witamy w serwisie Wieczorny Szept</Preview>
         <Container style={container}>
           <Section style={coverSection}>
             <Section style={imageSection}>
@@ -38,19 +40,23 @@ export function WelcomeEmail(props: WelcomeEmailProps) {
               <Text style={mainText}>
                 Droga Czytelniczo, Drogi Czytelniku, <br />
                 <br />
-                Cieszymy się z okazanego nam zaufania i rozpoczęcia subskrypcji
-                Wieczornego Szeptu.
+                {subscriptionType === SubscriptionType.ONE_TIME
+                  ? "Cieszymy się z okazanego nam zaufania i rozpoczęcia 30 dniowej, jednorazowej subskrypcji Wieczornego Szeptu."
+                  : "Cieszymy się z okazanego nam zaufania i rozpoczęcia subskrypcji Wieczornego Szeptu."}
                 <br />
-                Od dziś, każdego wieczoru o 20:59, otrzymasz wiadomość, która
-                ogrzeje Twoje serce i przyniesie chwilę spokoju.
+                {subscriptionType === SubscriptionType.ONE_TIME
+                  ? "Od dziś, każdego wieczoru o 20:59 przez kolejne 30 dni, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju."
+                  : "Od dziś, każdego wieczoru o 20:59, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju."}
               </Text>
-              <Text style={mainText}>
-                Twoją subskrypcją możesz zarządzać w dowolnym momencie w{" "}
-                <Link href={`${baseUrl}/dashboard`} style={dashboardLink}>
-                  Panelu Użytkownika
-                </Link>
-                .
-              </Text>
+              {subscriptionType === SubscriptionType.ONE_TIME ? null : (
+                <Text style={mainText}>
+                  Twoją subskrypcją możesz zarządzać w dowolnym momencie w{" "}
+                  <Link href={`${baseUrl}/dashboard`} style={dashboardLink}>
+                    Panelu Użytkownika
+                  </Link>
+                  .
+                </Text>
+              )}
               <Text style={bottomText}>
                 Dziękujemy, że jesteś z nami. Niech każdy szept będzie dla
                 Ciebie źródłem uśmiechu i refleksji.

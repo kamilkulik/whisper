@@ -1,7 +1,8 @@
+import { SubscriptionType } from "@prisma/client";
+
 type BaseEmailProps = {
   to: string;
   subject: string;
-  message: string;
 };
 
 export type ConfirmEmailProps = {
@@ -14,6 +15,7 @@ export type ConfirmationCodeViaEmailProps = {
 
 export type WelcomeEmailProps = {
   userName?: string;
+  subscriptionType: SubscriptionType;
 };
 
 export type PaymentLinkProps = {

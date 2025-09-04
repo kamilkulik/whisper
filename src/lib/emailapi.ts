@@ -39,7 +39,6 @@ class ResendEmailClient implements EmailClientInterface {
   async sendEmail({
     to,
     subject,
-    message,
     template,
   }: SendEmailClientProps): Promise<CreateEmailResponseSuccess> {
     try {
@@ -70,9 +69,8 @@ class LocalEmailClient implements EmailClientInterface {
   async sendEmail(
     props: SendEmailClientProps
   ): Promise<CreateEmailResponseSuccess> {
-    const { to, subject, message } = props;
+    const { to, subject } = props;
     console.log(`[LOCAL] Sending email to ${to}: ${subject}`);
-    console.log(`[LOCAL] Message: ${message}`);
 
     return {
       id: "123",
@@ -89,6 +87,7 @@ export async function sendEmail(props: SendEmailProps) {
     case "welcome":
       templateToUse = WelcomeEmail({
         userName: props.userName,
+        subscriptionType: props.subscriptionType,
       });
       break;
     case "confirm-email":

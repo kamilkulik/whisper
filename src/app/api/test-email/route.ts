@@ -1,6 +1,8 @@
 import { EmailTemplate, sendEmail } from "@/lib/emailapi";
 import { NextRequest, NextResponse } from "next/server";
 import { generateOneTimeUrl } from "../utils/oneTimeJwt";
+import { SubscriptionType } from "@prisma/client";
+import { getSubscriptionType } from "@/lib/consts";
 
 export const POST = async (request: NextRequest) => {
   const requestBody: {
@@ -11,6 +13,7 @@ export const POST = async (request: NextRequest) => {
     verificationLink?: string;
     verificationCode?: string;
     paymentLinkUrl?: string;
+    subscriptionType?: string;
     userId?: string;
     userEmail?: string;
   } = await request.json();
@@ -22,6 +25,7 @@ export const POST = async (request: NextRequest) => {
     verificationLink,
     verificationCode,
     paymentLinkUrl,
+    subscriptionType,
     userId,
     userEmail,
   } = requestBody;
@@ -61,13 +65,15 @@ export const POST = async (request: NextRequest) => {
   await sendEmail({
     to: to ?? "kulikkamil@icloud.com",
     subject: subject ?? "Test Email",
-    message: "This is a test email",
     template,
     userName: userName ?? "Kamil Kulik",
     verificationLink:
       finalVerificationLink ?? "https://wieczornyszept.pl/verify-email",
     verificationCode: verificationCode ?? "123456",
     paymentLinkUrl: paymentLinkUrl ?? "https://wieczornyszept.pl/payment-link",
+    subscriptionType: subscriptionType
+      ? getSubscriptionType(subscriptionType)
+      : SubscriptionType.ONE_TIME,
   });
   return NextResponse.json({ message: "Email sent" });
 };

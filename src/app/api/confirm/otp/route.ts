@@ -47,7 +47,6 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     await sendEmail({
       to: email,
       subject: "Wieczorny szept - kod potwierdzający",
-      message: confirmationCode.toString(),
       verificationCode: confirmationCode.toString(),
       template: "confirmation-code-via-email",
     });
