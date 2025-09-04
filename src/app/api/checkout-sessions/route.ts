@@ -41,6 +41,8 @@ export async function POST(request: NextRequest) {
       customer_email: body.email,
       metadata: {
         productType: productType.toString(),
+        productId: config.prod,
+        priceId: config.price,
       },
       line_items: [
         {

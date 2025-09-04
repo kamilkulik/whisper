@@ -6,6 +6,7 @@ export const POST = async (request: NextRequest) => {
   const requestBody: {
     template: EmailTemplate;
     to: string;
+    subject: string;
     userName?: string;
     verificationLink?: string;
     verificationCode?: string;
@@ -16,6 +17,7 @@ export const POST = async (request: NextRequest) => {
   const {
     template,
     to,
+    subject,
     userName,
     verificationLink,
     verificationCode,
@@ -58,7 +60,7 @@ export const POST = async (request: NextRequest) => {
 
   await sendEmail({
     to: to ?? "kulikkamil@icloud.com",
-    subject: "Test Email",
+    subject: subject ?? "Test Email",
     message: "This is a test email",
     template,
     userName: userName ?? "Kamil Kulik",

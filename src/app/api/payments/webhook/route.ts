@@ -4,6 +4,7 @@ import { Buffer } from "node:buffer";
 import { handleSessionCompleted } from "../utils/handleSessionCompleted";
 import { handleSubscriptionUpdated } from "../utils/handleSubscriptionUpdated";
 import { handleSubscriptionCreated } from "../utils/handleSubscriptionCreated";
+import { handlePaymentIntentSucceeded } from "../utils/handlePaymentIntentSucceeded";
 
 export const config = {
   api: {
@@ -114,26 +115,29 @@ export async function POST(request: NextRequest) {
         case "checkout.session.completed":
           const checkoutSession = event.data.object;
           console.log(
-            `✅ CheckoutSession for ${checkoutSession.amount_total} was successful!`
+            `✅ CheckoutSession for ${
+              checkoutSession.amount_total
+                ? checkoutSession.amount_total / 100
+                : 0
+            } was successful!`
           );
           handleSessionCompleted(checkoutSession);
           break;
-        case "customer.subscription.updated":
-          const subscription = event.data.object;
-          console.log(`✅ Subscription ${subscription.id} was updated`);
-          handleSubscriptionUpdated(subscription);
-          break;
-        case "customer.subscription.created":
-          const subscriptionCreated = event.data.object;
-          console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);
-          handleSubscriptionCreated(subscriptionCreated);
-          break;
+        // case "customer.subscription.updated":
+        //   const subscription = event.data.object;
+        //   console.log(`✅ Subscription ${subscription.id} was updated`);
+        //   handleSubscriptionUpdated(subscription);
+        //   break;
+        // case "customer.subscription.created":
+        //   const subscriptionCreated = event.data.object;
+        //   console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);
+        //   handleSubscriptionCreated(subscriptionCreated);
+        //   break;
         // case "payment_intent.succeeded":
         //   const paymentIntent = event.data.object;
         //   console.log(
-        //     `PaymentIntent for ${paymentIntent.amount} was successful!`
+        //     `✅ PaymentIntent for ${paymentIntent.amount / 100} was successful!`
         //   );
-        //   // Then define and call a method to handle the successful payment intent.
         //   // handlePaymentIntentSucceeded(paymentIntent);
         //   break;
         // case "payment_method.attached":

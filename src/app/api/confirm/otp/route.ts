@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../../utils/csfrProtection";
-import { redirect } from "next/navigation";
 
 const temporarySessionIdCache = new Map<
   string,
