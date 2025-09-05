@@ -48,9 +48,6 @@ export default async function MessageSettingsPage() {
           <h1 className="text-3xl font-bold text-white mb-2">
             Ustawienia Wiadomości
           </h1>
-          <p className="text-white/80">
-            Zmień język wiadomości, które otrzymujesz
-          </p>
         </div>
 
         <MessageSettingsForm user={userFromSession} />

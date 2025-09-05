@@ -77,12 +77,12 @@ export default function MessageSettingsForm({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-16">
         <div className="space-y-4">
           <div>
             <label
               htmlFor="messageLanguage"
-              className="block text-white font-medium mb-2"
+              className="block text-white text-left font-medium mb-2"
             >
               Język wiadomości
             </label>
@@ -105,9 +105,6 @@ export default function MessageSettingsForm({
                 </option>
               ))}
             </select>
-            <p className="text-white/60 text-sm mt-2">
-              Wybierz język, w którym chcesz otrzymywać wiadomości
-            </p>
           </div>
         </div>
 
@@ -122,7 +119,7 @@ export default function MessageSettingsForm({
 
           <a
             href="/dashboard"
-            className="flex-1 bg-gray-500/20 hover:bg-gray-500/30 text-gray-300 hover:text-gray-200 font-medium py-3 px-6 rounded-xl transition-all duration-200 border border-gray-400/30 hover:border-gray-400/50 backdrop-blur-sm text-center"
+            className="flex-1 bg-gray-500/20 hover:bg-gray-500/30 text-gray-300 hover:text-gray-200 font-medium py-3 px-6 rounded-xl transition-all duration-200 border border-gray-400/30 hover:border-gray-400/50 backdrop-blur-sm flex items-center justify-center"
           >
             Anuluj
           </a>
