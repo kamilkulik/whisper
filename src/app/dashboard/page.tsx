@@ -47,9 +47,7 @@ function nextMessageTime(subscription: Subscription): {
     subscription?.dateExpires > new Date()
   ) {
     isSubscribed = true;
-    message = `Otrzymasz swój następny szept ${
-      new Date() > new Date("20:59") ? "jutro" : "dzisiaj"
-    } o`;
+    message = `${new Date() > new Date("20:59") ? "jutro" : "dzisiaj"} o`;
   } else if (
     subscription?.status === SubscriptionStatus.CANCELLED &&
     subscription?.dateExpires
@@ -140,20 +138,16 @@ export default async function DashboardPage() {
       </a>
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Panel Użytkownika
-            </h1>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+            <div className="flex flex-col justify-center bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+              <p className="text-white/90 mb-4">Twój kolejny szept</p>
+              <div className="mx-8 mb-8 border-t border-white/20"></div>
               {nextMessageTime(subscription!).isSubscribed ? (
                 <>
                   <p className="text-white/90 mb-4">
                     {nextMessageTime(subscription!).message}
                   </p>
-                  <div className="text-2xl font-bold text-yellow-400">
+                  <div className="text-3xl font-bold text-yellow-400">
                     20:59
                   </div>
                 </>
@@ -165,7 +159,8 @@ export default async function DashboardPage() {
             </div>
 
             <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-              <p className="text-white/90 mb-4">Twoja subskrypcja:</p>
+              <p className="text-white/90 mb-4">Twoja subskrypcja</p>
+              <div className="mx-8 mb-8 border-t border-white/20"></div>
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/20 border border-green-400/30">
                 <span className="text-green-400 font-medium text-2xl">
                   {subscriptionTypeToText(subscription)}
@@ -210,19 +205,20 @@ export default async function DashboardPage() {
             <h2 className="text-2xl font-semibold text-white mb-6">
               Ustawienia
             </h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl border border-white/20 text-xl">
+              <div className="flex items-center justify-between p-4">
                 <a
                   href="/dashboard/user-settings"
-                  className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+                  className="text-white hover:text-blue-300 font-medium transition-colors duration-200"
                 >
                   Zmień email i telefon →
                 </a>
               </div>
-              <div className="flex items-center justify-between p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/20">
+              <div className="border-t border-white/20"></div>
+              <div className="flex items-center justify-between p-4">
                 <a
                   href="/dashboard/message-settings"
-                  className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+                  className="text-white hover:text-blue-300 font-medium transition-colors duration-200"
                 >
                   Zmień język wiadomości →
                 </a>
