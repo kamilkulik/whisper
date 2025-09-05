@@ -208,7 +208,7 @@ export default async function DashboardPage() {
               {subscription?.type === SubscriptionType.MONTHLY &&
               subscription?.status === SubscriptionStatus.ACTIVE &&
               subscription?.dateCancelled === null ? (
-                <CancelSubscriptionButton />
+                <CancelSubscriptionButton subscription={subscription} />
               ) : subscription?.status === SubscriptionStatus.ACTIVE &&
                 subscription?.dateCancelled &&
                 subscription?.dateExpires &&

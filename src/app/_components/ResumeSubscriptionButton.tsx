@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { ModalWrapper } from "./ModalWrapper";
-import { useRouter } from "next/navigation";
 import { Subscription } from "@prisma/client";
 
 interface ResumeSubscriptionButtonProps {
@@ -14,7 +13,6 @@ export default function ResumeSubscriptionButton({
 }: ResumeSubscriptionButtonProps) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleResumeClick = () => {
     setShowConfirmation(true);

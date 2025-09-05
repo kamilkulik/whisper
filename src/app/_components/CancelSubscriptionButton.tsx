@@ -2,12 +2,17 @@
 
 import { useState } from "react";
 import { ModalWrapper } from "./ModalWrapper";
-import { useRouter } from "next/navigation";
+import { Subscription, SubscriptionType } from "@prisma/client";
 
-export default function CancelSubscriptionButton() {
+interface CancelSubscriptionButtonProps {
+  subscription: Subscription;
+}
+
+export default function CancelSubscriptionButton({
+  subscription,
+}: CancelSubscriptionButtonProps) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleCancelClick = () => {
     setShowConfirmation(true);
@@ -16,7 +21,11 @@ export default function CancelSubscriptionButton() {
   const handleConfirmCancel = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/subscriptions", {
+      const url =
+        subscription.type === SubscriptionType.ONE_TIME
+          ? "/api/payments/refund"
+          : "/api/subscriptions";
+      const response = await fetch(url, {
         method: "DELETE",
       });
 
