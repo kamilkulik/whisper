@@ -4,7 +4,7 @@ import { createSubscription } from "./createSubscription";
 import { prisma } from "@/lib/prisma";
 import { getSubscriptionType } from "@/lib/consts";
 import { sendEmail } from "@/lib/emailapi";
-import { User } from "@prisma/client";
+import { SubscriptionStatus, SubscriptionType, User } from "@prisma/client";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session
@@ -32,8 +32,38 @@ export async function handleSessionCompleted(
     throw new Error("User not found");
   }
 
+  // latest active user subscription
+  const latestActiveSubscription = await prisma.subscription.findFirst({
+    where: {
+      userId: user.id,
+      status: SubscriptionStatus.ACTIVE,
+      type: SubscriptionType.ONE_TIME,
+      dateExpires: {
+        gt: new Date(),
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  let expiryAdjustmentInMilis = 0;
+  // if latestActiveSubscription exists, see how many days are left until expiration
+  // but only for ONE_TIME subs - stack them.
+  // MONTHLY subscription always overwrites existing subs
+  if (
+    latestActiveSubscription &&
+    latestActiveSubscription.dateExpires &&
+    productType === SubscriptionType.ONE_TIME
+  ) {
+    expiryAdjustmentInMilis = Math.floor(
+      latestActiveSubscription.dateExpires.getTime() - new Date().getTime()
+    );
+  }
+
   const subscription = await createSubscription({
     created: eventData.created * 1000,
+    expiryAdjustmentInMilis,
     productType: getSubscriptionType(productType),
     subscriptionId: eventData?.subscription
       ? eventData.subscription.toString()

@@ -9,6 +9,7 @@ import {
 
 export interface SubscriptionFactoryInput {
   created: number;
+  expiryAdjustmentInMilis: number;
   productType: string;
   subscriptionId: string;
   user: User;
@@ -16,6 +17,7 @@ export interface SubscriptionFactoryInput {
 
 export function subscriptionFactory({
   created,
+  expiryAdjustmentInMilis,
   productType,
   subscriptionId,
   user,
@@ -29,8 +31,12 @@ export function subscriptionFactory({
   | "type"
   | "userId"
 > {
-  const expiresIn7DaysAt = new Date(created + 7 * 24 * 60 * 60 * 1000);
-  const expiresIn30DaysAt = new Date(created + 30 * 24 * 60 * 60 * 1000);
+  const expiresIn7DaysAt = new Date(
+    created + 7 * 24 * 60 * 60 * 1000 + expiryAdjustmentInMilis
+  );
+  const expiresIn30DaysAt = new Date(
+    created + 30 * 24 * 60 * 60 * 1000 + expiryAdjustmentInMilis
+  );
   const subscriptionType = getSubscriptionType(productType);
 
   const dateExpires =

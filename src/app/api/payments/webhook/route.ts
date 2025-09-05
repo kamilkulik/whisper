@@ -123,11 +123,11 @@ export async function POST(request: NextRequest) {
           );
           handleSessionCompleted(checkoutSession);
           break;
-        // case "customer.subscription.updated":
-        //   const subscription = event.data.object;
-        //   console.log(`✅ Subscription ${subscription.id} was updated`);
-        //   handleSubscriptionUpdated(subscription);
-        //   break;
+        case "customer.subscription.updated":
+          const subscription = event.data.object;
+          console.log(`✅ Subscription ${subscription.id} was updated`);
+          handleSubscriptionUpdated(subscription);
+          break;
         // case "customer.subscription.created":
         //   const subscriptionCreated = event.data.object;
         //   console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);

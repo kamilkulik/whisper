@@ -7,6 +7,7 @@ import { Subscription } from "@prisma/client";
 
 export async function createSubscription({
   created,
+  expiryAdjustmentInMilis,
   productType,
   subscriptionId,
   user,
@@ -16,6 +17,7 @@ export async function createSubscription({
     JSON.stringify(
       {
         created,
+        expiryAdjustmentInMilis,
         productType,
         user,
       },
@@ -25,6 +27,7 @@ export async function createSubscription({
   );
   const subscriptionData = subscriptionFactory({
     created,
+    expiryAdjustmentInMilis,
     productType,
     subscriptionId,
     user,

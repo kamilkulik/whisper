@@ -1,11 +1,8 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
+import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import NavigationBar from "../_components/NavigationBar";
 
 export default async function TrialSuccess() {
-  const searchParams = useSearchParams();
-  let customerEmail = searchParams.get("email");
+  const userEmailFromSessionCookie = await userEmailFromCookie();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] overflow-hidden">
@@ -61,7 +58,7 @@ export default async function TrialSuccess() {
               <p className="text-white text-lg">
                 Email potwierdzający został wysłany na adres:{" "}
                 <span className="font-semibold text-blue-200">
-                  {customerEmail}
+                  {userEmailFromSessionCookie}
                 </span>
               </p>
             </div>

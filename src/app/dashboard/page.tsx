@@ -147,9 +147,7 @@ export default async function DashboardPage() {
                   <p className="text-white/90 mb-4">
                     {nextMessageTime(subscription!).message}
                   </p>
-                  <div className="text-3xl font-bold text-yellow-400">
-                    20:59
-                  </div>
+                  <div className="text-3xl font-bold text-green-400">20:59</div>
                 </>
               ) : (
                 <p className="text-white/90 mb-4">
@@ -164,14 +162,18 @@ export default async function DashboardPage() {
               <div
                 className={`inline-flex items-center mb-4 px-3 py-1 rounded-full ${
                   subscription?.status === SubscriptionStatus.ACTIVE
-                    ? "bg-green-500/20 border border-green-400/30"
+                    ? subscription?.dateCancelled
+                      ? "bg-orange-500/20 border border-orange-400/30"
+                      : "bg-green-500/20 border border-green-400/30"
                     : "bg-red-500/20 border border-red-400/30"
                 }`}
               >
                 <span
                   className={`font-medium text-2xl ${
                     subscription?.status === SubscriptionStatus.ACTIVE
-                      ? "text-green-400"
+                      ? subscription?.dateCancelled
+                        ? "text-orange-400"
+                        : "text-green-400"
                       : "text-red-300"
                   }`}
                 >
@@ -181,9 +183,17 @@ export default async function DashboardPage() {
               {subscription?.dateExpires &&
                 subscription.status === SubscriptionStatus.ACTIVE && (
                   <p className="text-white/80 mt-3 mb-8 text-2xl md:text-xl">
-                    {subscription?.type === SubscriptionType.MONTHLY
-                      ? "Odnawia się"
-                      : "Wygasa"}
+                    {subscription?.type === SubscriptionType.MONTHLY ? (
+                      subscription.dateCancelled ? (
+                        <>
+                          <span className="font-bold">Anulowana</span>. Wygasa
+                        </>
+                      ) : (
+                        "Odnawia się"
+                      )
+                    ) : (
+                      "Wygasa"
+                    )}
                     {<br />}
                     {subscription?.dateExpires.toLocaleDateString("pl-PL", {
                       year: "numeric",
