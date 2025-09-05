@@ -23,8 +23,6 @@ export function ModalWrapper({
   const [isVisible, setIsVisible] = useState(false);
 
   const handleClose = () => {
-    // Navigate back to the main page without modal
-    router.push("/");
     onClose();
   };
 

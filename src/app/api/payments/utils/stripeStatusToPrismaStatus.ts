@@ -8,7 +8,7 @@ export function stripeStatusToPrismaStatus(
     case "active":
       return SubscriptionStatus.ACTIVE;
     case "canceled":
-      return SubscriptionStatus.CANCELLED;
+      return SubscriptionStatus.CANCEL_AT_PERIOD_END;
     case "past_due":
       return SubscriptionStatus.PENDING;
     case "incomplete":

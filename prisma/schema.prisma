@@ -29,7 +29,7 @@ enum PaymentProvider {
 
 enum SubscriptionStatus {
   ACTIVE
-  CANCELLED
+  CANCEL_AT_PERIOD_END
   PENDING
   EXPIRED
   FAILED

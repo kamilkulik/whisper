@@ -8,6 +8,7 @@ import {
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import CancelSubscriptionButton from "../_components/CancelSubscriptionButton";
+import ResumeSubscriptionButton from "../_components/ResumeSubscriptionButton";
 
 function subscriptionTypeToText(subscription: Subscription | null) {
   if (!subscription) {
@@ -17,7 +18,7 @@ function subscriptionTypeToText(subscription: Subscription | null) {
   const { type, status } = subscription;
 
   switch (status) {
-    case SubscriptionStatus.CANCELLED:
+    case SubscriptionStatus.CANCEL_AT_PERIOD_END:
       return "Anulowana";
     case SubscriptionStatus.EXPIRED:
       return "Wygasła";
@@ -49,7 +50,7 @@ function nextMessageTime(subscription: Subscription): {
     isSubscribed = true;
     message = `${new Date() > new Date("20:59") ? "jutro" : "dzisiaj"} o`;
   } else if (
-    subscription?.status === SubscriptionStatus.CANCELLED &&
+    subscription?.status === SubscriptionStatus.CANCEL_AT_PERIOD_END &&
     subscription?.dateExpires
   ) {
     message = "Subskrypcja została anulowana";
@@ -208,6 +209,11 @@ export default async function DashboardPage() {
               subscription?.status === SubscriptionStatus.ACTIVE &&
               subscription?.dateCancelled === null ? (
                 <CancelSubscriptionButton />
+              ) : subscription?.status === SubscriptionStatus.ACTIVE &&
+                subscription?.dateCancelled &&
+                subscription?.dateExpires &&
+                subscription?.dateExpires > new Date() ? (
+                <ResumeSubscriptionButton subscription={subscription} />
               ) : (
                 // TODO encapsulate button into its own component
                 <div className="mt-6">
