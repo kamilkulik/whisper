@@ -23,7 +23,9 @@ export default function CancelSubscriptionButton() {
       if (response.ok) {
         setIsLoading(false);
         setShowConfirmation(false);
-        router.push("/dashboard");
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
       } else {
         console.error("Failed to cancel subscription");
         setIsLoading(false);
