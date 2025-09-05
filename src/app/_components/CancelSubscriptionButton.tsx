@@ -21,9 +21,9 @@ export default function CancelSubscriptionButton() {
       });
 
       if (response.ok) {
-        setIsLoading(false);
-        setShowConfirmation(false);
         setTimeout(() => {
+          setIsLoading(false);
+          setShowConfirmation(false);
           window.location.reload();
         }, 300);
       } else {
