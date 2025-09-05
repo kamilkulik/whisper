@@ -6,10 +6,7 @@ import { csfrProtection } from "../../utils/csfrProtection";
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 
-export async function POST(
-  request: NextRequest,
-  response: NextResponse
-): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   csfrProtection(request);
 
   const sessionIdFromCookie = request.cookies.get("sessionId")?.value;
