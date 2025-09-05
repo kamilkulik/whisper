@@ -161,14 +161,26 @@ export default async function DashboardPage() {
             <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
               <p className="text-white/90 mb-4">Twoja subskrypcja</p>
               <div className="mx-8 mb-8 border-t border-white/20"></div>
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/20 border border-green-400/30">
-                <span className="text-green-400 font-medium text-2xl">
+              <div
+                className={`inline-flex items-center px-3 py-1 rounded-full ${
+                  subscription?.status === SubscriptionStatus.ACTIVE
+                    ? "bg-green-500/20 border border-green-400/30"
+                    : "bg-red-500/20 border border-red-400/30"
+                }`}
+              >
+                <span
+                  className={`font-medium text-2xl ${
+                    subscription?.status === SubscriptionStatus.ACTIVE
+                      ? "text-green-400"
+                      : "text-red-300"
+                  }`}
+                >
                   {subscriptionTypeToText(subscription)}
                 </span>
               </div>
               {subscription?.dateExpires &&
                 subscription.status === SubscriptionStatus.ACTIVE && (
-                  <p className="text-white/80 mt-3 text-2xl">
+                  <p className="text-white/80 mt-3 text-2xl md:text-xl">
                     {subscription?.type === SubscriptionType.MONTHLY
                       ? "Odnawia się"
                       : "Wygasa"}{" "}
@@ -190,7 +202,7 @@ export default async function DashboardPage() {
                 <div className="mt-6">
                   <a
                     href="/subscribe"
-                    className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+                    className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-2xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
                   >
                     {subscription?.status === SubscriptionStatus.ACTIVE
                       ? "Przedłuż teraz"
@@ -209,7 +221,7 @@ export default async function DashboardPage() {
               <div className="flex items-center justify-between p-4">
                 <a
                   href="/dashboard/user-settings"
-                  className="text-white hover:text-blue-300 font-medium transition-colors duration-200"
+                  className="text-white hover:text-blue-300 font-normal transition-colors duration-200"
                 >
                   Zmień email i telefon →
                 </a>
@@ -218,7 +230,7 @@ export default async function DashboardPage() {
               <div className="flex items-center justify-between p-4">
                 <a
                   href="/dashboard/message-settings"
-                  className="text-white hover:text-blue-300 font-medium transition-colors duration-200"
+                  className="text-white hover:text-blue-300 font-normal transition-colors duration-200"
                 >
                   Zmień język wiadomości →
                 </a>
