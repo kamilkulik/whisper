@@ -53,7 +53,9 @@ export default function PricingSection(props: PricingSectionProps) {
             Wybierz najbardziej dogodną opcję
           </p>
           <p className="text-2xl text-green-400 font-semibold">
-            aby otrzymać swój pierwszy szept już dziś wieczorem
+            {`aby otrzymać swój pierwszy szept już ${
+              new Date() > new Date("20:59") ? "jutro" : "dziś"
+            } wieczorem`}
           </p>
         </div>
 
