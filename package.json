@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "dev:local": "next dev --turbopack --hostname 0.0.0.0",
+    "dev:local": "echo '🚀 Starting local development server...' && echo '📱 Your local API will be available at:' && ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print \"   http://\" $2 \":3000\"}' | head -1 && echo '   http://localhost:3000' && echo '' && next dev --turbopack --hostname 0.0.0.0",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "build": "next build",
