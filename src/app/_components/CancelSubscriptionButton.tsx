@@ -55,7 +55,7 @@ export default function CancelSubscriptionButton({
     <>
       <button
         onClick={handleCancelClick}
-        className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+        className="bg-red-500/20 hover:bg-red-500/30 text-red-200 hover:text-red-100 font-medium px-6 py-3 rounded-lg text-sm transition-all duration-300 inline-block border border-red-400/30 hover:border-red-400/50 cursor-pointer"
       >
         Anuluj subskrypcję
       </button>

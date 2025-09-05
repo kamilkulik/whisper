@@ -216,7 +216,7 @@ export default async function DashboardPage() {
                 <ResumeSubscriptionButton subscription={subscription} />
               ) : (
                 // TODO encapsulate button into its own component
-                <div className="mt-6">
+                <div className="my-6 space-y-4">
                   <a
                     href="/subscribe"
                     className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-2xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
@@ -225,6 +225,13 @@ export default async function DashboardPage() {
                       ? "Przedłuż teraz"
                       : "Kup teraz"}
                   </a>
+                  <div className="mx-8 border-t border-white/20"></div>
+                  {subscription?.type === SubscriptionType.ONE_TIME &&
+                    subscription?.status === SubscriptionStatus.ACTIVE && (
+                      <div>
+                        <CancelSubscriptionButton subscription={subscription} />
+                      </div>
+                    )}
                 </div>
               )}
             </div>
