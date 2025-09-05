@@ -53,7 +53,7 @@ export default function ResumeSubscriptionButton({
     if (!subscription.dateExpires) return null;
 
     const nextBillingDate = new Date(subscription.dateExpires);
-    nextBillingDate.setMonth(nextBillingDate.getMonth() + 1);
+    nextBillingDate.setMonth(nextBillingDate.getMonth());
 
     return nextBillingDate.toLocaleDateString("pl-PL", {
       year: "numeric",
@@ -87,11 +87,12 @@ export default function ResumeSubscriptionButton({
             <div className="text-white/70 mb-6 text-center space-y-3">
               <p>
                 Kontynuując, wznawiasz automatyczne pobieranie opłat z Twojej
-                metody płatności.
+                karty płatniczej.
               </p>
               {nextBillingDate && (
                 <p className="font-semibold text-orange-400">
-                  Następna płatność: {nextBillingDate}
+                  Następna płatność:{<br />}
+                  {nextBillingDate}
                 </p>
               )}
             </div>
