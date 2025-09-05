@@ -25,7 +25,7 @@ function subscriptionTypeToText(subscription: Subscription | null) {
 
   switch (type) {
     case SubscriptionType.ONE_TIME:
-      return "30 dni";
+      return "30 dni szeptów";
     case SubscriptionType.MONTHLY:
       return "Miesięczna";
     case SubscriptionType.TRIAL:
@@ -162,7 +162,7 @@ export default async function DashboardPage() {
               <p className="text-white/90 mb-4">Twoja subskrypcja</p>
               <div className="mx-8 mb-8 border-t border-white/20"></div>
               <div
-                className={`inline-flex items-center px-3 py-1 rounded-full ${
+                className={`inline-flex items-center mb-4 px-3 py-1 rounded-full ${
                   subscription?.status === SubscriptionStatus.ACTIVE
                     ? "bg-green-500/20 border border-green-400/30"
                     : "bg-red-500/20 border border-red-400/30"
@@ -180,10 +180,11 @@ export default async function DashboardPage() {
               </div>
               {subscription?.dateExpires &&
                 subscription.status === SubscriptionStatus.ACTIVE && (
-                  <p className="text-white/80 mt-3 text-2xl md:text-xl">
+                  <p className="text-white/80 mt-3 mb-8 text-2xl md:text-xl">
                     {subscription?.type === SubscriptionType.MONTHLY
                       ? "Odnawia się"
-                      : "Wygasa"}{" "}
+                      : "Wygasa"}
+                    {<br />}
                     {subscription?.dateExpires.toLocaleDateString("pl-PL", {
                       year: "numeric",
                       month: "long",

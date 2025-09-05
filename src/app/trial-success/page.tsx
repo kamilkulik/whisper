@@ -3,9 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import NavigationBar from "../_components/NavigationBar";
 
-export default function TrialSuccess() {
+export default async function TrialSuccess() {
   const searchParams = useSearchParams();
-  const customerEmail = searchParams.get("email") || "test@test.pl";
+  let customerEmail = searchParams.get("email");
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] overflow-hidden">
@@ -51,7 +51,10 @@ export default function TrialSuccess() {
 
             <p className="text-xl text-blue-200 leading-relaxed">
               Twoja subskrypcja została pomyślnie aktywowana. Pierwszy szept
-              zostanie wysłany na Twój numer telefonu dziś wieczorem o 20:59.
+              zostanie wysłany na Twój numer telefonu{" "}
+              {`${
+                new Date() > new Date("20:59") ? "jutro" : "dziś"
+              } wieczorem o 20:59.`}
             </p>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
@@ -78,7 +81,7 @@ export default function TrialSuccess() {
           <div className="mt-12 space-y-4">
             <a
               href="/"
-              className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               Powrót do strony głównej
             </a>

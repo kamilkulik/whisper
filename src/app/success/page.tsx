@@ -11,6 +11,7 @@ export default async function Success({
   if (!session_id)
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
 
+  // TODO is this safe?
   const { status, customer_details } = await stripe.checkout.sessions.retrieve(
     session_id,
     {
@@ -78,7 +79,10 @@ export default async function Success({
 
               <p className="text-xl text-blue-200 leading-relaxed">
                 Twoja subskrypcja została pomyślnie aktywowana. Pierwszy szept
-                zostanie wysłany na Twój numer telefonu dziś wieczorem o 20:59.
+                zostanie wysłany na Twój numer telefonu{" "}
+                {`${
+                  new Date() > new Date("20:59") ? "jutro" : "dziś"
+                } wieczorem o 20:59.`}
               </p>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
@@ -105,7 +109,7 @@ export default async function Success({
             <div className="mt-12 space-y-4">
               <a
                 href="/"
-                className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Powrót do strony głównej
               </a>
