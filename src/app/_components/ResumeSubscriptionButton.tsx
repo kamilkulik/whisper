@@ -31,7 +31,7 @@ export default function ResumeSubscriptionButton({
           setIsLoading(false);
           setShowConfirmation(false);
           window.location.reload();
-        }, 300);
+        }, 400);
       } else {
         console.error("Failed to resume subscription");
         setIsLoading(false);

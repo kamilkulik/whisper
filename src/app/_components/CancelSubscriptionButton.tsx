@@ -34,7 +34,7 @@ export default function CancelSubscriptionButton({
           setIsLoading(false);
           setShowConfirmation(false);
           window.location.reload();
-        }, 300);
+        }, 400);
       } else {
         console.error("Failed to cancel subscription");
         setIsLoading(false);
