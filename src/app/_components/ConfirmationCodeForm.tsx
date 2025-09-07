@@ -9,26 +9,32 @@ import { ConfirmationCodeGrid } from "./ConfirmationCodeGrid";
 import { SuccessMessage } from "./SuccessMessage";
 import { ValidationErrors } from "../_types";
 import { PhoneForm } from "./PhoneForm";
+import { useTranslations } from "next-intl";
 // ContactForm is switched at the parent level; no import/render here
 
 // Validation schemas
-const phoneSchema = z.object({
-  numerTelefonu: z
-    .string()
-    .min(6, "Numer telefonu musi mieć co najmniej 6 cyfr")
-    .max(15, "Numer telefonu nie może być dłuższy niż 15 cyfr")
-    .regex(
-      /^[0-9\s\-]+$/,
-      "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
-    ),
-});
+const localisedPhoneSchema = (
+  t: Awaited<ReturnType<typeof useTranslations>>
+) => {
+  return z.object({
+    numerTelefonu: z
+      .string()
+      .min(6, t("form-validation-errors.phone-number.min"))
+      .max(15, t("form-validation-errors.phone-number.max"))
+      .regex(/^[0-9\s\-]+$/, t("form-validation-errors.phone-number.regex")),
+  });
+};
 
-const emailSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email jest wymagany")
-    .email("Nieprawidłowy format email"),
-});
+const localisedEmailSchema = (
+  t: Awaited<ReturnType<typeof useTranslations>>
+) => {
+  return z.object({
+    email: z
+      .string()
+      .min(1, t("form-validation-errors.email.min"))
+      .email(t("form-validation-errors.email.email")),
+  });
+};
 
 export default function ConfirmationCodeForm({
   onShowContactForm,
@@ -60,21 +66,26 @@ export default function ConfirmationCodeForm({
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [sessionId, setSessionId] = useState<string>("");
+  const t = useTranslations("Components.ConfirmationCodeForm");
+  const phoneSchema = localisedPhoneSchema(t);
+  const emailSchema = localisedEmailSchema(t);
+
+  const sharedMessages = useTranslations("Shared.countries");
 
   const stateKey = showSuccessMessage
     ? "success"
     : showConfirmationCode
-    ? "code"
-    : "phone";
+      ? "code"
+      : "phone";
 
   const countryOptions = [
-    { code: "+48", name: "Polska" },
-    { code: "+44", name: "Wielka Brytania" },
-    { code: "+1", name: "Stany Zjednoczone" },
-    { code: "+34", name: "Hiszpania" },
-    { code: "+52", name: "Meksyk" },
-    { code: "+56", name: "Chile" },
-    { code: "+39", name: "Włochy" },
+    { code: "+48", name: sharedMessages("poland") },
+    { code: "+44", name: sharedMessages("uk") },
+    { code: "+1", name: sharedMessages("usa") },
+    { code: "+34", name: sharedMessages("spain") },
+    { code: "+52", name: sharedMessages("mexico") },
+    { code: "+56", name: sharedMessages("chile") },
+    { code: "+39", name: sharedMessages("italy") },
   ];
 
   // Handle clicking outside the dropdowns
@@ -144,7 +155,7 @@ export default function ConfirmationCodeForm({
         console.log("Using phone schema");
       } else {
         console.log("Unknown field or mode mismatch");
-        return "Nieznane pole";
+        return t("form-validation-errors.unknown-field");
       }
       fieldSchema.parse(value);
       return undefined; // No error
@@ -153,7 +164,7 @@ export default function ConfirmationCodeForm({
         console.log("Validation error:", error.issues[0]?.message);
         return error.issues[0]?.message;
       }
-      return "Błąd walidacji";
+      return t("form-validation-errors.validation-error");
     }
   };
 
@@ -236,16 +247,14 @@ export default function ConfirmationCodeForm({
         setShowConfirmationCode(true);
         setMessage(
           isEmailMode
-            ? "Kod weryfikacyjny został wysłany na Twój adres email."
-            : "Kod weryfikacyjny został wysłany na Twój numer telefonu."
+            ? t("form-submit-message.email")
+            : t("form-submit-message.phone")
         );
       } else {
-        setMessage(
-          data.error || "Wystąpił błąd podczas wysyłania kodu weryfikacyjnego."
-        );
+        setMessage(data.error || t("form-submit-message.submit-error"));
       }
     } catch (error) {
-      setMessage("Wystąpił błąd podczas wysyłania kodu weryfikacyjnego.");
+      setMessage(t("form-submit-message.submit-error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -259,7 +268,7 @@ export default function ConfirmationCodeForm({
       // Get sessionId from localStorage
       const storedSessionId = localStorage.getItem("confirmationSessionId");
       if (!storedSessionId) {
-        setMessage("Błąd sesji. Proszę spróbować ponownie.");
+        setMessage(t("form-submit-message.session-error"));
         setIsSubmitting(false);
         return;
       }
@@ -296,7 +305,7 @@ export default function ConfirmationCodeForm({
         if (isLoginMode) {
           console.log("Login mode");
           // Handle login success
-          setMessage("Logowanie udane!");
+          setMessage(t("form-submit-message.login-success"));
           setShowConfirmationCode(false);
           setShowSuccessMessage(true);
 
@@ -313,7 +322,7 @@ export default function ConfirmationCodeForm({
         } else {
           console.log("Signup mode");
           // Handle signup success (existing flow)
-          setMessage("Numer telefonu potwierdzony!");
+          setMessage(t("form-submit-message.signup-success"));
           setShowConfirmationCode(false);
           setShowSuccessMessage(true);
 
@@ -338,14 +347,13 @@ export default function ConfirmationCodeForm({
         }
       } else {
         setMessage(
-          responseData.error ||
-            "Nieprawidłowy kod weryfikacyjny. Spróbuj ponownie."
+          responseData.error || t("form-submit-message.incorrect-code")
         );
         // Clear localStorage on error to force new session
         localStorage.removeItem("confirmationSessionId");
       }
     } catch (error) {
-      setMessage("Wystąpił błąd podczas weryfikacji kodu.");
+      setMessage(t("form-submit-message.code-verification-error"));
       console.error("ConfirmationCodeForm error:", error);
       // Clear localStorage on error to force new session
       localStorage.removeItem("confirmationSessionId");

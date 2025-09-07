@@ -186,6 +186,31 @@
     "title": "Message Settings"
   },
   "Components": {
+    "ConfirmationCodeForm": {
+      "form-validation-errors": {
+        "phone-number": {
+          "min": "Phone number must be at least 6 digits",
+          "max": "Phone number must be less than 15 digits",
+          "regex": "Phone number can only contain digits, spaces, and hyphens"
+        },
+        "email": {
+          "min": "Email is required",
+          "email": "Invalid email format"
+        },
+        "unknown-field": "Unknown field",
+        "validation-error": "Validation error"
+      },
+      "form-submit-message": {
+        "email": "The verification code has been sent to your email.",
+        "phone": "The verification code has been sent to your phone number.",
+        "submit-error": "An error occurred while sending the verification code.",
+        "session-error": "Session error. Please try again.",
+        "login-success": "Login successful!",
+        "signup-success": "Phone number verified!",
+        "incorrect-code": "Incorrect verification code. Please try again.",
+        "code-verification-error": "An error occurred while verifying the code."
+      }
+    },
     "ContactForm": {
       "form-validation-errors": {
         "phone-number": {
@@ -237,6 +262,17 @@
     },
     "ReturnButton": {
       "return": "Return"
+    }
+  },
+  "Shared": {
+    "countries": {
+      "poland": "Poland",
+      "uk": "United Kingdom",
+      "usa": "United States",
+      "spain": "Spain",
+      "mexico": "Mexico",
+      "chile": "Chile",
+      "italy": "Italy"
     }
   }
 }

@@ -186,6 +186,31 @@
     "title": "Ustawienia Wiadomości"
   },
   "Components": {
+    "ConfirmationCodeForm": {
+      "form-validation-errors": {
+        "phone-number": {
+          "min": "Numer telefonu musi mieć co najmniej 6 cyfr",
+          "max": "Numer telefonu nie może być dłuższy niż 15 cyfr",
+          "regex": "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
+        },
+        "email": {
+          "min": "Email jest wymagany",
+          "email": "Nieprawidłowy format email"
+        },
+        "unknown-field": "Nieznane pole",
+        "validation-error": "Błąd walidacji"
+      },
+      "form-submit-message": {
+        "email": "Kod weryfikacyjny został wysłany na Twój adres email.",
+        "phone": "Kod weryfikacyjny został wysłany na Twój numer telefonu.",
+        "submit-error": "Wystąpił błąd podczas wysyłania kodu weryfikacyjnego.",
+        "session-error": "Błąd sesji. Proszę spróbować ponownie.",
+        "login-success": "Logowanie udane!",
+        "signup-success": "Numer telefonu potwierdzony!",
+        "incorrect-code": "Nieprawidłowy kod weryfikacyjny. Proszę spróbować ponownie.",
+        "code-verification-error": "Wystąpił błąd podczas weryfikacji kodu."
+      }
+    },
     "ContactForm": {
       "form-validation-errors": {
         "phone-number": {
@@ -237,6 +262,17 @@
     },
     "ReturnButton": {
       "return": "Powrót"
+    }
+  },
+  "Shared": {
+    "countries": {
+      "poland": "Polska",
+      "uk": "Wielka Brytania",
+      "usa": "Stany Zjednoczone",
+      "spain": "Hiszpania",
+      "mexico": "Meksyk",
+      "chile": "Chile",
+      "italy": "Włochy"
     }
   }
 }
