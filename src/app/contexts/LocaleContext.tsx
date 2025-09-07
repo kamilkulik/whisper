@@ -18,10 +18,11 @@ const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
 interface LocaleProviderProps {
   children: ReactNode;
+  locale: string;
 }
 
-export function LocaleProvider({ children }: LocaleProviderProps) {
-  const [language, setLanguage] = useState("Polski");
+export function LocaleProvider({ children, locale }: LocaleProviderProps) {
+  const [language, setLanguage] = useState(locale);
   const [countryCode, setCountryCode] = useState("+48");
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -63,7 +64,8 @@ export function LocaleProvider({ children }: LocaleProviderProps) {
 
   useEffect(() => {
     // Detect browser language and country when component mounts
-    const browserLanguage = navigator.language;
+    // const browserLanguage = navigator.language;
+    const browserLanguage = locale;
 
     const detectedLanguage = detectBrowserLanguage(browserLanguage);
     const detectedCountryCode = detectBrowserCountryCode(browserLanguage);
@@ -71,7 +73,7 @@ export function LocaleProvider({ children }: LocaleProviderProps) {
     setLanguage(detectedLanguage);
     setCountryCode(detectedCountryCode);
     setIsLoaded(true);
-  }, []);
+  }, [locale]);
 
   const value: LocaleContextType = {
     language,

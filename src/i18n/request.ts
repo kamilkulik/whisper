@@ -1,12 +1,13 @@
 import { getRequestConfig } from "next-intl/server";
+import { cookies } from "next/headers";
 
 /**
  * used to provide configuration for server-only code, i.e. Server Components, Server Actions & friends
  */
 
 export default getRequestConfig(async () => {
-  // Static for now, we'll change this later
-  const locale = "en";
+  // local is set on the "locale" cookie by the server middleware
+  const locale = (await cookies()).get("locale")?.value || "pl";
 
   return {
     locale,

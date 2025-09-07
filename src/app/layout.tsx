@@ -3,7 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "./contexts/LocaleContext";
 import { Suspense } from "react";
-import { NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider, useLocale } from "next-intl";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -18,11 +18,12 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = useLocale();
   return (
     <html>
       <body className={`${montserrat.variable} antialiased font-montserrat`}>
         <Suspense fallback={<div>Loading...</div>}>
-          <LocaleProvider>
+          <LocaleProvider locale={locale}>
             {/** NextIntlClientProvider used to provide configuration for Client Components */}
             {/**  */}
             <NextIntlClientProvider>{children}</NextIntlClientProvider>
