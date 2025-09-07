@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ModalWrapper } from "./ModalWrapper";
 import { Subscription } from "@prisma/client";
+import { useFormatter, useTranslations } from "next-intl";
 
 interface ResumeSubscriptionButtonProps {
   subscription: Subscription;
@@ -13,6 +14,7 @@ export default function ResumeSubscriptionButton({
 }: ResumeSubscriptionButtonProps) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations("Components.ResumeSubscriptionButton");
 
   const handleResumeClick = () => {
     setShowConfirmation(true);
@@ -55,14 +57,16 @@ export default function ResumeSubscriptionButton({
     const nextBillingDate = new Date(subscription.dateExpires);
     nextBillingDate.setMonth(nextBillingDate.getMonth());
 
-    return nextBillingDate.toLocaleDateString("pl-PL", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return nextBillingDate;
   };
 
   const nextBillingDate = getNextBillingDate();
+  const format = useFormatter();
+  const formattedNextBillingDate = format.dateTime(nextBillingDate!, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <>
@@ -70,7 +74,7 @@ export default function ResumeSubscriptionButton({
         onClick={handleResumeClick}
         className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-2xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
       >
-        Wznów teraz
+        {t("CTA-button")}
       </button>
 
       {showConfirmation && (
@@ -81,18 +85,15 @@ export default function ResumeSubscriptionButton({
         >
           <div className="bg-white/80 dark:bg-gray-800/80 rounded-2xl shadow-xl p-12 backdrop-blur-sm max-w-md mx-auto">
             <h3 className="text-2xl font-bold text-white/80 mb-6 text-center">
-              Wznów subskrypcję
+              {t("confirm-modal.title")}
             </h3>
 
             <div className="text-white/70 mb-6 text-center space-y-3">
-              <p>
-                Kontynuując, wznawiasz automatyczne pobieranie opłat z Twojej
-                karty płatniczej.
-              </p>
-              {nextBillingDate && (
+              <p>{t("confirm-modal.copy")}</p>
+              {formattedNextBillingDate && (
                 <p className="font-semibold text-orange-400">
-                  Następna płatność:{<br />}
-                  {nextBillingDate}
+                  {t("confirm-modal.next-payment")}:{<br />}
+                  {formattedNextBillingDate}
                 </p>
               )}
             </div>
@@ -103,7 +104,9 @@ export default function ResumeSubscriptionButton({
                 disabled={isLoading}
                 className="bg-green-500 hover:bg-green-600 disabled:bg-green-400 text-white font-bold px-8 py-3 rounded-lg transition-all duration-300 disabled:cursor-not-allowed"
               >
-                {isLoading ? "Wznawianie..." : "Wznów"}
+                {isLoading
+                  ? t("confirm-modal.loading")
+                  : t("confirm-modal.action-button")}
               </button>
 
               <button
@@ -111,7 +114,7 @@ export default function ResumeSubscriptionButton({
                 disabled={isLoading}
                 className="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white font-bold px-8 py-3 rounded-lg transition-all duration-300 disabled:cursor-not-allowed"
               >
-                Anuluj
+                {t("confirm-modal.cancel-button")}
               </button>
             </div>
           </div>

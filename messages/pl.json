@@ -169,5 +169,45 @@
       "change-message-language": "Zmień język wiadomości →"
     },
     "logout": "Wyloguj się"
+  },
+  "UserSettingsPage": {
+    "title": "Ustawienia Użytkownika",
+    "email": "Email",
+    "email-placeholder": "Twój email",
+    "phone-number": "Numer telefonu",
+    "phone-number-placeholder": "Twój numer telefonu",
+    "form-success-message": "Dane zostały zaktualizowane pomyślnie!",
+    "form-error-message": "Wystąpił błąd podczas aktualizacji danych.",
+    "form-loading": "Aktualizowanie...",
+    "form-save-changes": "Zapisz zmiany",
+    "form-cancel": "Anuluj"
+  },
+  "MessageSettingsPage": {
+    "title": "Ustawienia Wiadomości"
+  },
+  "Components": {
+    "CancelSubscriptionButton": {
+      "CTA-button": "Anuluj subskrypcję",
+      "confirm-modal": {
+        "title": "Czy na pewno chcesz anulować swoją subskrypcję?",
+        "CTA-button": "Tak",
+        "cancel-button": "Anuluj",
+        "loading": "Anulowanie..."
+      }
+    },
+    "ResumeSubscriptionButton": {
+      "CTA-button": "Wznów teraz",
+      "confirm-modal": {
+        "title": "Wzów subskrypcję",
+        "copy": "Kontynuując, wznawiasz automatyczne pobieranie opłat z Twojej karty płatniczej.",
+        "next-payment": "Następna płatność",
+        "loading": "Wznowienie...",
+        "action-button": "Wznów",
+        "cancel-button": "Anuluj"
+      }
+    },
+    "ReturnButton": {
+      "return": "Powrót"
+    }
   }
 }

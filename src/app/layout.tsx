@@ -4,6 +4,7 @@ import "./globals.css";
 import { LocaleProvider } from "./contexts/LocaleContext";
 import { Suspense } from "react";
 import { NextIntlClientProvider, useLocale } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -15,10 +16,11 @@ export const metadata: Metadata = {
   description: "Otrzymuj codzienne szepty, które ogrzewają serce.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const locale = useLocale();
+  const messages = await getMessages();
+  const locale = await getLocale();
   return (
     <html>
       <body className={`${montserrat.variable} antialiased font-montserrat`}>
@@ -26,7 +28,9 @@ export default function RootLayout({
           <LocaleProvider locale={locale}>
             {/** NextIntlClientProvider used to provide configuration for Client Components */}
             {/**  */}
-            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+            <NextIntlClientProvider messages={messages} locale={locale}>
+              {children}
+            </NextIntlClientProvider>
           </LocaleProvider>
         </Suspense>
       </body>

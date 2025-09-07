@@ -169,5 +169,45 @@
       "change-message-language": "Change message language →"
     },
     "logout": "Logout"
+  },
+  "UserSettingsPage": {
+    "title": "User Settings",
+    "email": "Email",
+    "email-placeholder": "Your email",
+    "phone-number": "Phone number",
+    "phone-number-placeholder": "Your phone number",
+    "form-success-message": "Data has been updated successfully!",
+    "form-error-message": "An error occurred while updating the data.",
+    "form-loading": "Updating...",
+    "form-save-changes": "Save changes",
+    "form-cancel": "Cancel"
+  },
+  "MessageSettingsPage": {
+    "title": "Message Settings"
+  },
+  "Components": {
+    "CancelSubscriptionButton": {
+      "CTA-button": "Cancel subscription",
+      "confirm-modal": {
+        "title": "Are you sure you want to cancel your subscription?",
+        "CTA-button": "Yes",
+        "cancel-button": "Cancel",
+        "loading": "Canceling..."
+      }
+    },
+    "ResumeSubscriptionButton": {
+      "CTA-button": "Resume now",
+      "confirm-modal": {
+        "title": "Resume subscription",
+        "copy": "By continuing, you resume automatic payment from your payment card.",
+        "next-payment": "Next payment",
+        "loading": "Resuming...",
+        "action-button": "Resume",
+        "cancel-button": "Cancel"
+      }
+    },
+    "ReturnButton": {
+      "return": "Return"
+    }
   }
 }

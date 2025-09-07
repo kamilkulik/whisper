@@ -10,8 +10,7 @@ import { redirect } from "next/navigation";
 import CancelSubscriptionButton from "../_components/CancelSubscriptionButton";
 import ResumeSubscriptionButton from "../_components/ResumeSubscriptionButton";
 import { ReturnButton } from "../_components/ReturnButton";
-import { getTranslations } from "next-intl/server";
-import { useTranslations } from "next-intl";
+import { getFormatter, getTranslations } from "next-intl/server";
 
 function subscriptionTypeToText(
   subscription: Subscription | null,
@@ -44,7 +43,8 @@ function subscriptionTypeToText(
 
 function nextMessageTime(
   subscription: Subscription,
-  t: Awaited<ReturnType<typeof getTranslations>>
+  t: Awaited<ReturnType<typeof getTranslations>>,
+  format: Awaited<ReturnType<typeof getFormatter>>
 ): {
   isSubscribed: boolean;
   message: string;
@@ -67,7 +67,7 @@ function nextMessageTime(
 
     if (lastSheptDate > new Date()) {
       message += ` ${t("next-message.last-whisper")}`;
-      message += ` ${lastSheptDate.toLocaleDateString("pl-PL", {
+      message += ` ${format.dateTime(lastSheptDate, {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -80,14 +80,6 @@ function nextMessageTime(
   }
 
   return { isSubscribed, message };
-}
-
-function subscriptionStatusToText(subscription: Subscription) {
-  if (subscription.status === SubscriptionStatus.ACTIVE) {
-    return "Aktywna";
-  } else {
-    return "Nieaktywna";
-  }
 }
 
 function findLatestSubscription(subscriptions: Subscription[]): Subscription {
@@ -104,6 +96,7 @@ export default async function DashboardPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId");
   const t = await getTranslations("DashboardPage");
+  const format = await getFormatter();
 
   if (!sessionId) {
     redirect("/?modal=login");
@@ -134,16 +127,16 @@ export default async function DashboardPage() {
             <div className="flex flex-col justify-center bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
               <p className="text-white/90 mb-4">{t("next-message.title")}</p>
               <div className="mx-8 mb-8 border-t border-white/20"></div>
-              {nextMessageTime(subscription!, t).isSubscribed ? (
+              {nextMessageTime(subscription!, t, format).isSubscribed ? (
                 <>
                   <p className="text-white/90 mb-4">
-                    {nextMessageTime(subscription!, t).message}
+                    {nextMessageTime(subscription!, t, format).message}
                   </p>
                   <div className="text-3xl font-bold text-green-400">20:59</div>
                 </>
               ) : (
                 <p className="text-white/90 mb-4">
-                  {nextMessageTime(subscription!, t).message}
+                  {nextMessageTime(subscription!, t, format).message}
                 </p>
               )}
             </div>
@@ -192,7 +185,7 @@ export default async function DashboardPage() {
                       t("subscription-card.renewal-status.expires")
                     )}
                     {<br />}
-                    {subscription?.dateExpires.toLocaleDateString("pl-PL", {
+                    {format.dateTime(subscription?.dateExpires, {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
