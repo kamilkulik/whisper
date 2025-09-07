@@ -58,52 +58,44 @@ export default function Home() {
   // Testimonial data
   const testimonials = [
     {
-      quote:
-        "Te wiadomości to małe klejnoty dnia. Czasem jedno zdanie wystarczy, by poczuć się potrzebną",
-      author: "Zosia",
-      status: "emerytka",
+      quote: t("testimonials.testimonial-1.quote"),
+      author: t("testimonials.testimonial-1.author"),
+      status: t("testimonials.testimonial-1.status"),
     },
     {
-      quote:
-        "Otwieram SMS i nagle w pokoju robi się jaśniej, choć lampy się nie zmieniają",
-      author: "Gocha",
-      status: "matka",
+      quote: t("testimonials.testimonial-2.quote"),
+      author: t("testimonials.testimonial-2.author"),
+      status: t("testimonials.testimonial-2.status"),
     },
     {
-      quote:
-        "Wieczorny Szept” to codzienny list od życia — czuły, lekki, potrzebny",
-      author: "Maryla",
-      status: "miłośniczka poezji",
+      quote: t("testimonials.testimonial-3.quote"),
+      author: t("testimonials.testimonial-3.author"),
+      status: t("testimonials.testimonial-3.status"),
     },
     {
-      quote:
-        "Każdy wieczór z „Wieczornym Szeptem” staje się cieplejszy. Te krótkie wersy przypominają mi, że serce nadal potrafi drżeć",
-      author: "Amelia",
-      status: "nauczycielka",
+      quote: t("testimonials.testimonial-4.quote"),
+      author: t("testimonials.testimonial-4.author"),
+      status: t("testimonials.testimonial-4.status"),
     },
     {
-      quote:
-        "Dzięki nim znów czuję się jak młoda dziewczyna czekająca na list od ukochanego",
-      author: "Kasia",
-      status: "matka",
+      quote: t("testimonials.testimonial-5.quote"),
+      author: t("testimonials.testimonial-5.author"),
+      status: t("testimonials.testimonial-5.status"),
     },
     {
-      quote:
-        "Wasze szepty są jak filiżanka herbaty wypita przy kominku — krótko, ale w sam raz dla duszy",
-      author: "Dorota",
-      status: "opiekunka",
+      quote: t("testimonials.testimonial-6.quote"),
+      author: t("testimonials.testimonial-6.author"),
+      status: t("testimonials.testimonial-6.status"),
     },
     {
-      quote:
-        "Te krótkie smsiki w kilku słowach potrafią obudzić wspomnienia, których dawno już nie odwiedzałam",
-      author: "Ania",
-      status: "podróżniczka",
+      quote: t("testimonials.testimonial-7.quote"),
+      author: t("testimonials.testimonial-7.author"),
+      status: t("testimonials.testimonial-7.status"),
     },
     {
-      quote:
-        "Nie wiedziałam, że SMS może być jak dotyk — delikatny, ciepły, kojący",
-      author: "Domi",
-      status: "fanka",
+      quote: t("testimonials.testimonial-8.quote"),
+      author: t("testimonials.testimonial-8.author"),
+      status: t("testimonials.testimonial-8.status"),
     },
   ];
 
@@ -179,8 +171,8 @@ export default function Home() {
         >
           <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
             <div className="flex items-center space-x-8">
-              <div className="text-white font-bold text-xl">
-                WIECZORNY SZEPT 🌙
+              <div className="text-white font-bold text-3xl">
+                {t("hero.brand")} 🌙
               </div>
               <div className="hidden md:flex space-x-6"></div>
             </div>
@@ -190,13 +182,13 @@ export default function Home() {
                 onClick={handleLoginClick}
                 className="text-white hover:text-blue-200 transition-colors"
               >
-                Logowanie
+                {t("hero.login-button")}
               </button>
               <button
                 onClick={handleNavigateToPricing}
                 className="hidden sm:inline-block bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors cursor-pointer"
               >
-                Zacznij teraz
+                {t("hero.header-cta-button")}
               </button>
             </div>
           </div>
@@ -228,13 +220,13 @@ export default function Home() {
                   </div>
 
                   <p className="text-xl text-white leading-relaxed md:max-lg:text-2xl">
-                    Krótka wiadomość, pełna ciepła i magii słów.
+                    {t("hero.copy.c-1")}
                     <br />
-                    Każdego wieczoru, o tej samej porze.
+                    {t("hero.copy.c-2")}
                     <br />
-                    Darmowy dostęp przez 7 dni.
+                    {t("hero.copy.c-3")}
                     <br />
-                    Możesz anulować w każdej chwili.
+                    {t("hero.copy.c-4")}
                   </p>
 
                   {/** Encapsulate button into its own component */}
@@ -242,7 +234,7 @@ export default function Home() {
                     onClick={handleNavigateToPricing}
                     className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
                   >
-                    Wyślij mi pierwszy szept
+                    {t("hero.button")}
                   </button>
 
                   <div className="flex items-center space-x-4 pt-8">
@@ -270,9 +262,7 @@ export default function Home() {
                       {/* <p className="font-medium">
                         Join over 25,000 poetry lovers worldwide.
                       </p> */}
-                      <p className="text-blue-200">
-                        Pierwszy szept dziś wieczorem o 20:59
-                      </p>
+                      <p className="text-blue-200">{t("hero.CTA")}</p>
                     </div>
                   </div>
                 </div>
@@ -308,20 +298,17 @@ export default function Home() {
                 {/* Content */}
                 <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
                   <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
-                    Słowa, które zostają z Tobą na{" "}
+                    {t("smartphone-notification-section.title-1")}{" "}
                     <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                      długo
+                      {t("smartphone-notification-section.title-2")}
                     </span>
                   </h2>
 
                   <p className="text-2xl lg:text-xl text-blue-200 text-justify leading-relaxed">
-                    To nie są przypadkowe cytaty. Każdy szept jest pisany
-                    ręcznie przez poetę, który od lat tworzy krótkie formy pełne
-                    emocji.
+                    {t("smartphone-notification-section.copy-1")}
                     <br />
                     <br />
-                    Są jak małe listy miłosne — tylko że mieszczą się w jednym
-                    SMS-ie. Idealne, by zakończyć dzień z uśmiechem.
+                    {t("smartphone-notification-section.copy-2")}
                   </p>
 
                   <div className="flex flex-col md:max-lg:flex-row md:max-lg:space-x-8 md:max-lg:justify-center items-center">
@@ -329,11 +316,15 @@ export default function Home() {
                       onClick={handleNavigateToPricing}
                       className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
                     >
-                      Rozpocznij Okres Próbny
+                      {t("smartphone-notification-section.button")}
                     </button>
                     <div className="text-white text-2xl lg:text-xl mt-4">
-                      <p className="font-medium">✓ Darmowy przez 7 dni</p>
-                      <p className="text-blue-200">✓ Anuluj w każdej chwili</p>
+                      <p className="font-medium">
+                        {t("smartphone-notification-section.CTA-copy-1")}
+                      </p>
+                      <p className="text-blue-200">
+                        {t("smartphone-notification-section.CTA-copy-2")}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -1,9 +1,124 @@
 {
   "LandingPage": {
     "hero": {
+      "brand": "EVENING WHISPER",
       "title-1": "Receive daily whispers that ",
       "title-2": "warm",
-      "title-3": "your heart — directly to your phone."
+      "title-3": "your heart — directly to your phone.",
+      "copy": {
+        "c-1": "Short message, full of warmth and magic words.",
+        "c-2": "Every evening, at the same time.",
+        "c-3": "Free access for 7 days.",
+        "c-4": "You can cancel at any time."
+      },
+      "button": "Send me my first whisper",
+      "CTA": "First whisper tonight at 20:59",
+      "login-button": "Login",
+      "header-cta-button": "Start now"
+    },
+    "how-it-works": {
+      "title": "As simple as two sighs",
+      "step-1": {
+        "title": "Sign up in 30 seconds",
+        "description": "Provide your phone number and done. Simple form that you will fill in less than 30 seconds."
+      },
+      "step-2": {
+        "title": "Every evening at 20:59",
+        "description": "You receive a message only for you. Every day, exactly at the same time."
+      },
+      "step-3": {
+        "title": "Enjoy the moment",
+        "description": "Read, smile, keep for yourself or send it to someone else. It's your moment of peace."
+      },
+      "mini-CTA": "So simple that you can have your first message today",
+      "button": "Send me my first whisper",
+      "reassurance-box": {
+        "title": "Your phone number is safe",
+        "description": "Free access for 7 days. You can cancel at any time."
+      }
+    },
+    "smartphone-notification-section": {
+      "title-1": "Words that stay with you for",
+      "title-2": "long",
+      "copy-1": "These are not just random or AI-generated quotes. Each whisper is written manually by a poet who has been writing short forms full of emotions for years.",
+      "copy-2": "They are like little love letters — only they fit in one SMS. Perfect to end the day with a smile.",
+      "button": "Start Trial Period",
+      "CTA-copy-1": "✓ Free for 7 days",
+      "CTA-copy-2": "✓ Cancel anytime"
+    },
+    "testimonials": {
+      "testimonial-1": {
+        "quote": "These messages are little gems in my day. Sometimes a single sentence is enough to make me feel needed.",
+        "author": "Margaret",
+        "status": "retired"
+      },
+      "testimonial-2": {
+        "quote": "I open a text and suddenly the room feels brighter, even though the lights haven’t changed.",
+        "author": "Patricia",
+        "status": "mother"
+      },
+      "testimonial-3": {
+        "quote": "“Evening Whisper” is a daily letter from life — tender, light, essential.",
+        "author": "Eleanor",
+        "status": "poetry lover"
+      },
+      "testimonial-4": {
+        "quote": "Every evening with “Evening Whisper” feels warmer. These short verses remind me that the heart can still tremble.",
+        "author": "Amelia",
+        "status": "teacher"
+      },
+      "testimonial-5": {
+        "quote": "Thanks to them I feel once again like a young girl waiting for a letter from her beloved.",
+        "author": "Catherine",
+        "status": "mother"
+      },
+      "testimonial-6": {
+        "quote": "Your whispers are like a cup of tea by the fire — brief, but just right for the soul.",
+        "author": "Dorothy",
+        "status": "carer"
+      },
+      "testimonial-7": {
+        "quote": "These little texts, in just a few words, can awaken memories I haven’t visited in years.",
+        "author": "Anne",
+        "status": "traveller"
+      },
+      "testimonial-8": {
+        "quote": "I never knew a text message could be like a touch — gentle, warm, soothing.",
+        "author": "Emily",
+        "status": "fan"
+      }
+    },
+    "pricing-section": {
+      "title": "A moment of warmth and kind words",
+      "subtitle-1": "Choose the most convenient option",
+      "subtitle-2": "to receive your first whisper",
+      "subtitle-3": "tomorrow",
+      "subtitle-4": "this very",
+      "subtitle-5": "evening",
+      "trial-card": {
+        "title": "Trial Period",
+        "duration": "7 DAYS",
+        "currency": "£",
+        "period": "for 7 days",
+        "CTA-button": "Start your trial"
+      },
+      "one-time-purchase-card": {
+        "tooltip": "most popular choice",
+        "title": "One-off Payment",
+        "duration": "30 DAYS OF EVENING WHISPERS",
+        "currency": "£",
+        "period": "one-time",
+        "CTA-button": "Buy for 19 £"
+      },
+      "subscription-card": {
+        "tooltip": "card required",
+        "title": "Subscription",
+        "duration": "MONTHLY",
+        "currency": "£",
+        "period": "/ per month",
+        "price": "equivalent to 228 £/year",
+        "CTA-button": "Start subscription"
+      }
     }
   }
 }

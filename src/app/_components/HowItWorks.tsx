@@ -1,10 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 interface HowItWorksProps {
   onGetStarted: () => void;
 }
 
 export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
+  const t = useTranslations("LandingPage");
+
   return (
     <div className="relative py-20" data-oid="-i:6r4a">
       <div className="max-w-7xl mx-auto px-6" data-oid="qpvhgcn">
@@ -14,7 +18,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
             className="text-4xl lg:text-5xl font-bold text-white mb-4"
             data-oid="c3bt..l"
           >
-            Proste jak dwa westchnienia
+            {t("how-it-works.title")}
           </h2>
         </div>
 
@@ -41,14 +45,13 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               className="text-3xl lg:text-2xl font-bold text-white mb-4 text-center"
               data-oid="f751mx4"
             >
-              Zapisz się w 30 sekund
+              {t("how-it-works.step-1.title")}
             </h3>
             <p
               className="text-blue-200 ms:max-md:text-2xl md:max-lg:text-xl lg:text-xl text-center leading-relaxed"
               data-oid="x8z2y01"
             >
-              Podaj numer telefonu i gotowe. Prosty formularz, który wypełnisz w
-              mniej niż minutę.
+              {t("how-it-works.step-1.description")}
             </p>
           </div>
 
@@ -73,14 +76,13 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               className="text-3xl lg:text-2xl font-bold text-white mb-4 text-center"
               data-oid="04_897m"
             >
-              Codziennie wieczorem o 20:59
+              {t("how-it-works.step-2.title")}
             </h3>
             <p
               className="text-blue-200 ms:max-md:text-2xl md:max-lg:text-xl lg:text-xl text-center leading-relaxed"
               data-oid="w6hltyq"
             >
-              Dostajesz wiadomość tylko dla Ciebie. Każdego dnia, punktualnie o
-              tej samej porze.
+              {t("how-it-works.step-2.description")}
             </p>
           </div>
 
@@ -105,14 +107,13 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               className="text-3xl lg:text-2xl font-bold text-white mb-4 text-center"
               data-oid="_od5h0g"
             >
-              Ciesz się chwilą
+              {t("how-it-works.step-3.title")}
             </h3>
             <p
               className="text-blue-200 ms:max-md:text-2xl md:max-lg:text-xl lg:text-xl text-center leading-relaxed"
               data-oid="njb5q2h"
             >
-              Czytaj, uśmiechnij się, zachowaj dla siebie lub wyślij dalej. To
-              Twoja chwila spokoju.
+              {t("how-it-works.step-3.description")}
             </p>
           </div>
         </div>
@@ -120,14 +121,14 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
         {/* Mini CTA */}
         <div className="text-center mb-8" data-oid="my9c93g">
           <p className="text-xl text-white mb-6" data-oid="k8wphqe">
-            Tak proste, że pierwszą wiadomość możesz mieć już dziś
+            {t("how-it-works.mini-CTA")}
           </p>
           <button
             onClick={onGetStarted}
             className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
             data-oid="-w0zi67"
           >
-            Wyślij mi pierwszy szept
+            {t("how-it-works.button")}
           </button>
         </div>
 
@@ -139,7 +140,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
           >
             <div className="text-center mb-4" data-oid="aqr874e">
               <p className="text-white font-medium" data-oid="knbzos_">
-                Darmowy dostęp przez 7 dni. Możesz anulować w każdej chwili.
+                {t("how-it-works.reassurance-box.description")}
               </p>
             </div>
             <div
@@ -165,7 +166,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
                 className="text-green-400 text-lg font-medium"
                 data-oid="lvp06st"
               >
-                Twój numer telefonu jest bezpieczny
+                {t("how-it-works.reassurance-box.title")}
               </span>
             </div>
           </div>

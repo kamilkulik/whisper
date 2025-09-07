@@ -1,9 +1,124 @@
 {
   "LandingPage": {
     "hero": {
+      "brand": "WIECZORNY SZEPT",
       "title-1": "Otrzymuj codzienny szept, który ",
       "title-2": "ogrzeje",
-      "title-3": "Twoje serce — prosto na Twój telefon."
+      "title-3": "Twoje serce — prosto na Twój telefon.",
+      "copy": {
+        "c-1": "Krótka wiadomość, pełna ciepła i magii słów.",
+        "c-2": "Każdego wieczoru, o tej samej porze.",
+        "c-3": "Darmowy dostęp przez 7 dni.",
+        "c-4": "Możesz anulować w każdej chwili."
+      },
+      "button": "Wyślij mi pierwszy szept",
+      "CTA": "Pierwszy szept dziś wieczorem o 20:59",
+      "login-button": "Logowanie",
+      "header-cta-button": "Zacznij teraz"
+    },
+    "how-it-works": {
+      "title": "Proste jak dwa westchnienia",
+      "step-1": {
+        "title": "Zapisz się w 30 sekund",
+        "description": "Podaj numer telefonu i gotowe. Prosty formularz, który wypełnisz w mniej niż 30 sekund."
+      },
+      "step-2": {
+        "title": "Codziennie wieczorem o 20:59",
+        "description": "Dostajesz wiadomość tylko dla Ciebie. Każdego dnia, punktualnie o tej samej porze."
+      },
+      "step-3": {
+        "title": "Ciesz się chwilą",
+        "description": "Czytaj, uśmiechnij się, zachowaj dla siebie lub wyślij dalej. To Twoja chwila spokoju."
+      },
+      "mini-CTA": "Tak proste, że pierwszą wiadomość możesz mieć już dziś",
+      "button": "Wyślij mi pierwszy szept",
+      "reassurance-box": {
+        "title": "Twój numer telefonu jest bezpieczny",
+        "description": "Darmowy dostęp przez 7 dni. Możesz anulować w każdej chwili."
+      }
+    },
+    "smartphone-notification-section": {
+      "title-1": "Słowa, które zostają z Tobą na",
+      "title-2": "długo",
+      "copy-1": "To nie są przypadkowe cytaty ani generowane przez AI. Każdy szept jest pisany ręcznie przez poetę, który od lat tworzy krótkie formy pełne emocji.",
+      "copy-2": "Są jak małe listy miłosne — tylko że mieszczą się w jednym SMS-ie. Idealne, by zakończyć dzień z uśmiechem.",
+      "button": "Rozpocznij Okres Próbny",
+      "CTA-copy-1": "✓ Darmowy przez 7 dni",
+      "CTA-copy-2": "✓ Anuluj w każdej chwili"
+    },
+    "testimonials": {
+      "testimonial-1": {
+        "quote": "Te wiadomości to małe klejnoty dnia. Czasem jedno zdanie wystarczy, by poczuć się potrzebną",
+        "author": "Zosia",
+        "status": "emerytka"
+      },
+      "testimonial-2": {
+        "quote": "Otwieram SMS i nagle w pokoju robi się jaśniej, choć lampy się nie zmieniają",
+        "author": "Gocha",
+        "status": "matka"
+      },
+      "testimonial-3": {
+        "quote": "Wieczorny Szept” to codzienny list od życia — czuły, lekki, potrzebny",
+        "author": "Maryla",
+        "status": "miłośniczka poezji"
+      },
+      "testimonial-4": {
+        "quote": "Każdy wieczór z „Wieczornym Szeptem” staje się cieplejszy. Te krótkie wersy przypominają mi, że serce nadal potrafi drżeć",
+        "author": "Amelia",
+        "status": "nauczycielka"
+      },
+      "testimonial-5": {
+        "quote": "Dzięki nim znów czuję się jak młoda dziewczyna czekająca na list od ukochanego",
+        "author": "Kasia",
+        "status": "matka"
+      },
+      "testimonial-6": {
+        "quote": "Wasze szepty są jak filiżanka herbaty wypita przy kominku — krótko, ale w sam raz dla duszy",
+        "author": "Dorota",
+        "status": "opiekunka"
+      },
+      "testimonial-7": {
+        "quote": "Te krótkie smsiki w kilku słowach potrafią obudzić wspomnienia, których dawno już nie odwiedzałam",
+        "author": "Ania",
+        "status": "podróżniczka"
+      },
+      "testimonial-8": {
+        "quote": "Nie wiedziałam, że SMS może być jak dotyk — delikatny, ciepły, kojący",
+        "author": "Domi",
+        "status": "fanka"
+      }
+    },
+    "pricing-section": {
+      "title": "Chwila ciepła i dobrych słów",
+      "subtitle-1": "Wybierz najbardziej dogodną opcję",
+      "subtitle-2": "aby otrzymać swój pierwszy szept już",
+      "subtitle-3": "jutro",
+      "subtitle-4": "dziś",
+      "subtitle-5": "wieczorem",
+      "trial-card": {
+        "title": "Okres Próbny",
+        "duration": "7 DNI",
+        "currency": "zł",
+        "period": "przez 7 dni",
+        "CTA-button": "Rozpocznij okres próbny"
+      },
+      "one-time-purchase-card": {
+        "tooltip": "najczęściej wybierany",
+        "title": "Jednorazowa Płatność",
+        "duration": "30 DNI WIECZORNYCH SZEPTÓW",
+        "currency": "zł",
+        "period": "jednorazowo",
+        "CTA-button": "Kup za 19 zł"
+      },
+      "subscription-card": {
+        "tooltip": "wymaga karty",
+        "title": "Subskrypcja",
+        "duration": "MIESIĘCZNA",
+        "currency": "zł",
+        "period": "/ miesiąc",
+        "price": "równowartość 228 zł/rok",
+        "CTA-button": "Rozpocznij subskrypcję"
+      }
     }
   }
 }
