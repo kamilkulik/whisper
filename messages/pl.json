@@ -132,7 +132,9 @@
       "link-3": "Zwroty",
       "newsletter-title": "Newsletter",
       "newsletter-subtitle": "Zapisz się, aby otrzymywać ekskluzywne oferty, oryginalne historie, wydarzenia i więcej.",
-      "newsletter-button": "SUBMIT"
-    }
+      "newsletter-button": "SUBMIT",
+      "newsletter-placeholder": "Wprowadź swój adres email"
+    },
+    "copyright": "© 2025 Wieczorny Szept. Wszelkie prawa zastrzeżone."
   }
 }
