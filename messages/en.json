@@ -136,5 +136,38 @@
       "newsletter-placeholder": "Enter your email"
     },
     "copyright": "© 2025 Evening Whisper. All rights reserved."
+  },
+  "DashboardPage": {
+    "next-message": {
+      "title": "Your next whisper",
+      "no-active-subscription": "You don't have an active subscription",
+      "canceled-subscription": "You canceled your subscription",
+      "at": "at",
+      "tomorrow": "tomorrow",
+      "today": "today",
+      "last-whisper": "last whisper:"
+    },
+    "subscription-card": {
+      "title": "Your subscription",
+      "subscription-type-to-text": {
+        "not-subscribed": "No subscription",
+        "canceled": "Canceled",
+        "expired": "Expired",
+        "trial": "7 day trial",
+        "monthly": "Monthly",
+        "one-time": "30 days of whispers"
+      },
+      "renewal-status": {
+        "canceled": "Canceled",
+        "renewes": "Renewes",
+        "expires": "Expires"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "change-email-and-phone": "Change email and phone →",
+      "change-message-language": "Change message language →"
+    },
+    "logout": "Logout"
   }
 }

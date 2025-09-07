@@ -9,34 +9,43 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import CancelSubscriptionButton from "../_components/CancelSubscriptionButton";
 import ResumeSubscriptionButton from "../_components/ResumeSubscriptionButton";
+import { ReturnButton } from "../_components/ReturnButton";
+import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
-function subscriptionTypeToText(subscription: Subscription | null) {
+function subscriptionTypeToText(
+  subscription: Subscription | null,
+  t: Awaited<ReturnType<typeof getTranslations>>
+) {
   if (!subscription) {
-    return "Brak subskrypcji";
+    return t("subscription-card.subscription-type-to-text.not-subscribed");
   }
 
   const { type, status } = subscription;
 
   switch (status) {
     case SubscriptionStatus.CANCEL_AT_PERIOD_END:
-      return "Anulowana";
+      return t("subscription-card.subscription-type-to-text.canceled");
     case SubscriptionStatus.EXPIRED:
-      return "Wygasła";
+      return t("subscription-card.subscription-type-to-text.expired");
   }
 
   switch (type) {
     case SubscriptionType.ONE_TIME:
-      return "30 dni szeptów";
+      return t("subscription-card.subscription-type-to-text.one-time");
     case SubscriptionType.MONTHLY:
-      return "Miesięczna";
+      return t("subscription-card.subscription-type-to-text.monthly");
     case SubscriptionType.TRIAL:
-      return "Okres próbny 7 dni";
+      return t("subscription-card.subscription-type-to-text.trial");
     default:
-      return "Brak subskrypcji";
+      return t("subscription-card.subscription-type-to-text.not-subscribed");
   }
 }
 
-function nextMessageTime(subscription: Subscription): {
+function nextMessageTime(
+  subscription: Subscription,
+  t: Awaited<ReturnType<typeof getTranslations>>
+): {
   isSubscribed: boolean;
   message: string;
 } {
@@ -48,16 +57,16 @@ function nextMessageTime(subscription: Subscription): {
     subscription?.dateExpires > new Date()
   ) {
     isSubscribed = true;
-    message = `${new Date() > new Date("20:59") ? "jutro" : "dzisiaj"} o`;
+    message = `${new Date() > new Date("20:59") ? t("next-message.tomorrow") : t("next-message.today")} ${t("next-message.at")}`;
   } else if (
     subscription?.status === SubscriptionStatus.CANCEL_AT_PERIOD_END &&
     subscription?.dateExpires
   ) {
-    message = "Subskrypcja została anulowana";
+    message = t("next-message.canceled-subscription");
     const lastSheptDate = subscription?.dateExpires;
 
     if (lastSheptDate > new Date()) {
-      message += " ostatni szept:";
+      message += ` ${t("next-message.last-whisper")}`;
       message += ` ${lastSheptDate.toLocaleDateString("pl-PL", {
         year: "numeric",
         month: "long",
@@ -67,7 +76,7 @@ function nextMessageTime(subscription: Subscription): {
       })}`;
     }
   } else {
-    message = "Nie masz aktywnej subskrypcji";
+    message = t("next-message.no-active-subscription");
   }
 
   return { isSubscribed, message };
@@ -94,6 +103,7 @@ function findLatestSubscription(subscriptions: Subscription[]): Subscription {
 export default async function DashboardPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId");
+  const t = await getTranslations("DashboardPage");
 
   if (!sessionId) {
     redirect("/?modal=login");
@@ -117,48 +127,31 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <a
-        href="/"
-        className="z-10 flex items-center text-white/80 hover:text-white transition-colors duration-200 mr-6 absolute left-10 top-20"
-      >
-        <svg
-          className="w-5 h-5 mr-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-        <span>Powrót</span>
-      </a>
+      <ReturnButton href="/" />
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="flex flex-col justify-center bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-              <p className="text-white/90 mb-4">Twój kolejny szept</p>
+              <p className="text-white/90 mb-4">{t("next-message.title")}</p>
               <div className="mx-8 mb-8 border-t border-white/20"></div>
-              {nextMessageTime(subscription!).isSubscribed ? (
+              {nextMessageTime(subscription!, t).isSubscribed ? (
                 <>
                   <p className="text-white/90 mb-4">
-                    {nextMessageTime(subscription!).message}
+                    {nextMessageTime(subscription!, t).message}
                   </p>
                   <div className="text-3xl font-bold text-green-400">20:59</div>
                 </>
               ) : (
                 <p className="text-white/90 mb-4">
-                  {nextMessageTime(subscription!).message}
+                  {nextMessageTime(subscription!, t).message}
                 </p>
               )}
             </div>
 
             <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-              <p className="text-white/90 mb-4">Twoja subskrypcja</p>
+              <p className="text-white/90 mb-4">
+                {t("subscription-card.title")}
+              </p>
               <div className="mx-8 mb-8 border-t border-white/20"></div>
               <div
                 className={`inline-flex items-center mb-4 px-3 py-1 rounded-full ${
@@ -178,7 +171,7 @@ export default async function DashboardPage() {
                       : "text-red-300"
                   }`}
                 >
-                  {subscriptionTypeToText(subscription)}
+                  {subscriptionTypeToText(subscription, t)}
                 </span>
               </div>
               {subscription?.dateExpires &&
@@ -187,13 +180,16 @@ export default async function DashboardPage() {
                     {subscription?.type === SubscriptionType.MONTHLY ? (
                       subscription.dateCancelled ? (
                         <>
-                          <span className="font-bold">Anulowana</span>. Wygasa
+                          <span className="font-bold">
+                            {t("subscription-card.renewal-status.canceled")}
+                          </span>
+                          . {t("subscription-card.renewal-status.expires")}
                         </>
                       ) : (
-                        "Odnawia się"
+                        t("subscription-card.renewal-status.renewes")
                       )
                     ) : (
-                      "Wygasa"
+                      t("subscription-card.renewal-status.expires")
                     )}
                     {<br />}
                     {subscription?.dateExpires.toLocaleDateString("pl-PL", {
@@ -239,7 +235,7 @@ export default async function DashboardPage() {
 
           <div className="mb-8">
             <h2 className="text-2xl font-semibold text-white mb-6">
-              Ustawienia
+              {t("settings.title")}
             </h2>
             <div className="bg-white/20 backdrop-blur-sm rounded-xl border border-white/20 text-xl">
               <div className="flex items-center justify-between p-4">
@@ -247,7 +243,7 @@ export default async function DashboardPage() {
                   href="/dashboard/user-settings"
                   className="text-white hover:text-blue-300 font-normal transition-colors duration-200"
                 >
-                  Zmień email i telefon →
+                  {t("settings.change-email-and-phone")}
                 </a>
               </div>
               <div className="border-t border-white/20"></div>
@@ -256,7 +252,7 @@ export default async function DashboardPage() {
                   href="/dashboard/message-settings"
                   className="text-white hover:text-blue-300 font-normal transition-colors duration-200"
                 >
-                  Zmień język wiadomości →
+                  {t("settings.change-message-language")}
                 </a>
               </div>
             </div>
@@ -268,7 +264,7 @@ export default async function DashboardPage() {
                 type="submit"
                 className="bg-red-500/20 hover:bg-red-500/30 text-red-300 hover:text-red-200 font-medium py-3 px-6 rounded-xl transition-all duration-200 border border-red-400/30 hover:border-red-400/50 backdrop-blur-sm"
               >
-                Wyloguj się
+                {t("logout")}
               </button>
             </form>
           </div>

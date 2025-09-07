@@ -136,5 +136,38 @@
       "newsletter-placeholder": "Wprowadź swój adres email"
     },
     "copyright": "© 2025 Wieczorny Szept. Wszelkie prawa zastrzeżone."
+  },
+  "DashboardPage": {
+    "next-message": {
+      "title": "Twój kolejny szept",
+      "no-active-subscription": "Nie masz aktywnej subskrypcji",
+      "canceled-subscription": "Subskrypcja została anulowana",
+      "at": "o",
+      "tomorrow": "jutro",
+      "today": "dzisiaj",
+      "last-whisper": "ostatni szept:"
+    },
+    "subscription-card": {
+      "title": "Twoja subskrypcja",
+      "subscription-type-to-text": {
+        "not-subscribed": "Brak subskrypcji",
+        "canceled": "Anulowana",
+        "expired": "Wygasła",
+        "trial": "Okres próbny 7 dni",
+        "monthly": "Miesięczna",
+        "one-time": "30 dni szeptów"
+      },
+      "renewal-status": {
+        "canceled": "Anulowana",
+        "renewes": "Odnawia się",
+        "expires": "Wygasa"
+      }
+    },
+    "settings": {
+      "title": "Ustawienia",
+      "change-email-and-phone": "Zmień email i telefon →",
+      "change-message-language": "Zmień język wiadomości →"
+    },
+    "logout": "Wyloguj się"
   }
 }
