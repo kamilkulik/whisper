@@ -186,6 +186,35 @@
     "title": "Ustawienia Wiadomości"
   },
   "Components": {
+    "ContactForm": {
+      "form-validation-errors": {
+        "phone-number": {
+          "min": "Numer telefonu musi mieć co najmniej 6 cyfr",
+          "max": "Numer telefonu nie może być dłuższy niż 15 cyfr",
+          "regex": "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
+        },
+        "name": {
+          "min": "Imię musi mieć co najmniej 2 znaki",
+          "max": "Imię nie może być dłuższe niż 50 znaków",
+          "regex": "Imię może zawierać tylko litery, spacje, myślniki i apostrofy"
+        },
+        "email": {
+          "min": "Email jest wymagany",
+          "max": "Email jest za długi",
+          "email": "Nieprawidłowy format email"
+        }
+      },
+      "form-title": "Potrzebujemy jeszcze kilku informacji",
+      "form-label-name": "Imię *",
+      "form-placeholder-name": "Wpisz swoje imię",
+      "form-label-email": "Email *",
+      "form-placeholder-email": "np. jan.kowalski@email.com",
+      "form-label-message-language": "Język wiadomości *",
+      "form-terms-of-service-1": "Akceptuję",
+      "form-terms-of-service-2": "regulamin usługi",
+      "form-submit-button": "WYŚLIJ",
+      "form-submit-button-loading": "WYSYŁANIE..."
+    },
     "CancelSubscriptionButton": {
       "CTA-button": "Anuluj subskrypcję",
       "confirm-modal": {

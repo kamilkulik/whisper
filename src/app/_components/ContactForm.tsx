@@ -7,31 +7,33 @@ import DOMPurify from "dompurify";
 import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 import { GatheredUserData, prepSaveUserBody } from "./utils/saveUserBodyPrep";
+import { useTranslations } from "next-intl";
 
 // Validation schema
-const formSchema = z.object({
-  phoneNumber: z
-    .string()
-    .min(6, "Numer telefonu musi mieć co najmniej 6 cyfr")
-    .max(15, "Numer telefonu nie może być dłuższy niż 15 cyfr")
-    .regex(
-      /^[0-9\s\-]+$/,
-      "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
-    ),
-  name: z
-    .string()
-    .min(2, "Imię musi mieć co najmniej 2 znaki")
-    .max(50, "Imię nie może być dłuższe niż 50 znaków")
-    .regex(
-      /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]+$/,
-      "Imię może zawierać tylko litery, spacje, myślniki i apostrofy"
-    ),
-  email: z
-    .string()
-    .min(1, "Email jest wymagany")
-    .max(254, "Email jest za długi")
-    .email("Nieprawidłowy format email"),
-});
+const localisedFormSchema = (
+  t: Awaited<ReturnType<typeof useTranslations>>
+) => {
+  return z.object({
+    phoneNumber: z
+      .string()
+      .min(6, t("form-validation-errors.phone-number.min"))
+      .max(15, t("form-validation-errors.phone-number.max"))
+      .regex(/^[0-9\s\-]+$/, t("form-validation-errors.phone-number.regex")),
+    name: z
+      .string()
+      .min(2, t("form-validation-errors.name.min"))
+      .max(50, t("form-validation-errors.name.max"))
+      .regex(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]+$/,
+        t("form-validation-errors.name.regex")
+      ),
+    email: z
+      .string()
+      .min(1, t("form-validation-errors.email.min"))
+      .max(254, t("form-validation-errors.email.max"))
+      .email(t("form-validation-errors.email.email")),
+  });
+};
 
 type ValidationErrors = {
   name?: string;
@@ -46,6 +48,7 @@ export default function ContactForm({
   selectedProduct: SubscriptionType | null;
 }) {
   const { language, countryCode, isLoaded } = useLocale();
+  const t = useTranslations("Components.ContactForm");
 
   const [formData, setFormData] = useState<
     GatheredUserData & { acceptTerms: boolean }
@@ -105,7 +108,7 @@ export default function ContactForm({
     value: string
   ): string | undefined => {
     try {
-      const fieldSchema = formSchema.shape[fieldName];
+      const fieldSchema = localisedFormSchema(t).shape[fieldName];
       fieldSchema.parse(value);
       return undefined; // No error
     } catch (error) {
@@ -295,7 +298,7 @@ export default function ContactForm({
           className="text-3xl lg:text-2xl text-center font-bold text-white mb-2"
           data-oid="8cie_js"
         >
-          Potrzebujemy jeszcze kilku informacji
+          {t("form-title")}
         </h3>
       </div>
 
@@ -310,7 +313,7 @@ export default function ContactForm({
             className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="er2p-26"
           >
-            Imię *
+            {t("form-label-name")}
           </label>
           <input
             type="text"
@@ -328,7 +331,7 @@ export default function ContactForm({
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
             }`}
-            placeholder="Wpisz swoje imię"
+            placeholder={t("form-placeholder-name")}
             data-oid="6qn7m1j"
           />
 
@@ -345,7 +348,7 @@ export default function ContactForm({
             className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="cvsh.:4"
           >
-            Adres email *
+            {t("form-label-email")}
           </label>
           <input
             type="email"
@@ -363,7 +366,7 @@ export default function ContactForm({
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
             }`}
-            placeholder="np. jan.kowalski@email.com"
+            placeholder={t("form-placeholder-email")}
             data-oid="253.e9u"
           />
 
@@ -380,7 +383,7 @@ export default function ContactForm({
             className="block text-white font-medium mb-2 text-xl lg:text-base"
             data-oid="2ox.qfi"
           >
-            Język wiadomości *
+            {t("form-label-message-language")}
           </label>
           <div
             className="relative"
@@ -486,7 +489,7 @@ export default function ContactForm({
             className="text-lg text-white/90"
             data-oid="qbo8wve"
           >
-            Akceptuję{" "}
+            {t("form-terms-of-service-1")}{" "}
             <a
               href="/regulamin"
               target="_blank"
@@ -494,7 +497,7 @@ export default function ContactForm({
               className="text-white underline hover:text-white/80"
               data-oid="3mi774b"
             >
-              regulamin usługi
+              {t("form-terms-of-service-2")}
             </a>
           </label>
         </div>
@@ -505,7 +508,9 @@ export default function ContactForm({
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-xl shadow-lg"
           data-oid="yomb8ur"
         >
-          {isSubmitting ? "WYSYŁANIE..." : "WYŚLIJ"}
+          {isSubmitting
+            ? t("form-submit-button-loading")
+            : t("form-submit-button")}
         </button>
       </form>
 

@@ -186,6 +186,35 @@
     "title": "Message Settings"
   },
   "Components": {
+    "ContactForm": {
+      "form-validation-errors": {
+        "phone-number": {
+          "min": "Phone number must be at least 6 digits",
+          "max": "Phone number must be less than 15 digits",
+          "regex": "Phone number can only contain digits, spaces, and hyphens"
+        },
+        "name": {
+          "min": "Name must be at least 2 characters",
+          "max": "Name must be less than 50 characters",
+          "regex": "Name can only contain letters, spaces, hyphens, and apostrophes"
+        },
+        "email": {
+          "min": "Email is required",
+          "max": "Email is too long",
+          "email": "Invalid email format"
+        }
+      },
+      "form-title": "We need a few more details",
+      "form-label-name": "Name *",
+      "form-placeholder-name": "Enter your name",
+      "form-label-email": "Email *",
+      "form-placeholder-email": "e.g. john.doe@email.com",
+      "form-label-message-language": "Message language *",
+      "form-terms-of-service-1": "I accept the",
+      "form-terms-of-service-2": "terms of service",
+      "form-submit-button": "SEND",
+      "form-submit-button-loading": "SENDING..."
+    },
     "CancelSubscriptionButton": {
       "CTA-button": "Cancel subscription",
       "confirm-modal": {
