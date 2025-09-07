@@ -11,6 +11,7 @@ import PricingSection from "./_components/PricingSection";
 import { ModalWrapper } from "./_components/ModalWrapper";
 import TestingToolsWrapper from "./_components/TestingToolsWrapper";
 import { SubscriptionType } from "@prisma/client";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
   const router = useRouter();
@@ -18,6 +19,9 @@ export default function Home() {
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
   const [selectedProduct, setSelectedProduct] =
     useState<SubscriptionType | null>(null);
+
+  // Get translations
+  const t = useTranslations("LandingPage");
 
   // Get modal from search params
   const searchParams = useSearchParams();
@@ -215,11 +219,11 @@ export default function Home() {
                 <div className="lg:col-span-2 space-y-8">
                   <div>
                     <h1 className="text-5xl lg:text-4xl font-bold text-white leading-tight">
-                      Otrzymuj codzienny szept, który{" "}
+                      {t("hero.title-1")}{" "}
                       <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        ogrzeje
+                        {t("hero.title-2")}
                       </span>{" "}
-                      Twoje serce — prosto na Twój telefon.
+                      {t("hero.title-3")}
                     </h1>
                   </div>
 
