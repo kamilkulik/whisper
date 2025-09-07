@@ -119,6 +119,20 @@
         "price": "równowartość 228 zł/rok",
         "CTA-button": "Rozpocznij subskrypcję"
       }
+    },
+    "bottom-cta": {
+      "title": "Gotowa/y na swój pierwszy szept?",
+      "subtitle": "Dołącz do tysięcy czytelników, którzy każdego wieczoru otrzymują ciepłe słowa",
+      "button": "Rozpocznij darmowy okres próbny"
+    },
+    "footer": {
+      "title": "Dowiedz się więcej",
+      "link-1": "Regulamin",
+      "link-2": "Polityka Prywatności",
+      "link-3": "Zwroty",
+      "newsletter-title": "Newsletter",
+      "newsletter-subtitle": "Zapisz się, aby otrzymywać ekskluzywne oferty, oryginalne historie, wydarzenia i więcej.",
+      "newsletter-button": "SUBMIT"
     }
   }
 }

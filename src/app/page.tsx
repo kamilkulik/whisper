@@ -351,17 +351,16 @@ export default function Home() {
             <div className="flex justify-center">
               <div className="text-center">
                 <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-                  Gotowa/y na swój pierwszy szept?
+                  {t("bottom-cta.title")}
                 </h2>
                 <p className="text-xl text-blue-200 mb-8">
-                  Dołącz do tysięcy czytelników, którzy każdego wieczoru
-                  otrzymują ciepłe słowa
+                  {t("bottom-cta.subtitle")}
                 </p>
                 <button
                   onClick={handleNavigateToPricing}
                   className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  Rozpocznij darmowy okres próbny
+                  {t("bottom-cta.button")}
                 </button>
               </div>
             </div>
@@ -382,7 +381,7 @@ export default function Home() {
               {/* Middle Column - Links */}
               <div className="col-span-2">
                 <h3 className="text-2xl font-bold mb-8 elegant-text">
-                  Dowiedz się więcej
+                  {t("footer.title")}
                 </h3>
                 <ul className="space-y-4">
                   <li>
@@ -390,7 +389,7 @@ export default function Home() {
                       href="#"
                       className="text-white/80 hover:text-white transition-colors"
                     >
-                      Regulamin
+                      {t("footer.link-1")}
                     </a>
                   </li>
                   <li>
@@ -398,7 +397,7 @@ export default function Home() {
                       href="#"
                       className="text-white/80 hover:text-white transition-colors"
                     >
-                      Polityka Prywatności
+                      {t("footer.link-2")}
                     </a>
                   </li>
                   <li>
@@ -406,7 +405,7 @@ export default function Home() {
                       href="#"
                       className="text-white/80 hover:text-white transition-colors"
                     >
-                      Zwroty i Refundacje
+                      {t("footer.link-3")}
                     </a>
                   </li>
                 </ul>
@@ -415,21 +414,20 @@ export default function Home() {
               {/* Right Column - Newsletter */}
               <div className="col-span-3">
                 <h3 className="text-2xl font-bold mb-8 elegant-text">
-                  Newsletter
+                  {t("footer.newsletter-title")}
                 </h3>
                 <p className="text-white/80 mb-6 leading-relaxed">
-                  Zapisz się, aby otrzymywać ekskluzywne oferty, oryginalne
-                  historie, wydarzenia i więcej.
+                  {t("footer.newsletter-subtitle")}
                 </p>
                 <div className="space-y-4">
                   <input
                     type="email"
-                    placeholder="Wprowadź swój adres email"
+                    placeholder={t("footer.newsletter-placeholder")}
                     className="w-full px-4 py-3 bg-transparent border-b-2 border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white transition-colors"
                   />
 
                   <button className="bg-[#F5F5DC] text-[#2A031E] px-6 py-2 rounded-lg font-medium hover:bg-white transition-colors">
-                    SUBMIT
+                    {t("footer.newsletter-button")}
                   </button>
                 </div>
               </div>
@@ -441,9 +439,7 @@ export default function Home() {
         <div className="relative border-t border-white/20 py-8">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <div className="text-white/60 text-sm">
-                © 2025 Wieczorny Szept. Wszelkie prawa zastrzeżone.
-              </div>
+              <div className="text-white/60 text-sm">{t("copyright")}</div>
             </div>
           </div>
         </div>
