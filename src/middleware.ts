@@ -26,6 +26,7 @@ export function middleware(request: NextRequest) {
 
   // Otherwise, detect from Accept-Language header
   const acceptLang = request.headers.get("accept-language") || "";
+  // en-GB,en;q=0.9,en-US;q=0.8,pl;q=0.7
   const browserLocale = acceptLang.split(",")[0].split("-")[0]; // crude parse
   const locale = browserLocale || DEFAULT_LOCALE;
 
