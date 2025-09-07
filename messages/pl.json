@@ -249,6 +249,20 @@
         "loading": "Anulowanie..."
       }
     },
+    "PhoneForm": {
+      "form-title": {
+        "login": "Zaloguj się do swojego konta",
+        "signup": "Zacznijmy od potwierdzenia Twojego numeru telefonu"
+      },
+      "form-label-country": "Kod kraju *",
+      "form-label-phone-number": "Numer telefonu *",
+      "form-label-phone-number-placeholder": "np. 123 456 789",
+      "form-label-email": "Email *",
+      "form-label-email-placeholder": "np. jan.kowalski@email.com",
+      "form-submit-button": "WYŚLIJ KOD LOGOWANIA",
+      "form-submit-button-loading": "WYSYŁANIE...",
+      "form-submit-button-signup": "WYŚLIJ KOD WERYFIKACYJNY"
+    },
     "ResumeSubscriptionButton": {
       "CTA-button": "Wznów teraz",
       "confirm-modal": {

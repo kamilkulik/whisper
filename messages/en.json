@@ -249,6 +249,20 @@
         "loading": "Canceling..."
       }
     },
+    "PhoneForm": {
+      "form-title": {
+        "login": "Login to your account",
+        "signup": "Let's start by verifying your phone number"
+      },
+      "form-label-country": "Country code *",
+      "form-label-phone-number": "Phone number *",
+      "form-label-phone-number-placeholder": "e.g. 123 456 789",
+      "form-label-email": "Email *",
+      "form-label-email-placeholder": "e.g. john.doe@email.com",
+      "form-submit-button": "SEND LOGIN CODE",
+      "form-submit-button-loading": "SENDING...",
+      "form-submit-button-signup": "SEND VERIFICATION CODE"
+    },
     "ResumeSubscriptionButton": {
       "CTA-button": "Resume now",
       "confirm-modal": {

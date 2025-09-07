@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { ValidationErrors } from "../_types";
 
 type PhoneFormProps = {
@@ -35,6 +36,7 @@ export function PhoneForm({
   handlePhoneSubmit,
   onToggleCountryDropdown,
 }: PhoneFormProps) {
+  const t = useTranslations("Components.PhoneForm");
   return (
     <>
       <div className="mb-8" data-oid="fv3gut-">
@@ -42,9 +44,7 @@ export function PhoneForm({
           className="text-2xl font-bold text-center text-white"
           data-oid="8cie_js"
         >
-          {isLoginMode
-            ? "Zaloguj się do swojego konta"
-            : "Zacznijmy od potwierdzenia Twojego numeru telefonu"}
+          {isLoginMode ? t("form-title.login") : t("form-title.signup")}
         </h3>
       </div>
       <form
@@ -61,7 +61,7 @@ export function PhoneForm({
                   className="block text-white font-medium mb-2 text-xl"
                   data-oid="lotbw.t"
                 >
-                  Kod kraju *
+                  {t("form-label-country")}
                 </label>
                 <div
                   className="relative flex items-center"
@@ -128,7 +128,7 @@ export function PhoneForm({
                   className="block text-white font-medium mb-2 text-xl"
                   data-oid="jits35v"
                 >
-                  Numer telefonu *
+                  {t("form-label-phone-number")}
                 </label>
                 <input
                   type="tel"
@@ -148,7 +148,7 @@ export function PhoneForm({
                       ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                       : "focus:ring-white/30"
                   }`}
-                  placeholder="np. 123 456 789"
+                  placeholder={t("form-label-phone-number-placeholder")}
                   data-oid="6a6jkxb"
                 />
               </div>
@@ -165,7 +165,7 @@ export function PhoneForm({
               htmlFor="email"
               className="block text-white font-medium mb-2 text-xl"
             >
-              Adres email *
+              {t("form-label-email")}
             </label>
             <input
               type="email"
@@ -183,7 +183,7 @@ export function PhoneForm({
                   ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                   : "focus:ring-white/30"
               }`}
-              placeholder="np. jan.kowalski@email.com"
+              placeholder={t("form-label-email-placeholder")}
             />
             {validationErrors.email && (
               <p className="mt-1 text-sm text-red-300">
@@ -199,10 +199,10 @@ export function PhoneForm({
           data-oid="yomb8ur"
         >
           {isSubmitting
-            ? "WYSYŁANIE..."
+            ? t("form-submit-button-loading")
             : isLoginMode
-            ? "WYŚLIJ KOD LOGOWANIA"
-            : "WYŚLIJ KOD WERYFIKACYJNY"}
+              ? t("form-submit-button")
+              : t("form-submit-button-signup")}
         </button>
       </form>
     </>
