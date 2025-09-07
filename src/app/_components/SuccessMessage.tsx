@@ -1,8 +1,11 @@
+import { useTranslations } from "next-intl";
+
 export function SuccessMessage({
   isLoginMode = false,
 }: {
   isLoginMode?: boolean;
 }) {
+  const t = useTranslations("Components.SuccessMessage");
   return (
     <div className="text-center space-y-6">
       <div className="flex justify-center">
@@ -24,12 +27,12 @@ export function SuccessMessage({
       </div>
       <div>
         <h3 className="text-2xl font-bold text-white mb-2">
-          {isLoginMode ? "Logowanie udane!" : "Numer potwierdzony!"}
+          {isLoginMode ? t("login-success") : t("signup-success")}
         </h3>
         <p className="text-white/80 text-lg">
           {isLoginMode
-            ? "Zostałeś pomyślnie zalogowany do swojego konta."
-            : "Twój numer telefonu został pomyślnie zweryfikowany."}
+            ? t("login-success-description")
+            : t("signup-success-description")}
         </p>
       </div>
     </div>

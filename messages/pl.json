@@ -240,6 +240,9 @@
       "form-submit-button": "WYŚLIJ",
       "form-submit-button-loading": "WYSYŁANIE..."
     },
+    "CtaButton": {
+      "button": "Zacznij teraz"
+    },
     "CancelSubscriptionButton": {
       "CTA-button": "Anuluj subskrypcję",
       "confirm-modal": {
@@ -276,6 +279,12 @@
     },
     "ReturnButton": {
       "return": "Powrót"
+    },
+    "SuccessMessage": {
+      "login-success": "Logowanie udane!",
+      "signup-success": "Numer telefonu potwierdzony!",
+      "login-success-description": "Zostałeś pomyślnie zalogowany do swojego konta.",
+      "signup-success-description": "Twój numer telefonu został pomyślnie zweryfikowany."
     }
   },
   "Shared": {
