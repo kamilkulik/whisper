@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 export function ConfirmationCodeGrid({
@@ -10,6 +11,7 @@ export function ConfirmationCodeGrid({
   const [code, setCode] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [timeLeft, setTimeLeft] = useState<number>(0);
+  const t = useTranslations("Components.ConfirmationCodeGrid");
 
   // Countdown timer effect
   useEffect(() => {
@@ -105,15 +107,15 @@ export function ConfirmationCodeGrid({
     <div className="space-y-6">
       {/* Countdown Timer */}
       <div className="text-center mb-4">
-        <p className="text-white/80 text-xl mb-2">Kod wygaśnie za:</p>
+        <p className="text-white/80 text-xl mb-2">{t("countdown-timer")}</p>
         <p className="text-white font-bold text-2xl">{formatTime(timeLeft)}</p>
       </div>
 
       <div className="text-center">
         <h3 className="text-xl font-bold text-white mb-2">
-          Wprowadź 6-cyfrowy kod
+          {t("code-input-title")}
         </h3>
-        <p className="text-white/80 text-lg">Wysłany na Twój numer telefonu</p>
+        <p className="text-white/80 text-lg">{t("code-input-description")}</p>
       </div>
 
       <div className="flex justify-center gap-3">

@@ -211,6 +211,11 @@
         "code-verification-error": "Wystąpił błąd podczas weryfikacji kodu."
       }
     },
+    "ConfirmationCodeGrid": {
+      "countdown-timer": "Kod wygaśnie za:",
+      "code-input-title": "Wprowadź 6-cyfrowy kod",
+      "code-input-description": "Wysłany na Twój numer telefonu"
+    },
     "ContactForm": {
       "form-validation-errors": {
         "phone-number": {

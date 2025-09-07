@@ -211,6 +211,11 @@
         "code-verification-error": "An error occurred while verifying the code."
       }
     },
+    "ConfirmationCodeGrid": {
+      "countdown-timer": "Code expires in:",
+      "code-input-title": "Enter 6-digit code",
+      "code-input-description": "Sent to your phone number"
+    },
     "ContactForm": {
       "form-validation-errors": {
         "phone-number": {
