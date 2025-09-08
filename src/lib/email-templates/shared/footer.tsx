@@ -13,7 +13,7 @@ export async function Footer() {
         target="_blank"
         style={footerLink}
       >
-        t("link-1")
+        {t("link-1")}
       </Link>
       {t("and")}
       <Link
@@ -21,7 +21,7 @@ export async function Footer() {
         target="_blank"
         style={footerLink}
       >
-        t("link-2")
+        {t("link-2")}
       </Link>
       .
     </Text>
