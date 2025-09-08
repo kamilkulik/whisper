@@ -255,6 +255,7 @@ export const POST = async (request: NextRequest) => {
         try {
           const trialSubscription = await createSubscription({
             created: new Date().getTime(),
+            expiryAdjustmentInMilis: 0,
             productType: SubscriptionType.TRIAL,
             subscriptionId: "",
             user: savedUser,

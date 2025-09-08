@@ -9,7 +9,7 @@ import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useTranslations, useLocale } from "next-intl";
 
 interface PricingSectionProps {
-  onGetStarted?: (product: SubscriptionType) => () => void;
+  onGetStarted?: (product: SubscriptionType) => void;
   showTrial?: boolean;
 }
 
@@ -131,7 +131,7 @@ export default function PricingSection(props: PricingSectionProps) {
                 {/* Button Section */}
                 <div className="px-8 pb-8">
                   <button
-                    onClick={handleClick(SubscriptionType.TRIAL)}
+                    onClick={() => handleClick(SubscriptionType.TRIAL)}
                     className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     {t("pricing-section.trial-card.CTA-button")}
@@ -176,7 +176,7 @@ export default function PricingSection(props: PricingSectionProps) {
               {/* Button Section */}
               <div className="px-8 pb-8">
                 <button
-                  onClick={handleClick(SubscriptionType.ONE_TIME)}
+                  onClick={() => handleClick(SubscriptionType.ONE_TIME)}
                   className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   {t("pricing-section.one-time-purchase-card.CTA-button")}
@@ -223,7 +223,7 @@ export default function PricingSection(props: PricingSectionProps) {
               {/* Button Section */}
               <div className="px-8 pb-8">
                 <button
-                  onClick={handleClick(SubscriptionType.MONTHLY)}
+                  onClick={() => handleClick(SubscriptionType.MONTHLY)}
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   {t("pricing-section.subscription-card.CTA-button")}

@@ -72,6 +72,7 @@ export async function handleSubscriptionCreated(
 
   // create premium subscription
   const subscriptionData = subscriptionFactory({
+    expiryAdjustmentInMilis: 0,
     created: created * 1000,
     productType,
     subscriptionId: eventData.id,

@@ -108,7 +108,7 @@ export default function Home() {
     { src: "/szept_4.png", alt: "Wieczorny Szept Image 4" },
   ];
 
-  const handleStartJourneyWithScroll = (product: SubscriptionType) => () => {
+  const handleStartJourneyWithScroll = (product: SubscriptionType) => {
     console.log("Start Journey with scroll clicked!", product); // Debug log
 
     // Set the selected product
