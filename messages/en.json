@@ -1,7 +1,7 @@
 {
   "LandingPage": {
     "hero": {
-      "brand": "EVENING WHISPER",
+      "brand": "SECRET PROJECT",
       "title-1": "Receive daily whispers that ",
       "title-2": "warm",
       "title-3": "your heart — directly to your phone.",
@@ -150,7 +150,9 @@
         "canceled": "Canceled",
         "renewes": "Renewes",
         "expires": "Expires"
-      }
+      },
+      "CTA-button-extend": "Extend now",
+      "CTA-button-buynow": "Buy now"
     },
     "settings": {
       "title": "Settings",
@@ -226,7 +228,14 @@
           "min": "Email is required",
           "max": "Email is too long",
           "email": "Invalid email format"
-        }
+        },
+        "form-submit": "Please fix errors in the form.",
+        "form-submit-success": "Information saved! Redirecting...",
+        "form-submit-checkout": "Information saved! Redirecting to checkout...",
+        "form-submit-checkout-error": "An error occurred while creating the checkout session.",
+        "form-submit-error": "An error occurred while saving your information.",
+        "form-submit-terms-of-service": "You must accept the terms of service to continue.",
+        "validation-error": "Validation error"
       },
       "form-title": "We need a few more details",
       "form-label-name": "Name *",
@@ -306,6 +315,19 @@
       "mexico": "Mexico",
       "chile": "Chile",
       "italy": "Italy"
+    }
+  },
+  "EmailTemplates": {
+    "ConfirmCodeViaEmail": {
+      "preview": "One-time verification code",
+      "title": "Confirm your verification code",
+      "paragraph-1": "Thank you for starting your registration with Evening Whisper. To confirm it’s really you, please enter the verification code below. If you are not creating an account, simply ignore this message.",
+      "verification-code-title": "One-time verification code",
+      "verification-code-disclaimer": "This code is valid for 2 minutes",
+      "disclaimer": "Evening Whisper will never send emails asking you to disclose or verify your password, credit card, or bank account details.",
+      "footer": "This message was automatically generated and sent by Evening Whisper.",
+      "link-1": "terms of service",
+      "link-2": "privacy policy"
     }
   }
 }

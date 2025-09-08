@@ -50,6 +50,8 @@ export default function ContactForm({
   const { language, countryCode, isLoaded } = useLocale();
   const t = useTranslations("Components.ContactForm");
 
+  console.log(selectedProduct);
+
   const [formData, setFormData] = useState<
     GatheredUserData & { acceptTerms: boolean }
   >({
@@ -115,7 +117,7 @@ export default function ContactForm({
       if (error instanceof z.ZodError) {
         return error.issues[0]?.message;
       }
-      return "Błąd walidacji";
+      return t("form-validation-errors.validation-error");
     }
   };
 
@@ -168,7 +170,7 @@ export default function ContactForm({
 
     // Validate terms and conditions acceptance
     if (!formData.acceptTerms) {
-      setMessage("Musisz zaakceptować regulamin usługi, aby kontynuować.");
+      setMessage(t("form-submit-terms-of-service"));
       return;
     }
 
@@ -193,7 +195,7 @@ export default function ContactForm({
     // If there are validation errors, show them and don't submit
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      setMessage("Proszę poprawić błędy w formularzu.");
+      setMessage(t("form-validation-errors.form-submit"));
       console.log(errors);
       return;
     }
@@ -238,19 +240,19 @@ export default function ContactForm({
 
         // redirect to the pricing page
         if (selectedProduct === null) {
-          setMessage("Informacje zapisane! Przekierowywanie...");
+          setMessage(t("form-submit-success"));
           setTimeout(() => {
             window.location.href = "/subscribe";
           }, 1500);
           // If it's a trial, redirect to trial success page
         } else if (selectedProduct === SubscriptionType.TRIAL) {
-          setMessage("Informacje zapisane! Przekierowywanie...");
+          setMessage(t("form-submit-success"));
           setTimeout(() => {
             window.location.href = "/trial-success";
           }, 1500);
         } else {
           // For other products, redirect to Stripe checkout
-          setMessage("Informacje zapisane! Przekierowywanie do kasy...");
+          setMessage(t("form-submit-checkout"));
           const checkoutSessionsPayload: CheckoutSessionsPayload = {
             productType: selectedProduct || SubscriptionType.TRIAL,
             email: sanitizedData.email,
@@ -271,18 +273,18 @@ export default function ContactForm({
                   window.location.href = url;
                 }
               } else {
-                setMessage("Wystąpił błąd podczas tworzenia sesji płatności.");
+                setMessage(t("form-submit-checkout-error"));
               }
             } catch (error) {
-              setMessage("Wystąpił błąd podczas tworzenia sesji płatności.");
+              setMessage(t("form-submit-checkout-error"));
             }
           }, 1500);
         }
       } else {
-        setMessage(data.error || "Wystąpił błąd podczas wysyłania wiadomości.");
+        setMessage(data.error || t("form-submit-error"));
       }
     } catch (error) {
-      setMessage("Wystąpił błąd podczas wysyłania wiadomości.");
+      setMessage(t("form-submit-error"));
     } finally {
       setIsSubmitting(false);
     }

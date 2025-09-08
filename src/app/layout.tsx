@@ -12,7 +12,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Wieczorny Szept 🌙",
+  title: "Secret Project 🌙", // TODO change to the proper title
   description: "Otrzymuj codzienne szepty, które ogrzewają serce.",
 };
 

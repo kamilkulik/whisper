@@ -12,19 +12,21 @@ import {
   Text,
 } from "@react-email/components";
 import { ConfirmationCodeViaEmailProps } from "./types";
+import { getTranslations } from "next-intl/server";
 
 // const baseUrl = process.env.VERCEL_URL
 //   ? `https://${process.env.VERCEL_URL}`
 //   : "";
 
-export function ConfirmCodeViaEmail({
+export async function ConfirmCodeViaEmail({
   verificationCode,
 }: ConfirmationCodeViaEmailProps) {
+  const t = await getTranslations("EmailTemplates.ConfirmCodeViaEmail");
   return (
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Jednorazowy kod weryfikacyjny</Preview>
+        <Preview>{t("preview")}</Preview>
         <Container style={container}>
           <Section style={coverSection}>
             <Section style={imageSection}>
@@ -36,40 +38,30 @@ export function ConfirmCodeViaEmail({
               /> */}
             </Section>
             <Section style={upperSection}>
-              <Heading style={h1}>Potwierdź kod weryfikacyjny</Heading>
-              <Text style={mainText}>
-                Dziękujemy za rozpoczęcie rejestracji w serwisie Wieczorny
-                Szept. Aby potwierdzić, że to Ty, wprowadź poniższy kod
-                weryfikacyjny. Jeśli nie zakładasz konta, zignoruj tę wiadomość.
-              </Text>
+              <Heading style={h1}>{t("title")}</Heading>
+              <Text style={mainText}>{t("paragraph-1")}</Text>
               <Section style={verificationSection}>
-                <Text style={verifyText}>Jednorazowy kod weryfikacyjny</Text>
+                <Text style={verifyText}>{t("verification-code-title")}</Text>
 
                 <Text style={codeText}>{verificationCode}</Text>
                 <Text style={validityText}>
-                  (ten kod jest ważny przez 2 minuty)
+                  {t("verification-code-disclaimer")}
                 </Text>
               </Section>
             </Section>
             <Hr />
             <Section style={lowerSection}>
-              <Text style={cautionText}>
-                Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których
-                prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub
-                numeru konta bankowego.
-              </Text>
+              <Text style={cautionText}>{t("disclaimer")}</Text>
             </Section>
           </Section>
           <Text style={footerText}>
-            {
-              "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept. Nasz "
-            }
+            {t("footer")}
             <Link
               href="https://wieczornyszept.pl/regulamin"
               target="_blank"
               style={link}
             >
-              regulamin
+              {t("link-1")}
             </Link>
             {" oraz "}
             <Link
@@ -77,7 +69,7 @@ export function ConfirmCodeViaEmail({
               target="_blank"
               style={link}
             >
-              polityka prywatności
+              {t("link-2")}
             </Link>
             .
           </Text>

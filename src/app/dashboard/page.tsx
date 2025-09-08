@@ -211,8 +211,8 @@ export default async function DashboardPage() {
                     className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-2xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
                   >
                     {subscription?.status === SubscriptionStatus.ACTIVE
-                      ? "Przedłuż teraz"
-                      : "Kup teraz"}
+                      ? t("subscription-card.CTA-button-extend")
+                      : t("subscription-card.CTA-button-buynow")}
                   </a>
                   <div className="mx-8 border-t border-white/20"></div>
                   {subscription?.type === SubscriptionType.ONE_TIME &&

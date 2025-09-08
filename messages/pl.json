@@ -1,7 +1,7 @@
 {
   "LandingPage": {
     "hero": {
-      "brand": "WIECZORNY SZEPT",
+      "brand": "SECRET PROJECT",
       "title-1": "Otrzymuj codzienny szept, który ",
       "title-2": "ogrzeje",
       "title-3": "Twoje serce — prosto na Twój telefon.",
@@ -150,7 +150,9 @@
         "canceled": "Anulowana",
         "renewes": "Odnawia się",
         "expires": "Wygasa"
-      }
+      },
+      "CTA-button-extend": "Przedłuż teraz",
+      "CTA-button-buynow": "Kup teraz"
     },
     "settings": {
       "title": "Ustawienia",
@@ -160,7 +162,7 @@
     "logout": "Wyloguj się"
   },
   "NavigationBar": {
-    "title": "WIECZORNY SZEPT"
+    "title": "SECRET PROJECT"
   },
   "SuccessPage": {},
   "TrialSuccessPage": {},
@@ -226,7 +228,14 @@
           "min": "Email jest wymagany",
           "max": "Email jest za długi",
           "email": "Nieprawidłowy format email"
-        }
+        },
+        "form-submit": "Proszę poprawić błędy w formularzu.",
+        "form-submit-success": "Informacje zapisane! Przekierowywanie...",
+        "form-submit-checkout": "Informacje zapisane! Przekierowywanie do kasy...",
+        "form-submit-checkout-error": "Wystąpił błąd podczas tworzenia sesji płatności.",
+        "form-submit-error": "Wystąpił błąd podczas zapisywania informacji.",
+        "form-submit-terms-of-service": "Musisz zaakceptować regulamin usługi, aby kontynuować.",
+        "validation-error": "Błąd walidacji"
       },
       "form-title": "Potrzebujemy jeszcze kilku informacji",
       "form-label-name": "Imię *",
@@ -306,6 +315,19 @@
       "mexico": "Meksyk",
       "chile": "Chile",
       "italy": "Włochy"
+    }
+  },
+  "EmailTemplates": {
+    "ConfirmCodeViaEmail": {
+      "preview": "Jednorazowy kod weryfikacyjny",
+      "title": "Potwierdź kod weryfikacyjny",
+      "paragraph-1": "Dziękujemy za rozpoczęcie rejestracji w serwisie Wieczorny Szept. Aby potwierdzić, że to Ty, wprowadź poniższy kod weryfikacyjny. Jeśli nie zakładasz konta, zignoruj tę wiadomość.",
+      "verification-code-title": "Jednorazowy kod weryfikacyjny",
+      "verification-code-disclaimer": "Ten kod jest ważny przez 2 minuty",
+      "disclaimer": "Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub numeru konta bankowego.",
+      "footer": "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept.",
+      "link-1": "regulamin",
+      "link-2": "polityka prywatności"
     }
   }
 }
