@@ -76,7 +76,7 @@ export default async function Success({
                 {t("copy-1")}{" "}
                 {`${
                   new Date() > new Date("20:59") ? t("tomorrow") : t("today")
-                } {t("evening")}.`}
+                } ${t("evening")}.`}
               </p>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">

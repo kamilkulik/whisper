@@ -9,7 +9,7 @@ import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useTranslations, useLocale } from "next-intl";
 
 interface PricingSectionProps {
-  onGetStarted?: (productType?: SubscriptionType) => void;
+  onGetStarted?: (product: SubscriptionType) => () => void;
   showTrial?: boolean;
 }
 
@@ -48,22 +48,30 @@ export default function PricingSection(props: PricingSectionProps) {
     fetchShowTrial();
   }, []);
 
-  const handleClick = (product: SubscriptionType) => async () => {
-    const userEmailFromSessionCookie = await userEmailFromCookie();
-    console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
+  const handleClickWithoutOnGetStarted =
+    (product: SubscriptionType) => async () => {
+      const userEmailFromSessionCookie = await userEmailFromCookie();
+      console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
 
-    if (userEmailFromSessionCookie) {
-      const result = await navigateToCheckout(
-        product,
-        userEmailFromSessionCookie
-      );
-      if (result?.success) {
-        router.push("/trial-success");
+      if (userEmailFromSessionCookie) {
+        const result = await navigateToCheckout(
+          product,
+          userEmailFromSessionCookie
+        );
+        if (result?.success) {
+          router.push("/trial-success");
+        }
+      } else {
+        router.push(`/?modal=phone`, { scroll: false });
       }
-    } else {
-      router.push(`/?modal=phone`, { scroll: false });
-    }
-  };
+    };
+
+  let handleClick;
+  if (props.onGetStarted) {
+    handleClick = props.onGetStarted;
+  } else {
+    handleClick = handleClickWithoutOnGetStarted;
+  }
 
   return (
     <div className="relative py-20">

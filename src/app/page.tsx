@@ -108,11 +108,11 @@ export default function Home() {
     { src: "/szept_4.png", alt: "Wieczorny Szept Image 4" },
   ];
 
-  const handleStartJourneyWithScroll = (productType?: SubscriptionType) => {
-    console.log("Start Journey with scroll clicked!", productType); // Debug log
+  const handleStartJourneyWithScroll = (product: SubscriptionType) => () => {
+    console.log("Start Journey with scroll clicked!", product); // Debug log
 
     // Set the selected product
-    setSelectedProduct(productType || SubscriptionType.TRIAL);
+    setSelectedProduct(product || SubscriptionType.TRIAL);
 
     // Navigate to modal without scrolling to top
     router.push(`/?modal=phone`, { scroll: false });
