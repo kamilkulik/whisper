@@ -338,5 +338,31 @@
       "link-1": "regulamin",
       "link-2": "polityka prywatności"
     }
+  },
+  "API": {
+    "users": {
+      "POST": {
+        "trial-used": "Błąd. Z okresu próbnego można skorzystać tylko raz"
+      }
+    },
+    "SHARED": {
+      "PUT": {
+        "success": "Dane zostały zaktualizowane pomyślnie",
+        "error": "Wystąpił błąd podczas aktualizacji danych"
+      },
+      "POST": {
+        "success": "Twoje dane zostały pomyślnie zapisane",
+        "error": "Wystąpił błąd podczas zapisywania Twoich danych"
+      }
+    },
+    "unauthorized": "Niedozwolone - Brak ważnej sesji",
+    "form-validation-errors": {
+      "all-fields-required": "Wszystkie pola są wymagane",
+      "missing-fields": "Przynajmniej jedno pole musi być wypełnione",
+      "invalid-email": "Nieprawidłowy format email",
+      "email-already-taken": "Nie możesz użyć tego emaila",
+      "invalid-phone-number": "Nieprawidłowy format numeru telefonu",
+      "phone-number-already-taken": "Nie możesz użyć tego numeru telefonu"
+    }
   }
 }

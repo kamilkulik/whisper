@@ -6,6 +6,7 @@ import { sessionIdCache } from "@/lib/sessionIdCache";
 import { csfrProtection } from "../utils/csfrProtection";
 import { createSubscription } from "../payments/utils/createSubscription";
 import { generateOneTimeUrl } from "../utils/oneTimeJwt";
+import { getTranslations } from "next-intl/server";
 
 export type UserData = Omit<
   User,
@@ -20,11 +21,14 @@ export type UserData = Omit<
 >;
 
 export const PUT = async (request: NextRequest) => {
+  const t = await getTranslations("API.users.PUT");
+  const tShared = await getTranslations("API.SHARED");
+
   try {
     const sessionId = request.cookies.get("sessionId")?.value;
     if (!sessionId) {
       return NextResponse.json(
-        { error: "Unauthorized - No valid session" },
+        { error: tShared("unauthorized") },
         { status: 401 }
       );
     }
@@ -36,7 +40,7 @@ export const PUT = async (request: NextRequest) => {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Unauthorized - No valid session" },
+        { error: tShared("unauthorized") },
         { status: 401 }
       );
     }
@@ -47,7 +51,7 @@ export const PUT = async (request: NextRequest) => {
     // Validate that at least one field is provided
     if (!email && !phoneNumber && !messageLanguage) {
       return NextResponse.json(
-        { error: "Przynajmniej jedno pole musi być wypełnione" },
+        { error: tShared("form-validation-errors.missing-fields") },
         { status: 400 }
       );
     }
@@ -62,7 +66,7 @@ export const PUT = async (request: NextRequest) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return NextResponse.json(
-          { error: "Nieprawidłowy format email" },
+          { error: tShared("form-validation-errors.invalid-email") },
           { status: 400 }
         );
       }
@@ -74,7 +78,7 @@ export const PUT = async (request: NextRequest) => {
 
       if (existingEmailUser && existingEmailUser.id !== user.id) {
         return NextResponse.json(
-          { error: "Nie mozesz uzyc tego emaila" },
+          { error: tShared("form-validation-errors.email-already-taken") },
           { status: 400 }
         );
       }
@@ -92,7 +96,7 @@ export const PUT = async (request: NextRequest) => {
         cleanPhone.length > 18
       ) {
         return NextResponse.json(
-          { error: "Nieprawidłowy format numeru telefonu" },
+          { error: tShared("form-validation-errors.invalid-phone-number") },
           { status: 400 }
         );
       }
@@ -105,7 +109,7 @@ export const PUT = async (request: NextRequest) => {
       if (existingPhoneUser && existingPhoneUser.id !== user.id) {
         return NextResponse.json(
           {
-            error: "Nie mozesz uzyc tego numeru telefonu",
+            error: tShared("form-validation-errors.phone-number-already-taken"),
           },
           { status: 400 }
         );
@@ -126,24 +130,24 @@ export const PUT = async (request: NextRequest) => {
     });
 
     return NextResponse.json(
-      { message: "Dane zostały zaktualizowane pomyślnie" },
+      { message: tShared("PUT.success") },
       { status: 200 }
     );
   } catch (error) {
     console.error("[ users PUT ] Error updating user data:", error);
-    return NextResponse.json(
-      { error: "Wystąpił błąd podczas aktualizacji danych" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: tShared("PUT.error") }, { status: 500 });
   }
 };
 
 export const POST = async (request: NextRequest) => {
+  const t = await getTranslations("API.users.POST");
+  const tShared = await getTranslations("API.SHARED");
+
   try {
     const sessionId = request.cookies.get("sessionId")?.value;
     if (!sessionId) {
       return NextResponse.json(
-        { error: "Unauthorized - No valid session" },
+        { error: tShared("unauthorized") },
         { status: 401 }
       );
     }
@@ -155,7 +159,7 @@ export const POST = async (request: NextRequest) => {
 
     if (cachedSessionId !== sessionId) {
       return NextResponse.json(
-        { error: "Unauthorized - No valid session" },
+        { error: tShared("unauthorized") },
         { status: 401 }
       );
     }
@@ -163,7 +167,7 @@ export const POST = async (request: NextRequest) => {
     // Validate required fields
     if (!body.phoneNumber || !body.email || !body.name) {
       return NextResponse.json(
-        { error: "Wszystkie pola są wymagane" },
+        { error: tShared("form-validation-errors.all-fields-required") },
         { status: 400 }
       );
     }
@@ -172,7 +176,7 @@ export const POST = async (request: NextRequest) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(body.email)) {
       return NextResponse.json(
-        { error: "Nieprawidłowy format email" },
+        { error: tShared("form-validation-errors.invalid-email") },
         { status: 400 }
       );
     }
@@ -186,7 +190,7 @@ export const POST = async (request: NextRequest) => {
       cleanPhone.length > 18
     ) {
       return NextResponse.json(
-        { error: "Nieprawidłowy format numeru telefonu" },
+        { error: tShared("form-validation-errors.invalid-phone-number") },
         { status: 400 }
       );
     }
@@ -212,10 +216,7 @@ export const POST = async (request: NextRequest) => {
         !body.premium;
 
       if (triesToUseTrialAgain) {
-        return NextResponse.json(
-          { error: "Bład. Z okresu próbnego można skorzystać tylko raz" },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: t("trial-used") }, { status: 400 });
       }
 
       // Update existing user
@@ -301,14 +302,11 @@ export const POST = async (request: NextRequest) => {
     });
 
     return NextResponse.json(
-      { message: "Wiadomość została pomyślnie zapisana" },
+      { message: tShared("POST.success") },
       { status: 200 }
     );
   } catch (error) {
     console.error("[ users POST ] Error processing user data:", error);
-    return NextResponse.json(
-      { error: "Wystąpił błąd podczas przetwarzania wiadomości" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: tShared("POST.error") }, { status: 500 });
   }
 };
