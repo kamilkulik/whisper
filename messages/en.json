@@ -327,6 +327,14 @@
     }
   },
   "EmailTemplates": {
+    "SHARED": {
+      "disclaimer": "Evening Whisper will never send emails asking you to disclose or verify your password, credit card, or bank account details.",
+      "footer": "This message was automatically generated and sent by Evening Whisper.",
+      "our": "Our ",
+      "link-1": "terms of service",
+      "and": "and ",
+      "link-2": "privacy policy"
+    },
     "ConfirmCodeViaEmail": {
       "preview": "One-time verification code",
       "title": "Confirm your verification code",
@@ -337,6 +345,21 @@
       "footer": "This message was automatically generated and sent by Evening Whisper.",
       "link-1": "terms of service",
       "link-2": "privacy policy"
+    },
+    "Welcome": {
+      "greeting": "Dear Reader,",
+      "paragraph-1-trial": "We are grateful for your trust and for starting your trial with Evening Whisper.",
+      "paragraph-1-one-time": "We are grateful for your trust and for beginning your 30-day one-off subscription with Evening Whisper.",
+      "paragraph-1-monthly": "We are grateful for your trust and for starting your subscription with Evening Whisper.",
+      "paragraph-2-trial": "From today, every evening at 20:59 for the next 7 days, you will receive a message to warm your heart and bring you a moment of peace.",
+      "paragraph-2-one-time": "From today, every evening at 20:59 for the next 30 days, you will receive a message to warm your heart and bring you a moment of peace.",
+      "paragraph-2-monthly": "From today, every evening at 20:59, you will receive a message to warm your heart and bring you a moment of peace.",
+      "dashboard-link": "User Dashboard",
+      "CTA-copy-trial": "To continue receiving messages after your trial ends, you’ll need to purchase a paid subscription. You can do this in the",
+      "CTA-copy-monthly": "You can manage your subscription at any time in the",
+      "thank-you": "Thank you for being with us. May every whisper be a source of smiles and reflection.",
+      "signature": "With warm regards,",
+      "signature-team": "The Evening Whisper Team 🌙"
     }
   },
   "API": {

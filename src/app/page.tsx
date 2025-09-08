@@ -108,15 +108,16 @@ export default function Home() {
     { src: "/szept_4.png", alt: "Wieczorny Szept Image 4" },
   ];
 
-  const handleStartJourneyWithScroll = (product: SubscriptionType) => {
-    console.log("Start Journey with scroll clicked!", product); // Debug log
+  const handleStartJourneyWithScroll =
+    (product: SubscriptionType) => async () => {
+      console.log("Start Journey with scroll clicked!", product); // Debug log
 
-    // Set the selected product
-    setSelectedProduct(product || SubscriptionType.TRIAL);
+      // Set the selected product
+      setSelectedProduct(product);
 
-    // Navigate to modal without scrolling to top
-    router.push(`/?modal=phone`, { scroll: false });
-  };
+      // Navigate to modal without scrolling to top
+      router.push(`/?modal=phone`, { scroll: false });
+    };
 
   const handleNavigateToPricing = () => {
     // Smooth scroll to the pricing section

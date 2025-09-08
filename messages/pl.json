@@ -327,16 +327,35 @@
     }
   },
   "EmailTemplates": {
+    "SHARED": {
+      "disclaimer": "Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub numeru konta bankowego.",
+      "footer": "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept.",
+      "our": "Nasz ",
+      "link-1": "regulamin",
+      "and": "oraz ",
+      "link-2": "polityka prywatności"
+    },
     "ConfirmCodeViaEmail": {
       "preview": "Jednorazowy kod weryfikacyjny",
       "title": "Potwierdź kod weryfikacyjny",
       "paragraph-1": "Dziękujemy za rozpoczęcie rejestracji w serwisie Wieczorny Szept. Aby potwierdzić, że to Ty, wprowadź poniższy kod weryfikacyjny. Jeśli nie zakładasz konta, zignoruj tę wiadomość.",
       "verification-code-title": "Jednorazowy kod weryfikacyjny",
-      "verification-code-disclaimer": "Ten kod jest ważny przez 2 minuty",
-      "disclaimer": "Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub numeru konta bankowego.",
-      "footer": "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept.",
-      "link-1": "regulamin",
-      "link-2": "polityka prywatności"
+      "verification-code-disclaimer": "Ten kod jest ważny przez 2 minuty"
+    },
+    "Welcome": {
+      "greeting": "Droga Czytelniczo, Drogi Czytelniku,",
+      "paragraph-1-trial": "Cieszymy się z okazanego nam zaufania i rozpoczęcia okresu próbnego Wieczornego Szeptu.",
+      "paragraph-1-one-time": "Cieszymy się z okazanego nam zaufania i rozpoczęcia 30 dniowej, jednorazowej subskrypcji Wieczornego Szeptu.",
+      "paragraph-1-monthly": "Cieszymy się z okazanego nam zaufania i rozpoczęcia subskrypcji Wieczornego Szeptu.",
+      "paragraph-2-trial": "Od dziś, każdego wieczoru o 20:59 przez kolejne 7 dni, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju.",
+      "paragraph-2-one-time": "Od dziś, każdego wieczoru o 20:59 przez kolejne 30 dni, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju.",
+      "paragraph-2-monthly": "Od dziś, każdego wieczoru o 20:59, otrzymasz wiadomość, która ogrzeje Twoje serce i przyniesie chwilę spokoju.",
+      "dashboard-link": "Panelu Użytkownika",
+      "CTA-copy-trial": "Aby kontynuować otrzymywanie wiadomości po upływie okresu próbnego, musisz dokonać zakupu płatnej subskrypcji. Możesz to zrobić w",
+      "CTA-copy-monthly": "Twoją subskrypcją możesz zarządzać w dowolnym momencie w",
+      "thank-you": "Dziękujemy, że jesteś z nami. Niech każdy szept będzie dla Ciebie źródłem uśmiechu i refleksji.",
+      "signature": "Z serdecznymi pozdrowieniami,",
+      "signature-team": "Zespół Wieczornego Szeptu 🌙"
     }
   },
   "API": {

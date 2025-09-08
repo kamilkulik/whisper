@@ -85,7 +85,7 @@ export async function sendEmail(props: SendEmailProps) {
 
   switch (template) {
     case "welcome":
-      templateToUse = WelcomeEmail({
+      templateToUse = await WelcomeEmail({
         userName: props.userName,
         subscriptionType: props.subscriptionType,
       });
@@ -97,7 +97,8 @@ export async function sendEmail(props: SendEmailProps) {
       });
       break;
     case "confirmation-code-via-email":
-      templateToUse = ConfirmCodeViaEmail({
+      console.log("Verification code", props.verificationCode);
+      templateToUse = await ConfirmCodeViaEmail({
         verificationCode: props.verificationCode ?? "421341",
       });
       break;
