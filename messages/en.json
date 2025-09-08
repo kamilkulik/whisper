@@ -162,10 +162,19 @@
     "logout": "Logout"
   },
   "NavigationBar": {
-    "title": "EVENING WHISPER"
+    "title": "SECRET PROJECT"
   },
-  "SuccessPage": {},
-  "TrialSuccessPage": {},
+  "SuccessPage": {
+    "title-1": "Thank you for",
+    "title-2": "subscribing!",
+    "copy-1": "Your subscription has been successfully activated. The first whisper will be sent to your phone number",
+    "today": "this very",
+    "tomorrow": "tomorrow",
+    "evening": "evening at 20:59",
+    "email-confirmation": "The email confirmation has been sent to your email address",
+    "contact-us": "If you have any questions, contact us:",
+    "return-to-home": "Return to home"
+  },
   "UserSettingsPage": {
     "title": "User Settings",
     "email": "Email",
@@ -228,15 +237,15 @@
           "min": "Email is required",
           "max": "Email is too long",
           "email": "Invalid email format"
-        },
-        "form-submit": "Please fix errors in the form.",
-        "form-submit-success": "Information saved! Redirecting...",
-        "form-submit-checkout": "Information saved! Redirecting to checkout...",
-        "form-submit-checkout-error": "An error occurred while creating the checkout session.",
-        "form-submit-error": "An error occurred while saving your information.",
-        "form-submit-terms-of-service": "You must accept the terms of service to continue.",
-        "validation-error": "Validation error"
+        }
       },
+      "form-submit": "Please fix errors in the form.",
+      "form-submit-success": "Information saved! Redirecting...",
+      "form-submit-checkout": "Information saved! Redirecting to checkout...",
+      "form-submit-checkout-error": "An error occurred while creating the checkout session.",
+      "form-submit-error": "An error occurred while saving your information.",
+      "form-submit-terms-of-service": "You must accept the terms of service to continue.",
+      "validation-error": "Validation error",
       "form-title": "We need a few more details",
       "form-label-name": "Name *",
       "form-placeholder-name": "Enter your name",

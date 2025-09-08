@@ -164,8 +164,17 @@
   "NavigationBar": {
     "title": "SECRET PROJECT"
   },
-  "SuccessPage": {},
-  "TrialSuccessPage": {},
+  "SuccessPage": {
+    "title-1": "Dziękujemy za",
+    "title-2": "subskrypcję!",
+    "copy-1": "Twoja subskrypcja została pomyślnie aktywowana. Pierwszy szept zostanie wysłany na Twój numer telefonu",
+    "today": "dzisiaj",
+    "tomorrow": "jutro",
+    "evening": "wieczorem o 20:59",
+    "email-confirmation": "Email potwierdzający został wysłany na adres:",
+    "contact-us": "Jeśli masz pytania, skontaktuj się z nami:",
+    "return-to-home": "Powrót do strony głównej"
+  },
   "UserSettingsPage": {
     "title": "Ustawienia Użytkownika",
     "email": "Email",
@@ -228,15 +237,15 @@
           "min": "Email jest wymagany",
           "max": "Email jest za długi",
           "email": "Nieprawidłowy format email"
-        },
-        "form-submit": "Proszę poprawić błędy w formularzu.",
-        "form-submit-success": "Informacje zapisane! Przekierowywanie...",
-        "form-submit-checkout": "Informacje zapisane! Przekierowywanie do kasy...",
-        "form-submit-checkout-error": "Wystąpił błąd podczas tworzenia sesji płatności.",
-        "form-submit-error": "Wystąpił błąd podczas zapisywania informacji.",
-        "form-submit-terms-of-service": "Musisz zaakceptować regulamin usługi, aby kontynuować.",
-        "validation-error": "Błąd walidacji"
+        }
       },
+      "form-submit": "Proszę poprawić błędy w formularzu.",
+      "form-submit-success": "Informacje zapisane! Przekierowywanie...",
+      "form-submit-checkout": "Informacje zapisane! Przekierowywanie do kasy...",
+      "form-submit-checkout-error": "Wystąpił błąd podczas tworzenia sesji płatności.",
+      "form-submit-error": "Wystąpił błąd podczas zapisywania informacji.",
+      "form-submit-terms-of-service": "Musisz zaakceptować regulamin usługi, aby kontynuować.",
+      "validation-error": "Błąd walidacji",
       "form-title": "Potrzebujemy jeszcze kilku informacji",
       "form-label-name": "Imię *",
       "form-placeholder-name": "Wpisz swoje imię",

@@ -16,6 +16,7 @@ export async function handleTrialSubscription(userEmail: string) {
     // in a single transaction create trial sub and update user
     // use nested writes
     const subscriptionData = subscriptionFactory({
+      expiryAdjustmentInMilis: 0,
       created: new Date().getTime(),
       productType: SubscriptionType.TRIAL,
       subscriptionId: "",

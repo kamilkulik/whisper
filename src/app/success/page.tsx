@@ -66,23 +66,22 @@ export default async function Success({
             {/* Success Message */}
             <div className="space-y-6">
               <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-                Dziękujemy za{" "}
+                {t("title-1")}{" "}
                 <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  subskrypcję!
+                  {t("title-2")}
                 </span>
               </h1>
 
               <p className="text-xl text-blue-200 leading-relaxed">
-                Twoja subskrypcja została pomyślnie aktywowana. Pierwszy szept
-                zostanie wysłany na Twój numer telefonu{" "}
+                {t("copy-1")}{" "}
                 {`${
-                  new Date() > new Date("20:59") ? "jutro" : "dziś"
-                } wieczorem o 20:59.`}
+                  new Date() > new Date("20:59") ? t("tomorrow") : t("today")
+                } {t("evening")}.`}
               </p>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <p className="text-white text-lg">
-                  Email potwierdzający został wysłany na adres:{" "}
+                  {t("email-confirmation")}{" "}
                   <span className="font-semibold text-blue-200">
                     {customerEmail}
                   </span>
@@ -90,7 +89,7 @@ export default async function Success({
               </div>
 
               <p className="text-white/80 text-sm">
-                Jeśli masz pytania, skontaktuj się z nami:{" "}
+                {t("contact-us")}{" "}
                 <a
                   href="mailto:kontakt@wieczornyszept.pl"
                   className="text-blue-300 hover:text-blue-200 underline transition-colors"
@@ -106,7 +105,7 @@ export default async function Success({
                 href="/"
                 className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-semibold px-8 py-4 rounded-lg text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                Powrót do strony głównej
+                {t("return-to-home")}
               </a>
             </div>
           </div>
