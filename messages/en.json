@@ -170,6 +170,11 @@
     },
     "logout": "Logout"
   },
+  "NavigationBar": {
+    "title": "EVENING WHISPER"
+  },
+  "SuccessPage": {},
+  "TrialSuccessPage": {},
   "UserSettingsPage": {
     "title": "User Settings",
     "email": "Email",

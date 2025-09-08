@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
+import { getTranslations } from "next-intl/server";
+import NavigationBar from "../_components/NavigationBar";
 
 export default async function Success({
   searchParams,
@@ -10,6 +12,8 @@ export default async function Success({
 
   if (!session_id)
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
+
+  const t = await getTranslations("SuccessPage");
 
   // TODO is this safe?
   const { status, customer_details } = await stripe.checkout.sessions.retrieve(
@@ -35,16 +39,7 @@ export default async function Success({
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-3xl"></div>
         </div>
 
-        {/* Navigation Bar */}
-        <nav className="fixed top-0 left-0 right-0 z-[200] bg-black/20 backdrop-blur-md shadow-lg">
-          <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-            <div className="flex items-center space-x-8">
-              <div className="text-white font-bold text-xl">
-                WIECZORNY SZEPT 🌙
-              </div>
-            </div>
-          </div>
-        </nav>
+        <NavigationBar />
 
         {/* Main Content */}
         <div className="relative min-h-screen flex items-center justify-center">

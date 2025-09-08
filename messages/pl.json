@@ -170,6 +170,11 @@
     },
     "logout": "Wyloguj się"
   },
+  "NavigationBar": {
+    "title": "WIECZORNY SZEPT"
+  },
+  "SuccessPage": {},
+  "TrialSuccessPage": {},
   "UserSettingsPage": {
     "title": "Ustawienia Użytkownika",
     "email": "Email",
