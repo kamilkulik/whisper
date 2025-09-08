@@ -124,18 +124,7 @@
       "title": "Ready for your first whisper?",
       "subtitle": "Join thousands of readers who receive warm words every evening",
       "button": "Start free trial"
-    },
-    "footer": {
-      "title": "Learn more",
-      "link-1": "Terms of Service",
-      "link-2": "Privacy Policy",
-      "link-3": "Returns",
-      "newsletter-title": "Newsletter",
-      "newsletter-subtitle": "Subscribe to receive exclusive offers, original stories, events and more.",
-      "newsletter-button": "SUBMIT",
-      "newsletter-placeholder": "Enter your email"
-    },
-    "copyright": "© 2025 Evening Whisper. All rights reserved."
+    }
   },
   "DashboardPage": {
     "next-message": {
@@ -261,6 +250,17 @@
         "cancel-button": "Cancel",
         "loading": "Canceling..."
       }
+    },
+    "Footer": {
+      "title": "Learn more",
+      "link-1": "Terms of Service",
+      "link-2": "Privacy Policy",
+      "link-3": "Returns",
+      "newsletter-title": "Newsletter",
+      "newsletter-subtitle": "Subscribe to receive exclusive offers, original stories, events and more.",
+      "newsletter-button": "SUBMIT",
+      "newsletter-placeholder": "Enter your email",
+      "copyright": "© 2025 Evening Whisper. All rights reserved."
     },
     "PhoneForm": {
       "form-title": {
