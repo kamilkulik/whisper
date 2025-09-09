@@ -342,6 +342,14 @@
       "verification-code-title": "Jednorazowy kod weryfikacyjny",
       "verification-code-disclaimer": "Ten kod jest ważny przez 2 minuty"
     },
+    "ConfirmEmail": {
+      "preview": "Potwierdź swój adres email",
+      "title": "Potwierdź swój adres email",
+      "paragraph-1": "Dziękujemy za rozpoczęcie rejestracji w serwisie Wieczorny Szept. Aby potwierdzić swój adres email, kliknij w poniższy link. Jeśli nie zakładasz konta, zignoruj tę wiadomość.",
+      "verification-title": "Potwierdź email",
+      "verification-link-title": "Jednorazowy link potwierdzający",
+      "verification-link-disclaimer": "Ten link jest ważny przez 24 godziny"
+    },
     "Welcome": {
       "greeting": "Droga Czytelniczo, Drogi Czytelniku,",
       "paragraph-1-trial": "Cieszymy się z okazanego nam zaufania i rozpoczęcia okresu próbnego Wieczornego Szeptu.",

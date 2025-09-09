@@ -346,6 +346,14 @@
       "link-1": "terms of service",
       "link-2": "privacy policy"
     },
+    "ConfirmEmail": {
+      "preview": "Confirm your email",
+      "title": "Confirm your email",
+      "paragraph-1": "Thank you for starting your registration with Evening Whisper. To confirm it’s really you, please enter the verification code below. If you are not creating an account, simply ignore this message.",
+      "verification-title": "Confirm email",
+      "verification-link-title": "One-time verification link",
+      "verification-link-disclaimer": "This link is valid for 24 hours"
+    },
     "Welcome": {
       "greeting": "Dear Reader,",
       "paragraph-1-trial": "We are grateful for your trust and for starting your trial with Evening Whisper.",

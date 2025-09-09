@@ -9,13 +9,3 @@ export async function createTranslatorFromLocale(
 
   return createTranslator({ locale, messages, namespace });
 }
-
-/**
- * const t: {
-    <TargetKey extends string>(key: TargetKey, ...args: TranslateArgs<NestedValueOf<Record<string, any>, `EmailTemplates.Welcome.${TargetKey}`>, never>): string;
-    rich<TargetKey extends string>(key: TargetKey, ...args: TranslateArgs<...>): ReactNode;
-    markup<TargetKey extends string>(key: TargetKey, ...args: TranslateArgs<...>): string;
-    raw<TargetKey extends string>(key: TargetKey): any;
-    has<TargetKey extends string>(key: TargetKey): boolean;
-}
- */

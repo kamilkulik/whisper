@@ -32,7 +32,7 @@ export async function ConfirmEmail({
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Potwierdź swój adres email</Preview>
+        <Preview>{t("preview")}</Preview>
         <Container style={container}>
           <Section style={coverSection}>
             <Section style={imageSection}>
@@ -44,20 +44,16 @@ export async function ConfirmEmail({
               /> */}
             </Section>
             <Section style={upperSection}>
-              <Heading style={h1}>Potwierdź swój adres email</Heading>
-              <Text style={mainText}>
-                Dziękujemy za rozpoczęcie rejestracji w serwisie Wieczorny
-                Szept. Aby potwierdzić swój adres email, kliknij w poniższy
-                link. Jeśli nie zakładasz konta, zignoruj tę wiadomość.
-              </Text>
+              <Heading style={h1}>{t("title")}</Heading>
+              <Text style={mainText}>{t("paragraph-1")}</Text>
               <Section style={verificationSection}>
-                <Text style={verifyText}>Jednorazowy link potwierdzający</Text>
+                <Text style={verifyText}>{t("verification-link-title")}</Text>
 
                 <Link href={verificationLink} style={linkText}>
-                  Potwierdz email
+                  {t("verification-title")}
                 </Link>
                 <Text style={validityText}>
-                  (ten link jest ważny przez 24 godziny)
+                  {t("verification-link-disclaimer")}
                 </Text>
               </Section>
             </Section>
@@ -120,15 +116,6 @@ const coverSection = { backgroundColor: "#fff" };
 
 const upperSection = { padding: "25px 35px" };
 
-const lowerSection = { padding: "25px 35px" };
-
-const footerText = {
-  ...text,
-  fontSize: "12px",
-  padding: "0 20px",
-  textAlign: "left" as const,
-};
-
 const verifyText = {
   ...text,
   margin: 0,
@@ -165,12 +152,5 @@ const verificationSection = {
 const mainText = {
   ...text,
   marginBottom: "18px",
-  textAlign: "left" as const,
-};
-
-const cautionText = {
-  ...text,
-  fontSize: "12px",
-  margin: "0px",
   textAlign: "left" as const,
 };
