@@ -6,6 +6,7 @@ import { getSubscriptionType } from "@/lib/consts";
 
 export const POST = async (request: NextRequest) => {
   const requestBody: {
+    locale: string;
     template: EmailTemplate;
     to: string;
     subject: string;
@@ -18,6 +19,7 @@ export const POST = async (request: NextRequest) => {
     userEmail?: string;
   } = await request.json();
   const {
+    locale,
     template,
     to,
     subject,
@@ -63,6 +65,7 @@ export const POST = async (request: NextRequest) => {
   }
 
   await sendEmail({
+    locale,
     to: to ?? "kulikkamil@icloud.com",
     subject: subject ?? "Test Email",
     template,

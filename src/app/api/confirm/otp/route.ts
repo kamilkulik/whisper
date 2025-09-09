@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../../utils/csfrProtection";
+import { getLocale } from "next-intl/server";
 
 const temporarySessionIdCache = new Map<
   string,
@@ -27,6 +28,7 @@ function generateConfiramtionCodeDetails() {
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const phoneNumber = request.nextUrl.searchParams.get("phoneNumber");
   const email = request.nextUrl.searchParams.get("email");
+  const locale = await getLocale();
 
   if (!phoneNumber && !email) {
     return NextResponse.json(
@@ -45,10 +47,11 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 
   if (email) {
     await sendEmail({
-      to: email,
+      locale,
       subject: "Wieczorny szept - kod potwierdzający",
-      verificationCode: confirmationCode.toString(),
       template: "confirmation-code-via-email",
+      to: email,
+      verificationCode: confirmationCode.toString(),
     });
   } else if (phoneNumber) {
     await sendSms(phoneNumber, confirmationCode.toString());

@@ -91,10 +91,11 @@ export async function handleSubscriptionCreated(
 
   try {
     await sendEmail({
-      to: user.email,
+      locale: user.messageLanguage.toLowerCase(),
       subject: "Witamy w serwisie Wieczorny Szept",
-      template: "welcome",
       subscriptionType: productType,
+      template: "welcome",
+      to: user.email,
     });
   } catch (error) {
     console.error("Error sending email", error);

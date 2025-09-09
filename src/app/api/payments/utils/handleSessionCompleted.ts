@@ -79,10 +79,11 @@ export async function handleSessionCompleted(
 
   try {
     await sendEmail({
-      to: user.email,
+      locale: user.messageLanguage.toLowerCase(),
       subject: "Witamy w serwisie Wieczorny Szept",
-      template: "welcome",
       subscriptionType: subscription.type,
+      to: user.email,
+      template: "welcome",
     });
   } catch (error) {
     console.error("Error sending email", error);

@@ -21,8 +21,11 @@ const baseUrl = process.env.SZEPT_URL
   : "http://localhost:3000";
 
 export async function WelcomeEmail(props: WelcomeEmailProps) {
-  const { subscriptionType } = props;
-  const t = await getTranslations("EmailTemplates.Welcome");
+  const { locale, subscriptionType } = props;
+  const t = await getTranslations({
+    locale,
+    namespace: "EmailTemplates.Welcome",
+  });
 
   return (
     <Html>

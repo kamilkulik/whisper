@@ -264,10 +264,11 @@ export const POST = async (request: NextRequest) => {
 
           try {
             await sendEmail({
-              to: savedUser.email,
+              locale: savedUser.messageLanguage.toLowerCase(),
               subject: "Witamy w serwisie Wieczorny Szept",
-              template: "welcome",
               subscriptionType: trialSubscription.type,
+              template: "welcome",
+              to: savedUser.email,
             });
           } catch (error) {
             console.error(
@@ -285,13 +286,14 @@ export const POST = async (request: NextRequest) => {
 
       // send email to new user for them to verify their email
       await sendEmail({
-        to: savedUser.email,
+        locale: savedUser.messageLanguage.toLowerCase(),
         subject: "Zweryfikuj swój email",
+        template: "confirm-email",
+        to: savedUser.email,
         verificationLink: await generateOneTimeUrl(
           savedUser.id.toString(),
           savedUser.email
         ),
-        template: "confirm-email",
       });
     }
     /** CREATE NEW USER FLOW END */

@@ -80,18 +80,20 @@ class LocalEmailClient implements EmailClientInterface {
 
 export async function sendEmail(props: SendEmailProps) {
   const configuredEmailClient = process.env.EMAIL_API_PROVIDER;
-  const { template } = props;
+  const { locale, template } = props;
   let templateToUse: React.ReactElement;
 
   switch (template) {
     case "welcome":
       templateToUse = await WelcomeEmail({
+        locale,
         userName: props.userName,
         subscriptionType: props.subscriptionType,
       });
       break;
     case "confirm-email":
       templateToUse = ConfirmEmail({
+        locale,
         verificationLink:
           props.verificationLink ?? "https://wieczornyszept.pl/verify-email",
       });
@@ -99,11 +101,13 @@ export async function sendEmail(props: SendEmailProps) {
     case "confirmation-code-via-email":
       console.log("Verification code", props.verificationCode);
       templateToUse = await ConfirmCodeViaEmail({
+        locale,
         verificationCode: props.verificationCode ?? "421341",
       });
       break;
     case "payment-link":
       templateToUse = PaymentLink({
+        locale,
         paymentLinkUrl:
           props.paymentLinkUrl ?? "https://wieczornyszept.pl/payment-link",
       });

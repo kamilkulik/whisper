@@ -41,10 +41,11 @@ export async function handleTrialSubscription(userEmail: string) {
     if (savedSubscription && savedUser) {
       try {
         await sendEmail({
-          to: savedUser.email,
+          locale: savedUser.messageLanguage.toLowerCase(),
           subject: "Witamy w serwisie Wieczorny Szept",
-          template: "welcome",
           subscriptionType: SubscriptionType.TRIAL,
+          template: "welcome",
+          to: savedUser.email,
         });
       } catch (error) {
         console.error(

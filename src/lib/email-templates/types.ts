@@ -3,22 +3,27 @@ import { SubscriptionType } from "@prisma/client";
 type BaseEmailProps = {
   to: string;
   subject: string;
+  locale: string;
 };
 
 export type ConfirmEmailProps = {
+  locale: string;
   verificationLink: string;
 };
 
 export type ConfirmationCodeViaEmailProps = {
+  locale: string;
   verificationCode: string;
 };
 
 export type WelcomeEmailProps = {
+  locale: string;
   userName?: string;
   subscriptionType: SubscriptionType;
 };
 
 export type PaymentLinkProps = {
+  locale: string;
   paymentLinkUrl: string;
 };
 
