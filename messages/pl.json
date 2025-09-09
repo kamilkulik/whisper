@@ -330,9 +330,9 @@
     "SHARED": {
       "disclaimer": "Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub numeru konta bankowego.",
       "footer": "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept.",
-      "our": "Nasz ",
+      "our": " Nasz ",
       "link-1": "regulamin",
-      "and": "oraz ",
+      "and": " oraz ",
       "link-2": "polityka prywatności"
     },
     "ConfirmCodeViaEmail": {

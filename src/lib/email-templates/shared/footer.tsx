@@ -2,8 +2,11 @@ import { Link, Text } from "@react-email/components";
 import { footerLink, text } from "./styles";
 import { getTranslations } from "next-intl/server";
 
-export async function Footer() {
-  const t = await getTranslations("EmailTemplates.SHARED");
+export async function Footer({ locale }: { locale: string }) {
+  const t = await getTranslations({
+    locale,
+    namespace: "EmailTemplates.SHARED",
+  });
   return (
     <Text style={footerText}>
       {t("footer")}

@@ -92,7 +92,7 @@ export async function sendEmail(props: SendEmailProps) {
       });
       break;
     case "confirm-email":
-      templateToUse = ConfirmEmail({
+      templateToUse = await ConfirmEmail({
         locale,
         verificationLink:
           props.verificationLink ?? "https://wieczornyszept.pl/verify-email",

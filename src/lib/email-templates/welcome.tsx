@@ -15,13 +15,16 @@ import { WelcomeEmailProps } from "./types";
 import { SubscriptionType } from "@prisma/client";
 import { Footer, text } from "./shared";
 import { getTranslations } from "next-intl/server";
+import { Disclaimer } from "./shared/disclaimer";
 
 const baseUrl = process.env.SZEPT_URL
   ? `https://${process.env.SZEPT_URL}`
   : "http://localhost:3000";
 
-export async function WelcomeEmail(props: WelcomeEmailProps) {
-  const { locale, subscriptionType } = props;
+export async function WelcomeEmail({
+  locale,
+  subscriptionType,
+}: WelcomeEmailProps) {
   const t = await getTranslations({
     locale,
     namespace: "EmailTemplates.Welcome",
@@ -85,8 +88,9 @@ export async function WelcomeEmail(props: WelcomeEmailProps) {
               </Text>
             </Section>
             <Hr />
+            <Disclaimer locale={locale} />
           </Section>
-          <Footer />
+          <Footer locale={locale} />
         </Container>
       </Body>
     </Html>

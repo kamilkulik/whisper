@@ -2,8 +2,11 @@ import { Section, Text } from "@react-email/components";
 import { text } from "./styles";
 import { getTranslations } from "next-intl/server";
 
-export async function Disclaimer() {
-  const t = await getTranslations("EmailTemplates.SHARED");
+export async function Disclaimer({ locale }: { locale: string }) {
+  const t = await getTranslations({
+    locale,
+    namespace: "EmailTemplates.SHARED",
+  });
   return (
     <Section style={lowerSection}>
       <Text style={cautionText}>{t("disclaimer")}</Text>

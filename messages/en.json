@@ -330,9 +330,9 @@
     "SHARED": {
       "disclaimer": "Evening Whisper will never send emails asking you to disclose or verify your password, credit card, or bank account details.",
       "footer": "This message was automatically generated and sent by Evening Whisper.",
-      "our": "Our ",
+      "our": " Our ",
       "link-1": "terms of service",
-      "and": "and ",
+      "and": " and ",
       "link-2": "privacy policy"
     },
     "ConfirmCodeViaEmail": {

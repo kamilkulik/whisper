@@ -13,15 +13,21 @@ import {
 } from "@react-email/components";
 import { ConfirmationCodeViaEmailProps } from "./types";
 import { getTranslations } from "next-intl/server";
+import { Footer } from "./shared/footer";
+import { Disclaimer } from "./shared/disclaimer";
 
 // const baseUrl = process.env.VERCEL_URL
 //   ? `https://${process.env.VERCEL_URL}`
 //   : "";
 
 export async function ConfirmCodeViaEmail({
+  locale,
   verificationCode,
 }: ConfirmationCodeViaEmailProps) {
-  const t = await getTranslations("EmailTemplates.ConfirmCodeViaEmail");
+  const t = await getTranslations({
+    locale,
+    namespace: "EmailTemplates.ConfirmCodeViaEmail",
+  });
   return (
     <Html>
       <Head />
@@ -50,29 +56,9 @@ export async function ConfirmCodeViaEmail({
               </Section>
             </Section>
             <Hr />
-            <Section style={lowerSection}>
-              <Text style={cautionText}>{t("disclaimer")}</Text>
-            </Section>
+            <Disclaimer locale={locale} />
           </Section>
-          <Text style={footerText}>
-            {t("footer")}
-            <Link
-              href="https://wieczornyszept.pl/regulamin"
-              target="_blank"
-              style={link}
-            >
-              {t("link-1")}
-            </Link>
-            {" oraz "}
-            <Link
-              href="https://wieczornyszept.pl/polityka-prywatnosci"
-              target="_blank"
-              style={link}
-            >
-              {t("link-2")}
-            </Link>
-            .
-          </Text>
+          <Footer locale={locale} />
         </Container>
       </Body>
     </Html>

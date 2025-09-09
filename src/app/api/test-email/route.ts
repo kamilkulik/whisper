@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateOneTimeUrl } from "../utils/oneTimeJwt";
 import { SubscriptionType } from "@prisma/client";
 import { getSubscriptionType } from "@/lib/consts";
+import { Locale } from "next-intl";
 
 export const POST = async (request: NextRequest) => {
   const requestBody: {
-    locale: string;
+    locale: Locale;
     template: EmailTemplate;
     to: string;
     subject: string;

@@ -12,12 +12,22 @@ import {
   Text,
 } from "@react-email/components";
 import { ConfirmEmailProps } from "./types";
+import { getTranslations } from "next-intl/server";
+import { Disclaimer } from "./shared/disclaimer";
+import { Footer } from "./shared/footer";
 
 // const baseUrl = process.env.VERCEL_URL
 //   ? `https://${process.env.VERCEL_URL}`
 //   : "";
 
-export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
+export async function ConfirmEmail({
+  locale,
+  verificationLink,
+}: ConfirmEmailProps) {
+  const t = await getTranslations({
+    locale,
+    namespace: "EmailTemplates.ConfirmEmail",
+  });
   return (
     <Html>
       <Head />
@@ -52,35 +62,9 @@ export function ConfirmEmail({ verificationLink }: ConfirmEmailProps) {
               </Section>
             </Section>
             <Hr />
-            <Section style={lowerSection}>
-              <Text style={cautionText}>
-                Wieczorny Szept nigdy nie wysyła wiadomości e-mail w których
-                prosi o ujawnienie lub weryfikację hasła, karty kredytowej, lub
-                numeru konta bankowego.
-              </Text>
-            </Section>
+            <Disclaimer locale={locale} />
           </Section>
-          <Text style={footerText}>
-            {
-              "Ta wiadomość została wygenerowana i wysłana automatycznie przez serwis Wieczorny Szept. Nasz "
-            }
-            <Link
-              href="https://wieczornyszept.pl/regulamin"
-              target="_blank"
-              style={link}
-            >
-              regulamin
-            </Link>
-            {" oraz "}
-            <Link
-              href="https://wieczornyszept.pl/polityka-prywatnosci"
-              target="_blank"
-              style={link}
-            >
-              polityka prywatności
-            </Link>
-            .
-          </Text>
+          <Footer locale={locale} />
         </Container>
       </Body>
     </Html>

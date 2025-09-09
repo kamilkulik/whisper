@@ -1,4 +1,5 @@
 import { SubscriptionType } from "@prisma/client";
+import { Locale } from "next-intl";
 
 type BaseEmailProps = {
   to: string;
@@ -17,7 +18,7 @@ export type ConfirmationCodeViaEmailProps = {
 };
 
 export type WelcomeEmailProps = {
-  locale: string;
+  locale: Locale;
   userName?: string;
   subscriptionType: SubscriptionType;
 };
