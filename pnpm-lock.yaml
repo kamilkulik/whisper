@@ -59,6 +59,9 @@ importers:
       stripe:
         specifier: ^18.4.0
         version: 18.4.0(@types/node@20.19.9)
+      use-intl:
+        specifier: ^4.3.7
+        version: 4.3.7(react@19.1.0)
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
@@ -1603,8 +1606,8 @@ packages:
       '@types/react':
         optional: true
 
-  use-intl@4.3.6:
-    resolution: {integrity: sha512-MXB26v/U9JQimCHXWHPZAjqYGpOJf9aIGr6GeTzAemvHC0HecExVExp9LMhn1S8IY+O2OSoFzTSKHLknQSDKvw==}
+  use-intl@4.3.7:
+    resolution: {integrity: sha512-IkRFatZEIAm+JfFBAU2Bleb3f2DVt8WldIn5EZVSVu4D5U0QYq2hwB28LHAt15TDhfQw5sdEPsDpvJ2Uj8HjqA==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0 || ^19.0.0
 
@@ -2621,7 +2624,7 @@ snapshots:
       negotiator: 1.0.0
       next: 15.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react: 19.1.0
-      use-intl: 4.3.6(react@19.1.0)
+      use-intl: 4.3.7(react@19.1.0)
     optionalDependencies:
       typescript: 5.9.2
 
@@ -3075,7 +3078,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.1.9
 
-  use-intl@4.3.6(react@19.1.0):
+  use-intl@4.3.7(react@19.1.0):
     dependencies:
       '@formatjs/fast-memoize': 2.2.7
       '@schummar/icu-type-parser': 1.21.5

@@ -12,9 +12,9 @@ import {
   Text,
 } from "@react-email/components";
 import { ConfirmEmailProps } from "./types";
-import { getTranslations } from "next-intl/server";
 import { Disclaimer } from "./shared/disclaimer";
 import { Footer } from "./shared/footer";
+import { createTranslatorFromLocale } from "@/i18n/utils";
 
 // const baseUrl = process.env.VERCEL_URL
 //   ? `https://${process.env.VERCEL_URL}`
@@ -24,10 +24,10 @@ export async function ConfirmEmail({
   locale,
   verificationLink,
 }: ConfirmEmailProps) {
-  const t = await getTranslations({
+  const t = await createTranslatorFromLocale(
     locale,
-    namespace: "EmailTemplates.ConfirmEmail",
-  });
+    "EmailTemplates.ConfirmEmail"
+  );
   return (
     <Html>
       <Head />

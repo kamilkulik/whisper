@@ -14,8 +14,8 @@ import {
 import { WelcomeEmailProps } from "./types";
 import { SubscriptionType } from "@prisma/client";
 import { Footer, text } from "./shared";
-import { getTranslations } from "next-intl/server";
 import { Disclaimer } from "./shared/disclaimer";
+import { createTranslatorFromLocale } from "@/i18n/utils";
 
 const baseUrl = process.env.SZEPT_URL
   ? `https://${process.env.SZEPT_URL}`
@@ -25,10 +25,7 @@ export async function WelcomeEmail({
   locale,
   subscriptionType,
 }: WelcomeEmailProps) {
-  const t = await getTranslations({
-    locale,
-    namespace: "EmailTemplates.Welcome",
-  });
+  const t = await createTranslatorFromLocale(locale, "EmailTemplates.Welcome");
 
   return (
     <Html>
