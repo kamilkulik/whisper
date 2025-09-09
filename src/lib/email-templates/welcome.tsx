@@ -108,16 +108,6 @@ const container = {
   backgroundColor: "#eee",
 };
 
-const h1 = {
-  color: "#333",
-  fontFamily:
-    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  fontSize: "20px",
-  fontWeight: "bold",
-  marginBottom: "15px",
-  textAlign: "center" as const,
-};
-
 const dashboardLink = {
   color: "#2754C5",
   fontFamily:
