@@ -455,7 +455,7 @@ export default function ContactForm({
             className="flex-1 border-t border-gray-600"
             data-oid="-w4krbe"
           ></div>
-          {/* <span className="px-3 text-sm text-gray-500 dark:text-gray-400">lub</span> */}
+          {/* <span className="px-3 text-sm text-gray-400">lub</span> */}
           <div
             className="flex-1 border-t border-gray-600"
             data-oid="121n8te"

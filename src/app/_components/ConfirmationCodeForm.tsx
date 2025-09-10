@@ -374,7 +374,7 @@ export default function ConfirmationCodeForm({
 
   return (
     <div
-      className="max-w-lg mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50"
+      className="max-w-lg mx-auto bg-gray-800/60 rounded-2xl shadow-xl p-12 backdrop-blur-sm relative z-50"
       data-oid="tb00.87"
     >
       <div
