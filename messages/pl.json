@@ -157,7 +157,15 @@
     "settings": {
       "title": "Ustawienia",
       "change-email-and-phone": "Zmień email i telefon →",
-      "change-message-language": "Zmień język wiadomości →"
+      "change-message-language": "Zmień język wiadomości →",
+      "message-settings": {
+        "language-set-success": "Język wiadomości został zaktualizowany pomyślnie!",
+        "language-set-error": "Wystąpił błąd podczas aktualizacji języka.",
+        "message-language": "Język wiadomości",
+        "cancel": "Anuluj",
+        "form-loading": "Aktualizowanie...",
+        "form-save-changes": "Zapisz zmiany"
+      }
     },
     "logout": "Wyloguj się"
   },

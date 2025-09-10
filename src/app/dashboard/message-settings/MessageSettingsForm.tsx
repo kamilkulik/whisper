@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { User, SupportedLanguagesEnum } from "@prisma/client";
+import { useTranslations } from "next-intl";
 
 interface MessageSettingsFormProps {
   user: User;
@@ -23,6 +24,7 @@ export default function MessageSettingsForm({
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const t = useTranslations("DashboardPage.settings.message-settings");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,18 +47,18 @@ export default function MessageSettingsForm({
       if (response.ok) {
         setMessage({
           type: "success",
-          text: "Język wiadomości został zaktualizowany pomyślnie!",
+          text: t("language-set-success"),
         });
       } else {
         setMessage({
           type: "error",
-          text: data.message || "Wystąpił błąd podczas aktualizacji języka.",
+          text: data.message || t("language-set-error"),
         });
       }
     } catch (error) {
       setMessage({
         type: "error",
-        text: "Wystąpił błąd podczas aktualizacji języka.",
+        text: t("language-set-error"),
       });
     } finally {
       setIsLoading(false);
@@ -84,7 +86,7 @@ export default function MessageSettingsForm({
               htmlFor="messageLanguage"
               className="block text-white text-left font-medium mb-2"
             >
-              Język wiadomości
+              {t("message-language")}
             </label>
             <select
               id="messageLanguage"
@@ -114,14 +116,14 @@ export default function MessageSettingsForm({
             disabled={isLoading}
             className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 disabled:bg-blue-500/10 text-blue-300 hover:text-blue-200 disabled:text-blue-400/50 font-medium py-3 px-6 rounded-xl transition-all duration-200 border border-blue-400/30 hover:border-blue-400/50 disabled:border-blue-400/20 backdrop-blur-sm"
           >
-            {isLoading ? "Aktualizuję..." : "Zapisz zmiany"}
+            {isLoading ? t("form-loading") : t("form-save-changes")}
           </button>
 
           <a
             href="/dashboard"
             className="flex-1 bg-gray-500/20 hover:bg-gray-500/30 text-gray-300 hover:text-gray-200 font-medium py-3 px-6 rounded-xl transition-all duration-200 border border-gray-400/30 hover:border-gray-400/50 backdrop-blur-sm flex items-center justify-center"
           >
-            Anuluj
+            {t("cancel")}
           </a>
         </div>
       </form>

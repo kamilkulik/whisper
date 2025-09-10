@@ -157,7 +157,15 @@
     "settings": {
       "title": "Settings",
       "change-email-and-phone": "Change email and phone →",
-      "change-message-language": "Change message language →"
+      "change-message-language": "Change message language →",
+      "message-settings": {
+        "language-set-success": "Message language has been updated successfully!",
+        "language-set-error": "An error occurred while updating the message language.",
+        "message-language": "Message language",
+        "cancel": "Cancel",
+        "form-loading": "Updating...",
+        "form-save-changes": "Save changes"
+      }
     },
     "logout": "Logout"
   },
