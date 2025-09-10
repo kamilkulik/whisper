@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DEFAULT_LOCALE = "pl";
+const DEFAULT_LOCALE = "en";
+const POSSIBLE_LOCALES = ["pl", "en"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -28,7 +29,9 @@ export function middleware(request: NextRequest) {
   const acceptLang = request.headers.get("accept-language") || "";
   // en-GB,en;q=0.9,en-US;q=0.8,pl;q=0.7
   const browserLocale = acceptLang.split(",")[0].split("-")[0]; // crude parse
-  const locale = browserLocale || DEFAULT_LOCALE;
+  const locale = POSSIBLE_LOCALES.includes(browserLocale)
+    ? browserLocale
+    : DEFAULT_LOCALE;
 
   console.log("🇵🇱 setting locale", locale);
   res.cookies.set("locale", locale, {
