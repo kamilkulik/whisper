@@ -30,7 +30,7 @@ export type UserRawType = {
 
 export const GET = async (request: NextRequest) => {
   try {
-    // checkCronSecret(request);
+    checkCronSecret(request);
 
     const now = new Date();
     console.log(`Cron job executed at: ${now.toISOString()}`);
@@ -59,17 +59,7 @@ export const GET = async (request: NextRequest) => {
       ...user,
       next_message: (user.last_used_message || 0) + 1,
     }));
-    // const nextMessagesMap = new Map<
-    //   { userId: number; messageId: number; language: SupportedLanguagesEnum },
-    //   string
-    // >();
-    // usersWithNextMessage.forEach((user) => {
-    //   nextMessagesMap.set({
-    //     userId: user.id,
-    //     messageId: user.next_message,
-    //     language: user.messageLanguage,
-    //   });
-    // });
+
     const nextMessages = new Set(
       usersWithNextMessage.map((user) => user.next_message)
     );
@@ -91,33 +81,8 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    console.log("MESSAGES FROM DB:\n", JSON.stringify(messages, null, 2));
-
-    // console.log(JSON.stringify(messages, null, 2));
-
-    /**
-      {
-        "1": {
-          "translations": [
-            {
-              "text": "polska wersja",
-              "language": "PL"
-            },
-            {
-              "text": "english version",
-              "language": "EN"
-            }
-          ]
-        }
-      }
-     */
-    type Translation = {
-      text: string;
-      language: string;
-    };
-
     function toTranslationMap(
-      translations: Translation[]
+      translations: Pick<MessageTranslation, "text" | "language">[]
     ): Record<string, string> {
       return translations.reduce<Record<string, string>>(
         (acc, { text, language }) => {
