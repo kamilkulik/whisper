@@ -10,6 +10,24 @@ import {
 } from "@prisma/client";
 import { checkCronSecret } from "../utils/checkCronSecret";
 
+export type UserRawType = {
+  id: number;
+  phone_number: string;
+  email: string;
+  name: string;
+  message_language: SupportedLanguagesEnum;
+  last_used_message: number;
+  trial_ends: Date;
+  premium: boolean;
+  created_at: Date;
+  updated_at: Date;
+  confirmation_code: number;
+  confirmation_code_expires: Date;
+  phone_number_verified: boolean;
+  email_verified: boolean;
+  session_id: string;
+};
+
 export const GET = async (request: NextRequest) => {
   try {
     // checkCronSecret(request);
@@ -22,7 +40,7 @@ export const GET = async (request: NextRequest) => {
     );
 
     // 1. get all users who should receive a message
-    const users: User[] = await prisma.$queryRaw`
+    const users: UserRawType[] = await prisma.$queryRaw`
       SELECT u.* 
       FROM users u 
       LEFT JOIN subscriptions s ON s.user_id = u.id 
@@ -39,7 +57,7 @@ export const GET = async (request: NextRequest) => {
     // 2. create a unique set of message ids which should be sent next to each user
     const usersWithNextMessage = users.map((user) => ({
       ...user,
-      next_message: (user.lastUsedMessageId || 0) + 1,
+      next_message: (user.last_used_message || 0) + 1,
     }));
     // const nextMessagesMap = new Map<
     //   { userId: number; messageId: number; language: SupportedLanguagesEnum },
@@ -62,7 +80,8 @@ export const GET = async (request: NextRequest) => {
       where: {
         id: { in: Array.from(nextMessages) },
       },
-      include: {
+      select: {
+        id: true,
         translations: {
           select: {
             text: true,
@@ -72,38 +91,83 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    console.log(JSON.stringify(messages, null, 2));
+    console.log("MESSAGES FROM DB:\n", JSON.stringify(messages, null, 2));
 
-    // const messagesHash = messages.reduce(
-    //   (
-    //     acc: Record<number, Message & { translations: MessageTranslation[] }>,
-    //     message: Message & { translations: MessageTranslation[] }
-    //   ) => {
-    //     acc[message.id] = message;
-    //     return acc;
-    //   },
-    //   {} as Record<number, any>
-    // );
+    // console.log(JSON.stringify(messages, null, 2));
+
+    /**
+      {
+        "1": {
+          "translations": [
+            {
+              "text": "polska wersja",
+              "language": "PL"
+            },
+            {
+              "text": "english version",
+              "language": "EN"
+            }
+          ]
+        }
+      }
+     */
+    type Translation = {
+      text: string;
+      language: string;
+    };
+
+    function toTranslationMap(
+      translations: Translation[]
+    ): Record<string, string> {
+      return translations.reduce<Record<string, string>>(
+        (acc, { text, language }) => {
+          acc[language] = text;
+          return acc;
+        },
+        {}
+      );
+    }
+
+    const messagesHash = messages.reduce(
+      (
+        acc,
+        message: Pick<Message, "id"> & {
+          translations: Pick<MessageTranslation, "text" | "language">[];
+        }
+      ) => {
+        const translationsMap = toTranslationMap(message.translations);
+        acc.set(message.id, translationsMap);
+
+        return acc;
+      },
+      new Map<number, Record<string, string>>()
+    );
 
     // 4. Send message for each user
-    // for (const user of usersWithNextMessage) {
-    //   try {
-    //     const message = messagesHash[user.next_message];
-    //     if (message) {
-    //       console.log(`Sending message to user ${user.id}: ${message.message}`);
-    //       await sendSms(user.phoneNumber, message.message);
+    for (const user of usersWithNextMessage) {
+      try {
+        const message = messagesHash.get(user.next_message);
+        if (!message) {
+          console.error(`Message not found for user ${user.id}`);
+          continue;
+        }
+        const messageText = message[user.message_language];
 
-    //       // update what message got sent
-    //       await prisma.user.update({
-    //         where: { id: user.id },
-    //         data: { lastUsedMessageId: user.next_message },
-    //       });
-    //     }
-    //   } catch (error) {
-    //     // in case of message service failure log the error
-    //     console.error(`Failed to send message to user ${user.id}:`, error);
-    //   }
-    // }
+        if (messageText) {
+          console.log(`Sending message to user ${user.id}: ${messageText}`);
+          await sendSms(user.phone_number, messageText);
+
+          // update what message got sent
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { lastUsedMessageId: user.next_message },
+          });
+        }
+      } catch (error) {
+        // in case of message service failure log the error
+        console.error(`Failed to send message to user ${user.id}:`, error);
+      }
+    }
 
     console.log("Daily cron job completed successfully");
 
