@@ -83,7 +83,7 @@ export default function ResumeSubscriptionButton({
           onClose={() => setShowConfirmation(false)}
           modalId="resume-confirmation"
         >
-          <div className="bg-white/80 dark:bg-gray-800/80 rounded-2xl shadow-xl p-12 backdrop-blur-sm max-w-md mx-auto">
+          <div className="bg-gray-800/80 rounded-2xl shadow-xl p-12 backdrop-blur-sm max-w-md mx-auto">
             <h3 className="text-2xl font-bold text-white/80 mb-6 text-center">
               {t("confirm-modal.title")}
             </h3>

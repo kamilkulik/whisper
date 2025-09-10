@@ -23,7 +23,7 @@ export default async function UserSettingsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4">
-      <div className="bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
+      <div className="bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
         <div className="mb-8">
           <div className="flex items-center mb-6">
             <ReturnButton href="/dashboard" absolutePositioning={false} />

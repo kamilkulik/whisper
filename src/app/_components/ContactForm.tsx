@@ -292,7 +292,7 @@ export default function ContactForm({
 
   return (
     <div
-      className="max-w-md mx-auto bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
+      className="max-w-md mx-auto bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50"
       data-oid="tb00.87"
     >
       <div className="mb-8 lg:mb-4" data-oid="fv3gut-">
@@ -452,12 +452,12 @@ export default function ContactForm({
         {/* Divider */}
         <div className="my-6 flex items-center" data-oid=".8bq7bo">
           <div
-            className="flex-1 border-t border-gray-300 dark:border-gray-600"
+            className="flex-1 border-t border-gray-600"
             data-oid="-w4krbe"
           ></div>
           {/* <span className="px-3 text-sm text-gray-500 dark:text-gray-400">lub</span> */}
           <div
-            className="flex-1 border-t border-gray-300 dark:border-gray-600"
+            className="flex-1 border-t border-gray-600"
             data-oid="121n8te"
           ></div>
         </div>

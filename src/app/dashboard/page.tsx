@@ -122,7 +122,7 @@ export default async function DashboardPage() {
     <>
       <ReturnButton href="/" />
       <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
+        <div className="bg-gray-800/60 rounded-2xl shadow-xl p-8 backdrop-blur-sm relative z-50">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="flex flex-col justify-center bg-white/20 backdrop-blur-sm p-6 rounded-xl border border-white/20">
               <p className="text-white/90 mb-4">{t("next-message.title")}</p>
