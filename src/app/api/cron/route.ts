@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
-import { SubscriptionStatus, User } from "@prisma/client";
+import {
+  Message,
+  MessageTranslation,
+  SubscriptionStatus,
+  SupportedLanguagesEnum,
+  User,
+} from "@prisma/client";
 import { checkCronSecret } from "../utils/checkCronSecret";
 
 export const GET = async (request: NextRequest) => {
   try {
-    checkCronSecret(request);
+    // checkCronSecret(request);
 
     const now = new Date();
     console.log(`Cron job executed at: ${now.toISOString()}`);
@@ -20,7 +26,7 @@ export const GET = async (request: NextRequest) => {
       SELECT u.* 
       FROM users u 
       LEFT JOIN subscriptions s ON s.user_id = u.id 
-      AND s.status = '${SubscriptionStatus.ACTIVE}' 
+      AND s.status = ${SubscriptionStatus.ACTIVE}::"SubscriptionStatus"
       AND s.date_expires > NOW() 
       WHERE ( 
         u.trial_ends > NOW() OR
@@ -35,6 +41,17 @@ export const GET = async (request: NextRequest) => {
       ...user,
       next_message: (user.lastUsedMessageId || 0) + 1,
     }));
+    // const nextMessagesMap = new Map<
+    //   { userId: number; messageId: number; language: SupportedLanguagesEnum },
+    //   string
+    // >();
+    // usersWithNextMessage.forEach((user) => {
+    //   nextMessagesMap.set({
+    //     userId: user.id,
+    //     messageId: user.next_message,
+    //     language: user.messageLanguage,
+    //   });
+    // });
     const nextMessages = new Set(
       usersWithNextMessage.map((user) => user.next_message)
     );
@@ -45,31 +62,48 @@ export const GET = async (request: NextRequest) => {
       where: {
         id: { in: Array.from(nextMessages) },
       },
+      include: {
+        translations: {
+          select: {
+            text: true,
+            language: true,
+          },
+        },
+      },
     });
-    const messagesHash = messages.reduce((acc: any, message: any) => {
-      acc[message.id] = message;
-      return acc;
-    }, {} as Record<number, any>);
+
+    console.log(JSON.stringify(messages, null, 2));
+
+    // const messagesHash = messages.reduce(
+    //   (
+    //     acc: Record<number, Message & { translations: MessageTranslation[] }>,
+    //     message: Message & { translations: MessageTranslation[] }
+    //   ) => {
+    //     acc[message.id] = message;
+    //     return acc;
+    //   },
+    //   {} as Record<number, any>
+    // );
 
     // 4. Send message for each user
-    for (const user of usersWithNextMessage) {
-      try {
-        const message = messagesHash[user.next_message];
-        if (message) {
-          console.log(`Sending message to user ${user.id}: ${message.message}`);
-          await sendSms(user.phoneNumber, message.message);
+    // for (const user of usersWithNextMessage) {
+    //   try {
+    //     const message = messagesHash[user.next_message];
+    //     if (message) {
+    //       console.log(`Sending message to user ${user.id}: ${message.message}`);
+    //       await sendSms(user.phoneNumber, message.message);
 
-          // update what message got sent
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { lastUsedMessageId: user.next_message },
-          });
-        }
-      } catch (error) {
-        // in case of message service failure log the error
-        console.error(`Failed to send message to user ${user.id}:`, error);
-      }
-    }
+    //       // update what message got sent
+    //       await prisma.user.update({
+    //         where: { id: user.id },
+    //         data: { lastUsedMessageId: user.next_message },
+    //       });
+    //     }
+    //   } catch (error) {
+    //     // in case of message service failure log the error
+    //     console.error(`Failed to send message to user ${user.id}:`, error);
+    //   }
+    // }
 
     console.log("Daily cron job completed successfully");
 

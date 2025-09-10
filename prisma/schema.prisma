@@ -38,17 +38,33 @@ enum SubscriptionStatus {
 }
 
 model Message {
-  id        Int                    @id @default(autoincrement())
-  message   String
-  language  SupportedLanguagesEnum
-  length    Int
-  createdAt DateTime               @default(now()) @map("created_at")
-  updatedAt DateTime?              @updatedAt @map("updated_at")
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 
   // Relation to users who used this message
   users User[]
 
+  // Relation to translations
+  translations MessageTranslation[]
+
   @@map("messages")
+}
+
+model MessageTranslation {
+  id        Int     @id @default(autoincrement())
+  messageId Int     @map("message_id")
+  message   Message @relation(fields: [messageId], references: [id])
+
+  language SupportedLanguagesEnum
+  text     String
+  length   Int // precomputed length of `text`
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@unique([messageId, language]) // one translation per language
+  @@map("message_translations")
 }
 
 model User {
