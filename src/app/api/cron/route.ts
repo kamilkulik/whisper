@@ -13,19 +13,8 @@ import { checkCronSecret } from "../utils/checkCronSecret";
 export type UserRawType = {
   id: number;
   phone_number: string;
-  email: string;
-  name: string;
   message_language: SupportedLanguagesEnum;
   last_used_message: number;
-  trial_ends: Date;
-  premium: boolean;
-  created_at: Date;
-  updated_at: Date;
-  confirmation_code: number;
-  confirmation_code_expires: Date;
-  phone_number_verified: boolean;
-  email_verified: boolean;
-  session_id: string;
 };
 
 export const GET = async (request: NextRequest) => {
@@ -41,7 +30,7 @@ export const GET = async (request: NextRequest) => {
 
     // 1. get all users who should receive a message
     const users: UserRawType[] = await prisma.$queryRaw`
-      SELECT u.* 
+      SELECT u.id, u.last_used_message, u.message_language, u.phone_number
       FROM users u 
       LEFT JOIN subscriptions s ON s.user_id = u.id 
       AND s.status = ${SubscriptionStatus.ACTIVE}::"SubscriptionStatus"
