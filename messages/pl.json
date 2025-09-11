@@ -17,7 +17,7 @@
       "header-cta-button": "Tydzień szeptów za darmo"
     },
     "how-it-works": {
-      "title": "Proste jak westchnienia",
+      "title": "Proste jak westchnienie",
       "step-1": {
         "title": "Zapisz się w kilka chwil",
         "description": "Podaj swój numer telefonu — i gotowe. Prosty formularz, wypełnisz w mgnieniu oka"
@@ -51,44 +51,44 @@
       "title": "Co nasi czytelnicy szepczą w odpowiedzi…",
       "copy": "Każde zdanie pochodzi od osoby, która już wpuściła Wieczorny Szept do swojego życia. Ich słowa mówią więcej niż jakiekolwiek obietnice.",
       "testimonial-1": {
-        "quote": "Te wiadomości to małe klejnoty dnia. Czasem jedno zdanie wystarczy, by poczuć się potrzebną",
-        "author": "Zosia",
+        "quote": "Te wiadomości są jak małe klejnoty dnia. Czasem jedno zdanie wystarczy, by poczuć się potrzebną.",
+        "author": "Zofia",
         "status": "emerytka"
       },
       "testimonial-2": {
-        "quote": "Otwieram SMS i nagle w pokoju robi się jaśniej, choć lampy się nie zmieniają",
-        "author": "Gocha",
-        "status": "matka"
+        "quote": "Otwieram SMS i nagle robi się jaśniej, choć w pokoju nic się nie zmienia.",
+        "author": "Gosia",
+        "status": "mama"
       },
       "testimonial-3": {
-        "quote": "Wieczorny Szept” to codzienny list od życia — czuły, lekki, potrzebny",
+        "quote": "„Wieczorny Szept” to dla mnie codzienny list od życia — czuły, lekki i potrzebny.",
         "author": "Maryla",
         "status": "miłośniczka poezji"
       },
       "testimonial-4": {
-        "quote": "Każdy wieczór z „Wieczornym Szeptem” staje się cieplejszy. Te krótkie wersy przypominają mi, że serce nadal potrafi drżeć",
+        "quote": "Wieczory z „Wieczornym Szeptem” są cieplejsze. Te krótkie wersy przypominają, że serce wciąż potrafi drżeć.",
         "author": "Amelia",
         "status": "nauczycielka"
       },
       "testimonial-5": {
-        "quote": "Dzięki nim znów czuję się jak młoda dziewczyna czekająca na list od ukochanego",
-        "author": "Kasia",
-        "status": "matka"
+        "quote": "Dzięki nim czuję się znów jak młoda dziewczyna czekająca na list od ukochanego.",
+        "author": "Katarzyna",
+        "status": "mama"
       },
       "testimonial-6": {
-        "quote": "Wasze szepty są jak filiżanka herbaty wypita przy kominku — krótko, ale w sam raz dla duszy",
+        "quote": "Szepty są jak filiżanka herbaty przy kominku — krótkie, ale zawsze w sam raz dla duszy.",
         "author": "Dorota",
         "status": "opiekunka"
       },
       "testimonial-7": {
-        "quote": "Te krótkie smsiki w kilku słowach potrafią obudzić wspomnienia, których dawno już nie odwiedzałam",
-        "author": "Ania",
+        "quote": "W kilku słowach potrafią obudzić wspomnienia, do których dawno nie wracałam.",
+        "author": "Anna",
         "status": "podróżniczka"
       },
       "testimonial-8": {
-        "quote": "Nie wiedziałam, że SMS może być jak dotyk — delikatny, ciepły, kojący",
-        "author": "Domi",
-        "status": "fanka"
+        "quote": "Nie wiedziałam, że SMS może być jak dotyk — delikatny, ciepły i kojący.",
+        "author": "Dominika",
+        "status": "czytelniczka"
       }
     },
     "pricing-section": {
@@ -99,22 +99,22 @@
       "subtitle-4": "dziś",
       "subtitle-5": "wieczorem",
       "trial-card": {
-        "title": "Okres Próbny",
-        "duration": "7 DNI",
+        "title": "Wypróbuj za darmo",
+        "duration": "BEZ ZOBOWIĄZAŃ",
         "currency": "zł",
         "period": "przez 7 dni",
         "CTA-button": "Rozpocznij okres próbny"
       },
       "one-time-purchase-card": {
-        "tooltip": "najczęściej wybierany",
-        "title": "Jednorazowa Płatność",
+        "tooltip": "często wybierany",
+        "title": "Jednorazowy miesiąc",
         "duration": "30 DNI WIECZORNYCH SZEPTÓW",
         "currency": "zł",
         "period": "jednorazowo",
-        "CTA-button": "Kup za 19 zł"
+        "CTA-button": "Odbierz 30 dni za 19 zł"
       },
       "subscription-card": {
-        "tooltip": "wymaga karty",
+        "tooltip": "dla stałych czytelników",
         "title": "Subskrypcja",
         "duration": "MIESIĘCZNA",
         "currency": "zł",
@@ -124,8 +124,8 @@
       }
     },
     "bottom-cta": {
-      "title": "Gotowa/y na swój pierwszy szept?",
-      "subtitle": "Dołącz do tysięcy czytelników, którzy każdego wieczoru otrzymują ciepłe słowa",
+      "title": "Gotowa / gotowy na swój pierwszy szept?",
+      "subtitle": "Dołącz do tysięcy czytelników, którzy każdego wieczoru otrzymują ciepłe słowa prosto na swój telefon",
       "button": "Rozpocznij darmowy okres próbny"
     }
   },

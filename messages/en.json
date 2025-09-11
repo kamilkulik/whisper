@@ -51,24 +51,24 @@
       "title": "What our readers whisper back…",
       "copy": "Every line here comes from someone who has already welcomed Evening Whisper into their life. Their words say more than we ever could.",
       "testimonial-1": {
-        "quote": "These messages are little gems in my day. Sometimes a single sentence is enough to make me feel needed.",
+        "quote": "These whispers are little gems in my day. Sometimes a single sentence is enough to make me feel needed.",
         "author": "Margaret",
         "status": "retired"
       },
       "testimonial-2": {
-        "quote": "I open a text and suddenly the room feels brighter, even though the lights haven’t changed.",
+        "quote": "I open a message and suddenly the room feels brighter, even though nothing around me has changed.",
         "author": "Patricia",
         "status": "mother"
       },
       "testimonial-3": {
-        "quote": "“Evening Whisper” is a daily letter from life — tender, light, essential.",
+        "quote": "Evening Whisper feels like a daily letter from life — tender, light, essential.",
         "author": "Eleanor",
         "status": "poetry lover"
       },
       "testimonial-4": {
-        "quote": "Every evening with “Evening Whisper” feels warmer. These short verses remind me that the heart can still tremble.",
-        "author": "Amelia",
-        "status": "teacher"
+        "quote": "My daughter signed me up. Now, every evening I wait for that one line that makes me smile. Best gift ever.",
+        "author": "Teresa",
+        "status": "grandmother"
       },
       "testimonial-5": {
         "quote": "Thanks to them I feel once again like a young girl waiting for a letter from her beloved.",
@@ -76,17 +76,17 @@
         "status": "mother"
       },
       "testimonial-6": {
-        "quote": "Your whispers are like a cup of tea by the fire — brief, but just right for the soul.",
+        "quote": "Your whispers are like a cup of tea by the fire — brief, but warming the soul in just the right way.",
         "author": "Dorothy",
         "status": "carer"
       },
       "testimonial-7": {
-        "quote": "These little texts, in just a few words, can awaken memories I haven’t visited in years.",
-        "author": "Anne",
-        "status": "traveller"
+        "quote": "Sometimes it feels like the words know exactly what I needed that day.",
+        "author": "Helena",
+        "status": "retired"
       },
       "testimonial-8": {
-        "quote": "I never knew a text message could be like a touch — gentle, warm, soothing.",
+        "quote": "I never knew a text message could feel like a touch — gentle, warm, soothing.",
         "author": "Emily",
         "status": "fan"
       }
@@ -99,8 +99,8 @@
       "subtitle-4": "this very",
       "subtitle-5": "evening",
       "trial-card": {
-        "title": "Trial Period",
-        "duration": "7 DAYS",
+        "title": "Test for free",
+        "duration": "NO STRINGS ATTACHED",
         "currency": "£",
         "period": "for 7 days",
         "CTA-button": "Start your trial"
@@ -125,7 +125,7 @@
     },
     "bottom-cta": {
       "title": "Ready for your first whisper?",
-      "subtitle": "Join thousands of readers who receive warm words every evening",
+      "subtitle": "Join thousands of readers who receive warm words every evening straight to their phone",
       "button": "Start free trial"
     }
   },
