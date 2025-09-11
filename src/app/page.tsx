@@ -281,7 +281,7 @@ export default function Home() {
           <HowItWorks onGetStarted={handleNavigateToPricing} />
 
           {/* Smartphone Notification Section */}
-          <div className="relative min-h-[80vh] flex items-center">
+          <div className="relative min-h-[80vh] flex items-center mb-32">
             <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
                 {/* Image */}
@@ -304,6 +304,7 @@ export default function Home() {
                     <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                       {t("smartphone-notification-section.title-2")}
                     </span>
+                    {t("smartphone-notification-section.title-3")}
                   </h2>
 
                   <p className="text-2xl lg:text-xl text-blue-200 text-justify leading-relaxed">
@@ -333,9 +334,23 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <div className="relative min-h-[65vh] flex flex-col items-center mb-32">
+            {/* Main Headline */}
+            <div className="text-center mb-4" data-oid="-zj3z04">
+              <h2
+                className="text-4xl lg:text-5xl font-bold text-white mb-4"
+                data-oid="c3bt..l"
+              >
+                {t("testimonials.title")}
+              </h2>
+            </div>
+            <p className="max-w-4xl text-2xl lg:text-xl text-blue-200 text-center leading-relaxed">
+              {t("testimonials.copy")}
+            </p>
 
-          {/* Testimonials Section */}
-          <TestimonialsCarousel testimonials={testimonials} />
+            {/* Testimonials Section */}
+            <TestimonialsCarousel testimonials={testimonials} />
+          </div>
 
           {/* Pricing Section */}
           <div id="pricing-section">

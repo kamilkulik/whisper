@@ -41,7 +41,7 @@ export default function TestimonialsCarousel({
   useEffect(() => {
     const interval = setInterval(() => {
       nextTestimonial();
-    }, 5000); // 5 seconds
+    }, 9000); // 5 seconds
 
     return () => clearInterval(interval);
   }, [testimonials.length, resetTimer]);

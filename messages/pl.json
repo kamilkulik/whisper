@@ -2,51 +2,54 @@
   "LandingPage": {
     "hero": {
       "brand": "SECRET PROJECT",
-      "title-1": "Otrzymuj codzienny szept, który ",
-      "title-2": "ogrzeje",
-      "title-3": "Twoje serce — prosto na Twój telefon.",
+      "title-1": "Codziennie mały szept — jak od ",
+      "title-2": "ukochanej osoby",
+      "title-3": "która pamięta i troszczy się o Ciebie",
       "copy": {
-        "c-1": "Krótka wiadomość, pełna ciepła i magii słów.",
-        "c-2": "Każdego wieczoru, o tej samej porze.",
+        "c-1": "Krótka wiadomość, która ogrzeje serce i doda otuchy.",
+        "c-2": "Codziennie wieczorem, o tej samej porze.",
         "c-3": "Darmowy dostęp przez 7 dni.",
-        "c-4": "Możesz anulować w każdej chwili."
+        "c-4": "Możesz zrezygnować w każdej chwili."
       },
-      "button": "Wyślij mi pierwszy szept",
-      "CTA": "Pierwszy szept dziś wieczorem o 20:59",
+      "button": "Niech odnajdzie mnie mój pierwszy szept",
+      "CTA": "Twój pierwszy szept dotrze już dziś wieczorem",
       "login-button": "Logowanie",
-      "header-cta-button": "Zacznij teraz"
+      "header-cta-button": "Tydzień szeptów za darmo"
     },
     "how-it-works": {
-      "title": "Proste jak dwa westchnienia",
+      "title": "Proste jak westchnienia",
       "step-1": {
-        "title": "Zapisz się w 30 sekund",
-        "description": "Podaj numer telefonu i gotowe. Prosty formularz, który wypełnisz w mniej niż 30 sekund."
+        "title": "Zapisz się w kilka chwil",
+        "description": "Podaj swój numer telefonu — i gotowe. Prosty formularz, wypełnisz w mgnieniu oka"
       },
       "step-2": {
-        "title": "Codziennie wieczorem o 20:59",
-        "description": "Dostajesz wiadomość tylko dla Ciebie. Każdego dnia, punktualnie o tej samej porze."
+        "title": "Twój szept, każdego wieczoru",
+        "description": "Codziennie, o tej samej porze, otrzymasz wiadomość stworzoną tylko dla Ciebie przez poetę"
       },
       "step-3": {
-        "title": "Ciesz się chwilą",
-        "description": "Czytaj, uśmiechnij się, zachowaj dla siebie lub wyślij dalej. To Twoja chwila spokoju."
+        "title": "Ciesz się swoją chwilą",
+        "description": "Przeczytaj powoli, uśmiechnij się, zachowaj — albo podziel się z bliską osobą. To Twoja codzienna pauza"
       },
-      "mini-CTA": "Tak proste, że pierwszą wiadomość możesz mieć już dziś",
-      "button": "Wyślij mi pierwszy szept",
+      "mini-CTA": "Tak proste — Twój pierwszy szept może dotrzeć już dziś wieczorem",
+      "button": "Niech odnajdzie mnie mój pierwszy szept",
       "reassurance-box": {
-        "title": "Twój numer telefonu jest bezpieczny",
-        "description": "Darmowy dostęp przez 7 dni. Możesz anulować w każdej chwili."
+        "title": "Twój numer telefonu pozostanie bezpieczny",
+        "description": "7 dni za darmo. Możesz zrezygnować w każdej chwili — bez żadnych zobowiązań"
       }
     },
     "smartphone-notification-section": {
-      "title-1": "Słowa, które zostają z Tobą na",
+      "title-1": "Słowa, które zostają z Tobą... na",
       "title-2": "długo",
-      "copy-1": "To nie są przypadkowe cytaty ani generowane przez AI. Każdy szept jest pisany ręcznie przez poetę, który od lat tworzy krótkie formy pełne emocji.",
-      "copy-2": "Są jak małe listy miłosne — tylko że mieszczą się w jednym SMS-ie. Idealne, by zakończyć dzień z uśmiechem.",
-      "button": "Rozpocznij Okres Próbny",
-      "CTA-copy-1": "✓ Darmowy przez 7 dni",
-      "CTA-copy-2": "✓ Anuluj w każdej chwili"
+      "title-3": " po przeczytaniu",
+      "copy-1": "Nieprzypadkowe. Nie generowane przez AI. Każdy szept powstaje ręcznie, tworzony przez poetę, który od lat zamyka emocje w krótkich formach.",
+      "copy-2": "To jak małe listy miłosne — mieszczą się w jednym SMS-ie, a potrafią rozjaśnić cały wieczór.",
+      "button": "Rozpocznij 7 dni szeptów",
+      "CTA-copy-1": "✓ 7 dni za darmo",
+      "CTA-copy-2": "✓ Możesz zrezygnować w każdej chwili"
     },
     "testimonials": {
+      "title": "Co nasi czytelnicy szepczą w odpowiedzi…",
+      "copy": "Każde zdanie pochodzi od osoby, która już wpuściła Wieczorny Szept do swojego życia. Ich słowa mówią więcej niż jakiekolwiek obietnice.",
       "testimonial-1": {
         "quote": "Te wiadomości to małe klejnoty dnia. Czasem jedno zdanie wystarczy, by poczuć się potrzebną",
         "author": "Zosia",

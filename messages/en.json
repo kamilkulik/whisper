@@ -2,51 +2,54 @@
   "LandingPage": {
     "hero": {
       "brand": "SECRET PROJECT",
-      "title-1": "Receive daily whispers that ",
-      "title-2": "warm",
-      "title-3": "your heart — directly to your phone.",
+      "title-1": "A little whisper each day — like from a ",
+      "title-2": "loved one",
+      "title-3": "who remembers and cares about you",
       "copy": {
-        "c-1": "Short message, full of warmth and magic words.",
+        "c-1": "A short message to warm your heart and lift your spirit.",
         "c-2": "Every evening, at the same time.",
-        "c-3": "Free access for 7 days.",
-        "c-4": "You can cancel at any time."
+        "c-3": "Free for 7 days.",
+        "c-4": "Cancel anytime."
       },
-      "button": "Send me my first whisper",
-      "CTA": "First whisper tonight at 20:59",
+      "button": "Let my first whisper find me tonight",
+      "CTA": "Your first whisper arrives this evening",
       "login-button": "Login",
-      "header-cta-button": "Start now"
+      "header-cta-button": "Week of whispers for free"
     },
     "how-it-works": {
-      "title": "As simple as two sighs",
+      "title": "As simple as a deep breath",
       "step-1": {
-        "title": "Sign up in 30 seconds",
-        "description": "Provide your phone number and done. Simple form that you will fill in less than 30 seconds."
+        "title": "Sign up in moments",
+        "description": "Just share your phone number — that’s all. A simple form, ready in a heartbeat"
       },
       "step-2": {
-        "title": "Every evening at 20:59",
-        "description": "You receive a message only for you. Every day, exactly at the same time."
+        "title": "Your whisper, every evening",
+        "description": "Each night, at the same time, a message created by a poet just for you arrives."
       },
       "step-3": {
-        "title": "Enjoy the moment",
-        "description": "Read, smile, keep for yourself or send it to someone else. It's your moment of peace."
+        "title": "Enjoy your moment",
+        "description": "Read it slowly, smile, save it — or share it with someone you love. It’s your pause in the day."
       },
-      "mini-CTA": "So simple that you can have your first message today",
-      "button": "Send me my first whisper",
+      "mini-CTA": "So simple — your first whisper can arrive this very evening",
+      "button": "Let my first whisper find me",
       "reassurance-box": {
-        "title": "Your phone number is safe",
-        "description": "Free access for 7 days. You can cancel at any time."
+        "title": "Your phone number stays safe",
+        "description": "7 days free. Cancel anytime — no strings attached"
       }
     },
     "smartphone-notification-section": {
-      "title-1": "Words that stay with you for",
+      "title-1": "Words that stay with you... ",
       "title-2": "long",
-      "copy-1": "These are not just random or AI-generated quotes. Each whisper is written manually by a poet who has been writing short forms full of emotions for years.",
-      "copy-2": "They are like little love letters — only they fit in one SMS. Perfect to end the day with a smile.",
-      "button": "Start Trial Period",
+      "title-3": " after reading",
+      "copy-1": "Not random. Not AI. Each whisper is written by hand, crafted by a poet who has spent years shaping emotions into short forms.",
+      "copy-2": "They are like little love notes — small enough to fit in a single SMS, yet warm enough to brighten your evening.",
+      "button": "Begin my 7 days of whispers",
       "CTA-copy-1": "✓ Free for 7 days",
       "CTA-copy-2": "✓ Cancel anytime"
     },
     "testimonials": {
+      "title": "What our readers whisper back…",
+      "copy": "Every line here comes from someone who has already welcomed Evening Whisper into their life. Their words say more than we ever could.",
       "testimonial-1": {
         "quote": "These messages are little gems in my day. Sometimes a single sentence is enough to make me feel needed.",
         "author": "Margaret",
