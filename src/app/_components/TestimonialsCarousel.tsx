@@ -47,7 +47,7 @@ export default function TestimonialsCarousel({
   }, [testimonials.length, resetTimer]);
 
   return (
-    <div className="relative py-32">
+    <div className="relative py-24">
       <div className="max-w-4xl mx-auto px-6">
         <div className="relative group">
           {/* Floating Navigation Arrows */}
