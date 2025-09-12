@@ -45,13 +45,23 @@ export default function Home() {
       ) as HTMLElement;
       if (bar) {
         bar.style.setProperty("visibility", "visible", "important");
+        let ticking = false;
+
         const handleScrollProgress = () => {
-          const progress =
-            window.scrollY / (document.body.scrollHeight - window.innerHeight);
-          bar.style.transform = `scaleX(${progress})`;
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              const progress =
+                window.scrollY /
+                (document.body.scrollHeight - window.innerHeight);
+              bar.style.transform = `scaleX(${progress})`;
+              ticking = false;
+            });
+            ticking = true;
+          }
         };
 
         window.addEventListener("scroll", handleScrollProgress);
+
         handleScrollProgress(); // initial draw
 
         return () => window.removeEventListener("scroll", handleScrollProgress);
