@@ -67,9 +67,17 @@ body {
 }
 
 /* Basic scroll behavior */
-html,
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+
+  /* Ensure html is the scroll container for scroll-driven animations */
+}
+
 body {
   overflow-x: hidden;
+  /* Ensure body doesn't interfere with scroll container */
+  min-height: auto;
 }
 
 /* Heartbeat animation */
@@ -156,4 +164,36 @@ body {
 /* Previous direction animations */
 .carousel-inner-container.previous .carousel-slide {
   transition: transform 1500ms ease-in-out;
+}
+
+/* Base state: collapsed bar */
+.reading-progress-bar {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899, #f59e0b);
+  z-index: 1000;
+  transform-origin: left;
+  transform: scaleX(0); /* <-- collapsed by default */
+}
+
+/* Modern browsers with scroll-timeline */
+@supports (animation-timeline: scroll()) {
+  .reading-progress-bar {
+    visibility: visible;
+    animation: scrollProgress linear forwards;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes scrollProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }

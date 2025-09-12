@@ -38,6 +38,27 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!CSS.supports("animation-timeline: scroll()")) {
+      const bar = document.querySelector(
+        ".reading-progress-bar"
+      ) as HTMLElement;
+      if (bar) {
+        bar.style.setProperty("visibility", "visible", "important");
+        const handleScrollProgress = () => {
+          const progress =
+            window.scrollY / (document.body.scrollHeight - window.innerHeight);
+          bar.style.transform = `scaleX(${progress})`;
+        };
+
+        window.addEventListener("scroll", handleScrollProgress);
+        handleScrollProgress(); // initial draw
+
+        return () => window.removeEventListener("scroll", handleScrollProgress);
+      }
+    }
+  }, []);
+
   // Handle modal deep links - scroll to pricing section when modal is present (except login and contact)
   useEffect(() => {
     if (modal && modal !== "login" && modal !== "contact") {
@@ -162,6 +183,9 @@ export default function Home() {
 
   return (
     <div className="relative">
+      {/* Reading Progress Bar */}
+      <div className="reading-progress-bar"></div>
+
       <div className="bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] relative">
         {/* Navigation Bar */}
         <nav
