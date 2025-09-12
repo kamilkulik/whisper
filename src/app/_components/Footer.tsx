@@ -14,9 +14,9 @@ export function Footer() {
       {/* Main Footer Content */}
       <div className="relative pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-5 gap-12 mb-12 px-12">
-            {/* Middle Column - Links */}
-            <div className="col-span-2">
+          <div className="flex justify-center mb-12">
+            {/* Links Section */}
+            <div className="text-center">
               <h3 className="text-2xl font-bold mb-8 elegant-text">
                 {t("title")}
               </h3>
@@ -46,27 +46,6 @@ export function Footer() {
                   </a>
                 </li>
               </ul>
-            </div>
-
-            {/* Right Column - Newsletter */}
-            <div className="col-span-3">
-              <h3 className="text-2xl font-bold mb-8 elegant-text">
-                {t("newsletter-title")}
-              </h3>
-              <p className="text-white/80 mb-6 leading-relaxed">
-                {t("newsletter-subtitle")}
-              </p>
-              <div className="space-y-4">
-                <input
-                  type="email"
-                  placeholder={t("newsletter-placeholder")}
-                  className="w-full px-4 py-3 bg-transparent border-b-2 border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white transition-colors"
-                />
-
-                <button className="bg-[#F5F5DC] text-[#2A031E] px-6 py-2 rounded-lg font-medium hover:bg-white transition-colors">
-                  {t("newsletter-button")}
-                </button>
-              </div>
             </div>
           </div>
         </div>
