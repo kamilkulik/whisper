@@ -5,6 +5,7 @@ import { LocaleProvider } from "./contexts/LocaleContext";
 import { Suspense } from "react";
 import { NextIntlClientProvider, useLocale } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { FullPageLoader } from "./_components/FullPageLoader";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -24,7 +25,7 @@ export default async function RootLayout({
   return (
     <html>
       <body className={`${montserrat.variable} antialiased font-montserrat`}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<FullPageLoader />}>
           <LocaleProvider locale={locale}>
             {/** NextIntlClientProvider used to provide configuration for Client Components */}
             {/**  */}

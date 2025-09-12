@@ -69,6 +69,77 @@ export default function Home() {
     }
   }, []);
 
+  // Canvas Animation POC
+  useEffect(() => {
+    const canvas = document.getElementById(
+      "hero-lightpass"
+    ) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    const frameCount = 148;
+    const currentFrame = (index: number) =>
+      `https://www.apple.com/105/media/us/airpods-pro/2019/1299e2f5_9206_4470_b28e_08307a42f19b/anim/sequence/large/01-hero-lightpass/${index.toString().padStart(4, "0")}.jpg`;
+
+    // Set canvas dimensions
+    canvas.width = 1158;
+    canvas.height = 770;
+
+    const img = new Image();
+    img.src = currentFrame(1);
+
+    // Load first frame
+    img.onload = function () {
+      context.drawImage(img, 0, 0);
+    };
+
+    // Preload images for smooth animation
+    const preloadImages = () => {
+      for (let i = 1; i < frameCount; i++) {
+        const preloadImg = new Image();
+        preloadImg.src = currentFrame(i);
+      }
+    };
+
+    const updateImage = (index: number) => {
+      img.src = currentFrame(index);
+      img.onload = function () {
+        context.drawImage(img, 0, 0);
+      };
+    };
+
+    let ticking = false;
+    const handleCanvasScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollTop = window.scrollY;
+          const maxScrollTop =
+            document.documentElement.scrollHeight - window.innerHeight;
+          const scrollFraction = scrollTop / maxScrollTop;
+          const frameIndex = Math.min(
+            frameCount - 1,
+            Math.ceil(scrollFraction * frameCount)
+          );
+          updateImage(frameIndex + 1);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    // Add scroll listener
+    window.addEventListener("scroll", handleCanvasScroll);
+
+    // Start preloading
+    preloadImages();
+
+    return () => {
+      window.removeEventListener("scroll", handleCanvasScroll);
+    };
+  }, []);
+
   // Handle modal deep links - scroll to pricing section when modal is present (except login and contact)
   useEffect(() => {
     if (modal && modal !== "login" && modal !== "contact") {
@@ -308,6 +379,20 @@ export default function Home() {
                   <ImageCarousel images={carouselImages} />
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Canvas Animation POC Section */}
+          <div className="relative min-h-[100vh] bg-black">
+            <div className="sticky top-0 h-screen flex items-center justify-center">
+              <canvas
+                id="hero-lightpass"
+                className="max-w-full max-h-full"
+                style={{
+                  maxWidth: "100vw",
+                  maxHeight: "100vh",
+                }}
+              />
             </div>
           </div>
 

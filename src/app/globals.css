@@ -197,3 +197,20 @@ body {
     transform: scaleX(1);
   }
 }
+
+/* Full Page Loader Animations */
+@keyframes loadingProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.loading-progress-bar {
+  animation: loadingProgress 2s ease-in-out infinite;
+}
