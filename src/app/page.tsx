@@ -142,7 +142,9 @@ export default function Home() {
 
   // Intersection Observer for copy line and float-in animations
   useEffect(() => {
-    const animatedElements = document.querySelectorAll(".copy-line, .float-in");
+    const animatedElements = document.querySelectorAll(
+      ".copy-line, .float-in, .float-in-right"
+    );
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -430,7 +432,10 @@ export default function Home() {
                 </div>
 
                 {/* Right Side - Image Carousel */}
-                <div className="mt-12 lg:mt-0 lg:col-span-3 relative">
+                <div
+                  className="float-in-right mt-12 lg:mt-0 lg:col-span-3 relative"
+                  data-delay="1500"
+                >
                   <ImageCarousel images={carouselImages} />
                 </div>
               </div>

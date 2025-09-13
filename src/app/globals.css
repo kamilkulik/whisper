@@ -241,3 +241,17 @@ body {
   opacity: 1;
   transform: translateX(0);
 }
+
+/* Float-in from right animations */
+.float-in-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+
+.float-in-right.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
