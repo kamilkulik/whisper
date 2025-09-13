@@ -227,3 +227,17 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Float-in from left animations */
+.float-in {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+
+.float-in.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}

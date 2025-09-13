@@ -140,9 +140,9 @@ export default function Home() {
     };
   }, []);
 
-  // Intersection Observer for copy line animations
+  // Intersection Observer for copy line and float-in animations
   useEffect(() => {
-    const copyLines = document.querySelectorAll(".copy-line");
+    const animatedElements = document.querySelectorAll(".copy-line, .float-in");
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -166,13 +166,13 @@ export default function Home() {
       }
     );
 
-    copyLines.forEach((line) => {
-      observer.observe(line);
+    animatedElements.forEach((element) => {
+      observer.observe(element);
     });
 
     return () => {
-      copyLines.forEach((line) => {
-        observer.unobserve(line);
+      animatedElements.forEach((element) => {
+        observer.unobserve(element);
       });
     };
   }, []);
@@ -392,26 +392,35 @@ export default function Home() {
 
                   <div className="flex items-center space-x-4 pt-8">
                     <div className="flex -space-x-2">
-                      <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden">
+                      <div
+                        className="float-in w-12 h-12 rounded-full border-2 border-white overflow-hidden"
+                        data-delay="1800"
+                      >
                         <img
                           src="/face_1.png"
                           className="w-full h-full object-cover object-center"
                         />
                       </div>
-                      <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden">
+                      <div
+                        className="float-in w-12 h-12 rounded-full border-2 border-white overflow-hidden"
+                        data-delay="1700"
+                      >
                         <img
                           src="/face_2.png"
                           className="w-full h-full object-cover object-center"
                         />
                       </div>
-                      <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden">
+                      <div
+                        className="float-in w-12 h-12 rounded-full border-2 border-white overflow-hidden"
+                        data-delay="1600"
+                      >
                         <img
                           src="/face_3.png"
                           className="w-full h-full object-cover object-center"
                         />
                       </div>
                     </div>
-                    <div className="text-white">
+                    <div className="float-in text-white" data-delay="1500">
                       {/* <p className="font-medium">
                         Join over 25,000 poetry lovers worldwide.
                       </p> */}
