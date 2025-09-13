@@ -140,6 +140,43 @@ export default function Home() {
     };
   }, []);
 
+  // Intersection Observer for copy line animations
+  useEffect(() => {
+    const copyLines = document.querySelectorAll(".copy-line");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const element = entry.target as HTMLElement;
+            const delay = parseInt(element.dataset.delay || "0");
+
+            setTimeout(() => {
+              element.classList.add("animate-in");
+            }, delay);
+
+            // Stop observing this element once it's animated
+            observer.unobserve(element);
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of the element is visible
+        rootMargin: "0px 0px -50px 0px", // Start animation slightly before element is fully visible
+      }
+    );
+
+    copyLines.forEach((line) => {
+      observer.observe(line);
+    });
+
+    return () => {
+      copyLines.forEach((line) => {
+        observer.unobserve(line);
+      });
+    };
+  }, []);
+
   // Handle modal deep links - scroll to pricing section when modal is present (except login and contact)
   useEffect(() => {
     if (modal && modal !== "login" && modal !== "contact") {
@@ -317,7 +354,10 @@ export default function Home() {
                 {/* Left Side - Content */}
                 <div className="lg:col-span-2 space-y-8">
                   <div>
-                    <h1 className="text-5xl lg:text-4xl font-bold text-white leading-tight">
+                    <h1
+                      className="copy-line text-5xl lg:text-4xl font-bold text-white leading-tight"
+                      data-delay="0"
+                    >
                       {t("hero.title-1")}{" "}
                       <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                         {t("hero.title-2")}
@@ -326,20 +366,26 @@ export default function Home() {
                     </h1>
                   </div>
 
-                  <p className="text-xl text-white leading-relaxed md:max-lg:text-2xl">
-                    {t("hero.copy.c-1")}
-                    <br />
-                    {t("hero.copy.c-2")}
-                    <br />
-                    {t("hero.copy.c-3")}
-                    <br />
-                    {t("hero.copy.c-4")}
-                  </p>
+                  <div className="text-xl text-white leading-relaxed md:max-lg:text-2xl">
+                    <div className="copy-line" data-delay="300">
+                      {t("hero.copy.c-1")}
+                    </div>
+                    <div className="copy-line" data-delay="500">
+                      {t("hero.copy.c-2")}
+                    </div>
+                    <div className="copy-line" data-delay="700">
+                      {t("hero.copy.c-3")}
+                    </div>
+                    <div className="copy-line" data-delay="900">
+                      {t("hero.copy.c-4")}
+                    </div>
+                  </div>
 
                   {/** Encapsulate button into its own component */}
                   <button
                     onClick={handleNavigateToPricing}
-                    className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+                    className="copy-line bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+                    data-delay="1100"
                   >
                     {t("hero.button")}
                   </button>

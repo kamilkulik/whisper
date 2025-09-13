@@ -214,3 +214,16 @@ body {
 .loading-progress-bar {
   animation: loadingProgress 2s ease-in-out infinite;
 }
+
+.copy-line {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 1.2s ease-out,
+    transform 1.2s ease-out;
+}
+
+.copy-line.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
