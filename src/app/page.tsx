@@ -434,7 +434,7 @@ export default function Home() {
                 {/* Right Side - Image Carousel */}
                 <div
                   className="float-in-right mt-12 lg:mt-0 lg:col-span-3 relative"
-                  data-delay="1500"
+                  data-delay="600"
                 >
                   <ImageCarousel images={carouselImages} />
                 </div>
