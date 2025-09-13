@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import ConfirmationCodeForm from "./_components/ConfirmationCodeForm";
 import ContactForm from "./_components/ContactForm";
@@ -20,6 +20,7 @@ export default function Home() {
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
   const [selectedProduct, setSelectedProduct] =
     useState<SubscriptionType | null>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   // Get translations
   const t = useTranslations("LandingPage");
@@ -36,6 +37,19 @@ export default function Home() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+
+    const setDelay = () => {
+      el.dataset["delay"] = window.innerWidth < 800 ? "0" : "1600";
+    };
+
+    setDelay();
+    window.addEventListener("resize", setDelay);
+    return () => window.removeEventListener("resize", setDelay);
   }, []);
 
   useEffect(() => {
@@ -434,7 +448,7 @@ export default function Home() {
                 {/* Right Side - Image Carousel */}
                 <div
                   className="float-in-right mt-12 lg:mt-0 lg:col-span-3 relative"
-                  data-delay="600"
+                  ref={carouselRef}
                 >
                   <ImageCarousel images={carouselImages} />
                 </div>
