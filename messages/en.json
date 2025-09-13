@@ -106,15 +106,15 @@
         "CTA-button": "Start your trial"
       },
       "one-time-purchase-card": {
-        "tooltip": "most popular choice",
-        "title": "One-off Payment",
+        "tooltip": "popular choice",
+        "title": "One-off month",
         "duration": "30 DAYS OF EVENING WHISPERS",
         "currency": "£",
         "period": "one-time",
         "CTA-button": "Buy for 19 £"
       },
       "subscription-card": {
-        "tooltip": "card required",
+        "tooltip": "for regular readers",
         "title": "Subscription",
         "duration": "MONTHLY",
         "currency": "£",

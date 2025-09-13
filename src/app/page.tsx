@@ -383,7 +383,7 @@ export default function Home() {
           </div>
 
           {/* Canvas Animation POC Section */}
-          <div className="relative min-h-[100vh] bg-black">
+          {/* <div className="relative min-h-[100vh] bg-black">
             <div className="sticky top-0 h-screen flex items-center justify-center">
               <canvas
                 id="hero-lightpass"
@@ -394,7 +394,7 @@ export default function Home() {
                 }}
               />
             </div>
-          </div>
+          </div> */}
 
           {/* How It Works Section */}
           <HowItWorks onGetStarted={handleNavigateToPricing} />
