@@ -536,8 +536,19 @@ export default function Home() {
             <div className="relative min-h-[60vh] flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
-                  {/* Image */}
-                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                  {/* Content - Order 1 on mobile, Order 2 on desktop */}
+                  <div className="order-1 lg:order-2 lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.it-begins-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.it-begins-2")}
+                      </span>
+                      {t("how-it-feels.it-begins-3")}
+                    </h2>
+                  </div>
+
+                  {/* Image - Order 2 on mobile, Order 1 on desktop */}
+                  <div className="order-2 lg:order-1 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef}
                       src="/gentle_ping.mp4"
@@ -554,17 +565,6 @@ export default function Home() {
                       preload="auto"
                     />
                   </div>
-
-                  {/* Content */}
-                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
-                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
-                      {t("how-it-feels.it-begins-1")}{" "}
-                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        {t("how-it-feels.it-begins-2")}
-                      </span>
-                      {t("how-it-feels.it-begins-3")}
-                    </h2>
-                  </div>
                 </div>
               </div>
             </div>
@@ -572,8 +572,8 @@ export default function Home() {
             <div className="relative min-h-[60vh] flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
-                  {/* Content */}
-                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                  {/* Content - Order 1 on mobile, Order 1 on desktop */}
+                  <div className="order-1 lg:order-1 lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
                     <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
                       {t("how-it-feels.open-the-whisper-1")}{" "}
                       <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -582,8 +582,8 @@ export default function Home() {
                       {t("how-it-feels.open-the-whisper-3")}
                     </h2>
                   </div>
-                  {/* Image */}
-                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                  {/* Image - Order 2 on mobile, Order 2 on desktop */}
+                  <div className="order-2 lg:order-2 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
                     <video
                       // ref={videoRef2}
                       src="/open_the_whisper.mp4"
@@ -608,8 +608,18 @@ export default function Home() {
             <div className="relative min-h-[60vh] flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
-                  {/* Content */}
-                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                  {/* Content - Order 1 on mobile, Order 2 on desktop */}
+                  <div className="order-1 lg:order-2 lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.the-habit-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.the-habit-2")}
+                      </span>
+                      {t("how-it-feels.the-habit-3")}
+                    </h2>
+                  </div>
+                  {/* Image - Order 2 on mobile, Order 1 on desktop */}
+                  <div className="order-2 lg:order-1 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef2}
                       src="/message-scroll.mp4"
@@ -626,16 +636,6 @@ export default function Home() {
                       preload="auto"
                     />
                   </div>
-                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
-                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
-                      {t("how-it-feels.the-habit-1")}{" "}
-                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        {t("how-it-feels.the-habit-2")}
-                      </span>
-                      {t("how-it-feels.the-habit-3")}
-                    </h2>
-                  </div>
-                  {/* Image */}
                 </div>
               </div>
             </div>
@@ -643,8 +643,8 @@ export default function Home() {
             <div className="relative min-h-[60vh] flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
-                  {/* Content */}
-                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                  {/* Content - Order 1 on mobile, Order 1 on desktop */}
+                  <div className="order-1 lg:order-1 lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
                     <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
                       {t("how-it-feels.the-feeling-1")}{" "}
                       <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -653,8 +653,8 @@ export default function Home() {
                       {t("how-it-feels.the-feeling-3")}
                     </h2>
                   </div>
-                  {/* Image */}
-                  <div className="flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 ">
+                  {/* Image - Order 2 on mobile, Order 2 on desktop */}
+                  <div className="order-2 lg:order-2 flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 ">
                     <img
                       src="/single_whisper.png"
                       alt="Smartphone showing Wieczorny Szept notification"
@@ -673,8 +673,18 @@ export default function Home() {
             <div className="relative min-h-[60vh] flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
-                  {/* Image */}
-                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                  {/* Content - Order 1 on mobile, Order 2 on desktop */}
+                  <div className="order-1 lg:order-2 lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.you-in-the-story-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.you-in-the-story-2")}
+                      </span>
+                      {t("how-it-feels.you-in-the-story-3")}
+                    </h2>
+                  </div>
+                  {/* Image - Order 2 on mobile, Order 1 on desktop */}
+                  <div className="order-2 lg:order-1 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
                     <video
                       // ref={videoRef2}
                       src="/heartfelt_message.mp4"
@@ -691,16 +701,6 @@ export default function Home() {
                       controlsList="nodownload nofullscreen noremoteplayback"
                       preload="auto"
                     />
-                  </div>
-                  {/* Content */}
-                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
-                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
-                      {t("how-it-feels.you-in-the-story-1")}{" "}
-                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        {t("how-it-feels.you-in-the-story-2")}
-                      </span>
-                      {t("how-it-feels.you-in-the-story-3")}
-                    </h2>
                   </div>
                 </div>
               </div>
