@@ -31,7 +31,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
           >
             {/* Photo */}
             <div
-              className="w-full h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
+              className="w-full min-h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
               data-oid="2k9yuv8"
             >
               <img
@@ -62,7 +62,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
           >
             {/* Photo */}
             <div
-              className="w-full h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
+              className="w-full min-h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
               data-oid="2k9yuv8"
             >
               <img
@@ -93,7 +93,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
           >
             {/* Photo */}
             <div
-              className="w-full h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
+              className="w-full min-h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
               data-oid="2k9yuv8"
             >
               <img

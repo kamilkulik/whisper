@@ -16,6 +16,24 @@
       "login-button": "Logowanie",
       "header-cta-button": "Tydzień szeptów za darmo"
     },
+    "how-it-feels": {
+      "title": "Jak to wygląda w Twoim telefonie",
+      "it-begins-1": "Zaczyna się od ",
+      "it-begins-2": "delikatnego",
+      "it-begins-3": " dźwięku wieczorem…",
+      "open-the-whisper-1": "Otwierasz go. Tylko kilka słów… a jednak",
+      "open-the-whisper-2": "zostają",
+      "open-the-whisper-3": "...",
+      "the-habit-1": "Każdego wieczoru pojawia się kolejny. Cichy ",
+      "the-habit-2": "rytuał",
+      "the-habit-3": " nabiera kształtu.",
+      "the-feeling-1": "Jedne budzą nostalgię, inne wywołują uśmiech. Każdy jest ",
+      "the-feeling-2": "stworzony",
+      "the-feeling-3": " po to, by zostać z Tobą.",
+      "you-in-the-story-1": "Czy potrafisz wyobrazić sobie ",
+      "you-in-the-story-2": "siebie",
+      "you-in-the-story-3": " otwierającą telefon, by znaleźć w nim takie słowa?"
+    },
     "how-it-works": {
       "title": "Proste jak westchnienie",
       "step-1": {

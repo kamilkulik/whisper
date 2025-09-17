@@ -22,6 +22,7 @@ export default function Home() {
     useState<SubscriptionType | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
 
   // Get translations
   const t = useTranslations("LandingPage");
@@ -194,7 +195,7 @@ export default function Home() {
     };
   }, []);
 
-  // Intersection Observer for video autoplay
+  // Intersection Observer for first video autoplay
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -205,7 +206,39 @@ export default function Home() {
           if (entry.isIntersecting) {
             // Video is in view, play it
             video.play().catch((error) => {
-              console.log("Video autoplay failed:", error);
+              console.log("Video 1 autoplay failed:", error);
+            });
+          } else {
+            // Video is out of view, pause it
+            video.pause();
+          }
+        });
+      },
+      {
+        threshold: 0.5, // Trigger when 50% of the video is visible
+        rootMargin: "0px 0px -10% 0px", // Start playing slightly before video is fully visible
+      }
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.unobserve(video);
+    };
+  }, []);
+
+  // Intersection Observer for second video autoplay
+  useEffect(() => {
+    const video = videoRef2.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Video is in view, play it
+            video.play().catch((error) => {
+              console.log("Video 2 autoplay failed:", error);
             });
           } else {
             // Video is out of view, pause it
@@ -489,74 +522,185 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Canvas Animation POC Section */}
-          {/* <div className="relative min-h-[100vh] bg-black">
-            <div className="sticky top-0 h-screen flex items-center justify-center">
-              <canvas
-                id="hero-lightpass"
-                className="max-w-full max-h-full"
-                style={{
-                  maxWidth: "100vw",
-                  maxHeight: "100vh",
-                }}
-              />
+          {/* Main Headline */}
+          <div className="relative py-32 md:max-lg:py-16">
+            <div className="text-center lg:mb-16" data-oid="-zj3z04">
+              <h2
+                className="text-4xl lg:text-5xl font-bold text-white"
+                data-oid="c3bt..l"
+              >
+                {t("how-it-feels.title")}
+              </h2>
             </div>
-          </div> */}
 
-          <div className="relative min-h-[80vh] flex items-center mb-32">
-            <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
-                {/* Image */}
-                <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
-                  <video
-                    ref={videoRef}
-                    src="/evening_message.mp4"
-                    className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                    style={{
-                      filter:
-                        "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                    }}
-                    loop={true}
-                    muted
-                    playsInline
-                    controls={true}
-                    controlsList="nodownload nofullscreen noremoteplayback"
-                    preload="auto"
-                  />
+            <div className="relative min-h-[60vh] flex items-center mb-32">
+              <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
+                  {/* Image */}
+                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                    <video
+                      ref={videoRef}
+                      src="/gentle_ping.mp4"
+                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                      style={{
+                        filter:
+                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                      }}
+                      loop={false}
+                      muted
+                      playsInline
+                      controls={false}
+                      controlsList="nodownload nofullscreen noremoteplayback"
+                      preload="auto"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.it-begins-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.it-begins-2")}
+                      </span>
+                      {t("how-it-feels.it-begins-3")}
+                    </h2>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                {/* Content */}
-                <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
-                  <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
-                    {t("smartphone-notification-section.title-1")}{" "}
-                    <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                      {t("smartphone-notification-section.title-2")}
-                    </span>
-                    {t("smartphone-notification-section.title-3")}
-                  </h2>
+            <div className="relative min-h-[60vh] flex items-center mb-32">
+              <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
+                  {/* Content */}
+                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.open-the-whisper-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.open-the-whisper-2")}
+                      </span>
+                      {t("how-it-feels.open-the-whisper-3")}
+                    </h2>
+                  </div>
+                  {/* Image */}
+                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                    <video
+                      // ref={videoRef2}
+                      src="/open_the_whisper.mp4"
+                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                      style={{
+                        filter:
+                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                      }}
+                      loop={true}
+                      muted
+                      autoPlay={true}
+                      playsInline
+                      controls={false}
+                      controlsList="nodownload nofullscreen noremoteplayback"
+                      preload="auto"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                  <p className="text-2xl lg:text-xl text-blue-200 text-justify leading-relaxed">
-                    {t("smartphone-notification-section.copy-1")}
-                    <br />
-                    <br />
-                    {t("smartphone-notification-section.copy-2")}
-                  </p>
+            <div className="relative min-h-[60vh] flex items-center mb-32">
+              <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
+                  {/* Content */}
+                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                    <video
+                      ref={videoRef2}
+                      src="/message-scroll.mp4"
+                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                      style={{
+                        filter:
+                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                      }}
+                      loop={true}
+                      muted
+                      playsInline
+                      controls={false}
+                      controlsList="nodownload nofullscreen noremoteplayback"
+                      preload="auto"
+                    />
+                  </div>
+                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.the-habit-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.the-habit-2")}
+                      </span>
+                      {t("how-it-feels.the-habit-3")}
+                    </h2>
+                  </div>
+                  {/* Image */}
+                </div>
+              </div>
+            </div>
 
-                  <div className="flex flex-col md:max-lg:flex-row md:max-lg:space-x-8 md:max-lg:justify-center items-center">
-                    <button
-                      onClick={handleNavigateToPricing}
-                      className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
-                    >
-                      {t("smartphone-notification-section.button")}
-                    </button>
-                    <div className="text-white text-2xl lg:text-xl mt-4">
-                      <p className="font-medium">
-                        {t("smartphone-notification-section.CTA-copy-1")}
-                      </p>
-                      <p className="text-blue-200">
-                        {t("smartphone-notification-section.CTA-copy-2")}
-                      </p>
-                    </div>
+            <div className="relative min-h-[60vh] flex items-center mb-32">
+              <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
+                  {/* Content */}
+                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.the-feeling-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.the-feeling-2")}
+                      </span>
+                      {t("how-it-feels.the-feeling-3")}
+                    </h2>
+                  </div>
+                  {/* Image */}
+                  <div className="flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 ">
+                    <img
+                      src="/single_whisper.png"
+                      alt="Smartphone showing Wieczorny Szept notification"
+                      className="w-full max-h-full "
+                      style={{
+                        borderRadius: "2rem",
+                        filter:
+                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative min-h-[60vh] flex items-center mb-32">
+              <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
+                  {/* Image */}
+                  <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                    <video
+                      // ref={videoRef2}
+                      src="/heartfelt_message.mp4"
+                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                      style={{
+                        filter:
+                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                      }}
+                      loop={true}
+                      muted
+                      autoPlay={true}
+                      playsInline
+                      controls={false}
+                      controlsList="nodownload nofullscreen noremoteplayback"
+                      preload="auto"
+                    />
+                  </div>
+                  {/* Content */}
+                  <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                    <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
+                      {t("how-it-feels.you-in-the-story-1")}{" "}
+                      <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {t("how-it-feels.you-in-the-story-2")}
+                      </span>
+                      {t("how-it-feels.you-in-the-story-3")}
+                    </h2>
                   </div>
                 </div>
               </div>
@@ -577,6 +721,7 @@ export default function Home() {
                     alt="Smartphone showing Wieczorny Szept notification"
                     className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                     style={{
+                      borderRadius: "2rem",
                       filter:
                         "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
                     }}
