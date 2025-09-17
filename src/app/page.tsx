@@ -23,6 +23,8 @@ export default function Home() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
+  const videoRef3 = useRef<HTMLVideoElement>(null);
+  const videoRef4 = useRef<HTMLVideoElement>(null);
 
   // Get translations
   const t = useTranslations("LandingPage");
@@ -195,18 +197,25 @@ export default function Home() {
     };
   }, []);
 
-  // Intersection Observer for first video autoplay
+  // Unified Intersection Observer for all videos
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const videos = [
+      videoRef.current,
+      videoRef2.current,
+      videoRef3.current,
+      videoRef4.current,
+    ].filter(Boolean);
+
+    if (videos.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement;
           if (entry.isIntersecting) {
             // Video is in view, play it
             video.play().catch((error) => {
-              console.log("Video 1 autoplay failed:", error);
+              console.log("Video autoplay failed:", error);
             });
           } else {
             // Video is out of view, pause it
@@ -220,42 +229,16 @@ export default function Home() {
       }
     );
 
-    observer.observe(video);
+    // Observe all videos
+    videos.forEach((video) => {
+      if (video) observer.observe(video);
+    });
 
     return () => {
-      observer.unobserve(video);
-    };
-  }, []);
-
-  // Intersection Observer for second video autoplay
-  useEffect(() => {
-    const video = videoRef2.current;
-    if (!video) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Video is in view, play it
-            video.play().catch((error) => {
-              console.log("Video 2 autoplay failed:", error);
-            });
-          } else {
-            // Video is out of view, pause it
-            video.pause();
-          }
-        });
-      },
-      {
-        threshold: 0.5, // Trigger when 50% of the video is visible
-        rootMargin: "0px 0px -10% 0px", // Start playing slightly before video is fully visible
-      }
-    );
-
-    observer.observe(video);
-
-    return () => {
-      observer.unobserve(video);
+      // Clean up all observations
+      videos.forEach((video) => {
+        if (video) observer.unobserve(video);
+      });
     };
   }, []);
 
@@ -557,7 +540,7 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef}
-                      src="/gentle_ping.mp4"
+                      src="/5-SEC-LOOP_notification-received-POL.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
@@ -596,8 +579,8 @@ export default function Home() {
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
                   <div className="order-2 lg:order-2 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
-                      // ref={videoRef2}
-                      src="/open_the_whisper.mp4"
+                      ref={videoRef3}
+                      src="/6-SEC-LOOP_whisper-open-POL.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
@@ -638,7 +621,7 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef2}
-                      src="/message-scroll.mp4"
+                      src="/12.3-SEC-FINAL-SCROLL.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
@@ -692,7 +675,7 @@ export default function Home() {
             </div>
 
             {/* Step 5 */}
-            <div className="relative min-h-[60vh] flex items-center mb-32">
+            <div className="relative min-h-[60vh] flex items-center">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 2 on desktop */}
@@ -712,7 +695,7 @@ export default function Home() {
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
-                      // ref={videoRef2}
+                      ref={videoRef4}
                       src="/heartfelt_message.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
