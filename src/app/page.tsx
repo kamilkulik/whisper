@@ -20,6 +20,8 @@ export default function Home() {
   const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState("");
   const [selectedProduct, setSelectedProduct] =
     useState<SubscriptionType | null>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
   const carouselRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
@@ -32,6 +34,27 @@ export default function Home() {
   // Get modal from search params
   const searchParams = useSearchParams();
   const modal = searchParams.get("modal");
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    const checkReducedMotion = () => {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      setPrefersReducedMotion(prefersReducedMotion);
+    };
+
+    // Check on mount
+    checkReducedMotion();
+
+    // Listen for changes
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    mediaQuery.addEventListener("change", checkReducedMotion);
+
+    return () => {
+      mediaQuery.removeEventListener("change", checkReducedMotion);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -558,26 +581,38 @@ export default function Home() {
 
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
-                    <video
-                      ref={videoRef}
-                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                      style={{
-                        filter:
-                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                      }}
-                      loop={true}
-                      muted
-                      playsInline
-                      controls={false}
-                      controlsList="nodownload nofullscreen noremoteplayback"
-                      preload="metadata"
-                      poster="/VIDEOS/POSTERS/pl-notification.jpg"
-                    >
-                      <source
-                        data-src="/VIDEOS/5-SEC-LOOP_notification-received-POL.mp4"
-                        type="video/mp4"
+                    {prefersReducedMotion ? (
+                      <img
+                        src="/VIDEOS/POSTERS/pl-notification.jpg"
+                        alt="Podgląd Szeptu"
+                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                        style={{
+                          filter:
+                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                        }}
                       />
-                    </video>
+                    ) : (
+                      <video
+                        ref={videoRef}
+                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                        style={{
+                          filter:
+                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                        }}
+                        loop={true}
+                        muted
+                        playsInline
+                        controls={false}
+                        controlsList="nodownload nofullscreen noremoteplayback"
+                        preload="metadata"
+                        poster="/VIDEOS/POSTERS/pl-notification.jpg"
+                      >
+                        <source
+                          data-src="/VIDEOS/5-SEC-LOOP_notification-received-POL.mp4"
+                          type="video/mp4"
+                        />
+                      </video>
+                    )}
                   </div>
                 </div>
               </div>
@@ -603,27 +638,39 @@ export default function Home() {
                   </div>
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
                   <div className="order-2 lg:order-2 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
-                    <video
-                      ref={videoRef3}
-                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                      style={{
-                        filter:
-                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                      }}
-                      loop={true}
-                      muted
-                      autoPlay={true}
-                      playsInline
-                      controls={false}
-                      controlsList="nodownload nofullscreen noremoteplayback"
-                      preload="metadata"
-                      poster="/VIDEOS/POSTERS/pl-message-reveal.jpg"
-                    >
-                      <source
-                        data-src="/VIDEOS/6-SEC-LOOP_whisper-open-POL.mp4"
-                        type="video/mp4"
+                    {prefersReducedMotion ? (
+                      <img
+                        src="/VIDEOS/POSTERS/pl-message-reveal.jpg"
+                        alt="Podgląd Szeptu"
+                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                        style={{
+                          filter:
+                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                        }}
                       />
-                    </video>
+                    ) : (
+                      <video
+                        ref={videoRef3}
+                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                        style={{
+                          filter:
+                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                        }}
+                        loop={true}
+                        muted
+                        autoPlay={true}
+                        playsInline
+                        controls={false}
+                        controlsList="nodownload nofullscreen noremoteplayback"
+                        preload="metadata"
+                        poster="/VIDEOS/POSTERS/pl-message-reveal.jpg"
+                      >
+                        <source
+                          data-src="/VIDEOS/6-SEC-LOOP_whisper-open-POL.mp4"
+                          type="video/mp4"
+                        />
+                      </video>
+                    )}
                   </div>
                 </div>
               </div>
