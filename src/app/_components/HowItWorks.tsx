@@ -35,7 +35,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               data-oid="2k9yuv8"
             >
               <img
-                src="/process_1.png"
+                src="/process_1.jpeg"
                 alt="Ciesz się chwilą"
                 className="w-full h-full object-cover object-top"
               />
@@ -66,7 +66,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               data-oid="2k9yuv8"
             >
               <img
-                src="/process_2.png"
+                src="/process_2.jpeg"
                 alt="Ciesz się chwilą"
                 className="w-full h-full object-cover object-top"
               />
@@ -97,7 +97,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               data-oid="2k9yuv8"
             >
               <img
-                src="/process_3.jpg"
+                src="/process_3.jpeg"
                 alt="Ciesz się chwilą"
                 className="w-full h-full object-cover object-top"
               />

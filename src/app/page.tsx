@@ -212,7 +212,27 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           const video = entry.target as HTMLVideoElement;
+          // Each entry describes an intersection change for one observed
+          // target element:
+          //   entry.boundingClientRect
+          //   entry.intersectionRatio
+          //   entry.intersectionRect
+          //   entry.isIntersecting
+          //   entry.rootBounds
+          //   entry.target
+          //   entry.time
           if (entry.isIntersecting) {
+            // lazy-load sources if not loaded yet
+            if (!video.dataset.loaded) {
+              video.querySelectorAll("source").forEach((source) => {
+                const el = source as HTMLSourceElement;
+                if (el.dataset.src) {
+                  el.src = el.dataset.src;
+                }
+              });
+              video.load();
+              video.dataset.loaded = "true";
+            }
             // Video is in view, play it
             video.play().catch((error) => {
               console.log("Video autoplay failed:", error);
@@ -224,7 +244,7 @@ export default function Home() {
         });
       },
       {
-        threshold: 0.5, // Trigger when 50% of the video is visible
+        threshold: 0.25, // Trigger when 25% of the video is visible
         rootMargin: "0px 0px -10% 0px", // Start playing slightly before video is fully visible
       }
     );
@@ -306,10 +326,10 @@ export default function Home() {
 
   // Image carousel data
   const carouselImages = [
-    { src: "/szept_1.png", alt: "Wieczorny Szept Image 1" },
-    { src: "/szept_2.png", alt: "Wieczorny Szept Image 2" },
-    { src: "/szept_3.png", alt: "Wieczorny Szept Image 3" },
-    { src: "/szept_4.png", alt: "Wieczorny Szept Image 4" },
+    { src: "/szept_1.jpeg", alt: "Wieczorny Szept Image 1" },
+    { src: "/szept_2.jpeg", alt: "Wieczorny Szept Image 2" },
+    { src: "/szept_3.jpeg", alt: "Wieczorny Szept Image 3" },
+    { src: "/szept_4.jpeg", alt: "Wieczorny Szept Image 4" },
   ];
 
   const handleStartJourneyWithScroll =
@@ -462,7 +482,7 @@ export default function Home() {
                         data-delay="1800"
                       >
                         <img
-                          src="/face_1.png"
+                          src="/face_1.jpeg"
                           className="w-full h-full object-cover object-center"
                         />
                       </div>
@@ -471,7 +491,7 @@ export default function Home() {
                         data-delay="1700"
                       >
                         <img
-                          src="/face_2.png"
+                          src="/face_2.jpeg"
                           className="w-full h-full object-cover object-center"
                         />
                       </div>
@@ -480,7 +500,7 @@ export default function Home() {
                         data-delay="1600"
                       >
                         <img
-                          src="/face_3.png"
+                          src="/face_3.jpeg"
                           className="w-full h-full object-cover object-center"
                         />
                       </div>
@@ -518,7 +538,7 @@ export default function Home() {
 
             {/* It How it feels Section */}
             {/* Step 1 */}
-            <div className="relative min-h-[60vh] flex items-center mb-32">
+            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 2 on desktop */}
@@ -540,7 +560,6 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef}
-                      src="/5-SEC-LOOP_notification-received-POL.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
@@ -551,15 +570,21 @@ export default function Home() {
                       playsInline
                       controls={false}
                       controlsList="nodownload nofullscreen noremoteplayback"
-                      preload="auto"
-                    />
+                      preload="metadata"
+                      poster="/VIDEOS/POSTERS/pl-notification.jpg"
+                    >
+                      <source
+                        data-src="/VIDEOS/5-SEC-LOOP_notification-received-POL.mp4"
+                        type="video/mp4"
+                      />
+                    </video>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="relative min-h-[60vh] flex items-center mb-32">
+            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 1 on desktop */}
@@ -580,7 +605,6 @@ export default function Home() {
                   <div className="order-2 lg:order-2 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef3}
-                      src="/6-SEC-LOOP_whisper-open-POL.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
@@ -592,15 +616,21 @@ export default function Home() {
                       playsInline
                       controls={false}
                       controlsList="nodownload nofullscreen noremoteplayback"
-                      preload="auto"
-                    />
+                      preload="metadata"
+                      poster="/VIDEOS/POSTERS/pl-message-reveal.jpg"
+                    >
+                      <source
+                        data-src="/VIDEOS/6-SEC-LOOP_whisper-open-POL.mp4"
+                        type="video/mp4"
+                      />
+                    </video>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="relative min-h-[60vh] flex items-center mb-32">
+            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 2 on desktop */}
@@ -621,7 +651,6 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef2}
-                      src="/12.3-SEC-FINAL-SCROLL.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
@@ -632,15 +661,21 @@ export default function Home() {
                       playsInline
                       controls={false}
                       controlsList="nodownload nofullscreen noremoteplayback"
-                      preload="auto"
-                    />
+                      preload="metadata"
+                      poster="/VIDEOS/POSTERS/pl-scroll.jpg"
+                    >
+                      <source
+                        data-src="/VIDEOS/12.3-SEC-FINAL-SCROLL.mp4"
+                        type="video/mp4"
+                      />
+                    </video>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Step 4 */}
-            <div className="relative min-h-[60vh] flex items-center mb-32">
+            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 1 on desktop */}
@@ -660,7 +695,7 @@ export default function Home() {
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
                   <div className="order-2 lg:order-2 flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3 ">
                     <img
-                      src="/single_whisper.png"
+                      src="/single_whisper.jpeg"
                       alt="Smartphone showing Wieczorny Szept notification"
                       className="w-full max-h-full "
                       style={{
@@ -675,7 +710,7 @@ export default function Home() {
             </div>
 
             {/* Step 5 */}
-            <div className="relative min-h-[60vh] flex items-center">
+            <div className="relative min-h-[60vh] py-24 flex items-center">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 2 on desktop */}
@@ -696,7 +731,6 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef4}
-                      src="/heartfelt_message.mp4"
                       className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
@@ -708,8 +742,14 @@ export default function Home() {
                       playsInline
                       controls={false}
                       controlsList="nodownload nofullscreen noremoteplayback"
-                      preload="auto"
-                    />
+                      preload="metadata"
+                      poster="/VIDEOS/POSTERS/pl-heartfelt.jpg"
+                    >
+                      <source
+                        data-src="/VIDEOS/heartfelt_message.mp4"
+                        type="video/mp4"
+                      />
+                    </video>
                   </div>
                 </div>
               </div>
@@ -726,7 +766,7 @@ export default function Home() {
                 {/* Image */}
                 <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
                   <img
-                    src="/szept_4.png"
+                    src="/szept_4.jpeg"
                     alt="Smartphone showing Wieczorny Szept notification"
                     className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                     style={{
