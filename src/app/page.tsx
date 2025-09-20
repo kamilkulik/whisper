@@ -773,6 +773,15 @@ export default function Home() {
                       <br />
                       {t("how-it-feels.you-in-the-story-copy-1")}
                     </p>
+                    <br />
+                    <p className="leading-loose text-2xl text-blue-200 text-center">
+                      <ul className="list-inside">
+                        <li>{t("how-it-feels.you-in-the-story-copy-2")}</li>
+                        <li>{t("how-it-feels.you-in-the-story-copy-3")}</li>
+                        <li>{t("how-it-feels.you-in-the-story-copy-4")}</li>
+                        <li>{t("how-it-feels.you-in-the-story-copy-5")}</li>
+                      </ul>
+                    </p>
                   </div>
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
