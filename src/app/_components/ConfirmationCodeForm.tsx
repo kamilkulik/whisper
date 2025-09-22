@@ -245,11 +245,17 @@ export default function ConfirmationCodeForm({
         );
         setSessionId(data.sessionId);
         setShowConfirmationCode(true);
-        setMessage(
-          isEmailMode
-            ? t("form-submit-message.email")
-            : t("form-submit-message.phone")
-        );
+
+        // In development mode, show the verification code
+        let message = isEmailMode
+          ? t("form-submit-message.email")
+          : t("form-submit-message.phone");
+
+        if (data.confirmationCode) {
+          message = `\n\n🔑 Verification Code: ${data.confirmationCode}`;
+        }
+
+        setMessage(message);
       } else {
         setMessage(data.error || t("form-submit-message.submit-error"));
       }
@@ -412,7 +418,7 @@ export default function ConfirmationCodeForm({
           <div className="mt-4 text-center">
             <p
               className={`text-lg ${
-                message.toLowerCase().includes("błąd")
+                ["błąd", "error"].includes(message.toLowerCase())
                   ? "text-red-300"
                   : "text-green-300"
               }`}

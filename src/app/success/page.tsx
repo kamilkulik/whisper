@@ -3,6 +3,8 @@ import { stripe } from "@/lib/stripe";
 import { getTranslations } from "next-intl/server";
 import NavigationBar from "../_components/NavigationBar";
 
+export const dynamic = "force-dynamic";
+
 export default async function Success({
   searchParams,
 }: {

@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import NavigationBar from "../_components/NavigationBar";
 
+export const dynamic = "force-dynamic";
+
 export default async function TrialSuccess() {
   const userEmailFromSessionCookie = await userEmailFromCookie();
   const t = await getTranslations("SuccessPage");

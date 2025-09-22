@@ -1,5 +1,3 @@
-"use server";
-
 import { sendEmail } from "@/lib/emailapi";
 import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
@@ -57,7 +55,13 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     await sendSms(phoneNumber, confirmationCode.toString());
   }
 
-  return NextResponse.json({ sessionId, confirmationCodeExpires });
+  // For local development, include the verification code in the response
+  const response: any = { sessionId, confirmationCodeExpires };
+  if (process.env.NODE_ENV === "development") {
+    response.confirmationCode = confirmationCode;
+  }
+
+  return NextResponse.json(response);
 };
 
 /**

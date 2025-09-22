@@ -3,6 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import NavigationBar from "../_components/NavigationBar";
 
+// Force dynamic rendering since we use searchParams
+export const dynamic = "force-dynamic";
+
 export default function EmailConfirmation() {
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
