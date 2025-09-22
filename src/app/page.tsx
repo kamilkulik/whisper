@@ -968,10 +968,8 @@ export default function Home() {
             />
           </div>
         </div>
-      </div>
 
-      {/* FAQ Section */}
-      <div className="bg-gradient-to-b from-[#2A031E] to-[#1a0214] text-white relative overflow-hidden">
+        {/* FAQ Section */}
         <div className="relative py-24">
           <div className="max-w-4xl mx-auto px-6">
             {/* FAQ Header */}
@@ -994,32 +992,32 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Contact Form Section */}
-      <div className="bg-[#2A031E] text-white relative overflow-hidden">
-        <div className="relative py-16">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex justify-center">
-              <div className="text-center">
-                <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-                  {t("bottom-cta.title")}
-                </h2>
-                <p className="text-xl text-blue-200 mb-8">
-                  {t("bottom-cta.subtitle")}
-                </p>
-                <button
-                  onClick={handleNavigateToPricing}
-                  className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-                >
-                  {t("bottom-cta.button")}
-                </button>
+        {/* Contact Form Section */}
+        <div className=" text-white relative overflow-hidden">
+          <div className="relative py-16">
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="flex justify-center">
+                <div className="text-center">
+                  <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+                    {t("bottom-cta.title")}
+                  </h2>
+                  <p className="text-xl text-blue-200 mb-8">
+                    {t("bottom-cta.subtitle")}
+                  </p>
+                  <button
+                    onClick={handleNavigateToPricing}
+                    className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    {t("bottom-cta.button")}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+          {/* Footer */}
+          <Footer />
         </div>
-        {/* Footer */}
-        <Footer />
       </div>
 
       {/* Modal Overlays */}
