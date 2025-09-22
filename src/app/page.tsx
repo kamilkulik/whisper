@@ -310,41 +310,49 @@ export default function Home() {
       quote: t("testimonials.testimonial-1.quote"),
       author: t("testimonials.testimonial-1.author"),
       status: t("testimonials.testimonial-1.status"),
+      verified: true,
     },
     {
       quote: t("testimonials.testimonial-2.quote"),
       author: t("testimonials.testimonial-2.author"),
       status: t("testimonials.testimonial-2.status"),
+      verified: true,
     },
     {
       quote: t("testimonials.testimonial-3.quote"),
       author: t("testimonials.testimonial-3.author"),
       status: t("testimonials.testimonial-3.status"),
+      verified: false,
     },
     {
       quote: t("testimonials.testimonial-4.quote"),
       author: t("testimonials.testimonial-4.author"),
       status: t("testimonials.testimonial-4.status"),
+      verified: false,
     },
     {
       quote: t("testimonials.testimonial-5.quote"),
       author: t("testimonials.testimonial-5.author"),
       status: t("testimonials.testimonial-5.status"),
+      verified: true,
     },
     {
       quote: t("testimonials.testimonial-6.quote"),
       author: t("testimonials.testimonial-6.author"),
       status: t("testimonials.testimonial-6.status"),
+      verified: false,
     },
     {
       quote: t("testimonials.testimonial-7.quote"),
       author: t("testimonials.testimonial-7.author"),
       status: t("testimonials.testimonial-7.status"),
+      verified: true,
     },
     {
       quote: t("testimonials.testimonial-8.quote"),
       author: t("testimonials.testimonial-8.author"),
       status: t("testimonials.testimonial-8.status"),
+      verified: false,
     },
   ];
 

@@ -78,6 +78,7 @@
     "testimonials": {
       "title": "What our readers whisper back…",
       "copy": "Every line here comes from someone who has already welcomed Evening Whisper into their life. Their words say more than we ever could.",
+      "verified": "Verified",
       "testimonial-1": {
         "quote": "These whispers are little gems in my day. Sometimes a single sentence is enough to make me feel needed.",
         "author": "Margaret",

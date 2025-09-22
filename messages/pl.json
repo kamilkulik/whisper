@@ -78,6 +78,7 @@
     "testimonials": {
       "title": "Co nasi czytelnicy szepczą w odpowiedzi…",
       "copy": "Każde zdanie pochodzi od osoby, która już wpuściła Wieczorny Szept do swojego życia. Ich słowa mówią więcej niż jakiekolwiek obietnice.",
+      "verified": "Zweryfikowany",
       "testimonial-1": {
         "quote": "Te wiadomości są jak małe klejnoty dnia. Czasem jedno zdanie wystarczy, by poczuć się potrzebną.",
         "author": "Zofia",

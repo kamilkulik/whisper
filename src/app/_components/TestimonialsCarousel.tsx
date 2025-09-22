@@ -1,11 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 
 interface Testimonial {
   quote: string;
   author: string;
   status: string;
+  verified: boolean;
 }
 
 interface TestimonialsCarouselProps {
@@ -15,6 +17,7 @@ interface TestimonialsCarouselProps {
 export default function TestimonialsCarousel({
   testimonials,
 }: TestimonialsCarouselProps) {
+  const t = useTranslations("LandingPage.testimonials");
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [resetTimer, setResetTimer] = useState(0);
 
@@ -126,6 +129,31 @@ export default function TestimonialsCarousel({
                       - {testimonial.author}, {testimonial.status}
                     </p>
                   </div>
+
+                  {testimonial.verified && (
+                    <div className="mb-8">
+                      <span className="inline-block bg-green-400/50 text-gray-300 text-sm px-4 py-2 rounded-full border border-gray-700/50">
+                        <div className="flex items-center space-x-2">
+                          <svg
+                            className="w-4 h-4 text-white/80"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+                            />
+                          </svg>
+                          <p className="text-white/80 font-medium">
+                            {t("verified")}
+                          </p>
+                        </div>
+                      </span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
