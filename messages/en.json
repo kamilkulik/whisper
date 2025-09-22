@@ -12,7 +12,8 @@
         "c-4": "Cancel anytime."
       },
       "button": "Let my first whisper find me tonight",
-      "CTA": "Your first whisper arrives this evening",
+      "CTA-copy-1": "Your first whisper arrives this evening",
+      "CTA-copy-2": "",
       "login-button": "Login",
       "header-cta-button": "Week of whispers for free"
     },

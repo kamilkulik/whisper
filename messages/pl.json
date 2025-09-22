@@ -12,7 +12,8 @@
         "c-4": "Możesz zrezygnować w każdej chwili."
       },
       "button": "Niech odnajdzie mnie mój pierwszy szept",
-      "CTA": "Twój pierwszy szept dotrze już dziś wieczorem",
+      "CTA-copy-1": "Twój pierwszy szept dotrze już dziś wieczorem.",
+      "CTA-copy-2": "Od 19 zł/mies.",
       "login-button": "Logowanie",
       "header-cta-button": "Tydzień szeptów za darmo"
     },

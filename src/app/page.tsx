@@ -601,10 +601,12 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="float-in text-white" data-delay="1500">
-                      {/* <p className="font-medium">
-                        Join over 25,000 poetry lovers worldwide.
-                      </p> */}
-                      <p className="text-blue-200">{t("hero.CTA")}</p>
+                      <p className="text-blue-200 text-xl">
+                        {t("hero.CTA-copy-1")}
+                      </p>
+                      <p className="text-blue-200 text-xl">
+                        {t("hero.CTA-copy-2")}
+                      </p>
                     </div>
                   </div>
                 </div>
