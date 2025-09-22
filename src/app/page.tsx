@@ -10,6 +10,7 @@ import HowItWorks from "./_components/HowItWorks";
 import PricingSection from "./_components/PricingSection";
 import { ModalWrapper } from "./_components/ModalWrapper";
 import TestingToolsWrapper from "./_components/TestingToolsWrapper";
+import AccordionItem from "./_components/AccordionItem";
 import { SubscriptionType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { Footer } from "./_components/Footer";
@@ -355,6 +356,70 @@ export default function Home() {
     { src: "/szept_4.jpeg", alt: "Wieczorny Szept Image 4" },
   ];
 
+  // FAQ data
+  const faqData = [
+    {
+      id: "faq-1",
+      question: t("faq.faq-1.question"),
+      answers: [
+        t("faq.faq-1.answer-1"),
+        t("faq.faq-1.answer-2"),
+        t("faq.faq-1.answer-3"),
+        t("faq.faq-1.answer-4"),
+      ].filter((answer) => answer.trim() !== ""), // Remove empty answers
+    },
+    {
+      id: "faq-2",
+      question: t("faq.faq-2.question"),
+      answers: [
+        t("faq.faq-2.answer-1"),
+        t("faq.faq-2.answer-2"),
+        t("faq.faq-2.answer-3"),
+        t("faq.faq-2.answer-4"),
+      ].filter((answer) => answer.trim() !== ""),
+    },
+    {
+      id: "faq-3",
+      question: t("faq.faq-3.question"),
+      answers: [
+        t("faq.faq-3.answer-1"),
+        t("faq.faq-3.answer-2"),
+        t("faq.faq-3.answer-3"),
+        t("faq.faq-3.answer-4"),
+      ].filter((answer) => answer.trim() !== ""),
+    },
+    {
+      id: "faq-4",
+      question: t("faq.faq-4.question"),
+      answers: [
+        t("faq.faq-4.answer-1"),
+        t("faq.faq-4.answer-2"),
+        t("faq.faq-4.answer-3"),
+        t("faq.faq-4.answer-4"),
+      ].filter((answer) => answer.trim() !== ""),
+    },
+    {
+      id: "faq-5",
+      question: t("faq.faq-5.question"),
+      answers: [
+        t("faq.faq-5.answer-1"),
+        t("faq.faq-5.answer-2"),
+        t("faq.faq-5.answer-3"),
+        t("faq.faq-5.answer-4"),
+      ].filter((answer) => answer.trim() !== ""),
+    },
+    {
+      id: "faq-6",
+      question: t("faq.faq-6.question"),
+      answers: [
+        t("faq.faq-6.answer-1"),
+        t("faq.faq-6.answer-2"),
+        t("faq.faq-6.answer-3"),
+        t("faq.faq-6.answer-4"),
+      ].filter((answer) => answer.trim() !== ""),
+    },
+  ];
+
   const handleStartJourneyWithScroll =
     (product: SubscriptionType) => async () => {
       console.log("Start Journey with scroll clicked!", product); // Debug log
@@ -498,7 +563,14 @@ export default function Home() {
                     {t("hero.button")}
                   </button>
 
-                  <div className="flex items-center space-x-4 pt-8">
+                  {/* Price pill */}
+                  {/* <div className="copy-line -mt-6" data-delay="1200">
+                    <span className="inline-block bg-gray-800/50 text-gray-300 text-sm px-4 py-2 rounded-full border border-gray-700/50">
+                      Od 19 zł/mies.
+                    </span>
+                  </div> */}
+
+                  <div className="flex items-center space-x-4">
                     <div className="flex -space-x-2">
                       <div
                         className="float-in w-12 h-12 rounded-full border-2 border-white overflow-hidden"
@@ -897,6 +969,33 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* FAQ Section */}
+      <div className="bg-gradient-to-b from-[#2A031E] to-[#1a0214] text-white relative overflow-hidden">
+        <div className="relative py-24">
+          <div className="max-w-4xl mx-auto px-6">
+            {/* FAQ Header */}
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                {t("faq.title")}
+              </h2>
+            </div>
+
+            {/* FAQ Accordion */}
+            <div className="space-y-4">
+              {faqData.map((faq) => (
+                <AccordionItem
+                  key={faq.id}
+                  id={faq.id}
+                  question={faq.question}
+                  answers={faq.answers}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Contact Form Section */}
       <div className="bg-[#2A031E] text-white relative overflow-hidden">
         <div className="relative py-16">

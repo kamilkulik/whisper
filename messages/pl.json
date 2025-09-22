@@ -150,6 +150,51 @@
         "CTA-button": "Rozpocznij subskrypcję"
       }
     },
+    "faq": {
+      "title": "Często zadawane pytania",
+      "faq-1": {
+        "question": "Jak anulować subskrypcję?",
+        "answer-1": "Możesz anulować swoją subskrypcję w dowolnym momencie bez żadnych opłat za anulowanie.",
+        "answer-2": "Moesz to zrobić na dwa sposoby:",
+        "answer-3": "1. Po rozpoczęciu subskrypcji otrzymasz wiadomość z linkiem do anulowania subskrypcji.",
+        "answer-4": "2. Po zalogowaniu się do swojego konta w sekcji ustawień możesz anulować subskrypcję."
+      },
+      "faq-2": {
+        "question": "Czy usługa działa bez internetu?",
+        "answer-1": "Tak, to SMS.",
+        "answer-2": "Wszędzie gdzie masz zasięg, możesz otrzymywać szepty.",
+        "answer-3": "",
+        "answer-4": ""
+      },
+      "faq-3": {
+        "question": "Czy usługa działa na każdym telefonie?",
+        "answer-1": "Tak.",
+        "answer-2": "Nie potrzebujesz aplikacji, aby otrzymywać szepty.",
+        "answer-3": "Wystarczy jedynie Twój numer telefonu.",
+        "answer-4": ""
+      },
+      "faq-4": {
+        "question": "Czy wiadomości się powtarzają?",
+        "answer-1": "Nie, każda wiadomość jest unikalna i tworzona przez doświadczonego poetę.",
+        "answer-2": "",
+        "answer-3": "",
+        "answer-4": ""
+      },
+      "faq-5": {
+        "question": "Czy mój numer telefonu jest bezpieczny?",
+        "answer-1": "Tak, Twój numer telefonu jest chroniony!",
+        "answer-2": "Nigdy nie będziemy udostępniać Twojego numeru telefonu osobom i organizacjom trzecim.",
+        "answer-3": "Nigdy nie będziemy wysyłać niechcianych wiadomości, reklam lub SPAMu",
+        "answer-4": ""
+      },
+      "faq-6": {
+        "question": "Czy mogę podarować komuś szepty?",
+        "answer-1": "Tak!",
+        "answer-2": "Możesz kupić subskrypcję dla bliskiej osoby – wystarczy podać jej numer telefonu.",
+        "answer-3": "",
+        "answer-4": ""
+      }
+    },
     "bottom-cta": {
       "title": "Gotowa / gotowy na swój pierwszy szept?",
       "subtitle": "Dołącz do tysięcy czytelników, którzy każdego wieczoru otrzymują ciepłe słowa prosto na swój telefon",

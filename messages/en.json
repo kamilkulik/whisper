@@ -150,6 +150,51 @@
         "CTA-button": "Start subscription"
       }
     },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "faq-1": {
+        "question": "How do I cancel my subscription?",
+        "answer-1": "You can cancel your subscription at any time with no cancellation fees.",
+        "answer-2": "There are two ways to do this:",
+        "answer-3": "1. Once your subscription begins, you’ll receive a message with a link to cancel.",
+        "answer-4": "2. You can also log in to your account and cancel in the settings section."
+      },
+      "faq-2": {
+        "question": "Does the service work without the internet?",
+        "answer-1": "Yes – it’s delivered by SMS.",
+        "answer-2": "As long as you have mobile signal, your Whispers will arrive.",
+        "answer-3": "",
+        "answer-4": ""
+      },
+      "faq-3": {
+        "question": "Does it work on any phone?",
+        "answer-1": "Yes.",
+        "answer-2": "You don’t need an app to receive your Whispers.",
+        "answer-3": "All that’s required is your phone number.",
+        "answer-4": ""
+      },
+      "faq-4": {
+        "question": "Do the messages ever repeat?",
+        "answer-1": "No – every Whisper is unique and written by an experienced poet.",
+        "answer-2": "",
+        "answer-3": "",
+        "answer-4": ""
+      },
+      "faq-5": {
+        "question": "Is my phone number safe?",
+        "answer-1": "Yes – your phone number is protected.",
+        "answer-2": "We will never share your number with third parties.",
+        "answer-3": "We will never send unwanted messages, adverts or spam.",
+        "answer-4": ""
+      },
+      "faq-6": {
+        "question": "Can I gift Whispers to someone else?",
+        "answer-1": "Yes!",
+        "answer-2": "You can buy a subscription for someone special – all you need is their phone number.",
+        "answer-3": "",
+        "answer-4": ""
+      }
+    },
     "bottom-cta": {
       "title": "Ready for your first whisper?",
       "subtitle": "Join thousands of readers who receive warm words every evening straight to their phone",
