@@ -25,7 +25,7 @@ export default function AccordionItem({
         className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-700/20 transition-colors"
         onClick={toggleAccordion}
       >
-        <h3 className="text-lg font-semibold text-white">{question}</h3>
+        <h3 className="text-xl font-semibold text-white">{question}</h3>
         <svg
           className={`w-5 h-5 text-blue-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -42,8 +42,8 @@ export default function AccordionItem({
           />
         </svg>
       </button>
-      <div className={`${isOpen ? "block" : "hidden"} px-6 pb-4`}>
-        <div className="text-blue-200 leading-relaxed space-y-2">
+      <div className={`${isOpen ? "block" : "hidden"} py-6 px-6 pb-4`}>
+        <div className="text-blue-100 text-xl leading-relaxed space-y-2">
           {answers.map((answer, index) => (
             <p key={index}>{answer}</p>
           ))}
