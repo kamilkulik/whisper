@@ -306,7 +306,7 @@ export default function ContactForm({
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-8 lg:space-y-4"
+        className="space-y-4 md:max-lg:space-y-8 lg:space-y-4"
         data-oid="d937n0b"
       >
         <div data-oid="1x7_v4l">
@@ -328,7 +328,7 @@ export default function ContactForm({
             }}
             onBlur={(e) => handleInputBlur("name", e.target.value)}
             required
-            className={`w-full px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl lg:text-base ${
+            className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl lg:text-base ${
               validationErrors.name
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
@@ -338,7 +338,7 @@ export default function ContactForm({
           />
 
           {validationErrors.name && (
-            <p className="mt-1 text-sm text-red-300" data-oid="669b2e6">
+            <p className="mt-1 text-lg text-red-300" data-oid="669b2e6">
               {validationErrors.name}
             </p>
           )}
@@ -363,7 +363,7 @@ export default function ContactForm({
             }}
             onBlur={(e) => handleInputBlur("email", e.target.value)}
             required
-            className={`w-full px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl lg:text-base ${
+            className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl lg:text-base ${
               validationErrors.email
                 ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                 : "focus:ring-white/30"
@@ -373,7 +373,7 @@ export default function ContactForm({
           />
 
           {validationErrors.email && (
-            <p className="mt-1 text-sm text-red-300" data-oid="k51k.9b">
+            <p className="mt-1 text-lg text-red-300" data-oid="k51k.9b">
               {validationErrors.email}
             </p>
           )}
@@ -395,7 +395,7 @@ export default function ContactForm({
             <button
               type="button"
               onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-              className="w-full px-6 py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-10 text-left lg:text-base"
+              className="w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm pr-10 text-left lg:text-base"
               data-oid="c3lmv88"
             >
               {languageOptions.find(
@@ -434,7 +434,7 @@ export default function ContactForm({
                     key={option.code}
                     type="button"
                     onClick={() => handleLanguageSelect(option.code)}
-                    className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
+                    className={`w-full px-6 py-3 text-2xl md:text-lg text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
                       formData.messageLanguage === option.code
                         ? "bg-gray-700"
                         : ""
