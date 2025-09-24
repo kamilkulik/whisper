@@ -1,10 +1,12 @@
 import {
   getLatestSubscriptionFromUserId,
   getUserFromSessionId,
+  prisma,
 } from "@/lib/prisma";
 import { csfrProtection } from "../../utils/csfrProtection";
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
+import { SubscriptionStatus } from "@prisma/client";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   csfrProtection(request);
@@ -42,6 +44,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { error: "Error resuming subscription" },
       { status: 500 }
     );
+  }
+
+  try {
+    await prisma.subscription.update({
+      where: {
+        id: subscription[0].id,
+      },
+      data: {
+        dateCancelled: null,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating subscription", error);
   }
 
   return NextResponse.json(
