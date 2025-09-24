@@ -30,9 +30,9 @@ export function LocaleProvider({ children, locale }: LocaleProviderProps) {
   const detectBrowserLanguage = (browserLang: string) => {
     const lang = browserLang.toLowerCase();
     if (lang.startsWith("pl")) return "Polski";
-    if (lang.startsWith("en")) return "Angielski";
-    if (lang.startsWith("es")) return "Hiszpański";
-    if (lang.startsWith("it")) return "Włoski";
+    if (lang.startsWith("en")) return "English";
+    // if (lang.startsWith("es")) return "Español";
+    // if (lang.startsWith("it")) return "Italiano";
     return "Polski"; // Default fallback
   };
 
@@ -46,18 +46,18 @@ export function LocaleProvider({ children, locale }: LocaleProviderProps) {
     // Check for specific country codes
     if (countryCodePart === "pl") return "+48"; // Poland
     if (countryCodePart === "gb" || countryCodePart === "uk") return "+44"; // United Kingdom
-    if (countryCodePart === "us") return "+1"; // United States
-    if (countryCodePart === "es") return "+34"; // Spain
-    if (countryCodePart === "it") return "+39"; // Italy
-    if (countryCodePart === "mx") return "+52"; // Mexico
-    if (countryCodePart === "cl") return "+56"; // Chile
+    // if (countryCodePart === "us") return "+1"; // United States
+    // if (countryCodePart === "es") return "+34"; // Spain
+    // if (countryCodePart === "it") return "+39"; // Italy
+    // if (countryCodePart === "mx") return "+52"; // Mexico
+    // if (countryCodePart === "cl") return "+56"; // Chile
 
     // Fallback based on language prefix (first part before dash)
     const languageCode = lang.split("-")[0];
     if (languageCode === "pl") return "+48";
     if (languageCode === "en") return "+44"; // Default to UK for English
-    if (languageCode === "es") return "+34"; // Default to Spain for Spanish
-    if (languageCode === "it") return "+39";
+    // if (languageCode === "es") return "+34"; // Default to Spain for Spanish
+    // if (languageCode === "it") return "+39";
 
     return "+48"; // Default fallback to Poland
   };

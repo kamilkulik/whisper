@@ -74,8 +74,8 @@ export default function ContactForm({
   const languageOptions = [
     { code: SupportedLanguagesEnum.PL, name: "Polski" },
     { code: SupportedLanguagesEnum.EN, name: "English" },
-    { code: SupportedLanguagesEnum.ES, name: "Español" },
-    { code: SupportedLanguagesEnum.IT, name: "Italiano" },
+    //   { code: SupportedLanguagesEnum.ES, name: "Español" },
+    //   { code: SupportedLanguagesEnum.IT, name: "Italiano" },
   ];
 
   // Update form data when locale context is loaded

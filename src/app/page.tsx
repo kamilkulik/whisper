@@ -22,12 +22,28 @@ export default function Home() {
   const [selectedProduct, setSelectedProduct] =
     useState<SubscriptionType | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+
+  // Language options for switcher
+  const languageOptions = [
+    { code: "pl", name: "PL" },
+    { code: "en", name: "EN" },
+  ];
+
+  // Handle language selection
+  const handleLanguageSelect = (locale: string) => {
+    // Set the locale cookie
+    document.cookie = `locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+    // Reload the page to apply the new locale
+    window.location.reload();
+  };
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
   const videoRef3 = useRef<HTMLVideoElement>(null);
   const videoRef4 = useRef<HTMLVideoElement>(null);
+  const languageDropdownRef = useRef<HTMLDivElement>(null);
 
   // Get translations
   const t = useTranslations("LandingPage");
@@ -35,6 +51,35 @@ export default function Home() {
   // Get modal from search params
   const searchParams = useSearchParams();
   const modal = searchParams.get("modal");
+
+  // Get current locale from URL or cookie
+  const getCurrentLocale = () => {
+    if (typeof window !== "undefined") {
+      const cookieValue = document.cookie
+        .split(";")
+        .find((c) => c.trim().startsWith("locale="))
+        ?.split("=")[1];
+      return cookieValue;
+    }
+    return undefined;
+  };
+
+  // Click outside handler for language dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        languageDropdownRef.current &&
+        !languageDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsLanguageDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Check for reduced motion preference
   useEffect(() => {
@@ -515,6 +560,35 @@ export default function Home() {
               >
                 {t("hero.header-cta-button")}
               </button>
+              {/* Language Switcher */}
+              <div className="relative" ref={languageDropdownRef}>
+                <button
+                  onClick={() =>
+                    setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
+                  }
+                  className="text-white hover:text-blue-200 transition-colors px-3 py-2 rounded-lg border border-white/20 hover:border-white/40"
+                  hidden={getCurrentLocale() === undefined}
+                >
+                  {
+                    languageOptions.find(
+                      (option) => option.code === getCurrentLocale()
+                    )?.name
+                  }
+                </button>
+                {isLanguageDropdownOpen && (
+                  <div className="absolute top-full mt-1 bg-gray-800 rounded-lg shadow-xl z-50 min-w-[80px]">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.code}
+                        onClick={() => handleLanguageSelect(option.code)}
+                        className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg transition-colors"
+                      >
+                        {option.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </nav>

@@ -11,8 +11,8 @@ interface MessageSettingsFormProps {
 const languageOptions = [
   { value: SupportedLanguagesEnum.PL, label: "Polski" },
   { value: SupportedLanguagesEnum.EN, label: "English" },
-  { value: SupportedLanguagesEnum.ES, label: "Español" },
-  { value: SupportedLanguagesEnum.IT, label: "Italiano" },
+  // { value: SupportedLanguagesEnum.ES, label: "Español" },
+  // { value: SupportedLanguagesEnum.IT, label: "Italiano" },
 ];
 
 export default function MessageSettingsForm({
