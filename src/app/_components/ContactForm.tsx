@@ -220,6 +220,7 @@ export default function ContactForm({
       // First, save the contact information
       const body = prepSaveUserBody({
         email: sanitizedData.email,
+        emailVerified: isEmailVerified?.isEmailVerified,
         messageLanguage: formData.messageLanguage,
         name: sanitizedData.name,
         phoneNumber: sanitizedData.phoneNumber,

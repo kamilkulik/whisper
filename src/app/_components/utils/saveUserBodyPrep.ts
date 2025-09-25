@@ -3,6 +3,7 @@ import { UserData } from "@/app/api/users/route";
 
 export interface GatheredUserData {
   email: string;
+  emailVerified?: boolean;
   messageLanguage: SupportedLanguagesEnum;
   name: string;
   phoneNumber: string;
@@ -28,6 +29,7 @@ function isPremium(product: SubscriptionType | null | undefined): boolean {
 
 export function prepSaveUserBody({
   email,
+  emailVerified,
   messageLanguage,
   name,
   phoneNumber,
@@ -37,7 +39,7 @@ export function prepSaveUserBody({
 
   return {
     email,
-    emailVerified: false,
+    emailVerified: emailVerified ?? false,
     messageLanguage,
     name,
     phoneNumber,
