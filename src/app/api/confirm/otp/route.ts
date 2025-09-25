@@ -135,6 +135,7 @@ export const POST = async (request: NextRequest) => {
           return NextResponse.json({
             redirectUrl: "/?modal=phone",
             status: 307,
+            isEmailVerified: true,
           });
         }
       } else if (phoneNumber) {

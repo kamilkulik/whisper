@@ -41,11 +41,16 @@ export default function ConfirmationCodeForm({
   onLoginSuccess,
   isLoginMode = false,
   isEmailMode = false,
+  setIsEmailVerified,
 }: {
   onShowContactForm?: (verifiedPhoneNumber: string) => void;
   onLoginSuccess?: (userId: string) => void;
   isLoginMode?: boolean;
   isEmailMode?: boolean;
+  setIsEmailVerified?: (isEmailVerified: {
+    isEmailVerified: boolean;
+    email: string;
+  }) => void;
 }) {
   const router = useRouter();
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
@@ -299,6 +304,14 @@ export default function ConfirmationCodeForm({
       if (responseData.status == 307) {
         console.log("Redirecting to:", responseData.redirectUrl);
         const redirectUrl = responseData.redirectUrl;
+
+        if (setIsEmailVerified && responseData.isEmailVerified) {
+          setIsEmailVerified({
+            isEmailVerified: true,
+            email: formData.email,
+          });
+        }
+
         if (redirectUrl) {
           // Use router to navigate to the new modal
           // This will properly close the current modal and open the new one
@@ -326,6 +339,7 @@ export default function ConfirmationCodeForm({
             window.location.href = "/dashboard";
           }, 2500);
         } else {
+          // TODO does this even get used?
           console.log("Signup mode");
           // Handle signup success (existing flow)
           setMessage(t("form-submit-message.signup-success"));

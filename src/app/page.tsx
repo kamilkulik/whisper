@@ -23,6 +23,13 @@ export default function Home() {
     useState<SubscriptionType | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState<{
+    isEmailVerified: boolean;
+    email: string;
+  }>({
+    isEmailVerified: false,
+    email: "",
+  });
 
   // Language options for switcher
   const languageOptions = [
@@ -1113,7 +1120,11 @@ export default function Home() {
 
       {modal === "login" && (
         <ModalWrapper isOpen={true} onClose={handleModalClose} modalId="login">
-          <ConfirmationCodeForm isLoginMode={true} isEmailMode={true} />
+          <ConfirmationCodeForm
+            isLoginMode={true}
+            isEmailMode={true}
+            setIsEmailVerified={setIsEmailVerified}
+          />
         </ModalWrapper>
       )}
 
@@ -1124,6 +1135,7 @@ export default function Home() {
           modalId="contact"
         >
           <ContactForm
+            isEmailVerified={isEmailVerified}
             verifiedPhoneNumber={verifiedPhoneNumber}
             selectedProduct={selectedProduct}
           />

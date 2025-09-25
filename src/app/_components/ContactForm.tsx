@@ -41,11 +41,16 @@ type ValidationErrors = {
 };
 
 export default function ContactForm({
-  verifiedPhoneNumber = "",
+  isEmailVerified,
   selectedProduct,
+  verifiedPhoneNumber = "",
 }: {
-  verifiedPhoneNumber?: string;
+  isEmailVerified?: {
+    isEmailVerified: boolean;
+    email: string;
+  };
   selectedProduct: SubscriptionType | null;
+  verifiedPhoneNumber?: string;
 }) {
   const { language, countryCode, isLoaded } = useLocale();
   const t = useTranslations("Components.ContactForm");
@@ -56,7 +61,10 @@ export default function ContactForm({
     GatheredUserData & { acceptTerms: boolean }
   >({
     acceptTerms: false,
-    email: "",
+    email:
+      isEmailVerified?.isEmailVerified && isEmailVerified.email
+        ? isEmailVerified.email
+        : "",
     messageLanguage: SupportedLanguagesEnum.PL, // Default fallback
     name: "",
     phoneNumber: verifiedPhoneNumber,
@@ -344,40 +352,42 @@ export default function ContactForm({
           )}
         </div>
 
-        <div data-oid="u4p0sqc">
-          <label
-            htmlFor="email"
-            className="block text-white font-medium mb-2 text-xl lg:text-base"
-            data-oid="cvsh.:4"
-          >
-            {t("form-label-email")}
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={(e) => {
-              handleChange(e);
-              clearValidationError("email");
-            }}
-            onBlur={(e) => handleInputBlur("email", e.target.value)}
-            required
-            className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl lg:text-base ${
-              validationErrors.email
-                ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                : "focus:ring-white/30"
-            }`}
-            placeholder={t("form-placeholder-email")}
-            data-oid="253.e9u"
-          />
+        {!isEmailVerified?.isEmailVerified && (
+          <div data-oid="u4p0sqc">
+            <label
+              htmlFor="email"
+              className="block text-white font-medium mb-2 text-xl lg:text-base"
+              data-oid="cvsh.:4"
+            >
+              {t("form-label-email")}
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={(e) => {
+                handleChange(e);
+                clearValidationError("email");
+              }}
+              onBlur={(e) => handleInputBlur("email", e.target.value)}
+              required
+              className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl lg:text-base ${
+                validationErrors.email
+                  ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                  : "focus:ring-white/30"
+              }`}
+              placeholder={t("form-placeholder-email")}
+              data-oid="253.e9u"
+            />
 
-          {validationErrors.email && (
-            <p className="mt-1 text-lg text-red-300" data-oid="k51k.9b">
-              {validationErrors.email}
-            </p>
-          )}
-        </div>
+            {validationErrors.email && (
+              <p className="mt-1 text-lg text-red-300" data-oid="k51k.9b">
+                {validationErrors.email}
+              </p>
+            )}
+          </div>
+        )}
 
         <div data-oid="isekqo7">
           <label
