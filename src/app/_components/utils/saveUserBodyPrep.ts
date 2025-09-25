@@ -9,6 +9,23 @@ export interface GatheredUserData {
   product: SubscriptionType | null;
 }
 
+function isPremium(product: SubscriptionType | null | undefined): boolean {
+  switch (product) {
+    case null:
+      return false;
+    case undefined:
+      return false;
+    case SubscriptionType.MONTHLY:
+      return true;
+    case SubscriptionType.ONE_TIME:
+      return true;
+    case SubscriptionType.TRIAL:
+      return false;
+    default:
+      return false;
+  }
+}
+
 export function prepSaveUserBody({
   email,
   messageLanguage,
@@ -16,7 +33,7 @@ export function prepSaveUserBody({
   phoneNumber,
   product,
 }: GatheredUserData): UserData {
-  const premium = product !== SubscriptionType.TRIAL;
+  const premium = isPremium(product);
 
   return {
     email,
