@@ -58,7 +58,7 @@ export function PhoneForm({
               <div className="flex flex-col h-full" data-oid="xbk7dq-">
                 <label
                   htmlFor="countryCode"
-                  className="block text-white font-medium mb-2 text-xl"
+                  className="block text-white font-medium mb-2 text-xl whitespace-nowrap"
                   data-oid="lotbw.t"
                 >
                   {t("form-label-country")}
