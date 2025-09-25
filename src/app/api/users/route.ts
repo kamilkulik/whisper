@@ -245,9 +245,10 @@ export const POST = async (request: NextRequest) => {
           phoneNumberVerified: body.phoneNumberVerified,
           premium: body.premium,
           sessionId,
-          trialEnds: !body.premium
-            ? new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
-            : null,
+          trialEnds:
+            !body.premium && !body.emailVerified // user not premium && email not verified means signup through login with email
+              ? new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
+              : null,
         },
       });
 
