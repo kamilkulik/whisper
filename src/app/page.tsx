@@ -32,6 +32,7 @@ export default function Home() {
     isEmailVerified: false,
     email: "",
   });
+  const [currentLocale, setCurrentLocale] = useState<string | null>(null);
 
   // Language options for switcher
   const languageOptions = [
@@ -61,17 +62,20 @@ export default function Home() {
   const searchParams = useSearchParams();
   const modal = searchParams.get("modal");
 
-  // Get current locale from URL or cookie
-  const getCurrentLocale = () => {
-    if (typeof window !== "undefined") {
-      const cookieValue = document.cookie
-        .split(";")
-        .find((c) => c.trim().startsWith("locale="))
-        ?.split("=")[1];
-      return cookieValue;
-    }
-    return undefined;
-  };
+  useEffect(() => {
+    // Get current locale from URL or cookie
+    const getCurrentLocale = () => {
+      if (typeof window !== "undefined") {
+        const cookieValue = document.cookie
+          .split(";")
+          .find((c) => c.trim().startsWith("locale="))
+          ?.split("=")[1];
+        return cookieValue || null;
+      }
+      return null;
+    };
+    setCurrentLocale(getCurrentLocale());
+  }, []);
 
   // Click outside handler for language dropdown
   useEffect(() => {
@@ -591,11 +595,11 @@ export default function Home() {
                     setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
                   }
                   className="text-white hover:text-blue-200 transition-colors px-3 py-2 rounded-lg border border-white/20 hover:border-white/40"
-                  hidden={getCurrentLocale() === undefined}
+                  hidden={currentLocale === null}
                 >
                   {
                     languageOptions.find(
-                      (option) => option.code === getCurrentLocale()
+                      (option) => option.code === currentLocale
                     )?.name
                   }
                 </button>
