@@ -55,8 +55,6 @@ export default function ContactForm({
   const { language, countryCode, isLoaded } = useLocale();
   const t = useTranslations("Components.ContactForm");
 
-  console.log(selectedProduct);
-
   const [formData, setFormData] = useState<
     GatheredUserData & { acceptTerms: boolean }
   >({

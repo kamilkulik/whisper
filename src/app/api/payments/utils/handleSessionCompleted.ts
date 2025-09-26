@@ -77,6 +77,17 @@ export async function handleSessionCompleted(
     );
   }
 
+  // TODO below could be performed async so the user doesn't have to wait
+
+  // mark user as premium
+  if (!user.premium) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { premium: true },
+    });
+  }
+
+  // notify them
   try {
     await sendEmail({
       locale: user.messageLanguage.toLowerCase(),
