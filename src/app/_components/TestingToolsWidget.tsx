@@ -51,31 +51,18 @@ export default function TestingToolsWidget({
 
   // Auto-expand on hover, retract when not hovered
   useEffect(() => {
-    console.log("Hover effect - isHovered:", isHovered);
     if (isHovered) {
-      console.log("Setting expanded to true");
       setIsExpanded(true);
     } else {
-      console.log("Setting up retract timer");
       // Add a small delay before retracting to allow for interaction
       const timer = setTimeout(() => {
-        console.log("Retracting widget");
         setIsExpanded(false);
       }, 500);
       return () => clearTimeout(timer);
     }
   }, [isHovered]);
 
-  console.log(
-    "TestingToolsWidget render - isVisible:",
-    isVisible,
-    "isExpanded:",
-    isExpanded,
-    "isHovered:",
-    isHovered
-  );
   if (!isVisible) {
-    console.log("TestingToolsWidget not visible, returning null");
     return null;
   }
 

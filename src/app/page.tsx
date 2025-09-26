@@ -14,6 +14,8 @@ import AccordionItem from "./_components/AccordionItem";
 import { SubscriptionType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { Footer } from "./_components/Footer";
+import { navigateToCheckout } from "./_actions/navigateToCheckout";
+import { userEmailFromCookie } from "./_actions/userEmailFromCookie";
 
 export default function Home() {
   const router = useRouter();
@@ -486,6 +488,21 @@ export default function Home() {
 
       // Set the selected product
       setSelectedProduct(product);
+
+      // Does the user have a valid session?
+      const userEmailFromSessionCookie = await userEmailFromCookie();
+      console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
+
+      if (userEmailFromSessionCookie) {
+        const result = await navigateToCheckout(
+          product,
+          userEmailFromSessionCookie
+        );
+        if (result?.success) {
+          router.push("/trial-success");
+          return;
+        }
+      }
 
       // Navigate to modal without scrolling to top
       router.push(`/?modal=phone`, { scroll: false });
