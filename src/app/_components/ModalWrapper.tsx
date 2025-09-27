@@ -5,18 +5,20 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface ModalWrapperProps {
-  isOpen: boolean;
-  onClose: () => void;
   children: React.ReactNode;
+  isOpen: boolean;
+  description?: string;
   modalId: string;
+  onClose: () => void;
   title?: string;
 }
 
 export function ModalWrapper({
-  isOpen,
-  onClose,
   children,
+  description,
+  isOpen,
   modalId,
+  onClose,
   title,
 }: ModalWrapperProps) {
   const router = useRouter();
@@ -60,6 +62,7 @@ export function ModalWrapper({
               <Dialog.Title asChild>
                 <h2 className="sr-only">{title}</h2>
               </Dialog.Title>
+              <Dialog.Description>{description}</Dialog.Description>
               <div className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300">
                 <div className="relative">
                   {/* Close button */}
