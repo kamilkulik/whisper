@@ -53,11 +53,13 @@ export function ModalWrapper({
       <Dialog.Portal>
         {isVisible && (
           <>
-            <Dialog.Overlay asChild>
+            <Dialog.Overlay>
               <div className="fixed inset-0 bg-black/55 backdrop-blur-sm z-50 transition-opacity duration-300" />
             </Dialog.Overlay>
-            <Dialog.Title asChild />
-            <Dialog.Content asChild className="top-10">
+            <Dialog.Content className="top-10">
+              <Dialog.Title asChild>
+                <h2 className="sr-only">{title}</h2>
+              </Dialog.Title>
               <div className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300">
                 <div className="relative">
                   {/* Close button */}
