@@ -276,6 +276,16 @@
     "title": "Ustawienia Wiadomości"
   },
   "Components": {
+    "CancelSubscriptionButton": {
+      "CTA-button": "Anuluj subskrypcję",
+      "confirm-modal": {
+        "title": "Czy na pewno chcesz anulować swoją subskrypcję?",
+        "CTA-button": "Tak",
+        "cancel-button": "Anuluj",
+        "loading": "Anulowanie...",
+        "description": "Kliknij Tak lub Anuluj, aby potwierdzić swój wybór"
+      }
+    },
     "ConfirmationCodeForm": {
       "form-validation-errors": {
         "phone-number": {
@@ -344,15 +354,6 @@
     },
     "CtaButton": {
       "button": "Zacznij teraz"
-    },
-    "CancelSubscriptionButton": {
-      "CTA-button": "Anuluj subskrypcję",
-      "confirm-modal": {
-        "title": "Czy na pewno chcesz anulować swoją subskrypcję?",
-        "CTA-button": "Tak",
-        "cancel-button": "Anuluj",
-        "loading": "Anulowanie..."
-      }
     },
     "Footer": {
       "title": "Dowiedz się więcej",

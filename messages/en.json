@@ -276,6 +276,16 @@
     "title": "Message Settings"
   },
   "Components": {
+    "CancelSubscriptionButton": {
+      "CTA-button": "Cancel subscription",
+      "confirm-modal": {
+        "title": "Are you sure you want to cancel your subscription?",
+        "CTA-button": "Yes",
+        "cancel-button": "Cancel",
+        "loading": "Canceling...",
+        "description": "Press Yes or Cancel to confirm your choice"
+      }
+    },
     "ConfirmationCodeForm": {
       "form-validation-errors": {
         "phone-number": {
@@ -344,15 +354,6 @@
     },
     "CtaButton": {
       "button": "Start now"
-    },
-    "CancelSubscriptionButton": {
-      "CTA-button": "Cancel subscription",
-      "confirm-modal": {
-        "title": "Are you sure you want to cancel your subscription?",
-        "CTA-button": "Yes",
-        "cancel-button": "Cancel",
-        "loading": "Canceling..."
-      }
     },
     "Footer": {
       "title": "Learn more",

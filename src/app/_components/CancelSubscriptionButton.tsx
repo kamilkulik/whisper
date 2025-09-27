@@ -64,9 +64,11 @@ export default function CancelSubscriptionButton({
 
       {showConfirmation && (
         <ModalWrapper
+          description={t("confirm-modal.description")}
           isOpen={showConfirmation}
-          onClose={handleCloseModal}
           modalId="cancel-confirmation"
+          onClose={handleCloseModal}
+          title={t("confirm-modal.title")}
         >
           <div className="bg-gray-800/80 rounded-2xl shadow-xl p-12 backdrop-blur-sm max-w-md mx-auto">
             <h3 className="text-2xl font-bold text-white/80 mb-6 text-center">
