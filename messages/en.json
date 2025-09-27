@@ -283,7 +283,7 @@
         "CTA-button": "Yes",
         "cancel-button": "Cancel",
         "loading": "Canceling...",
-        "description": "Press Yes or Cancel to confirm your choice"
+        "description": "Use Yes or Cancel buttons to confirm your choice"
       }
     },
     "ConfirmationCodeForm": {
@@ -388,7 +388,8 @@
         "next-payment": "Next payment",
         "loading": "Resuming...",
         "action-button": "Resume",
-        "cancel-button": "Cancel"
+        "cancel-button": "Cancel",
+        "description": "Use Resume or Cancel buttons to confirm your choice"
       }
     },
     "ReturnButton": {

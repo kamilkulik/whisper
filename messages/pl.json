@@ -388,7 +388,8 @@
         "next-payment": "Następna płatność",
         "loading": "Wznowienie...",
         "action-button": "Wznów",
-        "cancel-button": "Anuluj"
+        "cancel-button": "Anuluj",
+        "description": "Kliknij Wznów lub Anuluj, aby potwierdzić swój wybór"
       }
     },
     "ReturnButton": {

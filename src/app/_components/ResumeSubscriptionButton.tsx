@@ -82,6 +82,8 @@ export default function ResumeSubscriptionButton({
           isOpen={showConfirmation}
           onClose={() => setShowConfirmation(false)}
           modalId="resume-confirmation"
+          description={t("confirm-modal.description")}
+          title={t("confirm-modal.title")}
         >
           <div className="bg-gray-800/80 rounded-2xl shadow-xl p-12 backdrop-blur-sm max-w-md mx-auto">
             <h3 className="text-2xl font-bold text-white/80 mb-6 text-center">
