@@ -1134,13 +1134,25 @@ export default function Home() {
 
       {/* Modal Overlays */}
       {modal === "phone" && (
-        <ModalWrapper isOpen={true} onClose={handleModalClose} modalId="phone">
+        <ModalWrapper
+          isOpen={true}
+          onClose={handleModalClose}
+          modalId="phone"
+          description={t("modal-wrapper.phone.description")}
+          title={t("modal-wrapper.phone.title")}
+        >
           <ConfirmationCodeForm onShowContactForm={handleShowContactForm} />
         </ModalWrapper>
       )}
 
       {modal === "login" && (
-        <ModalWrapper isOpen={true} onClose={handleModalClose} modalId="login">
+        <ModalWrapper
+          description={t("modal-wrapper.login.description")}
+          title={t("modal-wrapper.login.title")}
+          isOpen={true}
+          onClose={handleModalClose}
+          modalId="login"
+        >
           <ConfirmationCodeForm
             isLoginMode={true}
             isEmailMode={true}
@@ -1154,6 +1166,8 @@ export default function Home() {
           isOpen={true}
           onClose={handleModalClose}
           modalId="contact"
+          description={t("modal-wrapper.contact.description")}
+          title={t("modal-wrapper.contact.title")}
         >
           <ContactForm
             isEmailVerified={isEmailVerified}

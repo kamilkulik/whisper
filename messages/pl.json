@@ -65,6 +65,20 @@
         "description": "7 dni za darmo. Możesz zrezygnować w każdej chwili — bez żadnych zobowiązań"
       }
     },
+    "modal-wrapper": {
+      "phone": {
+        "title": "Zweryfikuj swój numer telefonu",
+        "description": "Po wprowadzeniu numeru telefonu, otrzymasz kod weryfikacyjny SMSem"
+      },
+      "login": {
+        "title": "Zweryfikuj swój adres email",
+        "description": "Po wprowadzeniu adresu email, otrzymasz kod weryfikacyjny na swojego emaila"
+      },
+      "contact": {
+        "title": "Podaj kilka dodatkowych informacji",
+        "description": "Formularz kontaktowy z prośbą o imię, email, język wiadomości i zgodę na regulamin usługi"
+      }
+    },
     "smartphone-notification-section": {
       "title-1": "Słowa, które zostają z Tobą... na",
       "title-2": "długo",

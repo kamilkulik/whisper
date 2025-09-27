@@ -65,6 +65,20 @@
         "description": "7 days free. Cancel anytime — no strings attached"
       }
     },
+    "modal-wrapper": {
+      "phone": {
+        "title": "Verify your phone number",
+        "description": "After entering your phone number, you'll receive a verification code as a text message"
+      },
+      "login": {
+        "title": "Verify your email address",
+        "description": "After entering your email address, you'll receive a verification code as an email"
+      },
+      "contact": {
+        "title": "Provide a few additional details",
+        "description": "Contact form asking for your name, email, message language and consent to the terms of service"
+      }
+    },
     "smartphone-notification-section": {
       "title-1": "Words that stay with you... ",
       "title-2": "long",
