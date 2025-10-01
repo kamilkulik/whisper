@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe, stripeWebhookSecret } from "@/lib/stripe";
 import { Buffer } from "node:buffer";
-import { handleSessionCompleted } from "../utils/handleSessionCompleted";
-import { handleSubscriptionUpdated } from "../utils/handleSubscriptionUpdated";
-import { handleSubscriptionCreated } from "../utils/handleSubscriptionCreated";
-import { handlePaymentIntentSucceeded } from "../utils/handlePaymentIntentSucceeded";
+import {
+  handleRefundCreated,
+  handleSessionCompleted,
+  handleSubscriptionUpdated,
+} from "../utils";
 
 export const config = {
   api: {
@@ -29,7 +30,7 @@ const ALLOWED_EVENT_TYPES = [
    * This object represents a customer of your business. Use it to create recurring charges, save payment and contact information, and track payments that belong to the same customer.
    */
   "customer.subscription.created", // Occurs whenever a customer is signed up for a new plan.
-  "customer.subscription.updated", // Occurs whenever a subscription changes (e.g., switching from one plan to another, or changing the status from trial to active).
+  "customer.subscription.updated", // Occurs when a subscription is cancelled at the period end
   "customer.subscription.deleted", //Occurs whenever a customer’s subscription ends.
   /**
    * The Charge object represents a single attempt to move money into your Stripe account.
@@ -57,8 +58,7 @@ const ALLOWED_EVENT_TYPES = [
   "payment_intent.created", // Occurs when a payment intent is created
   "payment_intent.payment_failed", // Occurs when a payment attempt fails
   "payment_method.attached", // Occurs when a payment method is attached
-  // "customer.subscription.deleted", // Occurs when a subscription is cancelled immediately
-  "customer.subscription.updated", // Occurs when a subscription is cancelled at the period end
+  "refund.created", // Occurs when a refund is created
 ];
 
 /**
@@ -127,6 +127,11 @@ export async function POST(request: NextRequest) {
           const subscription = event.data.object;
           console.log(`✅ Subscription ${subscription.id} was updated`);
           handleSubscriptionUpdated(subscription);
+          break;
+        case "refund.created":
+          const refund = event.data.object;
+          console.log(`✅ Refund ${refund.id} was created`);
+          handleRefundCreated(refund);
           break;
         // case "customer.subscription.created":
         //   const subscriptionCreated = event.data.object;

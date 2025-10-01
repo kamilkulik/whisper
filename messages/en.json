@@ -235,7 +235,8 @@
         "expired": "Expired",
         "trial": "7 day trial",
         "monthly": "Monthly",
-        "one-time": "30 days of whispers"
+        "one-time": "30 days of whispers",
+        "refunded": "Refunded"
       },
       "renewal-status": {
         "canceled": "Canceled",

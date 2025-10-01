@@ -27,6 +27,8 @@ function subscriptionTypeToText(
       return t("subscription-card.subscription-type-to-text.canceled");
     case SubscriptionStatus.EXPIRED:
       return t("subscription-card.subscription-type-to-text.expired");
+    case SubscriptionStatus.REFUNDED:
+      return t("subscription-card.subscription-type-to-text.refunded");
   }
 
   switch (type) {

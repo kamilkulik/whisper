@@ -235,7 +235,8 @@
         "expired": "Wygasła",
         "trial": "Okres próbny 7 dni",
         "monthly": "Miesięczna",
-        "one-time": "30 dni szeptów"
+        "one-time": "30 dni szeptów",
+        "refunded": "Płatność zwrócona"
       },
       "renewal-status": {
         "canceled": "Anulowana",

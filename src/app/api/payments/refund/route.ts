@@ -3,6 +3,7 @@ import { csfrProtection } from "../../utils/csfrProtection";
 import {
   getLatestSubscriptionFromUserId,
   getUserFromSessionId,
+  prisma,
 } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 
@@ -23,7 +24,7 @@ const createRefund = async (paymentIntentId: string) => {
   }
 };
 
-export async function POST(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   csfrProtection(request);
 
   const sessionIdFromCookie = request.cookies.get("sessionId")?.value;
