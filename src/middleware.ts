@@ -1,9 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const DEFAULT_LOCALE = "en";
-const POSSIBLE_LOCALES = ["pl", "en"];
+const POSSIBLE_LOCALES = ["pl", "en"] as const;
+
+type Locale = (typeof POSSIBLE_LOCALES)[number];
+
+function inferDefaultFromHost(host?: string): Locale {
+  if (!host) return DEFAULT_LOCALE;
+  if (host.endsWith("wieczornyszept.pl")) return "pl";
+  if (host.endsWith("eveningwhisper.co.uk")) return DEFAULT_LOCALE;
+  return DEFAULT_LOCALE;
+}
 
 export function middleware(request: NextRequest) {
+  /**
+   * Authentication check for protected routes
+   */
+
   const { pathname } = request.nextUrl;
   const res = NextResponse.next();
 
@@ -21,17 +34,43 @@ export function middleware(request: NextRequest) {
     // In production, you'd validate against a database or Redis store
   }
 
-  // Locale detection and cookie setting
-  // If cookie already exists, keep it
+  /**
+   * Locale detection and cookie setting
+   *
+   * Recommnded order
+   * User-selected locale (cookie) → always wins
+   * Domain default (.pl → pl, .co.uk → en)
+   * Use browser language detection as a fallback in case domain is not recognised (for some reason)
+   */
+
+  // User-selected locale (cookie) → always wins
   if (request.cookies.has("locale")) return res;
 
-  // Otherwise, detect from Accept-Language header
+  const { host } = request.nextUrl;
+  // Domain default (.pl → pl, .co.uk or any other → en)
+  const currentDomainLocale: Locale = inferDefaultFromHost(host);
+
+  // Otherwise, likely first visit, detect from Accept-Language header
   const acceptLang = request.headers.get("accept-language") || "";
   // en-GB,en;q=0.9,en-US;q=0.8,pl;q=0.7
-  const browserLocale = acceptLang.split(",")[0].split("-")[0]; // crude parse
-  const locale = POSSIBLE_LOCALES.includes(browserLocale)
-    ? browserLocale
-    : DEFAULT_LOCALE;
+  const browserLocale = acceptLang.split(",")[0].split("-")[0] as Locale; // crude parse
+
+  // decide on the preferred locale now
+  let preferredLocale: Locale;
+  // domain locale and browser locale match, can safely set preferred locale
+  if (currentDomainLocale === browserLocale) {
+    preferredLocale = currentDomainLocale;
+  } else {
+    // user came from domain which suggests different locale to browser's
+    if (POSSIBLE_LOCALES.includes(browserLocale)) {
+      preferredLocale = browserLocale;
+    } else {
+      // browser locale is not supported, set default
+      preferredLocale = DEFAULT_LOCALE;
+    }
+  }
+
+  const locale = preferredLocale;
 
   console.log("🇵🇱 setting locale", locale);
   res.cookies.set("locale", locale, {
