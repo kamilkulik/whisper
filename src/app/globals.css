@@ -64,6 +64,7 @@ body {
   overflow-x: hidden;
   min-height: auto;
 }
+
 /* Heartbeat animation */
 @keyframes heartbeat {
   0% {

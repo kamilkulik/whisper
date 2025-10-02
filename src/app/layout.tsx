@@ -8,13 +8,12 @@ import { getLocale, getMessages } from "next-intl/server";
 import { FullPageLoader } from "./_components/FullPageLoader";
 
 const montserrat = Montserrat({
-  variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "Secret Project 🌙", // TODO change to the proper title
-  description: "Otrzymuj codzienne szepty, które ogrzewają serce.",
+  description: "Otrzymuj codzienne szepty, które ogrzewają serce.", // TODO translation
 };
 
 export default async function RootLayout({
@@ -23,8 +22,8 @@ export default async function RootLayout({
   const messages = await getMessages();
   const locale = await getLocale();
   return (
-    <html>
-      <body className={`${montserrat.variable} antialiased font-montserrat`}>
+    <html lang={locale} className={montserrat.className}>
+      <body>
         <Suspense fallback={<FullPageLoader />}>
           <LocaleProvider locale={locale}>
             {/** NextIntlClientProvider used to provide configuration for Client Components */}
