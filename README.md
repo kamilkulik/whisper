@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## PRICING STRATEGY
+
+I think that geolocation should drive the pricing. Especially if someone is trying to switch to a different domain to get cheapr pricing.
+Domain hopping should also be enabld and driven by geolocation.
+There are two mechanisms that can be used:
+
+- vercel geolocation data from headers https://vercel.com/docs/headers/request-headers, specifically:
+  - x-vercel-ip-country
+- browser's geolocation API
+  - https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API#examples
