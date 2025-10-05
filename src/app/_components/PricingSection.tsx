@@ -10,6 +10,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { GeoLocationContext } from "../contexts/GeoLocationContext";
 import { triangulateLocation } from "./utils/triangulateLocation";
 import { getPricingContext, PricingContextData } from "../_consts";
+import Spinner from "./Spinner";
 
 interface PricingSectionProps {
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
@@ -136,10 +137,12 @@ export default function PricingSection(props: PricingSectionProps) {
 
                 {/* Content Section */}
                 <div className="grid place-content-center grow py-8">
-                  <div className="flex items-baseline">
-                    {isLoaded && pricingData
-                      ? formatCurrency("0", pricingData.currency)
-                      : "Loading..."}
+                  <div className="flex items-baseline justify-center">
+                    {isLoaded && pricingData ? (
+                      formatCurrency("0", pricingData.currency)
+                    ) : (
+                      <Spinner size="xl" />
+                    )}
                   </div>
                   <p className="text-gray-400 text-lg text-center">
                     {t("pricing-section.trial-card.period")}
@@ -183,13 +186,15 @@ export default function PricingSection(props: PricingSectionProps) {
 
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
-                <div className="flex items-baseline">
-                  {isLoaded && pricingData
-                    ? formatCurrency(
-                        pricingData.subscription,
-                        pricingData.currency
-                      )
-                    : "Loading..."}
+                <div className="flex items-baseline justify-center">
+                  {isLoaded && pricingData ? (
+                    formatCurrency(
+                      pricingData.subscription,
+                      pricingData.currency
+                    )
+                  ) : (
+                    <Spinner size="xl" />
+                  )}
                   <span className="text-gray-400">
                     {t("pricing-section.subscription-card.period")}
                   </span>
@@ -236,10 +241,12 @@ export default function PricingSection(props: PricingSectionProps) {
 
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
-                <div className="flex items-baseline">
-                  {isLoaded && pricingData
-                    ? formatCurrency(pricingData.oneTime, pricingData.currency)
-                    : "Loading..."}
+                <div className="flex items-baseline justify-center">
+                  {isLoaded && pricingData ? (
+                    formatCurrency(pricingData.oneTime, pricingData.currency)
+                  ) : (
+                    <Spinner size="xl" />
+                  )}
                 </div>
                 <p className="text-gray-400 text-lg">
                   {t("pricing-section.one-time-purchase-card.period")}
