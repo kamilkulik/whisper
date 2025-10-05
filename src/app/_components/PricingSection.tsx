@@ -1,12 +1,15 @@
 "use client";
 
 import { SubscriptionType } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { shouldShowTrial } from "../_actions/showTrial";
 import { navigateToCheckout } from "../_actions/navigateToCheckout";
 import { useRouter } from "next/navigation";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useTranslations, useLocale } from "next-intl";
+import { GeoLocationContext } from "../contexts/GeoLocationContext";
+import { triangulateLocation } from "./utils/triangulateLocation";
+import { getPricingContext, PricingContextData } from "../_consts";
 
 interface PricingSectionProps {
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
@@ -18,6 +21,14 @@ export default function PricingSection(props: PricingSectionProps) {
   const router = useRouter();
   const t = useTranslations("LandingPage");
   const locale = useLocale();
+  const { isLoaded, ipCountry, host, browserGeo } =
+    useContext(GeoLocationContext);
+  const [triangulatedCountry, setTriangulatedCountry] = useState<string | null>(
+    null
+  );
+  const [pricingData, setPricingData] = useState<PricingContextData | null>(
+    null
+  );
 
   // Helper function to format currency based on locale
   const formatCurrency = (amount: string, currency: string) => {
@@ -39,6 +50,21 @@ export default function PricingSection(props: PricingSectionProps) {
       );
     }
   };
+
+  useEffect(() => {
+    if (isLoaded) {
+      const triangulateLocationCallback = async () => {
+        const triangulatedCountry = await triangulateLocation(ipCountry, host, {
+          latitude: browserGeo?.latitude!,
+          longitude: browserGeo?.longitude!,
+        });
+
+        setTriangulatedCountry(triangulatedCountry);
+        setPricingData(getPricingContext(triangulatedCountry || "DEFAULT"));
+      };
+      triangulateLocationCallback();
+    }
+  }, [isLoaded, ipCountry, host, browserGeo]);
 
   useEffect(() => {
     const fetchShowTrial = async () => {
@@ -111,10 +137,9 @@ export default function PricingSection(props: PricingSectionProps) {
                 {/* Content Section */}
                 <div className="grid place-content-center grow py-8">
                   <div className="flex items-baseline">
-                    {formatCurrency(
-                      "0",
-                      t("pricing-section.trial-card.currency")
-                    )}
+                    {isLoaded && pricingData
+                      ? formatCurrency("0", pricingData.currency)
+                      : "Loading..."}
                   </div>
                   <p className="text-gray-400 text-lg text-center">
                     {t("pricing-section.trial-card.period")}
@@ -159,10 +184,12 @@ export default function PricingSection(props: PricingSectionProps) {
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
                 <div className="flex items-baseline">
-                  {formatCurrency(
-                    "19",
-                    t("pricing-section.subscription-card.currency")
-                  )}
+                  {isLoaded && pricingData
+                    ? formatCurrency(
+                        pricingData.subscription,
+                        pricingData.currency
+                      )
+                    : "Loading..."}
                   <span className="text-gray-400">
                     {t("pricing-section.subscription-card.period")}
                   </span>
@@ -210,10 +237,9 @@ export default function PricingSection(props: PricingSectionProps) {
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
                 <div className="flex items-baseline">
-                  {formatCurrency(
-                    "19",
-                    t("pricing-section.one-time-purchase-card.currency")
-                  )}
+                  {isLoaded && pricingData
+                    ? formatCurrency(pricingData.oneTime, pricingData.currency)
+                    : "Loading..."}
                 </div>
                 <p className="text-gray-400 text-lg">
                   {t("pricing-section.one-time-purchase-card.period")}

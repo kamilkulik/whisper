@@ -45,3 +45,14 @@ There are two mechanisms that can be used:
   - x-vercel-ip-country
 - browser's geolocation API
   - https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API#examples
+- country code of user's phone number
+
+location data will be read:
+
+- default pricing SHOWN comes from referrer domain
+- ask the user for access to geolocation browser api
+- if user confirms - read their location in the phone number form
+- disallow phone numbers outside of the region indicated by visited domain (until .com is secured)
+- when making api calls to create checkout session, attempt to get user location again, but also in route handler read location headers
+- you want to make sure: referrer domain & location match, phone number country code and location match
+- until .com, I don't support phone numbers with country code other than +48 & +44

@@ -8,13 +8,17 @@ import {
   ReactNode,
 } from "react";
 
-interface LocaleContextType {
+export interface LocaleContextType {
   language: string;
   countryCode: string;
   isLoaded: boolean;
 }
 
-const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
+export const LocaleContext = createContext<LocaleContextType>({
+  language: "",
+  countryCode: "",
+  isLoaded: false,
+});
 
 interface LocaleProviderProps {
   children: ReactNode;
