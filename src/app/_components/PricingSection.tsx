@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useTranslations, useLocale } from "next-intl";
 import { GeoLocationContext } from "../contexts/GeoLocationContext";
-import { triangulateLocation } from "./utils/triangulateLocation";
+import { triangulateLocationOnFe } from "./utils/triangulateLocation";
 import { getPricingContext, PricingContextData } from "../_consts";
 import Spinner from "./Spinner";
 
@@ -58,10 +58,14 @@ export default function PricingSection(props: PricingSectionProps) {
         console.log("PricingSection useEffect");
         console.log("isLoaded", isLoaded);
         console.log("GEO DATA: ", ipCountry, host, browserGeo);
-        const triangulatedCountry = await triangulateLocation(ipCountry, host, {
-          latitude: browserGeo?.latitude!,
-          longitude: browserGeo?.longitude!,
-        });
+        const triangulatedCountry = await triangulateLocationOnFe(
+          ipCountry,
+          host,
+          {
+            latitude: browserGeo?.latitude,
+            longitude: browserGeo?.longitude,
+          }
+        );
 
         setTriangulatedCountry(triangulatedCountry);
         setPricingData(getPricingContext(triangulatedCountry || "DEFAULT"));

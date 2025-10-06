@@ -1,21 +1,19 @@
 import { GEO_CONTEXT } from "@/app/_consts";
 import { reverseGeoCode } from "../../_actions/reverseGeoCode";
 
-export async function triangulateLocation(
+export async function triangulateLocationOnFe(
   ipCountry?: string | null,
   host?: string | null,
-  browserGeo?: { latitude: number; longitude: number } | null,
-  stripeData?: { country: string } | null
+  browserGeo?: {
+    latitude: number | undefined;
+    longitude: number | undefined;
+  } | null
 ): Promise<string | null> {
-  if (stripeData) {
-    return stripeData.country;
-  }
-
   if (ipCountry) {
     return ipCountry;
   }
 
-  if (browserGeo) {
+  if (browserGeo?.latitude && browserGeo?.longitude) {
     return reverseGeoCode(browserGeo.latitude, browserGeo.longitude);
   }
 
