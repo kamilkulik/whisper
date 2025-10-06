@@ -10,14 +10,17 @@ export async function triangulateLocationOnFe(
   } | null
 ): Promise<string | null> {
   if (ipCountry) {
+    console.log("setting ipCountry", ipCountry);
     return ipCountry;
   }
 
   if (browserGeo?.latitude && browserGeo?.longitude) {
+    console.log("setting browserGeo", browserGeo);
     return reverseGeoCode(browserGeo.latitude, browserGeo.longitude);
   }
 
   if (host) {
+    console.log("setting host", host);
     const domain = GEO_CONTEXT.find((domain) => host.endsWith(domain.domain));
 
     return domain?.country ?? null;
