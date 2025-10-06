@@ -55,6 +55,9 @@ export default function PricingSection(props: PricingSectionProps) {
   useEffect(() => {
     if (isLoaded) {
       const triangulateLocationCallback = async () => {
+        console.log("PricingSection useEffect");
+        console.log("isLoaded", isLoaded);
+        console.log("GEO DATA: ", ipCountry, host, browserGeo);
         const triangulatedCountry = await triangulateLocation(ipCountry, host, {
           latitude: browserGeo?.latitude!,
           longitude: browserGeo?.longitude!,

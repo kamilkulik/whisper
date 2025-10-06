@@ -31,9 +31,12 @@ export function GeoLocationProvider({
   ipCountry: string | null;
   host: string | null;
 }) {
-  const [browserGeo, setBrowserGeo] = useState<GeolocationCoordinates | null>(
-    null
-  );
+  const [browserGeo, setBrowserGeo] = useState<GeoLocationContextType>({
+    browserGeo: null,
+    ipCountry,
+    host,
+    isLoaded: false,
+  });
 
   useEffect(() => {
     let watchId: number | null = null;
@@ -41,7 +44,12 @@ export function GeoLocationProvider({
     if ("geolocation" in navigator) {
       watchId = navigator.geolocation.watchPosition(
         (position: GeolocationPosition) => {
-          setBrowserGeo(position.coords);
+          setBrowserGeo({
+            browserGeo: position.coords,
+            ipCountry,
+            host,
+            isLoaded: true,
+          });
         },
         (error) => {
           console.error(error);
@@ -49,7 +57,12 @@ export function GeoLocationProvider({
         options
       );
     } else {
-      setBrowserGeo(null);
+      setBrowserGeo({
+        browserGeo: null,
+        ipCountry,
+        host,
+        isLoaded: true,
+      });
     }
 
     return () => {
@@ -59,15 +72,8 @@ export function GeoLocationProvider({
     };
   }, []);
 
-  const value: GeoLocationContextType = {
-    browserGeo,
-    ipCountry,
-    host,
-    isLoaded: true,
-  };
-
   return (
-    <GeoLocationContext.Provider value={value}>
+    <GeoLocationContext.Provider value={browserGeo}>
       {children}
     </GeoLocationContext.Provider>
   );
