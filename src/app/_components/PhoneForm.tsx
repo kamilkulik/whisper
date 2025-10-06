@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { ValidationErrors } from "../_types";
 
 type PhoneFormProps = {
-  formData: { numerTelefonu: string; email: string; countryCode: string };
+  formData: { phoneNumber: string; email: string; countryCode: string };
   isCountryDropdownOpen: boolean;
   countryDropdownRef: React.RefObject<HTMLDivElement | null>;
   countryOptions: { code: string; name: string }[];
@@ -124,7 +124,7 @@ export function PhoneForm({
               </div>
               <div className="h-full ml-4" data-oid="go9nv0c">
                 <label
-                  htmlFor="numerTelefonu"
+                  htmlFor="phoneNumber"
                   className="block text-white font-medium mb-2 text-xl"
                   data-oid="jits35v"
                 >
@@ -132,19 +132,17 @@ export function PhoneForm({
                 </label>
                 <input
                   type="tel"
-                  id="numerTelefonu"
-                  name="numerTelefonu"
-                  value={formData.numerTelefonu}
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
                   onChange={(e) => {
                     handleChange(e);
-                    clearValidationError("numerTelefonu");
+                    clearValidationError("phoneNumber");
                   }}
-                  onBlur={(e) =>
-                    handleInputBlur("numerTelefonu", e.target.value)
-                  }
+                  onBlur={(e) => handleInputBlur("phoneNumber", e.target.value)}
                   required
                   className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white text-xl placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${
-                    validationErrors.numerTelefonu
+                    validationErrors.phoneNumber
                       ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
                       : "focus:ring-white/30"
                   }`}
@@ -153,9 +151,9 @@ export function PhoneForm({
                 />
               </div>
             </div>
-            {validationErrors.numerTelefonu && (
+            {validationErrors.phoneNumber && (
               <p className="mt-1 text-sm text-red-300" data-oid="880w9:6">
-                {validationErrors.numerTelefonu}
+                {validationErrors.phoneNumber}
               </p>
             )}
           </>

@@ -1,4 +1,4 @@
 export type ValidationErrors = {
-  numerTelefonu?: string;
+  phoneNumber?: string;
   email?: string;
 };

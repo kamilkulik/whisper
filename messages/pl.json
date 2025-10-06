@@ -307,7 +307,8 @@
         "phone-number": {
           "min": "Numer telefonu musi mieć co najmniej 6 cyfr",
           "max": "Numer telefonu nie może być dłuższy niż 15 cyfr",
-          "regex": "Numer telefonu może zawierać tylko cyfry, spacje, myślniki"
+          "regex": "Numer telefonu może zawierać tylko cyfry, spacje, myślniki",
+          "country-mismatch": "Selected phone country code is not supported in your country"
         },
         "email": {
           "min": "Email jest wymagany",
@@ -420,8 +421,8 @@
   },
   "Shared": {
     "countries": {
-      "poland": "Polska",
-      "uk": "Wielka Brytania",
+      "PL": "Polska",
+      "GB": "Wielka Brytania",
       "usa": "Stany Zjednoczone",
       "spain": "Hiszpania",
       "mexico": "Meksyk",

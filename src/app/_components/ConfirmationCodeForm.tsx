@@ -10,6 +10,7 @@ import { SuccessMessage } from "./SuccessMessage";
 import { ValidationErrors } from "../_types";
 import { PhoneForm } from "./PhoneForm";
 import { useTranslations } from "next-intl";
+import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 // ContactForm is switched at the parent level; no import/render here
 
 // Validation schemas
@@ -17,7 +18,7 @@ const localisedPhoneSchema = (
   t: Awaited<ReturnType<typeof useTranslations>>
 ) => {
   return z.object({
-    numerTelefonu: z
+    phoneNumber: z
       .string()
       .min(6, t("form-validation-errors.phone-number.min"))
       .max(15, t("form-validation-errors.phone-number.max"))
@@ -62,7 +63,7 @@ export default function ConfirmationCodeForm({
   );
   const { countryCode } = useLocale();
   const [formData, setFormData] = useState({
-    numerTelefonu: "",
+    phoneNumber: "",
     email: "",
     countryCode: "+48",
   });
@@ -74,6 +75,7 @@ export default function ConfirmationCodeForm({
   const t = useTranslations("Components.ConfirmationCodeForm");
   const phoneSchema = localisedPhoneSchema(t);
   const emailSchema = localisedEmailSchema(t);
+  const { triangulatedCountry } = useTriangulatedLocation();
 
   const sharedMessages = useTranslations("Shared.countries");
 
@@ -84,13 +86,13 @@ export default function ConfirmationCodeForm({
       : "phone";
 
   const countryOptions = [
-    { code: "+48", name: sharedMessages("poland") },
-    { code: "+44", name: sharedMessages("uk") },
-    { code: "+1", name: sharedMessages("usa") },
-    { code: "+34", name: sharedMessages("spain") },
-    { code: "+52", name: sharedMessages("mexico") },
-    { code: "+56", name: sharedMessages("chile") },
-    { code: "+39", name: sharedMessages("italy") },
+    { code: "+48", name: sharedMessages("PL"), country: "PL" },
+    { code: "+44", name: sharedMessages("GB"), country: "GB" },
+    // { code: "+1", name: sharedMessages("usa") },
+    // { code: "+34", name: sharedMessages("spain") },
+    // { code: "+52", name: sharedMessages("mexico") },
+    // { code: "+56", name: sharedMessages("chile") },
+    // { code: "+39", name: sharedMessages("italy") },
   ];
 
   // Handle clicking outside the dropdowns
@@ -155,8 +157,8 @@ export default function ConfirmationCodeForm({
       if (isEmailMode && fieldName === "email") {
         fieldSchema = emailSchema.shape.email;
         console.log("Using email schema");
-      } else if (!isEmailMode && fieldName === "numerTelefonu") {
-        fieldSchema = phoneSchema.shape.numerTelefonu;
+      } else if (!isEmailMode && fieldName === "phoneNumber") {
+        fieldSchema = phoneSchema.shape.phoneNumber;
         console.log("Using phone schema");
       } else {
         console.log("Unknown field or mode mismatch");
@@ -188,16 +190,28 @@ export default function ConfirmationCodeForm({
   const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
+    const errors: ValidationErrors = {};
+
+    // TODO make sure this shows up first
+    // Start by verifying phone country code matches detected country
+    const phoneCountryCode = countryOptions.find(
+      (option) => option.code === formData.countryCode
+    )?.country!;
+
+    if (phoneCountryCode !== triangulatedCountry) {
+      errors.phoneNumber = t(
+        "form-validation-errors.phone-number.country-mismatch"
+      );
+    }
 
     // Validate all input fields based on mode
     const sanitizedData = isEmailMode
       ? { email: sanitizeInput(formData.email) }
-      : { numerTelefonu: sanitizeInput(formData.numerTelefonu) };
+      : { phoneNumber: sanitizeInput(formData.phoneNumber) };
 
     console.log("Form submission - isEmailMode:", isEmailMode);
     console.log("Sanitized data:", sanitizedData);
 
-    const errors: ValidationErrors = {};
     Object.entries(sanitizedData).forEach(([key, value]) => {
       console.log("Validating field:", key, "with value:", value);
       const error = validateField(
@@ -232,7 +246,7 @@ export default function ConfirmationCodeForm({
       if (isEmailMode) {
         params.append("email", formData.email);
       } else {
-        params.append("phoneNumber", formData.numerTelefonu);
+        params.append("phoneNumber", formData.phoneNumber);
       }
 
       const response = await fetch(`/api/confirm/otp?${params.toString()}`, {
@@ -294,7 +308,7 @@ export default function ConfirmationCodeForm({
           sessionId: storedSessionId,
           ...(isEmailMode
             ? { email: formData.email }
-            : { phoneNumber: formData.numerTelefonu }),
+            : { phoneNumber: formData.phoneNumber }),
           isLoginMode,
         }),
       });
@@ -350,7 +364,7 @@ export default function ConfirmationCodeForm({
           localStorage.removeItem("confirmationSessionId");
           localStorage.removeItem("confirmationCodeExpires");
           setFormData({
-            numerTelefonu: "",
+            phoneNumber: "",
             email: "",
             countryCode: countryCode,
           });
@@ -360,7 +374,7 @@ export default function ConfirmationCodeForm({
           setTimeout(() => {
             setShowSuccessMessage(false);
             if (onShowContactForm) {
-              const sanitizedPhone = (formData.numerTelefonu || "").trim();
+              const sanitizedPhone = (formData.phoneNumber || "").trim();
               onShowContactForm(sanitizedPhone);
             }
           }, 2000);

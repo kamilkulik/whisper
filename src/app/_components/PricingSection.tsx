@@ -11,6 +11,7 @@ import { GeoLocationContext } from "../contexts/GeoLocationContext";
 import { triangulateLocationOnFe } from "./utils/triangulateLocation";
 import { getPricingContext, PricingContextData } from "../_consts";
 import Spinner from "./Spinner";
+import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 
 interface PricingSectionProps {
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
@@ -24,12 +25,7 @@ export default function PricingSection(props: PricingSectionProps) {
   const locale = useLocale();
   const { isLoaded, ipCountry, host, browserGeo } =
     useContext(GeoLocationContext);
-  const [triangulatedCountry, setTriangulatedCountry] = useState<string | null>(
-    null
-  );
-  const [pricingData, setPricingData] = useState<PricingContextData | null>(
-    null
-  );
+  const { pricingData } = useTriangulatedLocation();
 
   // Helper function to format currency based on locale
   const formatCurrency = (amount: string, currency: string) => {
@@ -51,30 +47,6 @@ export default function PricingSection(props: PricingSectionProps) {
       );
     }
   };
-
-  useEffect(() => {
-    if (isLoaded) {
-      const triangulateLocationCallback = async () => {
-        console.log("PricingSection useEffect");
-        console.log("isLoaded", isLoaded);
-        console.log("GEO DATA: ", ipCountry, host, browserGeo);
-        const triangulatedCountry = await triangulateLocationOnFe(
-          ipCountry,
-          host,
-          {
-            latitude: browserGeo?.latitude,
-            longitude: browserGeo?.longitude,
-          }
-        );
-
-        console.log(">>> triangulatedCountry", triangulatedCountry);
-
-        setTriangulatedCountry(triangulatedCountry);
-        setPricingData(getPricingContext(triangulatedCountry || "DEFAULT"));
-      };
-      triangulateLocationCallback();
-    }
-  }, [isLoaded, ipCountry, host, browserGeo]);
 
   useEffect(() => {
     const fetchShowTrial = async () => {
