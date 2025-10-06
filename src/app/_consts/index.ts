@@ -16,8 +16,8 @@ export const GEO_CONTEXT = [
 
 export interface PricingContextData {
   country: string;
-  oneTime: string;
-  subscription: string;
+  oneTimePrice: string;
+  subscriptionPrice: string;
   currency: string;
   currencySign: string;
 }
@@ -25,22 +25,22 @@ export interface PricingContextData {
 export const PRICING_CONTEXT: PricingContextData[] = [
   {
     country: "UK",
-    oneTime: "9.99",
-    subscription: "7.99",
+    oneTimePrice: "10",
+    subscriptionPrice: "8",
     currency: "GBP",
     currencySign: "£",
   },
   {
     country: "PL",
-    oneTime: "24,99",
-    subscription: "19",
+    oneTimePrice: "25",
+    subscriptionPrice: "20",
     currency: "PLN",
     currencySign: "zł",
   },
   {
     country: "DEFAULT",
-    oneTime: "10.99",
-    subscription: "8.99",
+    oneTimePrice: "11",
+    subscriptionPrice: "9",
     currency: "USD",
     currencySign: "$",
   },

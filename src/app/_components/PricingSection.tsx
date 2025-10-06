@@ -141,7 +141,7 @@ export default function PricingSection(props: PricingSectionProps) {
                     {isLoaded && pricingData ? (
                       formatCurrency("0", pricingData.currency)
                     ) : (
-                      <Spinner size="xl" />
+                      <Spinner size="lg" />
                     )}
                   </div>
                   <p className="text-gray-400 text-lg text-center">
@@ -186,22 +186,26 @@ export default function PricingSection(props: PricingSectionProps) {
 
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
-                <div className="flex items-baseline justify-center">
-                  {isLoaded && pricingData ? (
-                    formatCurrency(
-                      pricingData.subscription,
-                      pricingData.currency
-                    )
-                  ) : (
-                    <Spinner size="xl" />
-                  )}
-                  <span className="text-gray-400">
-                    {t("pricing-section.subscription-card.period")}
-                  </span>
-                </div>
-                <p className="text-gray-400 text-lg">
-                  {t("pricing-section.subscription-card.price")}
-                </p>
+                {isLoaded && pricingData ? (
+                  <>
+                    <div className="flex items-baseline justify-center">
+                      {formatCurrency(
+                        pricingData.subscriptionPrice,
+                        pricingData.currency
+                      )}
+                      <span className="text-gray-400">
+                        {t("pricing-section.subscription-card.period")}
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-lg">
+                      {t("pricing-section.subscription-card.price1")}
+                      {`${+pricingData.subscriptionPrice * 12} ${pricingData.currency}`}
+                      {t("pricing-section.subscription-card.price2")}
+                    </p>
+                  </>
+                ) : (
+                  <Spinner size="xl" />
+                )}
               </div>
 
               {/* Button Section */}
@@ -243,7 +247,10 @@ export default function PricingSection(props: PricingSectionProps) {
               <div className="grid place-content-center grow py-8">
                 <div className="flex items-baseline justify-center">
                   {isLoaded && pricingData ? (
-                    formatCurrency(pricingData.oneTime, pricingData.currency)
+                    formatCurrency(
+                      pricingData.oneTimePrice,
+                      pricingData.currency
+                    )
                   ) : (
                     <Spinner size="xl" />
                   )}
@@ -255,18 +262,27 @@ export default function PricingSection(props: PricingSectionProps) {
 
               {/* Button Section */}
               <div className="px-8 pb-8">
-                <button
-                  onClick={
-                    props.onGetStarted
-                      ? props.onGetStarted(SubscriptionType.ONE_TIME)
-                      : handleClickWithoutOnGetStarted(
-                          SubscriptionType.ONE_TIME
-                        )
-                  }
-                  className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
-                >
-                  {t("pricing-section.one-time-purchase-card.CTA-button")}
-                </button>
+                {isLoaded && pricingData ? (
+                  <button
+                    onClick={
+                      props.onGetStarted
+                        ? props.onGetStarted(SubscriptionType.ONE_TIME)
+                        : handleClickWithoutOnGetStarted(
+                            SubscriptionType.ONE_TIME
+                          )
+                    }
+                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    {t("pricing-section.one-time-purchase-card.CTA-button") +
+                      new Intl.NumberFormat(locale, {
+                        style: "currency",
+                        currency: pricingData.currency,
+                        notation: "compact",
+                      }).format(+pricingData.oneTimePrice)}
+                  </button>
+                ) : (
+                  <Spinner size="lg" />
+                )}
               </div>
             </div>
           </div>

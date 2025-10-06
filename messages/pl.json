@@ -154,7 +154,7 @@
         "duration": "30 DNI WIECZORNYCH SZEPTÓW",
         "currency": "zł",
         "period": "jednorazowo",
-        "CTA-button": "Odbierz 30 dni za 19 zł"
+        "CTA-button": "Odbierz 30 dni za "
       },
       "subscription-card": {
         "tooltip": "dla stałych czytelników",
@@ -162,7 +162,8 @@
         "duration": "MIESIĘCZNA",
         "currency": "zł",
         "period": "/ miesiąc",
-        "price": "równowartość 228 zł/rok",
+        "price1": "równowartość ",
+        "price2": " /rok",
         "CTA-button": "Rozpocznij subskrypcję"
       }
     },

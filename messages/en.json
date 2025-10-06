@@ -154,7 +154,7 @@
         "duration": "30 DAYS OF EVENING WHISPERS",
         "currency": "£",
         "period": "one-time",
-        "CTA-button": "Buy for 19 £"
+        "CTA-button": "Buy for "
       },
       "subscription-card": {
         "tooltip": "for regular readers",
@@ -162,7 +162,8 @@
         "duration": "MONTHLY",
         "currency": "£",
         "period": "/ per month",
-        "price": "equivalent to 228 £/year",
+        "price1": "equivalent to ",
+        "price2": " /year",
         "CTA-button": "Start subscription"
       }
     },
