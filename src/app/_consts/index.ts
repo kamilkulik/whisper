@@ -1,19 +1,14 @@
-export const UK_DOMAIN = "eveningwhisper.co.uk";
+export const GB_DOMAIN = "eveningwhisper.co.uk";
 export const PL_DOMAIN = "wieczornyszept.pl";
 
 export const GEO_CONTEXT = [
   {
-    domain: UK_DOMAIN,
-    country: "UK",
+    domain: GB_DOMAIN,
+    country: "GB",
     countryCode: "+44",
   },
   {
     domain: PL_DOMAIN,
-    country: "PL",
-    countryCode: "+48",
-  },
-  {
-    domain: "localhost:3000",
     country: "PL",
     countryCode: "+48",
   },
@@ -29,7 +24,7 @@ export interface PricingContextData {
 
 export const PRICING_CONTEXT: PricingContextData[] = [
   {
-    country: "UK",
+    country: "GB",
     oneTimePrice: "10",
     subscriptionPrice: "8",
     currency: "GBP",

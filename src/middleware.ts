@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PL_DOMAIN, UK_DOMAIN } from "./app/_consts";
+import { PL_DOMAIN, GB_DOMAIN } from "./app/_consts";
 
 const DEFAULT_LOCALE = "en";
 const POSSIBLE_LOCALES = ["pl", "en"] as const;
@@ -9,7 +9,7 @@ type Locale = (typeof POSSIBLE_LOCALES)[number];
 function inferDefaultFromHost(host?: string): Locale {
   if (!host) return DEFAULT_LOCALE;
   if (host.endsWith(PL_DOMAIN)) return "pl";
-  if (host.endsWith(UK_DOMAIN)) return DEFAULT_LOCALE;
+  if (host.endsWith(GB_DOMAIN)) return DEFAULT_LOCALE;
   return DEFAULT_LOCALE;
 }
 

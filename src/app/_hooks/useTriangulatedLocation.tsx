@@ -19,9 +19,6 @@ export const useTriangulatedLocation = (): {
   useEffect(() => {
     if (isLoaded) {
       const triangulateLocationCallback = async () => {
-        console.log("PricingSection useEffect");
-        console.log("isLoaded", isLoaded);
-        console.log("GEO DATA: ", ipCountry, host, browserGeo);
         const triangulatedCountry = await triangulateLocationOnFe(
           ipCountry,
           host,

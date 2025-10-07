@@ -66,7 +66,7 @@ export default function ConfirmationCodeForm({
   const [formData, setFormData] = useState({
     phoneNumber: "",
     email: "",
-    countryCode: "+48",
+    countryCode: "",
   });
 
   // New state for confirmation code flow
