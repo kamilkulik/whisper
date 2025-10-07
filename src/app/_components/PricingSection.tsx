@@ -122,7 +122,7 @@ export default function PricingSection(props: PricingSectionProps) {
                     {isLoaded && pricingData ? (
                       formatCurrency("0", pricingData.currency)
                     ) : (
-                      <Spinner size="lg" />
+                      <Spinner size="xl" />
                     )}
                   </div>
                   <p className="text-gray-400 text-lg text-center">
@@ -242,7 +242,7 @@ export default function PricingSection(props: PricingSectionProps) {
               </div>
 
               {/* Button Section */}
-              <div className="px-8 pb-8">
+              <div className="px-8 pb-8 flex justify-center">
                 {isLoaded && pricingData ? (
                   <button
                     onClick={

@@ -12,6 +12,11 @@ export const GEO_CONTEXT = [
     country: "PL",
     countryCode: "+48",
   },
+  {
+    domain: "localhost:3000",
+    country: "PL",
+    countryCode: "+48",
+  },
 ];
 
 export interface PricingContextData {

@@ -53,6 +53,12 @@ export function GeoLocationProvider({
         },
         (error) => {
           console.error(error);
+          setBrowserGeo({
+            browserGeo: null,
+            ipCountry,
+            host,
+            isLoaded: true,
+          });
         },
         options
       );

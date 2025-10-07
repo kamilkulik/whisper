@@ -19,9 +19,9 @@ export async function triangulateLocationOnFe(
     return reverseGeoCode(browserGeo.latitude, browserGeo.longitude);
   }
 
-  if (host) {
-    console.log("setting host", host);
-    const domain = GEO_CONTEXT.find((domain) => host.endsWith(domain.domain));
+  const domain = GEO_CONTEXT.find((domain) => host?.endsWith(domain.domain));
+  if (domain) {
+    console.log("setting by domain", domain);
 
     return domain?.country ?? null;
   }

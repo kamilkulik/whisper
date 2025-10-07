@@ -1,11 +1,12 @@
 import { useTranslations } from "next-intl";
 import { ValidationErrors } from "../_types";
+import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
+import { GEO_CONTEXT } from "../_consts";
 
 type PhoneFormProps = {
   formData: { phoneNumber: string; email: string; countryCode: string };
   isCountryDropdownOpen: boolean;
   countryDropdownRef: React.RefObject<HTMLDivElement | null>;
-  countryOptions: { code: string; name: string }[];
   validationErrors: ValidationErrors;
   isSubmitting: boolean;
   isLoginMode: boolean;
@@ -24,7 +25,6 @@ export function PhoneForm({
   formData,
   isCountryDropdownOpen,
   countryDropdownRef,
-  countryOptions,
   validationErrors,
   isSubmitting,
   isLoginMode,
@@ -37,6 +37,8 @@ export function PhoneForm({
   onToggleCountryDropdown,
 }: PhoneFormProps) {
   const t = useTranslations("Components.PhoneForm");
+  const sharedMessages = useTranslations("Shared.countries");
+  const { triangulatedCountry } = useTriangulatedLocation();
   return (
     <>
       <div className="mb-8" data-oid="fv3gut-">
@@ -103,19 +105,23 @@ export function PhoneForm({
                       className="absolute top-full left-0 mt-2 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-80"
                       data-oid="u76tc5h"
                     >
-                      {countryOptions.map((option) => (
+                      {GEO_CONTEXT.filter(
+                        (option) => option.country === triangulatedCountry
+                      ).map((option) => (
                         <button
-                          key={option.code}
+                          key={option.countryCode}
                           type="button"
-                          onClick={() => handleCountrySelect(option.code)}
+                          onClick={() =>
+                            handleCountrySelect(option.countryCode)
+                          }
                           className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-2xl ${
-                            formData.countryCode === option.code
+                            formData.countryCode === option.countryCode
                               ? "bg-gray-700"
                               : ""
                           }`}
                           data-oid="jp414j."
                         >
-                          {option.code} {option.name}
+                          {option.countryCode} {sharedMessages(option.country)}
                         </button>
                       ))}
                     </div>

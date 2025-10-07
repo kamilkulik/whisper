@@ -11,6 +11,7 @@ import { ValidationErrors } from "../_types";
 import { PhoneForm } from "./PhoneForm";
 import { useTranslations } from "next-intl";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
+import { GEO_CONTEXT } from "../_consts";
 // ContactForm is switched at the parent level; no import/render here
 
 // Validation schemas
@@ -77,23 +78,11 @@ export default function ConfirmationCodeForm({
   const emailSchema = localisedEmailSchema(t);
   const { triangulatedCountry } = useTriangulatedLocation();
 
-  const sharedMessages = useTranslations("Shared.countries");
-
   const stateKey = showSuccessMessage
     ? "success"
     : showConfirmationCode
       ? "code"
       : "phone";
-
-  const countryOptions = [
-    { code: "+48", name: sharedMessages("PL"), country: "PL" },
-    { code: "+44", name: sharedMessages("GB"), country: "GB" },
-    // { code: "+1", name: sharedMessages("usa") },
-    // { code: "+34", name: sharedMessages("spain") },
-    // { code: "+52", name: sharedMessages("mexico") },
-    // { code: "+56", name: sharedMessages("chile") },
-    // { code: "+39", name: sharedMessages("italy") },
-  ];
 
   // Handle clicking outside the dropdowns
   useEffect(() => {
@@ -194,8 +183,8 @@ export default function ConfirmationCodeForm({
 
     // TODO make sure this shows up first
     // Start by verifying phone country code matches detected country
-    const phoneCountryCode = countryOptions.find(
-      (option) => option.code === formData.countryCode
+    const phoneCountryCode = GEO_CONTEXT.find(
+      (option) => option.countryCode === formData.countryCode
     )?.country!;
 
     if (phoneCountryCode !== triangulatedCountry) {
@@ -420,7 +409,6 @@ export default function ConfirmationCodeForm({
             formData={formData}
             isCountryDropdownOpen={isCountryDropdownOpen}
             countryDropdownRef={countryDropdownRef}
-            countryOptions={countryOptions}
             validationErrors={validationErrors}
             isSubmitting={isSubmitting}
             isLoginMode={isLoginMode}
