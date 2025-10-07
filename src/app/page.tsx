@@ -16,6 +16,8 @@ import { useTranslations } from "next-intl";
 import { Footer } from "./_components/Footer";
 import { navigateToCheckout } from "./_actions/navigateToCheckout";
 import { userEmailFromCookie } from "./_actions/userEmailFromCookie";
+import Spinner from "./_components/Spinner";
+import { useCurrentLocale } from "./_hooks/useCurrentLocale";
 
 export default function Home() {
   const router = useRouter();
@@ -32,7 +34,7 @@ export default function Home() {
     isEmailVerified: false,
     email: "",
   });
-  const [currentLocale, setCurrentLocale] = useState<string | null>(null);
+  const currentLocale = useCurrentLocale();
 
   // Language options for switcher
   const languageOptions = [
@@ -61,21 +63,6 @@ export default function Home() {
   // Get modal from search params
   const searchParams = useSearchParams();
   const modal = searchParams.get("modal");
-
-  useEffect(() => {
-    // Get current locale from URL or cookie
-    const getCurrentLocale = () => {
-      if (typeof window !== "undefined") {
-        const cookieValue = document.cookie
-          .split(";")
-          .find((c) => c.trim().startsWith("locale="))
-          ?.split("=")[1];
-        return cookieValue || null;
-      }
-      return null;
-    };
-    setCurrentLocale(getCurrentLocale());
-  }, []);
 
   // Click outside handler for language dropdown
   useEffect(() => {
@@ -416,10 +403,10 @@ export default function Home() {
 
   // Image carousel data
   const carouselImages = [
-    { src: "/szept_1.jpeg", alt: "Wieczorny Szept Image 1" },
-    { src: "/szept_2.jpeg", alt: "Wieczorny Szept Image 2" },
-    { src: "/szept_3.jpeg", alt: "Wieczorny Szept Image 3" },
-    { src: "/szept_4.jpeg", alt: "Wieczorny Szept Image 4" },
+    { src: `/${currentLocale}/szept_1.jpeg`, alt: "Wieczorny Szept Image 1" },
+    { src: `/${currentLocale}/szept_2.jpeg`, alt: "Wieczorny Szept Image 2" },
+    { src: `/${currentLocale}/szept_3.jpeg`, alt: "Wieczorny Szept Image 3" },
+    { src: `/${currentLocale}/szept_4.jpeg`, alt: "Wieczorny Szept Image 4" },
   ];
 
   // FAQ data
@@ -726,7 +713,11 @@ export default function Home() {
                   className="float-in-right mt-12 lg:mt-0 lg:col-span-3 relative"
                   ref={carouselRef}
                 >
-                  <ImageCarousel images={carouselImages} />
+                  {currentLocale ? (
+                    <ImageCarousel images={carouselImages} />
+                  ) : (
+                    <Spinner size="xl" />
+                  )}
                 </div>
               </div>
             </div>
@@ -925,16 +916,20 @@ export default function Home() {
                   </div>
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
                   <div className="order-2 lg:order-2 flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3 ">
-                    <img
-                      src="/single_whisper.jpeg"
-                      alt="Smartphone showing Wieczorny Szept notification"
-                      className="w-full max-h-full "
-                      style={{
-                        borderRadius: "2rem",
-                        filter:
-                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                      }}
-                    />
+                    {currentLocale ? (
+                      <img
+                        src={`/${currentLocale}/single_whisper.jpeg`}
+                        alt="Smartphone showing Wieczorny Szept notification"
+                        className="w-full max-h-full "
+                        style={{
+                          borderRadius: "2rem",
+                          filter:
+                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                        }}
+                      />
+                    ) : (
+                      <Spinner size="xl" />
+                    )}
                   </div>
                 </div>
               </div>

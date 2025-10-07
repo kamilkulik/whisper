@@ -1,6 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useCurrentLocale } from "../_hooks/useCurrentLocale";
+import Spinner from "./Spinner";
 
 interface HowItWorksProps {
   onGetStarted: () => void;
@@ -8,6 +10,7 @@ interface HowItWorksProps {
 
 export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
   const t = useTranslations("LandingPage");
+  const currentLocale = useCurrentLocale();
 
   return (
     <div className="relative py-20" data-oid="-i:6r4a">
@@ -34,11 +37,15 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               className="w-full min-h-48 rounded-xl mb-6 overflow-hidden border border-white/20"
               data-oid="2k9yuv8"
             >
-              <img
-                src="/process_1.jpeg"
-                alt="Ciesz się chwilą"
-                className="w-full h-full object-cover object-top"
-              />
+              {currentLocale ? (
+                <img
+                  src={`/${currentLocale}/process_1.jpeg`}
+                  alt="Ciesz się chwilą"
+                  className="w-full h-full object-cover object-top"
+                />
+              ) : (
+                <Spinner size="xl" />
+              )}
             </div>
 
             <h3
