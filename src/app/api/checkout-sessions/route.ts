@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe";
 import { SubscriptionType } from "@prisma/client";
 import { productConfigs } from "@/lib/consts";
+import { triangulateLocationBe } from "../utils/triangulateLocationBe";
 
 export interface CheckoutSessionsPayload {
   productType: SubscriptionType;
@@ -16,28 +17,39 @@ export async function POST(request: NextRequest) {
     const { productType } = body;
 
     const headersList = await headers();
-    let origin = headersList.get("origin");
+    let host = headersList.get("host");
 
-    // Ensure we have a valid origin with proper scheme
-    if (!origin) {
-      origin =
+    // Ensure we have a valid host with proper scheme
+    if (!host) {
+      host =
         process.env.NODE_ENV === "production"
           ? "https://wieczornyszept.pl" // Replace with your actual domain
           : "http://localhost:3000";
     }
 
-    // Ensure origin has proper scheme
-    if (!origin.startsWith("http://") && !origin.startsWith("https://")) {
-      origin = `https://${origin}`;
+    // Ensure host has proper scheme
+    if (!host.startsWith("http://") && !host.startsWith("https://")) {
+      host = `https://${host}`;
     }
 
-    const config = productConfigs[productType as keyof typeof productConfigs];
+    const ipCountry = headersList.get("x-vercel-ip-country");
+    const triangulatedCountry = triangulateLocationBe(null, ipCountry, host);
+
+    if (!triangulatedCountry) {
+      throw new Error("Failed to triangulate country");
+    }
+
+    const config = productConfigs[triangulatedCountry]?.[productType];
+
+    if (!config) {
+      throw new Error("Service is not available in your country");
+    }
 
     console.log("--- IMPORTANT --- config", config);
 
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
-      client_reference_id: "id_uzytkownika",
+      client_reference_id: body.email,
       customer_email: body.email,
       metadata: {
         productType: productType.toString(),
@@ -51,8 +63,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: config.mode,
-      success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/?canceled=true`,
+      success_url: `${host}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${host}/?canceled=true`,
     });
 
     if (!session.url) {
