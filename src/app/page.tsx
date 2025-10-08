@@ -710,7 +710,7 @@ export default function Home() {
 
                 {/* Right Side - Image Carousel */}
                 <div
-                  className="float-in-right mt-12 lg:mt-0 lg:col-span-3 relative"
+                  className="float-in-right mt-24 md:mt-0 lg:col-span-3 relative"
                   ref={carouselRef}
                 >
                   {currentLocale ? (
@@ -724,8 +724,12 @@ export default function Home() {
           </div>
 
           {/* Main Headline */}
-          <div className="relative py-32 md:max-lg:py-16">
-            <div className="text-center mb-16" data-oid="-zj3z04">
+          {/* blow div - entire section wrapper */}
+          <div className="relative mt-64  lg:mt-28">
+            <div
+              className="text-center mb-16 md:max-lg:mb-0"
+              data-oid="-zj3z04"
+            >
               <h2
                 className="text-4xl lg:text-5xl font-bold text-white"
                 data-oid="c3bt..l"
@@ -736,7 +740,7 @@ export default function Home() {
 
             {/* It How it feels Section */}
             {/* Step 1 */}
-            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
+            <div className="relative min-h-[60vh] md:min-h-[40vh] mb-40 flex items-center">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 2 on desktop */}
@@ -794,7 +798,7 @@ export default function Home() {
             </div>
 
             {/* Step 2 */}
-            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
+            <div className="relative min-h-[60vh] flex items-center mb-40">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 1 on desktop */}
@@ -852,7 +856,7 @@ export default function Home() {
             </div>
 
             {/* Step 3 */}
-            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
+            <div className="relative min-h-[60vh] flex items-center mb-40">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 2 on desktop */}
@@ -897,7 +901,7 @@ export default function Home() {
             </div>
 
             {/* Step 4 */}
-            <div className="relative min-h-[60vh] py-24 flex items-center mb-32">
+            <div className="relative min-h-[60vh] flex items-center mb-40">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 1 on desktop */}
@@ -936,7 +940,7 @@ export default function Home() {
             </div>
 
             {/* Step 5 */}
-            <div className="relative min-h-[60vh] py-24 flex items-center">
+            <div className="relative min-h-[60vh] flex items-center mb-40">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
                   {/* Content - Order 1 on mobile, Order 2 on desktop */}
