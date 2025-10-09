@@ -924,7 +924,7 @@ export default function Home() {
                       <img
                         src={`/${currentLocale}/single_whisper.jpeg`}
                         alt="Smartphone showing Wieczorny Szept notification"
-                        className="w-full max-h-full "
+                        className="w-full h-full object-contain"
                         style={{
                           borderRadius: "2rem",
                           filter:
