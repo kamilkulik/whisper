@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PL_DOMAIN, GB_DOMAIN } from "./app/_consts";
+import { getBaseUrl } from "./app/api/utils/baseUrl";
 
 const DEFAULT_LOCALE = "en";
 const POSSIBLE_LOCALES = ["pl", "en"] as const;
@@ -13,11 +14,12 @@ function inferDefaultFromHost(host?: string): Locale {
   return DEFAULT_LOCALE;
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   /**
    * Authentication check for protected routes
    */
 
+  const baseUrl = await getBaseUrl();
   const { pathname } = request.nextUrl;
   const res = NextResponse.next();
 
@@ -27,7 +29,7 @@ export function middleware(request: NextRequest) {
 
     // If no session cookie, redirect to login
     if (!sessionId) {
-      return NextResponse.redirect(new URL("/?modal=login", request.url));
+      return NextResponse.redirect(new URL("/?modal=login", baseUrl));
     }
 
     // TODO: Validate session against your session store
@@ -47,9 +49,8 @@ export function middleware(request: NextRequest) {
   // User-selected locale (cookie) → always wins
   if (request.cookies.has("locale")) return res;
 
-  const { host } = request.nextUrl;
   // Domain default (.pl → pl, .co.uk or any other → en)
-  const currentDomainLocale: Locale = inferDefaultFromHost(host);
+  const currentDomainLocale: Locale = inferDefaultFromHost(baseUrl);
 
   // Otherwise, likely first visit, detect from Accept-Language header
   const acceptLang = request.headers.get("accept-language") || "";

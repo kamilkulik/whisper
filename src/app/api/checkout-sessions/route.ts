@@ -5,6 +5,7 @@ import { stripe } from "@/lib/stripe";
 import { SubscriptionType } from "@prisma/client";
 import { productConfigs } from "@/lib/consts";
 import { triangulateLocationBe } from "../utils/triangulateLocationBe";
+import { getBaseUrl } from "../utils/baseUrl";
 
 export interface CheckoutSessionsPayload {
   productType: SubscriptionType;
@@ -17,23 +18,10 @@ export async function POST(request: NextRequest) {
     const { productType } = body;
 
     const headersList = await headers();
-    let host = headersList.get("host");
-
-    // Ensure we have a valid host with proper scheme
-    if (!host) {
-      host =
-        process.env.NODE_ENV === "production"
-          ? "https://wieczornyszept.pl" // Replace with your actual domain
-          : "http://localhost:3000";
-    }
-
-    // Ensure host has proper scheme
-    if (!host.startsWith("http://") && !host.startsWith("https://")) {
-      host = `https://${host}`;
-    }
+    const baseUrl = await getBaseUrl();
 
     const ipCountry = headersList.get("x-vercel-ip-country");
-    const triangulatedCountry = triangulateLocationBe(null, ipCountry, host);
+    const triangulatedCountry = triangulateLocationBe(null, ipCountry, baseUrl);
 
     if (!triangulatedCountry) {
       throw new Error("Failed to triangulate country");
@@ -63,8 +51,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: config.mode,
-      success_url: `${host}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${host}/?canceled=true`,
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/?canceled=true`,
     });
 
     if (!session.url) {
@@ -73,6 +61,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (err: any) {
+    console.error("Error creating checkout session", err);
     return NextResponse.json(
       { error: err.message },
       { status: err.statusCode || 500 }

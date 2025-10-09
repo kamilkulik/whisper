@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyOneTimeToken } from "../../utils/oneTimeJwt";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "../../utils/baseUrl";
 
 export async function GET(request: NextRequest) {
   try {
     // Get the token from query parameters
-    const { searchParams } = new URL(request.url);
+    const baseUrl = await getBaseUrl();
+    const { searchParams } = new URL(request.nextUrl);
     const token = searchParams.get("token");
 
     if (!token) {
       console.error("Email confirmation failed: Missing token");
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", request.url)
+        new URL("/email-confirmation?status=error", baseUrl)
       );
     }
 
@@ -24,7 +26,7 @@ export async function GET(request: NextRequest) {
         error: error instanceof Error ? error.message : String(error),
       });
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", request.url)
+        new URL("/email-confirmation?status=error", baseUrl)
       );
     }
 
@@ -46,7 +48,7 @@ export async function GET(request: NextRequest) {
         email: claims.userEmail,
       });
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", request.url)
+        new URL("/email-confirmation?status=error", baseUrl)
       );
     }
 
@@ -58,7 +60,7 @@ export async function GET(request: NextRequest) {
         userId: claims.userId,
       });
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", request.url)
+        new URL("/email-confirmation?status=error", baseUrl)
       );
     }
 
@@ -72,7 +74,7 @@ export async function GET(request: NextRequest) {
         new URL(
           "/email-confirmation?status=already-verified&email=" +
             claims.userEmail,
-          request.url
+          baseUrl
         )
       );
     }
@@ -91,13 +93,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         "/email-confirmation?status=success&email=" + claims.userEmail,
-        request.url
+        baseUrl
       )
     );
   } catch (error) {
     console.error("Email confirmation error:", error);
+    const baseUrl = await getBaseUrl();
     return NextResponse.redirect(
-      new URL("/email-confirmation?status=error", request.url)
+      new URL("/email-confirmation?status=error", baseUrl)
     );
   }
 }
