@@ -999,25 +999,23 @@ export default function Home() {
           <HowItWorks onGetStarted={handleNavigateToPricing} />
 
           {/* Smartphone Notification Section */}
-          <div className="relative min-h-[80vh] flex items-center mb-32">
+          <div className="relative min-h-[80vh] flex items-center my-32">
             <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-stretch">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12">
                 {/* Image */}
-                <div className="relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3">
+                <div className="order-2 lg:order-1 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 lg:row-span-3 self-center">
                   <img
                     src="/szept_4.jpeg"
                     alt="Smartphone showing Wieczorny Szept notification"
-                    className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                    className="w-full max-h-full object-contain drop-shadow-3xl"
                     style={{
-                      borderRadius: "2rem",
                       filter:
                         "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
                     }}
                   />
                 </div>
 
-                {/* Content */}
-                <div className="lg:col-span-2 flex flex-col justify-between space-y-12 lg:space-y-0 md:my-12 xl:my-2">
+                <div className="order-1 lg:order-2 lg:col-start-4 lg:col-span-2 self-start">
                   <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
                     {t("smartphone-notification-section.title-1")}{" "}
                     <span className=" bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -1025,31 +1023,35 @@ export default function Home() {
                     </span>
                     {t("smartphone-notification-section.title-3")}
                   </h2>
+                </div>
 
+                {/* Content */}
+                <div className="order-3 lg:col-start-4 lg:col-span-2">
                   <p className="text-2xl lg:text-xl text-blue-200 text-justify leading-relaxed">
                     {t("smartphone-notification-section.copy-1")}
                     <br />
                     <br />
                     {t("smartphone-notification-section.copy-2")}
                   </p>
+                </div>
 
-                  <div className="flex flex-col md:max-lg:flex-row md:max-lg:space-x-8 md:max-lg:justify-center items-center">
-                    <button
-                      onClick={handleNavigateToPricing}
-                      className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
-                    >
-                      {t("smartphone-notification-section.button")}
-                    </button>
-                    <div className="text-white text-2xl lg:text-xl mt-4">
-                      <p className="font-medium">
-                        {t("smartphone-notification-section.CTA-copy-1")}
-                      </p>
-                      <p className="text-blue-200">
-                        {t("smartphone-notification-section.CTA-copy-2")}
-                      </p>
-                    </div>
+                <div className="order-4 lg:col-start-4 lg:col-span-2 flex flex-col md:max-lg:flex-row md:max-lg:space-x-8 md:max-lg:justify-center items-center self-start">
+                  <button
+                    onClick={handleNavigateToPricing}
+                    className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
+                  >
+                    {t("smartphone-notification-section.button")}
+                  </button>
+                  <div className="text-white text-2xl lg:text-xl mt-4">
+                    <p className="font-medium">
+                      {t("smartphone-notification-section.CTA-copy-1")}
+                    </p>
+                    <p className="text-blue-200">
+                      {t("smartphone-notification-section.CTA-copy-2")}
+                    </p>
                   </div>
                 </div>
+                {/* </div> */}
               </div>
             </div>
           </div>
