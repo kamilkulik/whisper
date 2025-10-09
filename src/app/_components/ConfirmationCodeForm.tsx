@@ -176,22 +176,32 @@ export default function ConfirmationCodeForm({
     }));
   };
 
-  const handlePhoneSubmit = async (e: React.FormEvent) => {
+  /**
+   * HANDLES SENDING AND VERIFIYING CONFIRMATION CODE
+   * BOTH PHONE AND EMAIL!
+   */
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
     const errors: ValidationErrors = {};
 
     // TODO make sure this shows up first
     // Start by verifying phone country code matches detected country
-    const phoneCountryCode = GEO_CONTEXT.find(
-      (option) => option.countryCode === formData.countryCode
-    )?.country!;
+    if (!isEmailMode) {
+      const phoneCountryCode = GEO_CONTEXT.find(
+        (option) => option.countryCode === formData.countryCode
+      )?.country!;
 
-    if (phoneCountryCode !== triangulatedCountry) {
-      errors.phoneNumber = t(
-        "form-validation-errors.phone-number.country-mismatch"
-      );
+      console.log("phoneCountryCode", phoneCountryCode);
+
+      if (phoneCountryCode !== triangulatedCountry) {
+        errors.phoneNumber = t(
+          "form-validation-errors.phone-number.country-mismatch"
+        );
+      }
     }
+
+    console.log("validation errors", errors);
 
     // Validate all input fields based on mode
     const sanitizedData = isEmailMode
@@ -217,7 +227,7 @@ export default function ConfirmationCodeForm({
     // If there are validation errors, show them and don't submit
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      setMessage("Proszę poprawić błędy w formularzu.");
+      setMessage(t("form-validation-errors.validation-error"));
       return;
     }
 
@@ -417,7 +427,7 @@ export default function ConfirmationCodeForm({
             clearValidationError={clearValidationError}
             handleInputBlur={handleInputBlur}
             handleCountrySelect={handleCountrySelect}
-            handlePhoneSubmit={handlePhoneSubmit}
+            handlePhoneSubmit={handleFormSubmit}
             onToggleCountryDropdown={() =>
               setIsCountryDropdownOpen(!isCountryDropdownOpen)
             }
