@@ -759,7 +759,7 @@ export default function Home() {
                   </div>
 
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
-                  <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
+                  <div className="order-2 lg:order-1 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     {prefersReducedMotion ? (
                       <img
                         src="/VIDEOS/POSTERS/pl-notification.jpg"
@@ -816,7 +816,7 @@ export default function Home() {
                     </p>
                   </div>
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
-                  <div className="order-2 lg:order-2 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
+                  <div className="order-2 lg:order-2 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     {prefersReducedMotion ? (
                       <img
                         src="/VIDEOS/POSTERS/pl-message-reveal.jpg"
@@ -874,7 +874,7 @@ export default function Home() {
                     </p>
                   </div>
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
-                  <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
+                  <div className="order-2 lg:order-1 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef2}
                       className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
@@ -919,7 +919,7 @@ export default function Home() {
                     </p>
                   </div>
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
-                  <div className="order-2 lg:order-2 flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
+                  <div className="order-2 lg:order-2 flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     {currentLocale ? (
                       <img
                         src={`/${currentLocale}/single_whisper.jpeg`}
@@ -966,7 +966,7 @@ export default function Home() {
                     </div>
                   </div>
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
-                  <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
+                  <div className="order-2 lg:order-1 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef4}
                       className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
