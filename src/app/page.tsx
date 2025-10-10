@@ -773,7 +773,7 @@ export default function Home() {
                     ) : (
                       <video
                         ref={videoRef}
-                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                        className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                         style={{
                           filter:
                             "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
@@ -830,7 +830,7 @@ export default function Home() {
                     ) : (
                       <video
                         ref={videoRef3}
-                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                        className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                         style={{
                           filter:
                             "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
@@ -877,7 +877,7 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef2}
-                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                      className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
                           "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
@@ -903,7 +903,7 @@ export default function Home() {
             {/* Step 4 */}
             <div className="relative min-h-[60vh] flex items-center mb-40">
               <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12">
                   {/* Content - Order 1 on mobile, Order 1 on desktop */}
                   <div className="order-1 lg:order-1 lg:col-span-2 flex flex-col justify-center lg:space-y-0 md:my-12 xl:my-2">
                     <h2 className="text-4xl lg:text-4xl text-center font-bold text-white leading-tight">
@@ -919,14 +919,13 @@ export default function Home() {
                     </p>
                   </div>
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
-                  <div className="order-2 lg:order-2 flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3 ">
+                  <div className="order-2 lg:order-2 flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     {currentLocale ? (
                       <img
                         src={`/${currentLocale}/single_whisper.jpeg`}
                         alt="Smartphone showing Wieczorny Szept notification"
-                        className="w-full h-full object-contain"
+                        className="max-w-full max-h-full object-contain rounded-2xl"
                         style={{
-                          borderRadius: "2rem",
                           filter:
                             "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
                         }}
@@ -970,7 +969,7 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef4}
-                      className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                      className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
                       style={{
                         filter:
                           "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
@@ -1007,7 +1006,7 @@ export default function Home() {
                   <img
                     src="/szept_4.jpeg"
                     alt="Smartphone showing Wieczorny Szept notification"
-                    className="w-full max-h-full object-contain drop-shadow-3xl"
+                    className="max-w-full max-h-full object-contain rounded-2xl"
                     style={{
                       filter:
                         "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
