@@ -1002,7 +1002,7 @@ export default function Home() {
             <div className="max-w-7xl md:max-lg:max-w-4xl mx-auto px-6 w-full">
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12">
                 {/* Image */}
-                <div className="order-2 lg:order-1 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 lg:row-span-3 self-center">
+                <div className="order-2 lg:order-1 md:max-lg:my-12 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 lg:row-span-3 self-center">
                   <img
                     src="/szept_4.jpeg"
                     alt="Smartphone showing Wieczorny Szept notification"
@@ -1037,7 +1037,7 @@ export default function Home() {
                 <div className="order-4 lg:col-start-4 lg:col-span-2 flex flex-col md:max-lg:flex-row md:max-lg:space-x-8 md:max-lg:justify-center items-center self-start">
                   <button
                     onClick={handleNavigateToPricing}
-                    className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
+                    className="max-md:my-8 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
                   >
                     {t("smartphone-notification-section.button")}
                   </button>
