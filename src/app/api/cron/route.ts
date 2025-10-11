@@ -18,6 +18,15 @@ export type UserRawType = {
 };
 
 export const GET = async (request: NextRequest) => {
+  const isCronProcessingEnabled = process.env.ENABLE_CRON === "true";
+
+  if (!isCronProcessingEnabled) {
+    return NextResponse.json(
+      { message: "Cron processing is disabled" },
+      { status: 200 }
+    );
+  }
+
   try {
     checkCronSecret(request);
 
