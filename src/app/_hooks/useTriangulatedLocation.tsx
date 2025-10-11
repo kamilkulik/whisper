@@ -4,6 +4,7 @@ import { GeoLocationContext } from "../contexts/GeoLocationContext";
 import { getPricingContext, PricingContextData } from "../_consts";
 
 export const useTriangulatedLocation = (): {
+  isLoaded: boolean;
   triangulatedCountry: string | null;
   pricingData: PricingContextData | null;
 } => {
@@ -37,5 +38,5 @@ export const useTriangulatedLocation = (): {
     }
   }, [isLoaded, ipCountry, host, browserGeo]);
 
-  return { triangulatedCountry, pricingData };
+  return { isLoaded, triangulatedCountry, pricingData };
 };

@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getUserDataFromSession } from "../_actions/testing";
+import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
+import { GeoLocationContext } from "../contexts/GeoLocationContext";
 
 interface TestingToolsWidgetProps {
   isVisible: boolean;
@@ -21,6 +23,13 @@ export default function TestingToolsWidget({
   const [sessionIdFromCookie, setSessionIdFromCookie] = useState<string | null>(
     null
   );
+  const { isLoaded, triangulatedCountry } = useTriangulatedLocation();
+  const {
+    isLoaded: geoContextLoaded,
+    ipCountry,
+    host,
+    browserGeo,
+  } = useContext(GeoLocationContext);
 
   // Reset expanded state when component mounts
   useEffect(() => {
@@ -89,8 +98,6 @@ export default function TestingToolsWidget({
         {/* Content panel */}
         <div className="w-80 bg-gray-800/95 backdrop-blur-sm rounded-l-2xl shadow-xl border-l border-gray-600 overflow-hidden">
           <div className="p-6 text-white overflow-y-auto overflow-x-hidden">
-            <h3 className="text-xl font-bold mb-4">Testing Tools</h3>
-
             <div className="space-y-4">
               <div className="bg-gray-700/50 rounded-lg p-4">
                 <h2 className="font-semibold mb-2 text-lg">
@@ -104,6 +111,36 @@ export default function TestingToolsWidget({
                   <div className="flex justify-between">
                     <span>Email Provider:</span>
                     <span className="text-green-400">{emailProvider}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-700/50 rounded-lg p-4">
+                <h4 className="font-semibold mb-2  text-lg">Geo Data</h4>
+                <div className="space-y-2">
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Location Data Loaded:</span>
+                      <span className="text-green-400">
+                        {isLoaded ? "true" : "false"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Host:</span>
+                      <span className="text-green-400">
+                        {geoContextLoaded ? host : "...loading"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Country:</span>
+                      <span className="text-green-400">
+                        {triangulatedCountry === null
+                          ? "null"
+                          : triangulatedCountry === undefined
+                            ? "undefined"
+                            : triangulatedCountry}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -153,9 +190,6 @@ export default function TestingToolsWidget({
                 <div className="text-xs text-gray-300 space-y-1">
                   <div>Mode: Development</div>
                   <div>Timestamp: {new Date().toLocaleTimeString()}</div>
-                  <div>
-                    User Agent: {navigator.userAgent.substring(0, 50)}...
-                  </div>
 
                   <div className="mt-3 pt-3 border-t border-gray-600">
                     <div className="flex justify-between items-center mb-2">

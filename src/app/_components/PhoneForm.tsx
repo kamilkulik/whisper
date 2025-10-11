@@ -39,6 +39,8 @@ export function PhoneForm({
   const t = useTranslations("Components.PhoneForm");
   const sharedMessages = useTranslations("Shared.countries");
   const { triangulatedCountry } = useTriangulatedLocation();
+
+  console.log("PhoneForm", triangulatedCountry);
   return (
     <>
       <div className="mb-8" data-oid="fv3gut-">

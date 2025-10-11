@@ -19,13 +19,17 @@ export async function triangulateLocationOnFe(
     return reverseGeoCode(browserGeo.latitude, browserGeo.longitude);
   }
 
+  // LOCAL DEVELOPMENT
   if (
     !!host &&
-    (host.includes("localhost:3000") || host.includes("127.0.0.1"))
+    (host.includes("localhost:3000") ||
+      host.includes("127.0.0.1") ||
+      host.includes("192.168.0"))
   ) {
     return "PL";
   }
 
+  // MATCH AGAINST KNOWN DOMAINS
   const domain = GEO_CONTEXT.find((domain) => host?.endsWith(domain.domain));
   if (domain) {
     console.log("setting by domain", domain);
@@ -33,5 +37,6 @@ export async function triangulateLocationOnFe(
     return domain?.country ?? null;
   }
 
+  // WOW, SOMETHING WENT HORRIBLY WRONG
   return null;
 }
