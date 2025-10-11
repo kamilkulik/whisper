@@ -1,18 +1,32 @@
-import { SubscriptionType } from "@prisma/client";
+"use server";
+
+import { Subscription, SubscriptionType, User } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 import { handleTrialSubscription } from "./handleTrialSubscription";
+import { getLatestActiveSubscriptionForUserEmail } from "@/lib/prisma";
 
 export async function navigateToCheckout(
   productType: SubscriptionType,
   email: string
-) {
+): Promise<{
+  success: boolean;
+  savedSubscription?: Subscription;
+  savedUser?: User;
+  hasCurrentActiveSubscription?: boolean;
+}> {
   if (!email) {
     console.error("User email not found");
-    return;
+    return { success: false };
   }
 
   console.log("user email", email);
   console.log("productType", productType);
+
+  // does the user already have an ACTIVE subscription?
+  const subscription = await getLatestActiveSubscriptionForUserEmail(email);
+  if (subscription) {
+    return { success: true, hasCurrentActiveSubscription: true };
+  }
 
   if (productType === SubscriptionType.TRIAL) {
     return handleTrialSubscription(email);
@@ -37,13 +51,16 @@ export async function navigateToCheckout(
       if (url) {
         window.location.href = url;
       }
+      return { success: true };
     } else {
       console.error(
         "Wystąpił błąd podczas tworzenia sesji płatności: ",
         checkoutResponse
       );
+      return { success: false };
     }
   } catch (error) {
     console.error("Wystąpił błąd podczas tworzenia sesji płatności.", error);
+    return { success: false };
   }
 }

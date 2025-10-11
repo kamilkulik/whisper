@@ -77,6 +77,10 @@
       "contact": {
         "title": "Provide a few additional details",
         "description": "Contact form asking for your name, email, message language and consent to the terms of service"
+      },
+      "already-subscribed": {
+        "acknowledgeText": "OK",
+        "description": "You already have an active subscription. You can cancel or extend it."
       }
     },
     "smartphone-notification-section": {

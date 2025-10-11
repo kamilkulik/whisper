@@ -1,16 +1,20 @@
 "use server";
 
 import { getUserFromEmail, prisma } from "@/lib/prisma";
-import { SubscriptionType } from "@prisma/client";
+import { Subscription, SubscriptionType, User } from "@prisma/client";
 import { subscriptionFactory } from "../api/payments/utils/subscriptionFactory";
 import { sendEmail } from "@/lib/emailapi";
 
-export async function handleTrialSubscription(userEmail: string) {
+export async function handleTrialSubscription(userEmail: string): Promise<{
+  success: boolean;
+  savedSubscription?: Subscription;
+  savedUser?: User;
+}> {
   try {
     const user = await getUserFromEmail(userEmail);
     if (!user) {
       console.error("User not found");
-      return;
+      return { success: false };
     }
 
     // in a single transaction create trial sub and update user
@@ -69,5 +73,6 @@ export async function handleTrialSubscription(userEmail: string) {
       "Wystąpił błąd podczas tworzenia subskrypcji na okres próbny.",
       error
     );
+    return { success: false };
   }
 }

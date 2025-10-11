@@ -18,6 +18,7 @@ import { navigateToCheckout } from "./_actions/navigateToCheckout";
 import { userEmailFromCookie } from "./_actions/userEmailFromCookie";
 import Spinner from "./_components/Spinner";
 import { useCurrentLocale } from "./_hooks/useCurrentLocale";
+import InformationModal from "./_components/InformationModal";
 
 export default function Home() {
   const router = useRouter();
@@ -490,6 +491,11 @@ export default function Home() {
           userEmailFromSessionCookie
         );
         if (result?.success) {
+          if (result?.hasCurrentActiveSubscription) {
+            // User already has an active subscription, inform them of it through
+            router.push("/?modal=already-subscribed", { scroll: false });
+            return;
+          }
           router.push("/trial-success");
           return;
         }
@@ -1173,6 +1179,24 @@ export default function Home() {
             isEmailVerified={isEmailVerified}
             verifiedPhoneNumber={verifiedPhoneNumber}
             selectedProduct={selectedProduct}
+          />
+        </ModalWrapper>
+      )}
+
+      {modal === "already-subscribed" && (
+        <ModalWrapper
+          isOpen={true}
+          onClose={handleModalClose}
+          modalId="contact"
+          description={t("modal-wrapper.contact.description")}
+          title={t("modal-wrapper.contact.title")}
+        >
+          <InformationModal
+            message={t("modal-wrapper.already-subscribed.description")}
+            acknowledgeText={t(
+              "modal-wrapper.already-subscribed.acknowledgeText"
+            )}
+            handleModalClose={handleModalClose}
           />
         </ModalWrapper>
       )}

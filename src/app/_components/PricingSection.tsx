@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useTranslations, useLocale } from "next-intl";
 import { GeoLocationContext } from "../contexts/GeoLocationContext";
-import { triangulateLocationOnFe } from "./utils/triangulateLocation";
-import { getPricingContext, PricingContextData } from "../_consts";
 import Spinner from "./Spinner";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 

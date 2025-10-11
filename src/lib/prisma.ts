@@ -1,6 +1,6 @@
 import "server-only";
 
-import { PrismaClient, Subscription } from "@prisma/client";
+import { PrismaClient, Subscription, SubscriptionStatus } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -41,5 +41,26 @@ export async function deleteSession(sessionId: string) {
   return prisma.user.update({
     where: { sessionId },
     data: { sessionId: null },
+  });
+}
+
+export async function getLatestActiveSubscriptionForUserEmail(
+  email: string
+): Promise<Subscription | null> {
+  const user = await getUserFromEmail(email);
+  if (!user) {
+    return null;
+  }
+  return prisma.subscription.findFirst({
+    where: {
+      userId: user.id,
+      status: SubscriptionStatus.ACTIVE,
+      dateExpires: {
+        gt: new Date(),
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }

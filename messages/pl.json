@@ -77,6 +77,10 @@
       "contact": {
         "title": "Podaj kilka dodatkowych informacji",
         "description": "Formularz kontaktowy z prośbą o imię, email, język wiadomości i zgodę na regulamin usługi"
+      },
+      "already-subscribed": {
+        "acknowledgeText": "OK",
+        "description": "Masz już aktywną subskrypcję. Możesz ją anulować lub przedłużyć."
       }
     },
     "smartphone-notification-section": {
