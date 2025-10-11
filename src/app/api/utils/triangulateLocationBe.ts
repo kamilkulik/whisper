@@ -15,7 +15,8 @@ export function triangulateLocationBe(
     if (
       host.includes("localhost:3000") ||
       host.includes("127.0.0.1") ||
-      host.includes("0.0.0.0:3000")
+      host.includes("0.0.0.0:3000") ||
+      host.includes("192.168.0")
     ) {
       return "PL";
     }

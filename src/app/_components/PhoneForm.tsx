@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { ValidationErrors } from "../_types";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 import { GEO_CONTEXT } from "../_consts";
+import { useEffect, useState } from "react";
 
 type PhoneFormProps = {
   formData: { phoneNumber: string; email: string; countryCode: string };
@@ -38,7 +39,20 @@ export function PhoneForm({
 }: PhoneFormProps) {
   const t = useTranslations("Components.PhoneForm");
   const sharedMessages = useTranslations("Shared.countries");
-  const { triangulatedCountry } = useTriangulatedLocation();
+  const { isLoaded, triangulatedCountry } = useTriangulatedLocation();
+  const [phoneCountryCodeOptions, setPhoneCountryCodeOptions] =
+    useState<typeof GEO_CONTEXT>(GEO_CONTEXT);
+
+  useEffect(() => {
+    if (isLoaded) {
+      const phoneCountryCodeOptions = GEO_CONTEXT.find(
+        (option) => option.country === triangulatedCountry
+      )
+        ? GEO_CONTEXT.filter((option) => option.country === triangulatedCountry)
+        : GEO_CONTEXT;
+      setPhoneCountryCodeOptions(phoneCountryCodeOptions);
+    }
+  }, [isLoaded, triangulatedCountry]);
 
   console.log("PhoneForm", triangulatedCountry);
   return (
@@ -107,9 +121,7 @@ export function PhoneForm({
                       className="absolute top-full left-0 mt-2 bg-gray-800 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto w-80"
                       data-oid="u76tc5h"
                     >
-                      {GEO_CONTEXT.filter(
-                        (option) => option.country === triangulatedCountry
-                      ).map((option) => (
+                      {phoneCountryCodeOptions.map((option) => (
                         <button
                           key={option.countryCode}
                           type="button"
