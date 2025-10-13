@@ -65,6 +65,10 @@ export default function PricingSection(props: PricingSectionProps) {
           userEmailFromSessionCookie
         );
         if (result?.success) {
+          if (result?.checkoutUrl) {
+            window.location.href = result.checkoutUrl;
+            return;
+          }
           router.push("/trial-success");
         }
       } else {

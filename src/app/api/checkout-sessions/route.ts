@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
       throw new Error("Service is not available in your country");
     }
 
+    console.log("[ /api/checkout-sessions ]");
     console.log("--- IMPORTANT --- config", config);
 
     // Create Checkout Sessions from body params.

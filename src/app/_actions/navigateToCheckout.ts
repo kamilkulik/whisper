@@ -4,6 +4,7 @@ import { Subscription, SubscriptionType, User } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 import { handleTrialSubscription } from "./handleTrialSubscription";
 import { getLatestActiveSubscriptionForUserEmail } from "@/lib/prisma";
+import { getBaseUrl } from "../api/utils/baseUrl";
 
 export async function navigateToCheckout(
   productType: SubscriptionType,
@@ -13,6 +14,7 @@ export async function navigateToCheckout(
   savedSubscription?: Subscription;
   savedUser?: User;
   hasCurrentActiveSubscription?: boolean;
+  checkoutUrl?: string;
 }> {
   if (!email) {
     console.error("User email not found");
@@ -42,7 +44,9 @@ export async function navigateToCheckout(
       email,
     };
 
-    const checkoutResponse = await fetch("/api/checkout-sessions", {
+    const baseUrl = await getBaseUrl();
+    const checkoutUrl = `${baseUrl}/api/checkout-sessions`;
+    const checkoutResponse = await fetch(checkoutUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +57,7 @@ export async function navigateToCheckout(
     if (checkoutResponse.ok) {
       const { url } = await checkoutResponse.json();
       if (url) {
-        window.location.href = url;
+        return { success: true, checkoutUrl: url };
       }
       return { success: true };
     } else {

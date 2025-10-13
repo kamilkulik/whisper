@@ -493,10 +493,15 @@ export default function Home() {
           product,
           userEmailFromSessionCookie
         );
+        console.log("[ handleStartJourneyWithScroll ] result: ", result);
         if (result?.success) {
           if (result?.hasCurrentActiveSubscription) {
             // User already has an active subscription, inform them of it through
             router.push("/?modal=already-subscribed", { scroll: false });
+            return;
+          }
+          if (result?.checkoutUrl) {
+            window.location.href = result.checkoutUrl;
             return;
           }
           router.push("/trial-success");
