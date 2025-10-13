@@ -19,6 +19,7 @@ import { userEmailFromCookie } from "./_actions/userEmailFromCookie";
 import Spinner from "./_components/Spinner";
 import { useCurrentLocale } from "./_hooks/useCurrentLocale";
 import InformationModal from "./_components/InformationModal";
+import { useGetCurrentSession } from "./_hooks/useGetCurrentSession";
 
 export default function Home() {
   const router = useRouter();
@@ -554,6 +555,8 @@ export default function Home() {
     }
   };
 
+  const { sessionId, loading: loadingSessionId } = useGetCurrentSession();
+
   return (
     <div className="relative">
       {/* Reading Progress Bar */}
@@ -581,7 +584,13 @@ export default function Home() {
                 onClick={handleLoginClick}
                 className="text-white hover:text-blue-200 transition-colors"
               >
-                {t("hero.login-button")}
+                {loadingSessionId ? (
+                  <Spinner size="sm" />
+                ) : sessionId ? (
+                  t("hero.dashboard-button")
+                ) : (
+                  t("hero.login-button")
+                )}
               </button>
               <button
                 onClick={handleNavigateToPricing}
