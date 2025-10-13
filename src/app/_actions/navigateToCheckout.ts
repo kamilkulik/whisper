@@ -24,6 +24,10 @@ export async function navigateToCheckout(
 
   // does the user already have an ACTIVE subscription?
   const subscription = await getLatestActiveSubscriptionForUserEmail(email);
+  console.log(
+    "[ navigateToCheckout ] latest active subscription: ",
+    subscription
+  );
   if (subscription) {
     return { success: true, hasCurrentActiveSubscription: true };
   }

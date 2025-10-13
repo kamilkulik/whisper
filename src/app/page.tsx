@@ -483,7 +483,10 @@ export default function Home() {
 
       // Does the user have a valid session?
       const userEmailFromSessionCookie = await userEmailFromCookie();
-      console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
+      console.log(
+        "[ handleStartJourneyWithScroll ] userEmailFromSessionCookie: ",
+        userEmailFromSessionCookie
+      );
 
       if (userEmailFromSessionCookie) {
         const result = await navigateToCheckout(
