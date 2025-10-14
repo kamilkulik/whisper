@@ -59,11 +59,6 @@ export default function PricingSection(props: PricingSectionProps) {
 
   const handleClickWithoutOnGetStarted =
     (product: SubscriptionType) => async () => {
-      const productKey = product.toString();
-
-      // Set loading state for this specific product
-      setLoadingStates((prev) => ({ ...prev, [productKey]: true }));
-
       try {
         const userEmailFromSessionCookie = await userEmailFromCookie();
         console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
@@ -87,9 +82,6 @@ export default function PricingSection(props: PricingSectionProps) {
         }
       } catch (error) {
         console.error("Error in handleClickWithoutOnGetStarted:", error);
-      } finally {
-        // Clear loading state
-        setLoadingStates((prev) => ({ ...prev, [productKey]: false }));
       }
     };
 
