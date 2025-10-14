@@ -36,6 +36,7 @@ export default function Home() {
     isEmailVerified: false,
     email: "",
   });
+  const pricingSectionRef = useRef<any>(null);
   const currentLocale = useCurrentLocale();
 
   // Language options for switcher
@@ -529,6 +530,16 @@ export default function Home() {
     router.push("/", { scroll: false });
   };
 
+  const handleModalOpen = () => {
+    // Clear loading states in PricingSection when modal opens
+    if (
+      pricingSectionRef.current &&
+      pricingSectionRef.current.clearAllLoadingStates
+    ) {
+      pricingSectionRef.current.clearAllLoadingStates();
+    }
+  };
+
   const handleShowContactForm = (phone: string) => {
     setVerifiedPhoneNumber(phone);
     // setShowContactForm(true);
@@ -556,6 +567,14 @@ export default function Home() {
   };
 
   const { sessionId, loading: loadingSessionId } = useGetCurrentSession();
+
+  // Handle modal opening to clear loading states
+  useEffect(() => {
+    if (modal === "phone" || modal === "already-subscribed") {
+      // Modal is opening, clear loading states
+      handleModalOpen();
+    }
+  }, [modal]);
 
   return (
     <div className="relative">
@@ -1098,6 +1117,7 @@ export default function Home() {
           {/* Pricing Section */}
           <div id="pricing-section">
             <PricingSection
+              ref={pricingSectionRef}
               onGetStarted={handleStartJourneyWithScroll}
               showTrial={true}
             />

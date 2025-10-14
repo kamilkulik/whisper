@@ -1,7 +1,13 @@
 "use client";
 
 import { SubscriptionType } from "@prisma/client";
-import { useEffect, useState, useContext } from "react";
+import {
+  useEffect,
+  useState,
+  useContext,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { shouldShowTrial } from "../_actions/showTrial";
 import { navigateToCheckout } from "../_actions/navigateToCheckout";
 import { useRouter } from "next/navigation";
@@ -16,12 +22,18 @@ interface PricingSectionProps {
   showTrial?: boolean;
 }
 
-export default function PricingSection(props: PricingSectionProps) {
+const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
   const [showTrial, setShowTrial] = useState(false);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {}
   );
   const router = useRouter();
+
+  // Expose clearAllLoadingStates to parent component
+  useImperativeHandle(ref, () => ({
+    clearAllLoadingStates: () => setLoadingStates({}),
+  }));
+
   const t = useTranslations("LandingPage");
   const locale = useLocale();
   const { isLoaded, ipCountry, host, browserGeo } =
@@ -100,8 +112,12 @@ export default function PricingSection(props: PricingSectionProps) {
         // Use the default handler
         await handleClickWithoutOnGetStarted(product)();
       }
-    } finally {
-      // Clear loading state
+
+      // Loading state will be cleared by parent component when modal opens
+      // via the ref and useImperativeHandle
+    } catch (error) {
+      console.error("Error in handleButtonClick:", error);
+      // Clear loading state on error
       setLoadingStates((prev) => ({ ...prev, [productKey]: false }));
     }
   };
@@ -320,4 +336,8 @@ export default function PricingSection(props: PricingSectionProps) {
       </div>
     </div>
   );
-}
+});
+
+PricingSection.displayName = "PricingSection";
+
+export default PricingSection;
