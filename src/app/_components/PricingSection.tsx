@@ -242,21 +242,25 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
               </div>
 
               {/* Button Section */}
-              <div className="px-8 pb-8">
-                <button
-                  onClick={handleButtonClick(SubscriptionType.MONTHLY)}
-                  disabled={loadingStates[SubscriptionType.MONTHLY]}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {loadingStates[SubscriptionType.MONTHLY] ? (
-                    <>
-                      <Spinner size="sm" />
-                      {t("pricing-section.subscription-card.CTA-button")}
-                    </>
-                  ) : (
-                    t("pricing-section.subscription-card.CTA-button")
-                  )}
-                </button>
+              <div className="px-8 pb-8 flex justify-center">
+                {isLoaded && pricingData ? (
+                  <button
+                    onClick={handleButtonClick(SubscriptionType.MONTHLY)}
+                    disabled={loadingStates[SubscriptionType.MONTHLY]}
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {loadingStates[SubscriptionType.MONTHLY] ? (
+                      <>
+                        <Spinner size="sm" />
+                        {t("pricing-section.subscription-card.CTA-button")}
+                      </>
+                    ) : (
+                      t("pricing-section.subscription-card.CTA-button")
+                    )}
+                  </button>
+                ) : (
+                  <Spinner size="lg" />
+                )}
               </div>
             </div>
           </div>
