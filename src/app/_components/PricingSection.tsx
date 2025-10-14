@@ -18,6 +18,9 @@ interface PricingSectionProps {
 
 export default function PricingSection(props: PricingSectionProps) {
   const [showTrial, setShowTrial] = useState(false);
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
+    {}
+  );
   const router = useRouter();
   const t = useTranslations("LandingPage");
   const locale = useLocale();
@@ -56,25 +59,60 @@ export default function PricingSection(props: PricingSectionProps) {
 
   const handleClickWithoutOnGetStarted =
     (product: SubscriptionType) => async () => {
-      const userEmailFromSessionCookie = await userEmailFromCookie();
-      console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
+      const productKey = product.toString();
 
-      if (userEmailFromSessionCookie) {
-        const result = await navigateToCheckout(
-          product,
-          userEmailFromSessionCookie
-        );
-        if (result?.success) {
-          if (result?.checkoutUrl) {
-            window.location.href = result.checkoutUrl;
-            return;
+      // Set loading state for this specific product
+      setLoadingStates((prev) => ({ ...prev, [productKey]: true }));
+
+      try {
+        const userEmailFromSessionCookie = await userEmailFromCookie();
+        console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
+
+        if (userEmailFromSessionCookie) {
+          const result = await navigateToCheckout(
+            product,
+            userEmailFromSessionCookie
+          );
+          console.log("navigateToCheckout result:", result);
+
+          if (result?.success) {
+            if (result?.checkoutUrl) {
+              window.location.href = result.checkoutUrl;
+              return;
+            }
+            router.push("/trial-success");
           }
-          router.push("/trial-success");
+        } else {
+          router.push(`/?modal=phone`, { scroll: false });
         }
-      } else {
-        router.push(`/?modal=phone`, { scroll: false });
+      } catch (error) {
+        console.error("Error in handleClickWithoutOnGetStarted:", error);
+      } finally {
+        // Clear loading state
+        setLoadingStates((prev) => ({ ...prev, [productKey]: false }));
       }
     };
+
+  // Wrapper function that handles loading state for both onGetStarted and handleClickWithoutOnGetStarted
+  const handleButtonClick = (product: SubscriptionType) => async () => {
+    const productKey = product.toString();
+
+    // Set loading state
+    setLoadingStates((prev) => ({ ...prev, [productKey]: true }));
+
+    try {
+      if (props.onGetStarted) {
+        // Use the provided onGetStarted callback
+        await props.onGetStarted(product)();
+      } else {
+        // Use the default handler
+        await handleClickWithoutOnGetStarted(product)();
+      }
+    } finally {
+      // Clear loading state
+      setLoadingStates((prev) => ({ ...prev, [productKey]: false }));
+    }
+  };
 
   return (
     <div className="relative py-20">
@@ -135,14 +173,18 @@ export default function PricingSection(props: PricingSectionProps) {
                 {/* Button Section */}
                 <div className="px-8 pb-8">
                   <button
-                    onClick={
-                      props.onGetStarted
-                        ? props.onGetStarted(SubscriptionType.TRIAL)
-                        : handleClickWithoutOnGetStarted(SubscriptionType.TRIAL)
-                    }
-                    className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                    onClick={handleButtonClick(SubscriptionType.TRIAL)}
+                    disabled={loadingStates[SubscriptionType.TRIAL]}
+                    className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {t("pricing-section.trial-card.CTA-button")}
+                    {loadingStates[SubscriptionType.TRIAL] ? (
+                      <>
+                        <Spinner size="sm" />
+                        {t("pricing-section.trial-card.CTA-button")}
+                      </>
+                    ) : (
+                      t("pricing-section.trial-card.CTA-button")
+                    )}
                   </button>
                 </div>
               </div>
@@ -194,14 +236,18 @@ export default function PricingSection(props: PricingSectionProps) {
               {/* Button Section */}
               <div className="px-8 pb-8">
                 <button
-                  onClick={
-                    props.onGetStarted
-                      ? props.onGetStarted(SubscriptionType.MONTHLY)
-                      : handleClickWithoutOnGetStarted(SubscriptionType.MONTHLY)
-                  }
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                  onClick={handleButtonClick(SubscriptionType.MONTHLY)}
+                  disabled={loadingStates[SubscriptionType.MONTHLY]}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {t("pricing-section.subscription-card.CTA-button")}
+                  {loadingStates[SubscriptionType.MONTHLY] ? (
+                    <>
+                      <Spinner size="sm" />
+                      {t("pricing-section.subscription-card.CTA-button")}
+                    </>
+                  ) : (
+                    t("pricing-section.subscription-card.CTA-button")
+                  )}
                 </button>
               </div>
             </div>
@@ -247,21 +293,30 @@ export default function PricingSection(props: PricingSectionProps) {
               <div className="px-8 pb-8 flex justify-center">
                 {isLoaded && pricingData ? (
                   <button
-                    onClick={
-                      props.onGetStarted
-                        ? props.onGetStarted(SubscriptionType.ONE_TIME)
-                        : handleClickWithoutOnGetStarted(
-                            SubscriptionType.ONE_TIME
-                          )
-                    }
-                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                    onClick={handleButtonClick(SubscriptionType.ONE_TIME)}
+                    disabled={loadingStates[SubscriptionType.ONE_TIME]}
+                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 disabled:from-gray-400 disabled:to-gray-500 text-gray-900 disabled:text-gray-500 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {t("pricing-section.one-time-purchase-card.CTA-button") +
+                    {loadingStates[SubscriptionType.ONE_TIME] ? (
+                      <>
+                        <Spinner size="sm" />
+                        {t(
+                          "pricing-section.one-time-purchase-card.CTA-button"
+                        ) +
+                          new Intl.NumberFormat(locale, {
+                            style: "currency",
+                            currency: pricingData.currency,
+                            notation: "compact",
+                          }).format(+pricingData.oneTimePrice)}
+                      </>
+                    ) : (
+                      t("pricing-section.one-time-purchase-card.CTA-button") +
                       new Intl.NumberFormat(locale, {
                         style: "currency",
                         currency: pricingData.currency,
                         notation: "compact",
-                      }).format(+pricingData.oneTimePrice)}
+                      }).format(+pricingData.oneTimePrice)
+                    )}
                   </button>
                 ) : (
                   <Spinner size="lg" />
