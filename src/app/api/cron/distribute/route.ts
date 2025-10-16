@@ -8,7 +8,7 @@ import {
   SupportedLanguagesEnum,
   User,
 } from "@prisma/client";
-import { checkCronSecret } from "../utils/checkCronSecret";
+import { checkCronSecret } from "../../utils/checkCronSecret";
 
 export type UserRawType = {
   id: number;
