@@ -30,11 +30,19 @@ export const GET = async (request: NextRequest) => {
       now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })
     );
 
+    const startOfTomorrow = new Date();
+    startOfTomorrow.setHours(0, 0, 0, 0);
+    startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+
+    const endOfTomorrow = new Date(startOfTomorrow);
+    endOfTomorrow.setHours(23, 59, 59, 999);
+
     const subscriptions = await prisma.subscription.findMany({
       where: {
         type: SubscriptionType.TRIAL,
         dateExpires: {
-          equals: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+          gte: startOfTomorrow,
+          lte: endOfTomorrow,
         },
       },
     });
@@ -42,7 +50,18 @@ export const GET = async (request: NextRequest) => {
     console.log(`Found ${subscriptions.length} subscriptions to notify`);
 
     for (const subscription of subscriptions) {
-      console.log(`Notifying user ${subscription.userId}`);
+      const user = await prisma.user.findUnique({
+        where: {
+          id: subscription.userId,
+        },
+      });
+
+      if (!user) {
+        console.error(`User not found for subscription ${subscription.id}`);
+      }
+
+      console.log(`Notifying user ${user?.email}`);
+      // TODO send actual email and text
     }
 
     console.log("Cron job completed successfully");
