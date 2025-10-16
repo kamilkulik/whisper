@@ -100,4 +100,12 @@ export async function handleSessionCompleted(
     console.error("Error sending email", error);
     throw new Error("Error sending email");
   }
+
+  // Log the webhook event
+  await prisma.webhookEventLog.create({
+    data: {
+      eventId: eventData.id.toString(),
+      eventData: JSON.stringify(eventData),
+    },
+  });
 }

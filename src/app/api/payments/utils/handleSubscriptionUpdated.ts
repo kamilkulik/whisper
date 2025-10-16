@@ -35,4 +35,12 @@ export async function handleSubscriptionUpdated(
     console.error("Error updating subscription", error);
     throw new Error("Error updating subscription");
   }
+
+  // Log the webhook event
+  await prisma.webhookEventLog.create({
+    data: {
+      eventId: subscription.id.toString(),
+      eventData: JSON.stringify(subscription),
+    },
+  });
 }

@@ -6,6 +6,7 @@ import {
   handleSessionCompleted,
   handleSubscriptionUpdated,
 } from "../utils";
+import { prisma } from "@/lib/prisma";
 
 export const config = {
   api: {
@@ -106,6 +107,21 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           { error: "Unexpected event type" },
           { status: 400 }
+        );
+      }
+
+      // Check if this event was already processed
+      const existingEvent = await prisma.webhookEventLog.findFirst({
+        where: {
+          eventId: event.id,
+        },
+      });
+
+      if (existingEvent) {
+        console.log(`⚠️  Event ${event.id} already processed, skipping`);
+        return NextResponse.json(
+          { message: "Event already processed" },
+          { status: 200 }
         );
       }
 

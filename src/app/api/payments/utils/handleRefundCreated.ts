@@ -24,4 +24,12 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
       status: SubscriptionStatus.REFUNDED,
     },
   });
+
+  // Log the webhook event
+  await prisma.webhookEventLog.create({
+    data: {
+      eventId: refund.id.toString(),
+      eventData: JSON.stringify(refund),
+    },
+  });
 }
