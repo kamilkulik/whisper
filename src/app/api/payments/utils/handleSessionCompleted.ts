@@ -106,6 +106,7 @@ export async function handleSessionCompleted(
     data: {
       eventId: eventData.id.toString(),
       eventData: JSON.stringify(eventData),
+      eventType: "checkout.session.completed",
     },
   });
 }

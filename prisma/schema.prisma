@@ -124,6 +124,7 @@ model WebhookEventLog {
   id        Int       @id @default(autoincrement())
   eventId   String    @unique @map("event_id")
   eventData Json      @map("event_data")
+  eventType String    @map("event_type")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
 

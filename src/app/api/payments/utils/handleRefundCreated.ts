@@ -30,6 +30,7 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
     data: {
       eventId: refund.id.toString(),
       eventData: JSON.stringify(refund),
+      eventType: "refund.created",
     },
   });
 }

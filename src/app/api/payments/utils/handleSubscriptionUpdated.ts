@@ -41,6 +41,7 @@ export async function handleSubscriptionUpdated(
     data: {
       eventId: subscription.id.toString(),
       eventData: JSON.stringify(subscription),
+      eventType: "customer.subscription.updated",
     },
   });
 }
