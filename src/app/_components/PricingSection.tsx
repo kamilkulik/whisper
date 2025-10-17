@@ -247,7 +247,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                   <button
                     onClick={handleButtonClick(SubscriptionType.MONTHLY)}
                     disabled={loadingStates[SubscriptionType.MONTHLY]}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2 flex-col"
                   >
                     {loadingStates[SubscriptionType.MONTHLY] ? (
                       <>
@@ -257,6 +257,11 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                     ) : (
                       t("pricing-section.subscription-card.CTA-button")
                     )}
+                    <img
+                      src="/Powered by Stripe - white.svg"
+                      alt="Powered by Stripe"
+                      className="mt-2 h-10"
+                    />
                   </button>
                 ) : (
                   <Spinner size="lg" />
@@ -307,7 +312,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                   <button
                     onClick={handleButtonClick(SubscriptionType.ONE_TIME)}
                     disabled={loadingStates[SubscriptionType.ONE_TIME]}
-                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 disabled:from-gray-400 disabled:to-gray-500 text-gray-900 disabled:text-gray-500 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 disabled:from-gray-400 disabled:to-gray-500 text-gray-900 disabled:text-gray-500 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2 flex-col"
                   >
                     {loadingStates[SubscriptionType.ONE_TIME] ? (
                       <>
@@ -329,6 +334,11 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                         notation: "compact",
                       }).format(+pricingData.oneTimePrice)
                     )}
+                    <img
+                      src="/Powered by Stripe - black.svg"
+                      alt="Powered by Stripe"
+                      className="mt-2 h-10"
+                    />
                   </button>
                 ) : (
                   <Spinner size="lg" />
