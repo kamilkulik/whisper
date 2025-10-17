@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { checkCronSecret } from "../../utils/checkCronSecret";
 import { prisma } from "@/lib/prisma";
 import { SubscriptionType } from "@prisma/client";
+import { sendSms } from "@/lib/smsapi";
+import { sendEmail } from "@/lib/emailapi";
 
 export const GET = async (request: NextRequest) => {
   /**
@@ -61,7 +63,32 @@ export const GET = async (request: NextRequest) => {
       }
 
       console.log(`Notifying user ${user?.email}`);
-      // TODO send actual email and text
+      try {
+        console.log(`Sending message to user ${user?.email}`);
+
+        if (user?.phoneNumber) {
+          await sendSms(
+            user?.phoneNumber,
+            "TODO write a good message - needs to be translated"
+          );
+        } else {
+          console.error(`User ${user?.email} has no phone number`);
+        }
+
+        if (user?.email) {
+          await sendEmail({
+            locale: user?.messageLanguage.toLowerCase(),
+            to: user?.email,
+            subject: "TODO write a good message - needs to be translated",
+            template: "trial-expiration-notification",
+          });
+        } else {
+          console.error(`User ${user?.email} has no email`);
+        }
+      } catch (error) {
+        // in case of message service failure log the error
+        console.error(`Failed to send message to user ${user?.id}:`, error);
+      }
     }
 
     console.log("Cron job completed successfully");

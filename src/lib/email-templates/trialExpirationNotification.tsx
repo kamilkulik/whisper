@@ -1,0 +1,114 @@
+import {
+  Body,
+  Container,
+  Head,
+  Hr,
+  Html,
+  Link,
+  Section,
+  Text,
+} from "@react-email/components";
+import { TrialExpirationNotificationProps } from "./types";
+import { Footer, text } from "./shared";
+import { Disclaimer } from "./shared/disclaimer";
+import { createTranslatorFromLocale } from "@/i18n/utils";
+
+const baseUrl = process.env.SZEPT_URL
+  ? `https://${process.env.SZEPT_URL}`
+  : "http://localhost:3000";
+
+export async function TrialExpirationNotification({
+  locale,
+}: TrialExpirationNotificationProps) {
+  const t = await createTranslatorFromLocale(
+    locale,
+    "EmailTemplates.TrialExpirationNotification"
+  );
+
+  return (
+    <Html>
+      <Head />
+      <Body style={main}>
+        <Container style={container}>
+          <Section style={coverSection}>
+            <Section style={imageSection}>
+              {/* <Img
+                src={`${baseUrl}/static/aws-logo.png`}
+                width="75"
+                height="45"
+                alt="AWS's Logo"
+              /> */}
+            </Section>
+            <Section style={upperSection}>
+              {/* <Heading style={h1}>Witamy w serwisie Wieczorny Szept</Heading> */}
+              <Text style={mainText}>
+                {t("greeting")} <br />
+              </Text>
+              <Text style={mainText}>
+                {t("CTA-copy-trial")}{" "}
+                <Link href={`${baseUrl}/dashboard`} style={dashboardLink}>
+                  {t("dashboard-link")}
+                </Link>
+                .
+              </Text>
+              <Text style={bottomText}>
+                {t("thank-you")}
+                <br />
+                <br />
+                {t("signature")}
+                <br />
+                {t("signature-team")}
+              </Text>
+            </Section>
+            <Hr />
+            <Disclaimer locale={locale} />
+          </Section>
+          <Footer locale={locale} />
+        </Container>
+      </Body>
+    </Html>
+  );
+}
+
+const main = {
+  backgroundColor: "#fff",
+  color: "#212121",
+};
+
+const container = {
+  padding: "20px",
+  margin: "0 auto",
+  backgroundColor: "#eee",
+};
+
+const dashboardLink = {
+  color: "#2754C5",
+  fontFamily:
+    "Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "14px",
+  textDecoration: "underline",
+};
+
+const imageSection = {
+  backgroundColor: "#252f3d",
+  display: "flex",
+  padding: "20px 0",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const coverSection = { backgroundColor: "#fff" };
+
+const upperSection = { padding: "25px 35px" };
+
+const mainText = {
+  ...text,
+  marginBottom: "12px",
+  textAlign: "left" as const,
+};
+
+const bottomText = {
+  ...text,
+  marginBottom: "18px",
+  textAlign: "left" as const,
+};

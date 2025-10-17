@@ -459,6 +459,14 @@
       "verification-link-title": "Jednorazowy link potwierdzający",
       "verification-link-disclaimer": "Ten link jest ważny przez 24 godziny"
     },
+    "TrialExpirationNotification": {
+      "greeting": "Droga Czytelniczo, Drogi Czytelniku,",
+      "CTA-copy-trial": "Aby kontynuować otrzymywanie wiadomości po upływie okresu próbnego, musisz dokonać zakupu płatnej subskrypcji. Możesz to zrobić w",
+      "dashboard-link": "Panelu Użytkownika",
+      "thank-you": "Dziękujemy, że jesteś z nami. Niech każdy szept będzie dla Ciebie źródłem uśmiechu i refleksji.",
+      "signature": "Z serdecznymi pozdrowieniami,",
+      "signature-team": "Zespół Wieczornego Szeptu 🌙"
+    },
     "Welcome": {
       "greeting": "Droga Czytelniczo, Drogi Czytelniku,",
       "paragraph-1-trial": "Cieszymy się z okazanego nam zaufania i rozpoczęcia okresu próbnego Wieczornego Szeptu.",

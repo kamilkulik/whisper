@@ -9,6 +9,7 @@ import {
   EmailProps,
   SendEmailProps,
   SendEmailClientProps,
+  TrialExpirationNotification,
 } from "./email-templates";
 
 interface EmailClientInterface {
@@ -19,7 +20,8 @@ export type EmailTemplate =
   | "confirm-email"
   | "confirmation-code-via-email"
   | "payment-link"
-  | "welcome";
+  | "welcome"
+  | "trial-expiration-notification";
 
 class ResendEmailClient implements EmailClientInterface {
   private readonly apiKey: string;
@@ -110,6 +112,11 @@ export async function sendEmail(props: SendEmailProps) {
         locale,
         paymentLinkUrl:
           props.paymentLinkUrl ?? "https://wieczornyszept.pl/payment-link",
+      });
+      break;
+    case "trial-expiration-notification":
+      templateToUse = await TrialExpirationNotification({
+        locale,
       });
       break;
     default:

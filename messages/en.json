@@ -463,6 +463,14 @@
       "verification-link-title": "One-time verification link",
       "verification-link-disclaimer": "This link is valid for 24 hours"
     },
+    "TrialExpirationNotification": {
+      "greeting": "Dear Reader,",
+      "CTA-copy-trial": "To continue receiving messages after your trial ends, you’ll need to purchase a paid subscription. You can do this in the",
+      "dashboard-link": "User Dashboard",
+      "thank-you": "Thank you for being with us. May every whisper be a source of smiles and reflection.",
+      "signature": "With warm regards,",
+      "signature-team": "The Evening Whisper Team 🌙"
+    },
     "Welcome": {
       "greeting": "Dear Reader,",
       "paragraph-1-trial": "We are grateful for your trust and for starting your trial with Evening Whisper.",

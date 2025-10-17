@@ -28,6 +28,10 @@ export type PaymentLinkProps = {
   paymentLinkUrl: string;
 };
 
+export type TrialExpirationNotificationProps = {
+  locale: string;
+};
+
 export type EmailProps =
   | ConfirmEmailProps
   | ConfirmationCodeViaEmailProps
@@ -38,7 +42,8 @@ export type EmailTemplate =
   | "confirm-email"
   | "confirmation-code-via-email"
   | "payment-link"
-  | "welcome";
+  | "welcome"
+  | "trial-expiration-notification";
 
 export type SendConfirmEmail = BaseEmailProps &
   ConfirmEmailProps & {
@@ -60,6 +65,10 @@ export type SendWelcomeEmail = BaseEmailProps &
     template: "welcome";
   };
 
+export type SendTrialExpirationNotification = BaseEmailProps & {
+  template: "trial-expiration-notification";
+};
+
 export type SendEmailClientProps = {
   template: React.ReactElement;
 } & BaseEmailProps;
@@ -68,4 +77,5 @@ export type SendEmailProps =
   | SendConfirmEmail
   | SendConfirmationCodeViaEmail
   | SendPaymentLink
-  | SendWelcomeEmail;
+  | SendWelcomeEmail
+  | SendTrialExpirationNotification;
