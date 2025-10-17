@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { checkCronSecret } from "../utils/checkCronSecret";
+import { checkCronSecret } from "../../utils/checkCronSecret";
 
 export async function POST(request: NextRequest) {
   checkCronSecret(request);
