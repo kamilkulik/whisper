@@ -57,7 +57,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 
   // For local development, include the verification code in the response
   const response: any = { sessionId, confirmationCodeExpires };
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.VERCEL_ENV === "development") {
     response.confirmationCode = confirmationCode;
   }
 
@@ -184,8 +184,8 @@ export const POST = async (request: NextRequest) => {
     response.cookies.set({
       name: "sessionId",
       value: authenticatedSessionId,
-      httpOnly: process.env.NODE_ENV === "production",
-      secure: process.env.NODE_ENV === "production", // Only secure in production
+      httpOnly: process.env.VERCEL_ENV === "production",
+      secure: process.env.VERCEL_ENV === "production", // Only secure in production
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",
@@ -195,7 +195,7 @@ export const POST = async (request: NextRequest) => {
       name: "x-csrf-token",
       value: generateCsrfToken(authenticatedSessionId),
       httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.VERCEL_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",
