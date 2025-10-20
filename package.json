@@ -7,7 +7,8 @@
     "dev:local": "echo '🚀 Starting local development server...' && echo '📱 Your local API will be available at:' && ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{print \"   http://\" $2 \":3000\"}' | head -1 && echo '   http://localhost:3000' && echo '' && next dev --turbopack --hostname 0.0.0.0",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
-    "build": "next build",
+    "prisma:deploy": "prisma migrate deploy",
+    "build": "pnpm prisma:generate && pnpm prisma:deploy && next build",
     "start": "next start",
     "lint": "next lint",
     "stripe:webhook": "stripe listen --forward-to localhost:3000/api/payments/webhook"
