@@ -33,7 +33,12 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userFromSessionId = await getUserFromSessionId(sessionIdFromCookie);
+  const userFromSessionId = await getUserFromSessionId<"id">(
+    sessionIdFromCookie,
+    {
+      id: true,
+    }
+  );
 
   if (!userFromSessionId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

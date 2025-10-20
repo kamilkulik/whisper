@@ -56,6 +56,12 @@ export const GET = async (request: NextRequest) => {
         where: {
           id: subscription.userId,
         },
+        select: {
+          id: true,
+          email: true,
+          phoneNumber: true,
+          messageLanguage: true,
+        },
       });
 
       if (!user) {

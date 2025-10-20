@@ -13,7 +13,10 @@ import { ReturnButton } from "../_components/ReturnButton";
 import { getFormatter, getTranslations } from "next-intl/server";
 
 function subscriptionTypeToText(
-  subscription: Subscription | null,
+  subscription: Pick<
+    Subscription,
+    "id" | "createdAt" | "status" | "type" | "dateCancelled" | "dateExpires"
+  > | null,
   t: Awaited<ReturnType<typeof getTranslations>>
 ) {
   if (!subscription) {
@@ -44,7 +47,10 @@ function subscriptionTypeToText(
 }
 
 function nextMessageTime(
-  subscription: Subscription,
+  subscription: Pick<
+    Subscription,
+    "id" | "createdAt" | "status" | "dateExpires" | "dateCancelled"
+  >,
   t: Awaited<ReturnType<typeof getTranslations>>,
   format: Awaited<ReturnType<typeof getFormatter>>
 ): {
@@ -84,7 +90,15 @@ function nextMessageTime(
   return { isSubscribed, message };
 }
 
-function findLatestSubscription(subscriptions: Subscription[]): Subscription {
+function findLatestSubscription(
+  subscriptions: Pick<
+    Subscription,
+    "id" | "createdAt" | "status" | "dateExpires" | "dateCancelled" | "type"
+  >[]
+): Pick<
+  Subscription,
+  "id" | "createdAt" | "status" | "dateExpires" | "dateCancelled" | "type"
+> {
   return subscriptions.reduce((latest, current) =>
     latest.createdAt && current.createdAt
       ? latest.createdAt > current.createdAt
@@ -104,15 +118,28 @@ export default async function DashboardPage() {
     redirect("/?modal=login");
   }
 
-  const userFromSession = await getUserFromSessionId(sessionId.value);
+  const userFromSession = await getUserFromSessionId<"id">(sessionId.value, {
+    id: true,
+  });
 
   if (!userFromSession) {
     redirect("/?modal=login");
   }
 
-  const allSubscriptions = await prisma.subscription.findMany({
+  const allSubscriptions: Pick<
+    Subscription,
+    "id" | "createdAt" | "status" | "dateExpires" | "dateCancelled" | "type"
+  >[] = await prisma.subscription.findMany({
     where: {
       userId: userFromSession.id,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      status: true,
+      dateExpires: true,
+      dateCancelled: true,
+      type: true,
     },
   });
   let subscription = null;

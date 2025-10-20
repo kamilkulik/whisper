@@ -115,6 +115,10 @@ export const POST = async (request: NextRequest) => {
       if (email) {
         const existingUser = await prisma.user.findUnique({
           where: { email },
+          select: {
+            id: true,
+            email: true,
+          },
         });
 
         if (existingUser) {
@@ -141,6 +145,10 @@ export const POST = async (request: NextRequest) => {
       } else if (phoneNumber) {
         const existingUser = await prisma.user.findUnique({
           where: { phoneNumber },
+          select: {
+            id: true,
+            phoneNumber: true,
+          },
         });
 
         if (existingUser) {

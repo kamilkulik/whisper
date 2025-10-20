@@ -115,6 +115,9 @@ export async function POST(request: NextRequest) {
         where: {
           eventId: event.id,
         },
+        select: {
+          id: true,
+        },
       });
 
       if (existingEvent) {

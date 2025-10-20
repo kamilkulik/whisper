@@ -29,7 +29,15 @@ export async function getUserDataFromSession() {
       return { error: "No session ID found" };
     }
 
-    const user = await getUserFromSessionId(sessionId.value);
+    const user = await getUserFromSessionId<
+      "name" | "email" | "emailVerified" | "phoneNumber" | "phoneNumberVerified"
+    >(sessionId.value, {
+      name: true,
+      email: true,
+      emailVerified: true,
+      phoneNumber: true,
+      phoneNumberVerified: true,
+    });
 
     if (!user) {
       return { error: "User not found" };

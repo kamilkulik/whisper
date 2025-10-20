@@ -12,7 +12,9 @@ export async function userEmailFromCookie(): Promise<string | null> {
       return null;
     }
 
-    const user = await getUserFromSessionId(sessionId.value);
+    const user = await getUserFromSessionId<"email">(sessionId.value, {
+      email: true,
+    });
 
     if (!user) {
       return null;

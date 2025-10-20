@@ -15,7 +15,13 @@ export default async function UserSettingsPage() {
     redirect("/?modal=login");
   }
 
-  const userFromSession = await getUserFromSessionId(sessionId.value);
+  const userFromSession = await getUserFromSessionId<"email" | "phoneNumber">(
+    sessionId.value,
+    {
+      email: true,
+      phoneNumber: true,
+    }
+  );
 
   if (!userFromSession) {
     redirect("/?modal=login");

@@ -13,7 +13,9 @@ export default async function SubscribePage() {
     redirect("/?modal=login");
   }
 
-  const userFromSession = await getUserFromSessionId(sessionId.value);
+  const userFromSession = await getUserFromSessionId<"id">(sessionId.value, {
+    id: true,
+  });
 
   if (!userFromSession) {
     redirect("/?modal=login");

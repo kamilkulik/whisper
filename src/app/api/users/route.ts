@@ -34,8 +34,11 @@ export const PUT = async (request: NextRequest) => {
     }
 
     // Get user from session
-    const user = await prisma.user.findUnique({
+    const user: Pick<User, "id"> | null = await prisma.user.findUnique({
       where: { sessionId },
+      select: {
+        id: true,
+      },
     });
 
     if (!user) {
@@ -72,9 +75,13 @@ export const PUT = async (request: NextRequest) => {
       }
 
       // Check if email is already taken by another user
-      const existingEmailUser = await prisma.user.findUnique({
-        where: { email },
-      });
+      const existingEmailUser: Pick<User, "id"> | null =
+        await prisma.user.findUnique({
+          where: { email },
+          select: {
+            id: true,
+          },
+        });
 
       if (existingEmailUser && existingEmailUser.id !== user.id) {
         return NextResponse.json(
@@ -102,9 +109,13 @@ export const PUT = async (request: NextRequest) => {
       }
 
       // Check if phone number is already taken by another user
-      const existingPhoneUser = await prisma.user.findUnique({
-        where: { phoneNumber },
-      });
+      const existingPhoneUser: Pick<User, "id"> | null =
+        await prisma.user.findUnique({
+          where: { phoneNumber },
+          select: {
+            id: true,
+          },
+        });
 
       if (existingPhoneUser && existingPhoneUser.id !== user.id) {
         return NextResponse.json(
@@ -196,17 +207,27 @@ export const POST = async (request: NextRequest) => {
     }
 
     // Check if user already exists
-    const existingEmailUser = await prisma.user.findUnique({
-      where: {
-        email: body.email,
-      },
-    });
+    const existingEmailUser: Pick<User, "id" | "trialEnds"> | null =
+      await prisma.user.findUnique({
+        where: {
+          email: body.email,
+        },
+        select: {
+          id: true,
+          trialEnds: true,
+        },
+      });
 
-    const existingPhoneNumberUser = await prisma.user.findUnique({
-      where: {
-        phoneNumber: body.phoneNumber,
-      },
-    });
+    const existingPhoneNumberUser: Pick<User, "id" | "trialEnds"> | null =
+      await prisma.user.findUnique({
+        where: {
+          phoneNumber: body.phoneNumber,
+        },
+        select: {
+          id: true,
+          trialEnds: true,
+        },
+      });
 
     if (existingEmailUser || existingPhoneNumberUser) {
       // check if they already used trial

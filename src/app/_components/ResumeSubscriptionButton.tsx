@@ -6,7 +6,7 @@ import { Subscription } from "@prisma/client";
 import { useFormatter, useTranslations } from "next-intl";
 
 interface ResumeSubscriptionButtonProps {
-  subscription: Subscription;
+  subscription: Pick<Subscription, "dateExpires">;
 }
 
 export default function ResumeSubscriptionButton({

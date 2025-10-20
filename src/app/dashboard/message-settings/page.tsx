@@ -15,7 +15,12 @@ export default async function MessageSettingsPage() {
     redirect("/?modal=login");
   }
 
-  const userFromSession = await getUserFromSessionId(sessionId.value);
+  const userFromSession = await getUserFromSessionId<"messageLanguage">(
+    sessionId.value,
+    {
+      messageLanguage: true,
+    }
+  );
 
   if (!userFromSession) {
     redirect("/?modal=login");

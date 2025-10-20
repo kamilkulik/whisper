@@ -1,6 +1,11 @@
 import "server-only";
 
-import { PrismaClient, Subscription, SubscriptionStatus } from "@prisma/client";
+import {
+  PrismaClient,
+  Subscription,
+  SubscriptionStatus,
+  User,
+} from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -10,30 +15,39 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-export async function getUserFromEmail(email: string) {
+export async function getUserFromEmail(
+  email: string
+): Promise<Pick<User, "id"> | null> {
   return prisma.user.findUnique({
     where: { email },
+    select: {
+      id: true,
+    },
   });
 }
 
-export async function getUserFromPhone(phone: string) {
-  return prisma.user.findUnique({
-    where: { phoneNumber: phone },
-  });
-}
-
-export async function getUserFromSessionId(sessionId: string) {
+export async function getUserFromSessionId<T extends keyof User>(
+  sessionId: string,
+  selectFields?: Record<T, boolean>
+): Promise<Pick<User, T> | null> {
   return prisma.user.findUnique({
     where: { sessionId },
+    select: selectFields ?? undefined,
   });
 }
 
+// type, id, subscriptionId
 export async function getLatestSubscriptionFromUserId(
   userId: number
-): Promise<Subscription[] | []> {
+): Promise<Pick<Subscription, "id" | "subscriptionId" | "type">[] | []> {
   return prisma.subscription.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      subscriptionId: true,
+      type: true,
+    },
   });
 }
 
@@ -46,7 +60,7 @@ export async function deleteSession(sessionId: string) {
 
 export async function getLatestActiveSubscriptionForUserEmail(
   email: string
-): Promise<Subscription | null> {
+): Promise<Pick<Subscription, "id"> | null> {
   const user = await getUserFromEmail(email);
   if (!user) {
     return null;
@@ -61,6 +75,9 @@ export async function getLatestActiveSubscriptionForUserEmail(
     },
     orderBy: {
       createdAt: "desc",
+    },
+    select: {
+      id: true,
     },
   });
 }

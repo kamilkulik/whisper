@@ -5,7 +5,7 @@ import { User, SupportedLanguagesEnum } from "@prisma/client";
 import { useTranslations } from "next-intl";
 
 interface MessageSettingsFormProps {
-  user: User;
+  user: Pick<User, "messageLanguage">;
 }
 
 const languageOptions = [

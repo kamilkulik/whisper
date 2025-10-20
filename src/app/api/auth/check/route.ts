@@ -11,7 +11,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ authenticated: false });
     }
 
-    const user = await getUserFromSessionId(sessionId.value);
+    const user = await getUserFromSessionId<"sessionId">(sessionId.value, {
+      sessionId: true,
+    });
 
     if (user && user.sessionId === sessionId.value) {
       return NextResponse.json({ authenticated: true });

@@ -12,7 +12,7 @@ export interface SubscriptionFactoryInput {
   expiryAdjustmentInMilis: number;
   productType: string;
   subscriptionId: string;
-  user: User;
+  user: Pick<User, "id">;
 }
 
 export function subscriptionFactory({

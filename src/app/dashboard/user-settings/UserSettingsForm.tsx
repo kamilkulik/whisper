@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 import { useTranslations } from "next-intl";
 
 interface UserSettingsFormProps {
-  user: User;
+  user: Pick<User, "email" | "phoneNumber">;
 }
 
 export default function UserSettingsForm({ user }: UserSettingsFormProps) {

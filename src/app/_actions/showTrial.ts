@@ -15,7 +15,10 @@ export async function shouldShowTrial() {
     return true;
   }
 
-  const user = await getUserFromSessionId(sessionId.value);
+  const user = await getUserFromSessionId<"id" | "trialEnds">(sessionId.value, {
+    id: true,
+    trialEnds: true,
+  });
 
   if (!user) {
     return true;

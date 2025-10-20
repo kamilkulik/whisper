@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { subscriptionFactory } from "./subscriptionFactory";
 import Stripe from "stripe";
-import { SubscriptionType } from "@prisma/client";
+import { SubscriptionType, User } from "@prisma/client";
 import { stripe } from "@/lib/stripe";
 import { getSubscriptionTypeByPriceId } from "@/lib/consts";
 import { sendEmail } from "@/lib/emailapi";
@@ -23,11 +23,17 @@ export async function handleSubscriptionCreated(
     throw new Error("No customer data found");
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: customerData.email,
-    },
-  });
+  const user: Pick<User, "id" | "email" | "messageLanguage"> | null =
+    await prisma.user.findUnique({
+      where: {
+        email: customerData.email,
+      },
+      select: {
+        id: true,
+        email: true,
+        messageLanguage: true,
+      },
+    });
 
   if (!user) {
     throw new Error("User not found");
@@ -38,6 +44,9 @@ export async function handleSubscriptionCreated(
     where: {
       userId: user.id,
       type: SubscriptionType.TRIAL,
+    },
+    select: {
+      id: true,
     },
   });
 

@@ -17,6 +17,11 @@ export async function handlePaymentIntentSucceeded(
     where: {
       email: receipt_email,
     },
+    select: {
+      id: true,
+      email: true,
+      messageLanguage: true,
+    },
   });
 
   if (!user) {
@@ -28,6 +33,9 @@ export async function handlePaymentIntentSucceeded(
     where: {
       userId: user.id,
       type: SubscriptionType.TRIAL,
+    },
+    select: {
+      id: true,
     },
   });
 

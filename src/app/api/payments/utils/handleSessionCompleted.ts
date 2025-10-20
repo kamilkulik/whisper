@@ -17,11 +17,18 @@ export async function handleSessionCompleted(
 
   console.log("handleSessionCompleted: metadata present, proceeding...");
 
-  let user: User | null = null;
+  let user: Pick<User, "id" | "email" | "messageLanguage" | "premium"> | null =
+    null;
   try {
     user = await prisma.user.findUnique({
       where: {
         email: eventData.customer_email!,
+      },
+      select: {
+        id: true,
+        email: true,
+        messageLanguage: true,
+        premium: true,
       },
     });
   } catch (error) {

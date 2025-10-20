@@ -9,6 +9,9 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
     where: {
       subscriptionId: String(refund.payment_intent),
     },
+    select: {
+      id: true,
+    },
   });
 
   if (!subscriptionId) {

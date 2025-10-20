@@ -6,7 +6,7 @@ import { Subscription, SubscriptionType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 
 interface CancelSubscriptionButtonProps {
-  subscription: Subscription;
+  subscription: Pick<Subscription, "type">;
 }
 
 export default function CancelSubscriptionButton({
