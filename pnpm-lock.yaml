@@ -23,6 +23,9 @@ importers:
       '@stripe/stripe-js':
         specifier: ^7.8.0
         version: 7.8.0
+      autoprefixer:
+        specifier: ^10.4.14
+        version: 10.4.21(postcss@8.5.6)
       dompurify:
         specifier: ^3.2.6
         version: 3.2.6
@@ -38,6 +41,9 @@ importers:
       next-intl:
         specifier: ^4.3.6
         version: 4.3.6(next@15.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.9.2)
+      postcss:
+        specifier: ^8.4.24
+        version: 8.5.6
       prisma:
         specifier: ^6.13.0
         version: 6.13.0(typescript@5.9.2)
@@ -59,6 +65,9 @@ importers:
       stripe:
         specifier: ^18.4.0
         version: 18.4.0(@types/node@20.19.9)
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.4.17
       use-intl:
         specifier: ^4.3.7
         version: 4.3.7(react@19.1.0)
@@ -84,18 +93,9 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.1.7(@types/react@19.1.9)
-      autoprefixer:
-        specifier: ^10.4.14
-        version: 10.4.21(postcss@8.5.6)
-      postcss:
-        specifier: ^8.4.24
-        version: 8.5.6
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
-      tailwindcss:
-        specifier: ^3.3.0
-        version: 3.4.17
       typescript:
         specifier: ^5
         version: 5.9.2
