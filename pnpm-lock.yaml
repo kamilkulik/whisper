@@ -23,6 +23,15 @@ importers:
       '@stripe/stripe-js':
         specifier: ^7.8.0
         version: 7.8.0
+      '@types/dompurify':
+        specifier: ^3.2.0
+        version: 3.2.0
+      '@types/node':
+        specifier: ^20
+        version: 20.19.9
+      '@types/react-dom':
+        specifier: ^19
+        version: 19.1.7(@types/react@19.1.9)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.21(postcss@8.5.6)
@@ -81,18 +90,6 @@ importers:
       '@react-email/preview':
         specifier: ^0.0.13
         version: 0.0.13(react@19.1.0)
-      '@types/dompurify':
-        specifier: ^3.2.0
-        version: 3.2.0
-      '@types/node':
-        specifier: ^20
-        version: 20.19.9
-      '@types/react':
-        specifier: ^19
-        version: 19.1.9
-      '@types/react-dom':
-        specifier: ^19
-        version: 19.1.7(@types/react@19.1.9)
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
