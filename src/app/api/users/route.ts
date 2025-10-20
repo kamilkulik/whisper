@@ -21,7 +21,6 @@ export type UserData = Omit<
 >;
 
 export const PUT = async (request: NextRequest) => {
-  const t = await getTranslations("API.users.PUT");
   const tShared = await getTranslations("API.SHARED");
 
   try {

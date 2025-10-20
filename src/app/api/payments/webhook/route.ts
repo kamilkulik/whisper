@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
 
       // Validate event type for additional security`
       if (!ALLOWED_EVENT_TYPES.includes(event.type)) {
-        console.log(`⚠️  Unexpected event type: ${event.type}`);
+        console.log(`⚠️  Unexpected event type: ${event.type}, SKIPPING`);
         return NextResponse.json(
           { error: "Unexpected event type" },
           { status: 400 }
