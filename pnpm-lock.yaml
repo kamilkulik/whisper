@@ -29,6 +29,9 @@ importers:
       '@types/node':
         specifier: ^20
         version: 20.19.9
+      '@types/react':
+        specifier: ^19
+        version: 19.1.9
       '@types/react-dom':
         specifier: ^19
         version: 19.1.7(@types/react@19.1.9)
@@ -682,7 +685,6 @@ packages:
 
   '@types/dompurify@3.2.0':
     resolution: {integrity: sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg==}
-    deprecated: This is a stub types definition. dompurify provides its own type definitions, so you do not need this installed.
 
   '@types/node@20.19.9':
     resolution: {integrity: sha512-cuVNgarYWZqxRJDQHEB58GEONhOK79QVR/qYx4S7kcUObQvUwvFnYxJuuHUKm2aieN9X3yZB4LZsuYNU1Qphsw==}
