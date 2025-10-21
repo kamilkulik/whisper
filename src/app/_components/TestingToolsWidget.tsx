@@ -132,6 +132,16 @@ export default function TestingToolsWidget({
                       </span>
                     </div>
                     <div className="flex justify-between">
+                      <span>x-vercel-ip-country:</span>
+                      <span className="text-green-400">
+                        {ipCountry === null
+                          ? "null"
+                          : ipCountry === undefined
+                            ? "undefined"
+                            : ipCountry}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
                       <span>Country:</span>
                       <span className="text-green-400">
                         {triangulatedCountry === null
