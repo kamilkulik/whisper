@@ -75,11 +75,13 @@ export async function middleware(request: NextRequest) {
   const locale = preferredLocale;
 
   console.log("🇵🇱 setting locale", locale);
+  console.log("🔍 Middleware - existing cookies:", request.cookies.getAll());
   res.cookies.set("locale", locale, {
     path: "/",
     httpOnly: false, // client should read it too
     sameSite: "lax",
   });
+  console.log("🔍 Middleware - cookie set:", locale);
 
   return res;
 }

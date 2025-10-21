@@ -10,16 +10,20 @@ export const useCurrentLocale = (): string | null => {
   useEffect(() => {
     const getCurrentLocale = () => {
       if (typeof window !== "undefined") {
+        console.log("🔍 useCurrentLocale - document.cookie:", document.cookie);
         const cookieValue = document.cookie
           .split(";")
           .find((c) => c.trim().startsWith("locale="))
           ?.split("=")[1];
+        console.log("🔍 useCurrentLocale - parsed cookie value:", cookieValue);
         return cookieValue || null;
       }
       return null;
     };
 
-    setCurrentLocale(getCurrentLocale());
+    const locale = getCurrentLocale();
+    console.log("🔍 useCurrentLocale - final locale:", locale);
+    setCurrentLocale(locale);
   }, []);
 
   return currentLocale;
