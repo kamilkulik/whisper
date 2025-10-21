@@ -3,6 +3,7 @@
 import { useState, useEffect, useContext } from "react";
 import { getUserDataFromSession } from "../_actions/testing";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
+import { useCurrentLocale } from "../_hooks/useCurrentLocale";
 import { GeoLocationContext } from "../contexts/GeoLocationContext";
 
 interface TestingToolsWidgetProps {
@@ -24,6 +25,7 @@ export default function TestingToolsWidget({
     null
   );
   const { isLoaded, triangulatedCountry } = useTriangulatedLocation();
+  const currentLocale = useCurrentLocale();
   const {
     isLoaded: geoContextLoaded,
     ipCountry,
@@ -129,6 +131,16 @@ export default function TestingToolsWidget({
                       <span>Host:</span>
                       <span className="text-green-400">
                         {geoContextLoaded ? host : "...loading"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Current locale hook:</span>
+                      <span className="text-green-400">
+                        {currentLocale === null
+                          ? "null"
+                          : currentLocale === undefined
+                            ? "undefined"
+                            : currentLocale}
                       </span>
                     </div>
                     <div className="flex justify-between">
