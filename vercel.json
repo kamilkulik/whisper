@@ -6,10 +6,6 @@
       "schedule": "58 20 * * *"
     },
     {
-      "path": "/api/cleanup-store",
-      "schedule": "0 22 * * *"
-    },
-    {
       "path": "/api/cron/notify",
       "schedule": "20 9 * * *"
     }
