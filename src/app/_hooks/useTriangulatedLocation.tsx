@@ -29,8 +29,6 @@ export const useTriangulatedLocation = (): {
           }
         );
 
-        console.log(">>> triangulatedCountry", triangulatedCountry);
-
         setTriangulatedCountry(triangulatedCountry);
         setPricingData(getPricingContext(triangulatedCountry || "DEFAULT"));
       };
