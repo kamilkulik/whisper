@@ -202,7 +202,6 @@ export default function ContactForm({
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       setMessage(t("form-validation-errors.form-submit"));
-      console.log(errors);
       return;
     }
 
