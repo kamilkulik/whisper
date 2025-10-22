@@ -140,24 +140,19 @@ export default function ConfirmationCodeForm({
     value: string,
     isEmailMode: boolean
   ): string | undefined => {
-    console.log("validateField called:", { fieldName, value, isEmailMode });
     try {
       let fieldSchema;
       if (isEmailMode && fieldName === "email") {
         fieldSchema = emailSchema.shape.email;
-        console.log("Using email schema");
       } else if (!isEmailMode && fieldName === "phoneNumber") {
         fieldSchema = phoneSchema.shape.phoneNumber;
-        console.log("Using phone schema");
       } else {
-        console.log("Unknown field or mode mismatch");
         return t("form-validation-errors.unknown-field");
       }
       fieldSchema.parse(value);
       return undefined; // No error
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.log("Validation error:", error.issues[0]?.message);
         return error.issues[0]?.message;
       }
       return t("form-validation-errors.validation-error");
@@ -192,8 +187,6 @@ export default function ConfirmationCodeForm({
         (option) => option.countryCode === formData.countryCode
       )?.country!;
 
-      console.log("phoneCountryCode", phoneCountryCode);
-
       if (phoneCountryCode !== triangulatedCountry) {
         errors.phoneNumber = t(
           "form-validation-errors.phone-number.country-mismatch"
@@ -201,25 +194,18 @@ export default function ConfirmationCodeForm({
       }
     }
 
-    console.log("validation errors", errors);
-
     // Validate all input fields based on mode
     const sanitizedData = isEmailMode
       ? { email: sanitizeInput(formData.email) }
       : { phoneNumber: sanitizeInput(formData.phoneNumber) };
 
-    console.log("Form submission - isEmailMode:", isEmailMode);
-    console.log("Sanitized data:", sanitizedData);
-
     Object.entries(sanitizedData).forEach(([key, value]) => {
-      console.log("Validating field:", key, "with value:", value);
       const error = validateField(
         key as keyof ValidationErrors,
         value,
         isEmailMode
       );
       if (error) {
-        console.log("Validation error for", key, ":", error);
         errors[key as keyof ValidationErrors] = error;
       }
     });
@@ -315,7 +301,6 @@ export default function ConfirmationCodeForm({
       const responseData = await response.json();
       // Handle 307 redirect for non-existing users FIRST
       if (responseData.status == 307) {
-        console.log("Redirecting to:", responseData.redirectUrl);
         const redirectUrl = responseData.redirectUrl;
 
         if (setIsEmailVerified && responseData.isEmailVerified) {
@@ -335,7 +320,6 @@ export default function ConfirmationCodeForm({
 
       if (response.ok) {
         if (isLoginMode) {
-          console.log("Login mode");
           // Handle login success
           setMessage(t("form-submit-message.login-success"));
           setShowConfirmationCode(false);
@@ -352,8 +336,6 @@ export default function ConfirmationCodeForm({
             window.location.href = "/dashboard";
           }, 2500);
         } else {
-          // TODO does this even get used?
-          console.log("Signup mode");
           // Handle signup success (existing flow)
           setMessage(t("form-submit-message.signup-success"));
           setShowConfirmationCode(false);
