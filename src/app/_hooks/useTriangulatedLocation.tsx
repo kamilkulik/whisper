@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { triangulateLocationOnFe } from "../_components/utils/triangulateLocation";
-import { GeoLocationContext } from "../contexts/GeoLocationContext";
+import { GeoLocationContext } from "../_contexts/GeoLocationContext";
 import { getPricingContext, PricingContextData } from "../_consts";
 
 export const useTriangulatedLocation = (): {

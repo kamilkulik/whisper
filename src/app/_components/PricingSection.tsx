@@ -13,7 +13,7 @@ import { navigateToCheckout } from "../_actions/navigateToCheckout";
 import { useRouter } from "next/navigation";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useTranslations, useLocale } from "next-intl";
-import { GeoLocationContext } from "../contexts/GeoLocationContext";
+import { GeoLocationContext } from "../_contexts/GeoLocationContext";
 import Spinner from "./Spinner";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useLocale } from "../contexts/LocaleContext";
+import { useLocale } from "../_contexts/LocaleContext";
 import { z } from "zod";
 import DOMPurify from "dompurify";
 import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";

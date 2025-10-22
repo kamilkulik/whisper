@@ -39,10 +39,8 @@ export function GeoLocationProvider({
   });
 
   useEffect(() => {
-    let watchId: number | null = null;
-
     if ("geolocation" in navigator) {
-      watchId = navigator.geolocation.watchPosition(
+      navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => {
           setBrowserGeo({
             browserGeo: position.coords,
@@ -70,12 +68,6 @@ export function GeoLocationProvider({
         isLoaded: true,
       });
     }
-
-    return () => {
-      if (watchId) {
-        navigator.geolocation.clearWatch(watchId);
-      }
-    };
   }, []);
 
   return (

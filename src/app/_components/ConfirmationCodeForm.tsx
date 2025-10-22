@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { z } from "zod";
-import { useLocale } from "../contexts/LocaleContext";
+import { useLocale } from "../_contexts/LocaleContext";
 import { useRouter } from "next/navigation";
 import { ConfirmationCodeGrid } from "./ConfirmationCodeGrid";
 import { SuccessMessage } from "./SuccessMessage";

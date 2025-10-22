@@ -4,7 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import { getUserDataFromSession } from "../_actions/testing";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 import { useCurrentLocale } from "../_hooks/useCurrentLocale";
-import { GeoLocationContext } from "../contexts/GeoLocationContext";
+import { GeoLocationContext } from "../_contexts/GeoLocationContext";
 
 interface TestingToolsWidgetProps {
   isVisible: boolean;
