@@ -478,24 +478,17 @@ export default function Home() {
 
   const handleStartJourneyWithScroll =
     (product: SubscriptionType) => async () => {
-      console.log("Start Journey with scroll clicked!", product); // Debug log
-
       // Set the selected product
       setSelectedProduct(product);
 
       // Does the user have a valid session?
       const userEmailFromSessionCookie = await userEmailFromCookie();
-      console.log(
-        "[ handleStartJourneyWithScroll ] userEmailFromSessionCookie: ",
-        userEmailFromSessionCookie
-      );
 
       if (userEmailFromSessionCookie) {
         const result = await navigateToCheckout(
           product,
           userEmailFromSessionCookie
         );
-        console.log("[ handleStartJourneyWithScroll ] result: ", result);
         if (result?.success) {
           if (result?.hasCurrentActiveSubscription) {
             // User already has an active subscription, inform them of it through
