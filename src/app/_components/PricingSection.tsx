@@ -199,7 +199,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
           <div className="relative hover:shadow-3xl hover:-translate-y-2 transition-all">
             {/* Subscription */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-[2]">
               <div className="bg-red-500 text-white px-4 py-2 rounded-full text-base font-bold whitespace-nowrap">
                 {t("pricing-section.subscription-card.tooltip")}
               </div>
@@ -266,7 +266,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
           {/* One-time Payment - Most Popular */}
           <div className="relative hover:shadow-3xl hover:-translate-y-2 transition-all ">
             {/* Popular Badge */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-[2]">
               <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-6 py-2 rounded-full text-base font-bold whitespace-nowrap">
                 {t("pricing-section.one-time-purchase-card.tooltip")}
               </div>

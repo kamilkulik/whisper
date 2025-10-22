@@ -577,9 +577,9 @@ export default function Home() {
       <div className="bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] relative">
         {/* Navigation Bar */}
         <nav
-          className={`fixed top-0 left-0 right-0 z-[200] transition-all duration-300 ${
+          className={`fixed top-0 left-0 right-0 z-[10] transition-all duration-300 ${
             scrolled
-              ? "bg-black/20 backdrop-blur-md shadow-lg"
+              ? "bg-black/40 backdrop-blur-md shadow-lg"
               : "bg-transparent"
           }`}
         >
