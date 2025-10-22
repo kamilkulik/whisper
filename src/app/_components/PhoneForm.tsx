@@ -54,7 +54,6 @@ export function PhoneForm({
     }
   }, [isLoaded, triangulatedCountry]);
 
-  console.log("PhoneForm", triangulatedCountry);
   return (
     <>
       <div className="mb-8" data-oid="fv3gut-">
