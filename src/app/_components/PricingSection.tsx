@@ -73,14 +73,12 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
     (product: SubscriptionType) => async () => {
       try {
         const userEmailFromSessionCookie = await userEmailFromCookie();
-        console.log("userEmailFromSessionCookie", userEmailFromSessionCookie);
 
         if (userEmailFromSessionCookie) {
           const result = await navigateToCheckout(
             product,
             userEmailFromSessionCookie
           );
-          console.log("navigateToCheckout result:", result);
 
           if (result?.success) {
             if (result?.checkoutUrl) {
