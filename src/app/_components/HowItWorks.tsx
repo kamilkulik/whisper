@@ -11,7 +11,6 @@ interface HowItWorksProps {
 export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
   const t = useTranslations("LandingPage");
   const currentLocale = useCurrentLocale();
-  console.log(" -- CURRENT LOCALE: ", currentLocale);
 
   return (
     <div className="relative py-20" data-oid="-i:6r4a">
