@@ -55,9 +55,10 @@ export function ModalWrapper({
       <Dialog.Portal>
         {isVisible && (
           <>
-            <Dialog.Overlay>
-              <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[50] transition-opacity duration-300" />
-            </Dialog.Overlay>
+            <Dialog.Overlay
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[49] transition-opacity duration-300 [backdrop-filter:blur(6px)] [-webkit-backdrop-filter:blur(6px)]
+            will-change-[backdrop-filter]"
+            />
             <Dialog.Content className="top-10">
               <Dialog.Title asChild>
                 <h2 className="sr-only">{title}</h2>
