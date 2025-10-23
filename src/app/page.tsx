@@ -579,7 +579,7 @@ export default function Home() {
         <nav
           className={`fixed top-0 left-0 right-0 z-[10] transition-all duration-300 ${
             scrolled
-              ? "bg-black/40 backdrop-blur-md shadow-lg"
+              ? "bg-black/40 backdrop-blur-md shadow-lg [backdrop-filter:blur(6px)] [-webkit-backdrop-filter:blur(6px)] will-change-[backdrop-filter]"
               : "bg-transparent"
           }`}
         >
