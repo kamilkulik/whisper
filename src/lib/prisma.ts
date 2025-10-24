@@ -7,7 +7,6 @@ import {
   User,
 } from "@prisma/client";
 
-import "dotenv/config";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { neonConfig } from "@neondatabase/serverless";
 
@@ -79,7 +78,7 @@ export async function deleteSession(sessionId: string) {
 
 export async function getLatestActiveSubscriptionForUserEmail(
   email: string
-): Promise<Pick<Subscription, "id"> | null> {
+): Promise<Pick<Subscription, "id" | "type"> | null> {
   const user = await getUserFromEmail(email);
   if (!user) {
     return null;
@@ -97,6 +96,7 @@ export async function getLatestActiveSubscriptionForUserEmail(
     },
     select: {
       id: true,
+      type: true,
     },
   });
 }

@@ -30,7 +30,7 @@ export async function navigateToCheckout(
     "[ navigateToCheckout ] latest active subscription: ",
     subscription
   );
-  if (subscription) {
+  if (subscription && subscription.type !== SubscriptionType.TRIAL) {
     return { success: true, hasCurrentActiveSubscription: true };
   }
 
