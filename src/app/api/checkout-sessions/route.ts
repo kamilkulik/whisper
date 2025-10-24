@@ -27,6 +27,10 @@ export async function POST(request: NextRequest) {
       throw new Error("Failed to triangulate country");
     }
 
+    if (!productType) {
+      throw new Error("Product type is required");
+    }
+
     const config = productConfigs[triangulatedCountry]?.[productType];
 
     if (!config) {

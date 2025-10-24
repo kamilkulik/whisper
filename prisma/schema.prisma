@@ -121,6 +121,17 @@ model KeyValue {
   @@map("key_values")
 }
 
+model SessionIdCache {
+  id                      Int       @id @default(autoincrement())
+  sessionId               String    @unique @map("session_id")
+  confirmationCode        Int       @map("confirmation_code")
+  confirmationCodeExpires DateTime? @map("confirmation_code_expires")
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime? @updatedAt @map("updated_at")
+
+  @@map("session_id_cache")
+}
+
 model WebhookEventLog {
   id        Int       @id @default(autoincrement())
   eventId   String    @unique @map("event_id")

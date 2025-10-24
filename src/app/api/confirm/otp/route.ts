@@ -6,14 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../../utils/csfrProtection";
 import { getLocale } from "next-intl/server";
+import { TemporarySessionIdCache } from "@/lib/temporarySessionIdCache";
 
-const temporarySessionIdCache = new Map<
-  string,
-  {
-    confirmationCode: number;
-    confirmationCodeExpires: Date;
-  }
->();
+const temporarySessionIdCache = TemporarySessionIdCache.getInstance();
 
 function generateConfiramtionCodeDetails() {
   return {
@@ -38,7 +33,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const { confirmationCode, confirmationCodeExpires, sessionId } =
     generateConfiramtionCodeDetails();
 
-  temporarySessionIdCache.set(sessionId, {
+  await temporarySessionIdCache.set(sessionId, {
     confirmationCode,
     confirmationCodeExpires,
   });
@@ -81,7 +76,7 @@ export const POST = async (request: NextRequest) => {
   const phoneNumber = body?.phoneNumber?.toString();
   const isLoginMode = body["isLoginMode"];
 
-  console.log(JSON.stringify(body, null, 2));
+  console.log("[ api/confirm/otp ] body: ", JSON.stringify(body, null, 2));
 
   if (!confirmationCode || !sessionId) {
     return NextResponse.json(
@@ -90,7 +85,7 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  const cachedSessionDetails = temporarySessionIdCache.get(sessionId);
+  const cachedSessionDetails = await temporarySessionIdCache.get(sessionId);
 
   if (
     !cachedSessionDetails ||
@@ -202,7 +197,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     // Clean up the temporary session
-    temporarySessionIdCache.delete(sessionId);
+    await temporarySessionIdCache.delete(sessionId);
 
     return response;
   } else {
