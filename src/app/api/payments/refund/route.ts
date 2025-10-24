@@ -16,7 +16,7 @@ const createRefund = async (paymentIntentId: string) => {
       // amount: 1000, // $10.00
     });
 
-    console.log("Refund created:", refund.id);
+    console.log("[ /api/payments/refund ]", "Refund created:", refund.id);
     return refund;
   } catch (error) {
     console.error("Error creating refund:", error);

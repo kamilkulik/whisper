@@ -117,7 +117,7 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (existingUser) {
-          console.log("existing user", email);
+          console.log("[ /api/confirm/otp ]", "existing user", email);
           try {
             await prisma.user.update({
               where: { email },
@@ -129,7 +129,12 @@ export const POST = async (request: NextRequest) => {
             console.error("Error saving to the db", err);
           }
         } else {
-          console.log("no existing user", email, " - redirecting to signup");
+          console.log(
+            "[ /api/confirm/otp ]",
+            "no existing user",
+            email,
+            " - redirecting to signup"
+          );
           // return raw 307 redirect with desition /?modal=phone
           return NextResponse.json({
             redirectUrl: "/?modal=phone",
@@ -147,7 +152,7 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (existingUser) {
-          console.log("existing user", phoneNumber);
+          console.log("[ /api/confirm/otp ]", "existing user", phoneNumber);
           try {
             await prisma.user.update({
               where: { phoneNumber },
@@ -159,6 +164,7 @@ export const POST = async (request: NextRequest) => {
         } else {
           // need to redirect to the signup form
           console.log(
+            "[ /api/confirm/otp ]",
             "no existing user",
             phoneNumber,
             " - redirecting to signup"

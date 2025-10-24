@@ -17,7 +17,9 @@ import { stripeStatusToPrismaStatus } from "./stripeStatusToPrismaStatus";
 export async function handleSubscriptionUpdated(
   subscription: Stripe.Subscription
 ) {
-  console.log(`💰💰💰 Subscription ${subscription.id} was updated`);
+  console.log(
+    `[ /api/payments/utils/handleSubscriptionUpdated ] 💰💰💰 Subscription ${subscription.id} was updated`
+  );
 
   try {
     await prisma.subscription.update({

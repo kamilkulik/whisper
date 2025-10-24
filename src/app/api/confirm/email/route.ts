@@ -66,10 +66,13 @@ export async function GET(request: NextRequest) {
 
     // Check if email is already verified
     if (user.emailVerified) {
-      console.log("Email confirmation: Email already verified", {
-        userId: claims.userId,
-        email: claims.userEmail,
-      });
+      console.log(
+        "[ /api/confirm/email ] Email confirmation: Email already verified",
+        {
+          userId: claims.userId,
+          email: claims.userEmail,
+        }
+      );
       return NextResponse.redirect(
         new URL(
           "/email-confirmation?status=already-verified&email=" +

@@ -26,9 +26,11 @@ export const GET = async (request: NextRequest) => {
     checkCronSecret(request);
 
     const now = new Date();
-    console.log(`Cron job executed at: ${now.toISOString()}`);
     console.log(
-      "CET time:",
+      `[ /api/cron/notify ] Cron job executed at: ${now.toISOString()}`
+    );
+    console.log(
+      "[ /api/cron/notify ] CET time:",
       now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })
     );
 
@@ -49,7 +51,9 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    console.log(`Found ${subscriptions.length} subscriptions to notify`);
+    console.log(
+      `[ /api/cron/notify ] Found ${subscriptions.length} subscriptions to notify`
+    );
 
     for (const subscription of subscriptions) {
       const user = await prisma.user.findUnique({
@@ -68,9 +72,11 @@ export const GET = async (request: NextRequest) => {
         console.error(`User not found for subscription ${subscription.id}`);
       }
 
-      console.log(`Notifying user ${user?.email}`);
+      console.log(`[ /api/cron/notify ] Notifying user ${user?.email}`);
       try {
-        console.log(`Sending message to user ${user?.email}`);
+        console.log(
+          `[ /api/cron/notify ] Sending message to user ${user?.email}`
+        );
 
         if (user?.phoneNumber) {
           await sendSms(
@@ -97,7 +103,7 @@ export const GET = async (request: NextRequest) => {
       }
     }
 
-    console.log("Cron job completed successfully");
+    console.log("[ /api/cron/notify ] Cron job completed successfully");
 
     return NextResponse.json(
       { message: "Cron job completed successfully" },

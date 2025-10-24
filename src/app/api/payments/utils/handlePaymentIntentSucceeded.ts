@@ -67,7 +67,10 @@ export async function handlePaymentIntentSucceeded(
     const subscription = await prisma.subscription.create({
       data: subscriptionData,
     });
-    console.log(JSON.stringify(subscription, null, 2));
+    console.log(
+      "[ /api/payments/utils/handlePaymentIntentSucceeded ]",
+      JSON.stringify(subscription, null, 2)
+    );
   } catch (error) {
     console.error("Error creating subscription", error);
     throw new Error("Error creating subscription");

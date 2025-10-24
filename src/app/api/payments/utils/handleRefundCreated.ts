@@ -3,7 +3,9 @@ import { SubscriptionStatus } from "@prisma/client";
 import Stripe from "stripe";
 
 export async function handleRefundCreated(refund: Stripe.Refund) {
-  console.log(`✅ Refund ${refund.id} was created`);
+  console.log(
+    `[ /api/payments/utils/handleRefundCreated ] ✅ Refund ${refund.id} was created`
+  );
 
   const subscriptionId = await prisma.subscription.findFirst({
     where: {

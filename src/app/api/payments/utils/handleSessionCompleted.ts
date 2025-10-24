@@ -15,7 +15,9 @@ export async function handleSessionCompleted(
 
   const { productType } = eventData.metadata;
 
-  console.log("handleSessionCompleted: metadata present, proceeding...");
+  console.log(
+    "[ /api/payments/utils/handleSessionCompleted ] metadata present, proceeding..."
+  );
 
   let user: Pick<User, "id" | "email" | "messageLanguage" | "premium"> | null =
     null;

@@ -69,7 +69,7 @@ const ALLOWED_EVENT_TYPES = [
 export async function POST(request: NextRequest) {
   try {
     let event;
-    console.log("Webhook received");
+    console.log("[ /api/payments/webhook ]", "Webhook received");
 
     if (stripeWebhookSecret) {
       // Get the signature sent by Stripe
@@ -89,7 +89,9 @@ export async function POST(request: NextRequest) {
           signature,
           stripeWebhookSecret
         );
-        console.log(`✅ Webhook signature verified for event: ${event.type}`);
+        console.log(
+          `[ /api/payments/webhook ] ✅ Webhook signature verified for event: ${event.type}`
+        );
       } catch (err: any) {
         console.error(
           `⚠️  Webhook signature verification failed.`,
@@ -103,7 +105,9 @@ export async function POST(request: NextRequest) {
 
       // Validate event type for additional security`
       if (!ALLOWED_EVENT_TYPES.includes(event.type)) {
-        console.log(`⚠️  Unexpected event type: ${event.type}, SKIPPING`);
+        console.log(
+          `[ /api/payments/webhook ] ⚠️  Unexpected event type: ${event.type}, SKIPPING`
+        );
         return NextResponse.json(
           { error: "Unexpected event type" },
           { status: 400 }
@@ -121,7 +125,9 @@ export async function POST(request: NextRequest) {
       });
 
       if (existingEvent) {
-        console.log(`⚠️  Event ${event.id} already processed, skipping`);
+        console.log(
+          `[ /api/payments/webhook ] ⚠️  Event ${event.id} already processed, skipping`
+        );
         return NextResponse.json(
           { message: "Event already processed" },
           { status: 200 }
@@ -134,7 +140,7 @@ export async function POST(request: NextRequest) {
         case "checkout.session.completed":
           const checkoutSession = event.data.object;
           console.log(
-            `✅ CheckoutSession for ${
+            `[ /api/payments/webhook ] ✅ CheckoutSession for ${
               checkoutSession.amount_total
                 ? checkoutSession.amount_total / 100
                 : 0
@@ -144,12 +150,16 @@ export async function POST(request: NextRequest) {
           break;
         case "customer.subscription.updated":
           const subscription = event.data.object;
-          console.log(`✅ Subscription ${subscription.id} was updated`);
+          console.log(
+            `[ /api/payments/webhook ] ✅ Subscription ${subscription.id} was updated`
+          );
           handleSubscriptionUpdated(subscription);
           break;
         case "refund.created":
           const refund = event.data.object;
-          console.log(`✅ Refund ${refund.id} was created`);
+          console.log(
+            `[ /api/payments/webhook ] ✅ Refund ${refund.id} was created`
+          );
           handleRefundCreated(refund);
           break;
         // case "customer.subscription.created":
@@ -172,11 +182,13 @@ export async function POST(request: NextRequest) {
         //   break;
         default:
           // Unexpected event type (shouldn't reach here due to validation above)
-          console.log(`Unhandled event type ${event.type}.`);
+          console.log(
+            `[ /api/payments/webhook ] Unhandled event type ${event.type}.`
+          );
       }
     } else {
       console.log(
-        "⚠️  No webhook secret configured - running in development mode"
+        "[ /api/payments/webhook ] ⚠️  No webhook secret configured - running in development mode"
       );
     }
 

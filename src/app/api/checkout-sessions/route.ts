@@ -38,7 +38,11 @@ export async function POST(request: NextRequest) {
     }
 
     console.log("[ /api/checkout-sessions ]");
-    console.log("--- IMPORTANT --- config", config);
+    console.log(
+      "[ /api/checkout-sessions ]",
+      "--- IMPORTANT --- config",
+      config
+    );
 
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({

@@ -92,7 +92,10 @@ export async function handleSubscriptionCreated(
     const subscription = await prisma.subscription.create({
       data: subscriptionData,
     });
-    console.log(JSON.stringify(subscription, null, 2));
+    console.log(
+      "[ /api/payments/utils/handleSubscriptionCreated ]",
+      JSON.stringify(subscription, null, 2)
+    );
   } catch (error) {
     console.error("Error creating subscription", error);
     throw new Error("Error creating subscription");

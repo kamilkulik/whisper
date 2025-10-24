@@ -319,7 +319,7 @@ export const POST = async (request: NextRequest) => {
     }
     /** CREATE NEW USER FLOW END */
 
-    console.log("[ users POST ] User data saved to database:", {
+    console.log("[ /api/users ] User data saved to database:", {
       timestamp: new Date().toISOString(),
       data: body,
     });

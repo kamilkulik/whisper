@@ -31,9 +31,11 @@ export const GET = async (request: NextRequest) => {
     checkCronSecret(request);
 
     const now = new Date();
-    console.log(`Cron job executed at: ${now.toISOString()}`);
     console.log(
-      "CET time:",
+      `[ /api/cron/distribute ] Cron job executed at: ${now.toISOString()}`
+    );
+    console.log(
+      "[ /api/cron/distribute ] CET time:",
       now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })
     );
 
@@ -50,7 +52,9 @@ export const GET = async (request: NextRequest) => {
       );
     `;
 
-    console.log(`Found ${users.length} users to send messages to`);
+    console.log(
+      `[ /api/cron/distribute ] Found ${users.length} users to send messages to`
+    );
 
     // 2. create a unique set of message ids which should be sent next to each user
     const usersWithNextMessage = users.map((user) => ({
@@ -61,7 +65,9 @@ export const GET = async (request: NextRequest) => {
     const nextMessages = new Set(
       usersWithNextMessage.map((user) => user.next_message)
     );
-    console.log(`Found ${nextMessages.size} unique messages to send`);
+    console.log(
+      `[ /api/cron/distribute ] Found ${nextMessages.size} unique messages to send`
+    );
 
     // 3. get all the messages which should be sent next to each user - convert to a hash table
     const messages = await prisma.message.findMany({
@@ -117,7 +123,9 @@ export const GET = async (request: NextRequest) => {
         const messageText = message[user.message_language];
 
         if (messageText) {
-          console.log(`Sending message to user ${user.id}: ${messageText}`);
+          console.log(
+            `[ /api/cron/distribute ] Sending message to user ${user.id}: ${messageText}`
+          );
           await sendSms(user.phone_number, messageText);
 
           // update what message got sent
@@ -132,7 +140,9 @@ export const GET = async (request: NextRequest) => {
       }
     }
 
-    console.log("Daily cron job completed successfully");
+    console.log(
+      "[ /api/cron/distribute ] Daily cron job completed successfully"
+    );
 
     return NextResponse.json(
       {

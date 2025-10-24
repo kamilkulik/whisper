@@ -15,7 +15,9 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log(`Cleanup completed: ${result.count} expired records deleted`);
+    console.log(
+      `[ /api/cron/cleanup-store ] Cleanup completed: ${result.count} expired records deleted`
+    );
 
     const now = new Date();
     return NextResponse.json({

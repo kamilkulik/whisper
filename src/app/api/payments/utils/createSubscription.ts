@@ -13,7 +13,7 @@ export async function createSubscription({
   user,
 }: SubscriptionFactoryInput): Promise<Subscription> {
   console.log(
-    "createSubscription",
+    "[ /api/payments/utils/createSubscription ] createSubscription",
     JSON.stringify(
       {
         created,
@@ -33,7 +33,10 @@ export async function createSubscription({
     user,
   });
 
-  console.log("subscriptionData", JSON.stringify(subscriptionData, null, 2));
+  console.log(
+    "[ /api/payments/utils/createSubscription ] subscriptionData",
+    JSON.stringify(subscriptionData, null, 2)
+  );
 
   try {
     const subscription = await prisma.subscription.create({
