@@ -23,7 +23,7 @@ class SessionIdCache {
   public async set(key: string, value: string) {
     if (!key || !value) {
       console.log(
-        `Cache instanceId: ${this.instanceId} - Missing key: ${key} or value: ${value}`
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Missing key: ${key} or value: ${value}`
       );
       return;
     }
@@ -37,12 +37,12 @@ class SessionIdCache {
       });
 
       console.log(
-        `Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`,
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`,
         await this.get(key)
       );
     } catch (error) {
       console.error(
-        `Cache instanceId: ${this.instanceId} - Error setting sessionId:`,
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error setting sessionId:`,
         error
       );
     }
@@ -57,7 +57,7 @@ class SessionIdCache {
       });
 
       console.log(
-        `Cache instanceId: ${this.instanceId} - get`,
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - get`,
         key,
         result?.value
       );
@@ -65,7 +65,7 @@ class SessionIdCache {
       return result?.value;
     } catch (error) {
       console.error(
-        `Cache instanceId: ${this.instanceId} - Error getting sessionId:`,
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error getting sessionId:`,
         error
       );
       return undefined;
@@ -79,7 +79,7 @@ class SessionIdCache {
       });
     } catch (error) {
       console.error(
-        `Cache instanceId: ${this.instanceId} - Error deleting sessionId:`,
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error deleting sessionId:`,
         error
       );
     }
@@ -90,7 +90,7 @@ class SessionIdCache {
       await this.prismaClient.keyValue.deleteMany();
     } catch (error) {
       console.error(
-        `Cache instanceId: ${this.instanceId} - Error clearing cache:`,
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error clearing cache:`,
         error
       );
     }
@@ -98,7 +98,7 @@ class SessionIdCache {
 
   public async clearAllSessionsForSameNumber(number: string) {
     console.log(
-      `Cache instanceId: ${this.instanceId} - clearAllSessionsForSameNumber`,
+      `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - clearAllSessionsForSameNumber`,
       number
     );
 
@@ -108,7 +108,7 @@ class SessionIdCache {
       });
     } catch (error) {
       console.error(
-        `Cache instanceId: ${this.instanceId} - Error clearing sessions for number:`,
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error clearing sessions for number:`,
         error
       );
     }
