@@ -23,9 +23,7 @@ class SessionIdCache {
   public async set(key: string, value: string) {
     if (!key || !value) {
       console.log(
-        `Cache instanceId: ${this.instanceId} - Missing key or value`,
-        key,
-        value
+        `Cache instanceId: ${this.instanceId} - Missing key: ${key} or value: ${value}`
       );
       return;
     }

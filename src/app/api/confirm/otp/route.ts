@@ -179,7 +179,11 @@ export const POST = async (request: NextRequest) => {
 
     // Create response with success
     const response = NextResponse.json({ success: true });
-    sessionIdCache.set(phoneNumber, authenticatedSessionId);
+    if (phoneNumber) {
+      sessionIdCache.set(phoneNumber, authenticatedSessionId);
+    } else if (email) {
+      sessionIdCache.set(email, authenticatedSessionId);
+    }
 
     // Set secure session cookie
     response.cookies.set({

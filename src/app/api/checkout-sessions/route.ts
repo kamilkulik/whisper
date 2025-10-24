@@ -24,17 +24,26 @@ export async function POST(request: NextRequest) {
     const triangulatedCountry = triangulateLocationBe(null, ipCountry, baseUrl);
 
     if (!triangulatedCountry) {
-      throw new Error("Failed to triangulate country");
+      throw new Error(
+        "[ /api/checkout-sessions ] Failed to triangulate country"
+      );
     }
 
     if (!productType) {
-      throw new Error("Product type is required");
+      throw new Error("[ /api/checkout-sessions ] Product type is required");
     }
+
+    console.log(
+      "[ /api/checkout-sessions ]",
+      `Attempting to get config for product type: ${productType} in country: ${triangulatedCountry}`
+    );
 
     const config = productConfigs[triangulatedCountry]?.[productType];
 
     if (!config) {
-      throw new Error("Service is not available in your country");
+      throw new Error(
+        "[ /api/checkout-sessions ] Service is not available in your country"
+      );
     }
 
     console.log("[ /api/checkout-sessions ]");

@@ -21,13 +21,14 @@ export async function navigateToCheckout(
     return { success: false };
   }
 
-  console.log("user email", email);
-  console.log("productType", productType);
+  console.log("[ navigateToCheckout ]", "user email", email);
+  console.log("[ navigateToCheckout ]", "productType", productType);
 
   // does the user already have an ACTIVE subscription?
   const subscription = await getLatestActiveSubscriptionForUserEmail(email);
   console.log(
-    "[ navigateToCheckout ] latest active subscription: ",
+    "[ navigateToCheckout ]",
+    "latest active subscription: ",
     subscription
   );
   if (subscription && subscription.type !== SubscriptionType.TRIAL) {
@@ -62,13 +63,18 @@ export async function navigateToCheckout(
       return { success: true };
     } else {
       console.error(
-        "Wystąpił błąd podczas tworzenia sesji płatności: ",
+        "[ navigateToCheckout ]",
+        "Error calling checkout session API: ",
         checkoutResponse
       );
       return { success: false };
     }
   } catch (error) {
-    console.error("Wystąpił błąd podczas tworzenia sesji płatności.", error);
+    console.error(
+      "[ navigateToCheckout ]",
+      "Error creating checkout session.",
+      error
+    );
     return { success: false };
   }
 }

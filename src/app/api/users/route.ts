@@ -165,7 +165,9 @@ export const POST = async (request: NextRequest) => {
     csfrProtection(request);
 
     const body: UserData = await request.json();
-    const cachedSessionId = await sessionIdCache.get(body.phoneNumber);
+    const cachedSessionId = await sessionIdCache.get(
+      body.phoneNumber ?? body.email
+    );
 
     if (cachedSessionId !== sessionId) {
       return NextResponse.json(
