@@ -14,7 +14,9 @@
     "stripe:webhook": "stripe listen --forward-to localhost:3000/api/payments/webhook"
   },
   "dependencies": {
-    "@prisma/client": "^6.13.0",
+    "@neondatabase/serverless": "^1.0.2",
+    "@prisma/adapter-neon": "^6.18.0",
+    "@prisma/client": "^6.18.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@react-email/components": "^0.5.1",
     "@react-email/render": "1.2.1",
@@ -30,7 +32,7 @@
     "next": "15.4.5",
     "next-intl": "^4.3.6",
     "postcss": "^8.4.24",
-    "prisma": "^6.13.0",
+    "prisma": "^6.18.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "resend": "^6.0.1",
@@ -40,10 +42,12 @@
     "tailwindcss": "^3.3.0",
     "use-intl": "^4.3.7",
     "uuid": "^11.1.0",
+    "ws": "^8.18.3",
     "zod": "^4.0.16"
   },
   "devDependencies": {
     "@react-email/preview": "^0.0.13",
+    "@types/ws": "^8.18.1",
     "prettier": "^3.6.2",
     "typescript": "^5"
   }
