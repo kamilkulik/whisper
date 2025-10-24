@@ -8,7 +8,8 @@ import { getBaseUrl } from "../api/utils/baseUrl";
 
 export async function navigateToCheckout(
   productType: SubscriptionType,
-  email: string
+  email: string,
+  triangulatedCountry?: string
 ): Promise<{
   success: boolean;
   savedSubscription?: Subscription;
@@ -51,6 +52,9 @@ export async function navigateToCheckout(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(triangulatedCountry
+          ? { "x-triangulated-country": triangulatedCountry }
+          : {}),
       },
       body: JSON.stringify(checkoutSessionsPayload),
     });

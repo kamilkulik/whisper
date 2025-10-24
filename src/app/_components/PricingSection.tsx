@@ -36,9 +36,9 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
   const t = useTranslations("LandingPage");
   const locale = useLocale();
-  const { isLoaded, ipCountry, host, browserGeo } =
-    useContext(GeoLocationContext);
-  const { pricingData } = useTriangulatedLocation();
+
+  const { isLoaded, pricingData, triangulatedCountry } =
+    useTriangulatedLocation();
 
   // Helper function to format currency based on locale
   const formatCurrency = (amount: string, currency: string) => {
@@ -77,7 +77,8 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
         if (userEmailFromSessionCookie) {
           const result = await navigateToCheckout(
             product,
-            userEmailFromSessionCookie
+            userEmailFromSessionCookie,
+            triangulatedCountry ?? undefined
           );
 
           if (result?.success) {

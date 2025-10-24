@@ -20,8 +20,15 @@ export async function POST(request: NextRequest) {
     const headersList = await headers();
     const baseUrl = await getBaseUrl();
 
-    const ipCountry = headersList.get("x-vercel-ip-country");
-    const triangulatedCountry = triangulateLocationBe(null, ipCountry, baseUrl);
+    const ipCountry = headersList.get("x-vercel-ip-country"); // Vercel IP country header will be set to location of function that called this API
+    const triangulatedCountryHeader = headersList.get("x-triangulated-country");
+
+    const triangulatedCountry = triangulateLocationBe(
+      null,
+      ipCountry,
+      baseUrl,
+      triangulatedCountryHeader
+    );
 
     if (!triangulatedCountry) {
       throw new Error(

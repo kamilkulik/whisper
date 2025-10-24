@@ -1,12 +1,15 @@
 export function triangulateLocationBe(
   stripeData: string | null,
   ipCountry?: string | null,
-  host?: string | null
+  host?: string | null,
+  triangulatedCountry?: string | null
 ): string | null {
   console.log(
     "[ triangulateLocationBe ]",
     "stripeData: ",
     stripeData,
+    "x-triangulated-country: ",
+    triangulatedCountry,
     "x-vercel-ip-country: ",
     ipCountry,
     "host: ",
@@ -14,6 +17,10 @@ export function triangulateLocationBe(
   );
   if (stripeData) {
     return stripeData;
+  }
+
+  if (triangulatedCountry) {
+    return triangulatedCountry;
   }
 
   if (ipCountry) {
