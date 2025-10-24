@@ -53,7 +53,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("[ /api/checkout-sessions ]");
     console.log(
       "[ /api/checkout-sessions ]",
       "--- IMPORTANT --- config",
