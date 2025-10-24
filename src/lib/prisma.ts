@@ -25,6 +25,7 @@ declare global {
 
 const connectionString = `${process.env.DATABASE_URL}`;
 
+// https://www.prisma.io/docs/orm/overview/databases/neon#how-to-use-neons-serverless-driver-with-prisma-orm
 const adapter = new PrismaNeon({ connectionString });
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
