@@ -20,6 +20,7 @@ import Spinner from "./_components/Spinner";
 import { useCurrentLocale } from "./_hooks/useCurrentLocale";
 import InformationModal from "./_components/InformationModal";
 import { useGetCurrentSession } from "./_hooks/useGetCurrentSession";
+import { useTriangulatedLocation } from "./_hooks/useTriangulatedLocation";
 
 export default function Home() {
   const router = useRouter();
@@ -38,6 +39,7 @@ export default function Home() {
   });
   const pricingSectionRef = useRef<any>(null);
   const currentLocale = useCurrentLocale();
+  const { triangulatedCountry } = useTriangulatedLocation();
 
   // Language options for switcher
   const languageOptions = [
@@ -157,77 +159,6 @@ export default function Home() {
         return () => window.removeEventListener("scroll", handleScrollProgress);
       }
     }
-  }, []);
-
-  // Canvas Animation POC
-  useEffect(() => {
-    const canvas = document.getElementById(
-      "hero-lightpass"
-    ) as HTMLCanvasElement;
-    if (!canvas) return;
-
-    const context = canvas.getContext("2d");
-    if (!context) return;
-
-    const frameCount = 148;
-    const currentFrame = (index: number) =>
-      `https://www.apple.com/105/media/us/airpods-pro/2019/1299e2f5_9206_4470_b28e_08307a42f19b/anim/sequence/large/01-hero-lightpass/${index.toString().padStart(4, "0")}.jpg`;
-
-    // Set canvas dimensions
-    canvas.width = 1158;
-    canvas.height = 770;
-
-    const img = new Image();
-    img.src = currentFrame(1);
-
-    // Load first frame
-    img.onload = function () {
-      context.drawImage(img, 0, 0);
-    };
-
-    // Preload images for smooth animation
-    const preloadImages = () => {
-      for (let i = 1; i < frameCount; i++) {
-        const preloadImg = new Image();
-        preloadImg.src = currentFrame(i);
-      }
-    };
-
-    const updateImage = (index: number) => {
-      img.src = currentFrame(index);
-      img.onload = function () {
-        context.drawImage(img, 0, 0);
-      };
-    };
-
-    let ticking = false;
-    const handleCanvasScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollTop = window.scrollY;
-          const maxScrollTop =
-            document.documentElement.scrollHeight - window.innerHeight;
-          const scrollFraction = scrollTop / maxScrollTop;
-          const frameIndex = Math.min(
-            frameCount - 1,
-            Math.ceil(scrollFraction * frameCount)
-          );
-          updateImage(frameIndex + 1);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    // Add scroll listener
-    window.addEventListener("scroll", handleCanvasScroll);
-
-    // Start preloading
-    preloadImages();
-
-    return () => {
-      window.removeEventListener("scroll", handleCanvasScroll);
-    };
   }, []);
 
   // Intersection Observer for copy line and float-in animations
@@ -487,7 +418,8 @@ export default function Home() {
       if (userEmailFromSessionCookie) {
         const result = await navigateToCheckout(
           product,
-          userEmailFromSessionCookie
+          userEmailFromSessionCookie,
+          triangulatedCountry || undefined
         );
         if (result?.success) {
           if (result?.hasCurrentActiveSubscription) {
