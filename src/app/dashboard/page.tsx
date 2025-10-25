@@ -65,7 +65,7 @@ function nextMessageTime(
     subscription?.dateExpires > new Date()
   ) {
     isSubscribed = true;
-    message = `${new Date() > new Date("20:59") ? t("next-message.tomorrow") : t("next-message.today")} ${t("next-message.at")}`;
+    message = `${new Date() > new Date(new Date().setHours(20, 59, 0, 0)) ? t("next-message.tomorrow") : t("next-message.today")} ${t("next-message.at")}`;
   } else if (
     subscription?.status === SubscriptionStatus.CANCEL_AT_PERIOD_END &&
     subscription?.dateExpires

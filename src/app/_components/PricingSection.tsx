@@ -134,7 +134,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
           </p>
           <p className="text-2xl text-green-400 font-semibold">
             {`${t("pricing-section.subtitle-2")} ${
-              new Date() > new Date("20:59")
+              new Date() > new Date(new Date().setHours(20, 59, 0, 0))
                 ? t("pricing-section.subtitle-3")
                 : t("pricing-section.subtitle-4")
             } ${t("pricing-section.subtitle-5")}`}
