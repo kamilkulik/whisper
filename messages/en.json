@@ -267,6 +267,26 @@
     },
     "logout": "Logout"
   },
+  "EmailConfirmation": {
+    "title-1": "Email",
+    "title-2": "confirmed!",
+    "subtitle": "Your email address has been successfully confirmed. You can now use the full functionality of the Wieczorny Szept service.",
+    "already-verified-title-1": "Email",
+    "already-verified-title-2": "already confirmed",
+    "already-verified-subtitle": "Your email address was already previously confirmed. You don't need to do anything else.",
+    "error-title": "Confirmation error",
+    "error-subtitle": "An error occurred while confirming your email address. The link may be invalid or expired.",
+    "unknown-status-title": "Unknown status",
+    "unknown-status-subtitle": "Unable to determine the status of email confirmation.",
+    "email-confirmed-1": "Your email address",
+    "email-confirmed-2": "has been successfully confirmed.",
+    "email-already-verified-1": "Email",
+    "email-already-verified-2": "already confirmed.",
+    "error-contact-us": "If you need a new confirmation link, contact us.",
+    "error-contact-us-2": "If you have any questions or problems with confirmation, contact us:",
+    "error-contact-us-email": "contact@eveningwhisper.co.uk",
+    "return-to-home": "Return to home"
+  },
   "NavigationBar": {
     "title": "SECRET PROJECT"
   },

@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import NavigationBar from "../_components/NavigationBar";
+import { useTranslations } from "next-intl";
 
 // Force dynamic rendering since we use searchParams
 export const dynamic = "force-dynamic";
@@ -10,6 +11,7 @@ export default function EmailConfirmation() {
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
   const customerEmail = searchParams.get("email") || "test@test.pl";
+  const t = useTranslations("EmailConfirmation");
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
@@ -85,15 +87,14 @@ export default function EmailConfirmation() {
             {status === "success" && (
               <>
                 <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-                  Email{" "}
+                  {t("title-1")}{" "}
                   <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
-                    potwierdzony!
+                    {t("title-2")}
                   </span>
                 </h1>
 
                 <p className="text-xl text-blue-200 leading-relaxed">
-                  Twój adres email został pomyślnie potwierdzony. Możesz teraz
-                  korzystać z pełnej funkcjonalności serwisu Wieczorny Szept.
+                  {t("subtitle")}
                 </p>
               </>
             )}
@@ -101,15 +102,14 @@ export default function EmailConfirmation() {
             {status === "already-verified" && (
               <>
                 <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-                  Email{" "}
+                  {t("already-verified-title-1")}{" "}
                   <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                    już potwierdzony
+                    {t("already-verified-title-2")}
                   </span>
                 </h1>
 
                 <p className="text-xl text-blue-200 leading-relaxed">
-                  Twój adres email był już wcześniej potwierdzony. Nie musisz
-                  nic więcej robić.
+                  {t("already-verified-subtitle")}
                 </p>
               </>
             )}
@@ -118,13 +118,12 @@ export default function EmailConfirmation() {
               <>
                 <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
                   <span className="bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
-                    Błąd potwierdzenia
+                    {t("error-title")}
                   </span>
                 </h1>
 
                 <p className="text-xl text-blue-200 leading-relaxed">
-                  Wystąpił problem z potwierdzeniem Twojego adresu email. Link
-                  może być nieprawidłowy lub wygasł.
+                  {t("error-subtitle")}
                 </p>
               </>
             )}
@@ -133,12 +132,12 @@ export default function EmailConfirmation() {
               <>
                 <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
                   <span className="bg-gradient-to-r from-gray-400 to-slate-400 bg-clip-text text-transparent">
-                    Nieznany status
+                    {t("unknown-status-title")}
                   </span>
                 </h1>
 
                 <p className="text-xl text-blue-200 leading-relaxed">
-                  Nie udało się określić statusu potwierdzenia emaila.
+                  {t("unknown-status-subtitle")}
                 </p>
               </>
             )}
@@ -146,11 +145,11 @@ export default function EmailConfirmation() {
             {status === "success" && (
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <p className="text-white text-lg">
-                  Twój adres email{" "}
+                  {t("email-confirmed-1")}{" "}
                   <span className="font-semibold text-blue-200">
                     {customerEmail}
                   </span>{" "}
-                  został pomyślnie potwierdzony.
+                  {t("email-confirmed-2")}
                 </p>
               </div>
             )}
@@ -158,32 +157,28 @@ export default function EmailConfirmation() {
             {status === "already-verified" && (
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <p className="text-white text-lg">
-                  Adres email{" "}
+                  {t("email-already-verified-1")}{" "}
                   <span className="font-semibold text-blue-200">
                     {customerEmail}
                   </span>{" "}
-                  był już wcześniej potwierdzony.
+                  {t("email-already-verified-2")}
                 </p>
               </div>
             )}
 
             {status === "error" && (
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-white text-lg">
-                  Jeśli potrzebujesz nowego linku potwierdzającego, skontaktuj
-                  się z nami.
-                </p>
+                <p className="text-white text-lg">{t("error-contact-us")}</p>
               </div>
             )}
 
             <p className="text-white/80 text-sm">
-              Jeśli masz pytania lub problemy z potwierdzeniem, skontaktuj się z
-              nami:{" "}
+              {t("error-contact-us-2")}:{" "}
               <a
-                href="mailto:kontakt@wieczornyszept.pl"
+                href={`mailto:${t("error-contact-us-email")}`}
                 className="text-blue-300 hover:text-blue-200 underline transition-colors"
               >
-                kontakt@wieczornyszept.pl
+                {t("error-contact-us-email")}
               </a>
             </p>
           </div>
@@ -194,7 +189,7 @@ export default function EmailConfirmation() {
               href="/"
               className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105"
             >
-              Powrót do strony głównej
+              {t("return-to-home")}
             </a>
           </div>
         </div>

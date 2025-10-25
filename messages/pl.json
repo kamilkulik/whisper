@@ -267,6 +267,26 @@
     },
     "logout": "Wyloguj się"
   },
+  "EmailConfirmation": {
+    "title-1": "Email",
+    "title-2": "potwierdzony!",
+    "subtitle": "Twój adres email został pomyślnie potwierdzony. Możesz teraz korzystać z pełnej funkcjonalności serwisu Wieczorny Szept.",
+    "already-verified-title-1": "Email",
+    "already-verified-title-2": "już potwierdzony",
+    "already-verified-subtitle": "Twój adres email był już wcześniej potwierdzony. Nie musisz nic więcej robić.",
+    "error-title": "Błąd potwierdzenia",
+    "error-subtitle": "Wystąpił problem z potwierdzeniem Twojego adresu email. Link może być nieprawidłowy lub wygasł.",
+    "unknown-status-title": "Nieznany status",
+    "unknown-status-subtitle": "Nie udało się określić statusu potwierdzenia emaila.",
+    "email-confirmed-1": "Twój adres email",
+    "email-confirmed-2": "został pomyślnie potwierdzony.",
+    "email-already-verified-1": "Email",
+    "email-already-verified-2": "już potwierdzony.",
+    "error-contact-us": "Jeśli potrzebujesz nowego linku potwierdzającego, skontaktuj się z nami.",
+    "error-contact-us-2": "Jeśli masz pytania lub problemy z potwierdzeniem, skontaktuj się z nami:",
+    "error-contact-us-email": "kontakt@wieczornyszept.pl",
+    "return-to-home": "Powrót do strony głównej"
+  },
   "NavigationBar": {
     "title": "SECRET PROJECT"
   },
