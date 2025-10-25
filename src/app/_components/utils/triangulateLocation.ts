@@ -1,4 +1,4 @@
-import { GEO_CONTEXT } from "@/app/_consts";
+import { GEO_CONTEXT, PL_COUNTRY_CODE } from "@/app/_consts";
 import { reverseGeoCode } from "../../_actions/reverseGeoCode";
 
 export async function triangulateLocationOnFe(
@@ -24,7 +24,7 @@ export async function triangulateLocationOnFe(
       host.includes("127.0.0.1") ||
       host.includes("192.168.0"))
   ) {
-    return "PL";
+    return PL_COUNTRY_CODE;
   }
 
   // MATCH AGAINST KNOWN DOMAINS
