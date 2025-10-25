@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../../utils/csfrProtection";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { TemporarySessionIdCache } from "@/lib/temporarySessionIdCache";
 
 const temporarySessionIdCache = TemporarySessionIdCache.getInstance();
@@ -22,6 +22,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const phoneNumber = request.nextUrl.searchParams.get("phoneNumber");
   const email = request.nextUrl.searchParams.get("email");
   const locale = await getLocale();
+  const t = await getTranslations("API.confirm-otp.GET");
 
   if (!phoneNumber && !email) {
     return NextResponse.json(
@@ -41,13 +42,16 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   if (email) {
     await sendEmail({
       locale,
-      subject: "Wieczorny szept - kod potwierdzający",
+      subject: t("sendEmail.subject"),
       template: "confirmation-code-via-email",
       to: email,
       verificationCode: confirmationCode.toString(),
     });
   } else if (phoneNumber) {
-    await sendSms(phoneNumber, confirmationCode.toString());
+    await sendSms(
+      phoneNumber,
+      `${t("sendSms.message")} ${confirmationCode.toString()}`
+    );
   }
 
   // For local development, include the verification code in the response
@@ -79,7 +83,10 @@ export const POST = async (request: NextRequest) => {
   const phoneNumber = body?.phoneNumber?.toString();
   const isLoginMode = body["isLoginMode"];
 
-  console.log("[ api/confirm/otp ] body: ", JSON.stringify(body, null, 2));
+  console.log(
+    "[ POST /api/confirm/otp ] body: ",
+    JSON.stringify(body, null, 2)
+  );
 
   if (!confirmationCode || !sessionId) {
     return NextResponse.json(
@@ -120,7 +127,7 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (existingUser) {
-          console.log("[ /api/confirm/otp ]", "existing user", email);
+          console.log("[ POST /api/confirm/otp ]", "existing user", email);
           try {
             await prisma.user.update({
               where: { email },
@@ -133,7 +140,7 @@ export const POST = async (request: NextRequest) => {
           }
         } else {
           console.log(
-            "[ /api/confirm/otp ]",
+            "[ POST /api/confirm/otp ]",
             "no existing user",
             email,
             " - redirecting to signup"
@@ -155,7 +162,11 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (existingUser) {
-          console.log("[ /api/confirm/otp ]", "existing user", phoneNumber);
+          console.log(
+            "[ POST /api/confirm/otp ]",
+            "existing user",
+            phoneNumber
+          );
           try {
             await prisma.user.update({
               where: { phoneNumber },
@@ -167,7 +178,7 @@ export const POST = async (request: NextRequest) => {
         } else {
           // need to redirect to the signup form
           console.log(
-            "[ /api/confirm/otp ]",
+            "[ POST /api/confirm/otp ]",
             "no existing user",
             phoneNumber,
             " - redirecting to signup"

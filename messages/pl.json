@@ -514,6 +514,16 @@
     }
   },
   "API": {
+    "confirm-otp": {
+      "GET": {
+        "sendEmail": {
+          "subject": "Wieczorny szept - kod potwierdzający"
+        },
+        "sendSms": {
+          "message": "Dziękujemy za rejestrację w serwisie Wieczorny Szept! Twój kod weryfikacyjny to:"
+        }
+      }
+    },
     "users": {
       "POST": {
         "trial-used": "Błąd. Z okresu próbnego można skorzystać tylko raz"

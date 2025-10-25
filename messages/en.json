@@ -518,6 +518,21 @@
     }
   },
   "API": {
+    "confirm-otp": {
+      "GET": {
+        "sendEmail": {
+          "subject": "Evening Whisper - confirmation code"
+        },
+        "sendSms": {
+          "message": "Thanks for signing up to Evening Whisper! Your confirmation code is:"
+        }
+      }
+    },
+    "cron": {
+      "notify": {
+        "message": "We hope you're enjoying Evening Whisper! To continue receiving messages after your trial ends, you’ll need to purchase a paid subscription. You can do this in the user dashboard. Visit evening whisper website right now!"
+      }
+    },
     "users": {
       "POST": {
         "trial-used": "Error. You can sign up for trial only once"

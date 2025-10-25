@@ -19,11 +19,16 @@ class SmsApiClient implements SmsClientInterface {
 
   async sendSms(phoneNumber: string, message: string): Promise<void> {
     try {
-      console.log(`Sending SMS to ${phoneNumber}: ${message}`);
+      console.log(
+        `[ SmsApiClient.sendSms ]Sending SMS to ${phoneNumber}: ${message}`
+      );
       const result = await this.smsapi.sms.sendSms(`${phoneNumber}`, message);
-      console.log(result);
+      console.log(`[ SmsApiClient.sendSms ] SMS API response:`, result);
     } catch (error) {
-      console.error(`Failed to send SMS to ${phoneNumber}:`, error);
+      console.error(
+        `[ SmsApiClient.sendSms ] Failed to send SMS to ${phoneNumber}:`,
+        error
+      );
     }
   }
 }
@@ -35,13 +40,17 @@ class SmsPlanetClient implements SmsClientInterface {
   constructor() {
     this.authToken = process.env.SMS_PLANET_TOKEN || "";
     if (!this.authToken) {
-      throw new Error("SMS_PLANET_TOKEN environment variable is required");
+      throw new Error(
+        "[ SmsPlanetClient] SMS_PLANET_TOKEN environment variable is required"
+      );
     }
   }
 
   async sendSms(phoneNumber: string, message: string): Promise<void> {
     try {
-      console.log(`Sending SMS via SmsPlanet to ${phoneNumber}: ${message}`);
+      console.log(
+        `[ SmsPlanetClient.sendSms ] Sending SMS via SmsPlanet to ${phoneNumber}: ${message}`
+      );
 
       const formData = new URLSearchParams({
         from: "TEST",
@@ -59,7 +68,7 @@ class SmsPlanetClient implements SmsClientInterface {
       });
 
       const result = await response.text();
-      console.log("SMS Planet response:", result);
+      console.log("[ SmsPlanetClient.sendSms ] SMS Planet response:", result);
 
       // Try to parse the response as JSON to check for API errors
       try {
@@ -84,7 +93,7 @@ class SmsPlanetClient implements SmsClientInterface {
       }
     } catch (error) {
       console.error(
-        `Failed to send SMS via SmsPlanet to ${phoneNumber}:`,
+        `[ SmsPlanetClient.sendSms ] Failed to send SMS via SmsPlanet to ${phoneNumber}:`,
         error
       );
       throw error;
@@ -94,7 +103,9 @@ class SmsPlanetClient implements SmsClientInterface {
 
 class LocalSmsClient implements SmsClientInterface {
   async sendSms(phoneNumber: string, message: string): Promise<void> {
-    console.log(`Sending SMS to ${phoneNumber}: ${message}`);
+    console.log(
+      `[ LocalSmsClient.sendSms ] Sending SMS to ${phoneNumber}: ${message}`
+    );
   }
 }
 
@@ -115,6 +126,8 @@ export async function sendSms(phoneNumber: string, message: string) {
       await localSmsClient.sendSms(phoneNumber, message);
       break;
     default:
-      throw new Error(`Unsupported SMS API provider: ${configuredSmsClient}`);
+      throw new Error(
+        `[ sendSms ] Unsupported SMS API provider: ${configuredSmsClient}`
+      );
   }
 }

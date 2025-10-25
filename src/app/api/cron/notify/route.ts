@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { SubscriptionType } from "@prisma/client";
 import { sendSms } from "@/lib/smsapi";
 import { sendEmail } from "@/lib/emailapi";
+import { getTranslations } from "next-intl/server";
+import { getBaseUrl } from "../../utils/baseUrl";
 
 export const GET = async (request: NextRequest) => {
   /**
@@ -27,10 +29,10 @@ export const GET = async (request: NextRequest) => {
 
     const now = new Date();
     console.log(
-      `[ /api/cron/notify ] Cron job executed at: ${now.toISOString()}`
+      `[ GET /api/cron/notify ] Cron job executed at: ${now.toISOString()}`
     );
     console.log(
-      "[ /api/cron/notify ] CET time:",
+      "[ GET /api/cron/notify ] CET time:",
       now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })
     );
 
@@ -52,8 +54,23 @@ export const GET = async (request: NextRequest) => {
     });
 
     console.log(
-      `[ /api/cron/notify ] Found ${subscriptions.length} subscriptions to notify`
+      `[ GET /api/cron/notify ] Found ${subscriptions.length} subscriptions to notify`
     );
+
+    if (!subscriptions.length) {
+      console.log(
+        "[ GET /api/cron/notify ] No subscriptions to notify about trial expiration"
+      );
+      return NextResponse.json(
+        {
+          message:
+            "[ GET /api/cron/notify ] No subscriptions to notify about trial expiration",
+        },
+        { status: 200 }
+      );
+    }
+
+    const t = await getTranslations("API.cron.notify");
 
     for (const subscription of subscriptions) {
       const user = await prisma.user.findUnique({
@@ -69,22 +86,23 @@ export const GET = async (request: NextRequest) => {
       });
 
       if (!user) {
-        console.error(`User not found for subscription ${subscription.id}`);
+        console.error(
+          `[ GET /api/cron/notify ] User not found for subscription ${subscription.id}`
+        );
       }
 
-      console.log(`[ /api/cron/notify ] Notifying user ${user?.email}`);
+      console.log(`[ GET /api/cron/notify ] Notifying user ${user?.email}`);
       try {
         console.log(
-          `[ /api/cron/notify ] Sending message to user ${user?.email}`
+          `[ GET /api/cron/notify ] Sending message to user ${user?.email}`
         );
 
         if (user?.phoneNumber) {
-          await sendSms(
-            user?.phoneNumber,
-            "TODO write a good message - needs to be translated"
-          );
+          await sendSms(user?.phoneNumber, t("message"));
         } else {
-          console.error(`User ${user?.email} has no phone number`);
+          console.error(
+            `[ GET /api/cron/notify ] User ${user?.email} has no phone number`
+          );
         }
 
         if (user?.email) {
@@ -95,22 +113,27 @@ export const GET = async (request: NextRequest) => {
             template: "trial-expiration-notification",
           });
         } else {
-          console.error(`User ${user?.email} has no email`);
+          console.error(
+            `[ GET /api/cron/notify ] User ${user?.email} has no email`
+          );
         }
       } catch (error) {
         // in case of message service failure log the error
-        console.error(`Failed to send message to user ${user?.id}:`, error);
+        console.error(
+          `[ GET /api/cron/notify ] Failed to send message to user ${user?.id}:`,
+          error
+        );
       }
     }
 
-    console.log("[ /api/cron/notify ] Cron job completed successfully");
+    console.log("[ GET /api/cron/notify ] Cron job completed successfully");
 
     return NextResponse.json(
-      { message: "Cron job completed successfully" },
+      { message: "[ GET /api/cron/notify ] Cron job completed successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Cron job error:", error);
+    console.error("[ GET /api/cron/notify ] Cron job error:", error);
     return NextResponse.json({ error: "Unauthorized" }, { status: 500 });
   }
 };
