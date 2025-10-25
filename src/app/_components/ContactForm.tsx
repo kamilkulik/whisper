@@ -473,7 +473,8 @@ export default function ContactForm({
         {/* Terms and Conditions Checkbox */}
         <div
           className={`flex items-center space-x-3 ${
-            !formData.acceptTerms && message.includes("regulamin")
+            !formData.acceptTerms &&
+            (message.includes("regulamin") || message.includes("terms"))
               ? "p-3 border border-red-300 rounded-2xl bg-red-500/20"
               : ""
           }`}
@@ -487,7 +488,8 @@ export default function ContactForm({
             onChange={handleChange}
             required
             className={`h-5 w-5 text-white focus:ring-white/30 rounded ${
-              !formData.acceptTerms && message.includes("regulamin")
+              !formData.acceptTerms &&
+              (message.includes("regulamin") || message.includes("terms"))
                 ? "border-red-500 focus:ring-red-500"
                 : "border-white/30 bg-white/20"
             }`}
@@ -527,7 +529,8 @@ export default function ContactForm({
       {message && (
         <div
           className={`mt-4 p-4 rounded-2xl text-sm backdrop-blur-sm ${
-            t("form-submit-success").includes(message)
+            t("form-submit-success").includes(message) ||
+            t("form-submit-checkout").includes(message)
               ? "bg-green-500/20 text-green-100 border border-green-400/30"
               : "bg-red-500/20 text-red-100 border border-red-400/30"
           }`}
