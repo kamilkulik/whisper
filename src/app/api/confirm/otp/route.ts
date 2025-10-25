@@ -52,7 +52,10 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 
   // For local development, include the verification code in the response
   const response: any = { sessionId, confirmationCodeExpires };
-  if (process.env.VERCEL_ENV === "development") {
+  if (
+    process.env.VERCEL_ENV === "development" ||
+    process.env.NODE_ENV === "development"
+  ) {
     response.confirmationCode = confirmationCode;
   }
 
