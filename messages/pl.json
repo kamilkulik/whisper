@@ -270,6 +270,11 @@
   "NavigationBar": {
     "title": "SECRET PROJECT"
   },
+  "NotFoundPage": {
+    "title": "Strona nie znaleziona",
+    "description": "Przepraszamy, ale strona której szukasz nie istnieje lub została przeniesiona.",
+    "CTA-button": "Powrót do strony głównej"
+  },
   "SuccessPage": {
     "title-1": "Dziękujemy za",
     "title-2": "subskrypcję!",
@@ -376,6 +381,11 @@
     },
     "CtaButton": {
       "button": "Zacznij teraz"
+    },
+    "Error": {
+      "title": "Wystąpił błąd",
+      "description": "Przepraszamy, wystąpił nieoczekiwany błąd. Nasz zespół został powiadomiony o problemie.",
+      "CTA-button": "Powrót do strony głównej"
     },
     "Footer": {
       "title": "Dowiedz się więcej",

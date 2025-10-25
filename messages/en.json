@@ -270,6 +270,11 @@
   "NavigationBar": {
     "title": "SECRET PROJECT"
   },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for does not exist or has been moved.",
+    "CTA-button": "Return to home"
+  },
   "SuccessPage": {
     "title-1": "Thank you for",
     "title-2": "subscribing!",
@@ -376,6 +381,11 @@
     },
     "CtaButton": {
       "button": "Start now"
+    },
+    "Error": {
+      "title": "An error occurred",
+      "description": "Sorry, an unexpected error has occurred. Our team has been notified of the problem.",
+      "CTA-button": "Return to home"
     },
     "Footer": {
       "title": "Learn more",

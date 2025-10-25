@@ -1,7 +1,9 @@
 import ErrorPageLayout from "./_components/ErrorPageLayout";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function NotFound() {
+  const t = useTranslations("NotFoundPage");
   return (
     <ErrorPageLayout>
       <div className="max-w-2xl mx-auto">
@@ -25,13 +27,12 @@ export default function NotFound() {
 
         <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
           <span className="bg-gradient-to-r from-gray-400 to-slate-400 bg-clip-text text-transparent">
-            Strona nie znaleziona
+            {t("title")}
           </span>
         </h1>
 
         <p className="text-xl text-blue-200 leading-relaxed mb-8">
-          Przepraszamy, ale strona której szukasz nie istnieje lub została
-          przeniesiona.
+          {t("description")}
         </p>
 
         <div className="space-y-4">
@@ -39,7 +40,7 @@ export default function NotFound() {
             href="/"
             className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105"
           >
-            Powrót do strony głównej
+            {t("CTA-button")}
           </Link>
         </div>
       </div>
