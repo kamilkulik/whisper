@@ -53,7 +53,9 @@ export default async function TrialSuccess() {
             <p className="text-xl text-blue-200 leading-relaxed">
               {t("copy-1")}{" "}
               {`${
-                new Date() > new Date("20:59") ? t("tomorrow") : t("today")
+                new Date() > new Date(new Date().setHours(20, 59, 0, 0))
+                  ? t("tomorrow")
+                  : t("today")
               } ${t("evening")}.`}
             </p>
 
