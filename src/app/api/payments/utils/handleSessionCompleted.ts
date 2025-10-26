@@ -82,55 +82,52 @@ export async function handleSessionCompleted(
     "[ /api/payments/utils/handleSessionCompleted ] Starting transaction to create subscription, update user and log webhook event"
   );
 
-  await prisma.$transaction(async (tx) => {
-    const subscription = await createSubscription({
-      created: eventData.created * 1000,
-      expiryAdjustmentInMilis,
-      productType: getSubscriptionType(productType),
-      subscriptionId: eventData?.subscription
-        ? eventData.subscription.toString()
-        : eventData.payment_intent!.toString(),
-      user,
-      tx,
-    });
-
-    if (!subscription) {
-      throw new Error(
-        "[ /api/payments/utils/handleSessionCompleted ] Subscription couldn't be created. Aborting notifying user"
-      );
-    } else {
-      console.log(
-        `[ /api/payments/utils/handleSessionCompleted ] Subscription ${subscription.id} created successfully`
-      );
-    }
-
-    // TODO below could be performed async so the user doesn't have to wait
-
-    // mark user as premium
-    if (!user.premium) {
-      await tx.user.update({
-        where: { id: user.id },
-        data: { premium: true },
-      });
-    }
-
-    console.log(
-      `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`
-    );
-
-    // Log the webhook event
-    await tx.webhookEventLog.create({
-      data: {
-        eventId: eventData.id.toString(),
-        eventData: JSON.stringify(eventData),
-        eventType: "checkout.session.completed",
-      },
-    });
-
-    console.log(
-      `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`
-    );
+  const subscription = await createSubscription({
+    created: eventData.created * 1000,
+    expiryAdjustmentInMilis,
+    productType: getSubscriptionType(productType),
+    subscriptionId: eventData?.subscription
+      ? eventData.subscription.toString()
+      : eventData.payment_intent!.toString(),
+    user,
   });
+
+  if (!subscription) {
+    throw new Error(
+      "[ /api/payments/utils/handleSessionCompleted ] Subscription couldn't be created. Aborting notifying user"
+    );
+  } else {
+    console.log(
+      `[ /api/payments/utils/handleSessionCompleted ] Subscription ${subscription.id} created successfully`
+    );
+  }
+
+  // TODO below could be performed async so the user doesn't have to wait
+
+  // mark user as premium
+  if (!user.premium) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { premium: true },
+    });
+  }
+
+  console.log(
+    `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`
+  );
+
+  // Log the webhook event
+  await prisma.webhookEventLog.create({
+    data: {
+      eventId: eventData.id.toString(),
+      eventData: JSON.stringify(eventData),
+      eventType: "checkout.session.completed",
+    },
+  });
+
+  console.log(
+    `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`
+  );
 
   // notify them
 

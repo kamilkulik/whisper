@@ -11,6 +11,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ authenticated: false });
     }
 
+    console.log(
+      "[ /api/auth/check ] checking  user with sessionId:",
+      sessionId.value
+    );
+
     const user = await getUserFromSessionId<"sessionId">(sessionId.value, {
       sessionId: true,
     });
@@ -21,7 +26,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ authenticated: false });
     }
   } catch (error) {
-    console.error("Error checking authentication:", error);
+    console.error("[ /api/auth/check ] Error checking authentication:", error);
     return NextResponse.json({ authenticated: false });
   }
 }
