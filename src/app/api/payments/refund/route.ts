@@ -6,20 +6,32 @@ import {
   prisma,
 } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
+import Stripe from "stripe";
 
 // Using Payment Intent ID
 const createRefund = async (paymentIntentId: string) => {
   try {
     const refund = await stripe.refunds.create({
       payment_intent: paymentIntentId,
-      // For partial refunds, specify amount in smallest currency unit (e.g., cents)
-      // amount: 1000, // $10.00
     });
 
     console.log("[ /api/payments/refund ]", "Refund created:", refund.id);
     return refund;
   } catch (error) {
     console.error("Error creating refund:", error);
+    if (
+      error instanceof Stripe.errors.StripeInvalidRequestError &&
+      error.code === "charge_already_refunded"
+    ) {
+      console.log(
+        "[ /api/payments/refund ] Charge already refunded. Reconciling subscription status and charge..."
+      );
+      // TODO reconcile subscription status and charge
+      return NextResponse.json(
+        { message: "Charge already refunded" },
+        { status: 200 }
+      );
+    }
     throw error;
   }
 };
