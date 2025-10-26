@@ -34,11 +34,16 @@ export async function handleSessionCompleted(
       },
     });
   } catch (error) {
-    console.error("Error finding user", error);
+    console.error(
+      "[ /api/payments/utils/handleSessionCompleted ] Error finding user",
+      error
+    );
   }
 
   if (!user) {
-    throw new Error("User not found");
+    throw new Error(
+      "[ /api/payments/utils/handleSessionCompleted ] User not found"
+    );
   }
 
   // latest active user subscription
@@ -68,6 +73,9 @@ export async function handleSessionCompleted(
     expiryAdjustmentInMilis = Math.floor(
       latestActiveSubscription.dateExpires.getTime() - new Date().getTime()
     );
+    console.log(
+      `[ /api/payments/utils/handleSessionCompleted ] Expiry adjustment in milis: ${expiryAdjustmentInMilis}`
+    );
   }
 
   const subscription = await createSubscription({
@@ -82,7 +90,11 @@ export async function handleSessionCompleted(
 
   if (!subscription) {
     throw new Error(
-      "Subscription couldn't be created. Aborting notifying user"
+      "[ /api/payments/utils/handleSessionCompleted ] Subscription couldn't be created. Aborting notifying user"
+    );
+  } else {
+    console.log(
+      `[ /api/payments/utils/handleSessionCompleted ] Subscription ${subscription.id} created successfully`
     );
   }
 
@@ -96,6 +108,10 @@ export async function handleSessionCompleted(
     });
   }
 
+  console.log(
+    `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`
+  );
+
   // notify them
   try {
     await sendEmail({
@@ -106,9 +122,18 @@ export async function handleSessionCompleted(
       template: "welcome",
     });
   } catch (error) {
-    console.error("Error sending email", error);
-    throw new Error("Error sending email");
+    console.error(
+      "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
+      error
+    );
+    throw new Error(
+      "[ /api/payments/utils/handleSessionCompleted ] Error sending email"
+    );
   }
+
+  console.log(
+    `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`
+  );
 
   // Log the webhook event
   await prisma.webhookEventLog.create({
@@ -118,4 +143,8 @@ export async function handleSessionCompleted(
       eventType: "checkout.session.completed",
     },
   });
+
+  console.log(
+    `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`
+  );
 }
