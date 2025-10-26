@@ -4,12 +4,7 @@ import { createSubscription } from "./createSubscription";
 import { prisma } from "@/lib/prisma";
 import { getSubscriptionType } from "@/lib/consts";
 import { sendEmail } from "@/lib/emailapi";
-import {
-  Subscription,
-  SubscriptionStatus,
-  SubscriptionType,
-  User,
-} from "@prisma/client";
+import { SubscriptionStatus, SubscriptionType, User } from "@prisma/client";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session
@@ -131,28 +126,33 @@ export async function handleSessionCompleted(
     console.log(
       `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`
     );
-
-    // notify them
-    try {
-      await sendEmail({
-        locale: user.messageLanguage.toLowerCase(),
-        subject: "Witamy w serwisie Wieczorny Szept",
-        subscriptionType: subscription.type,
-        to: user.email,
-        template: "welcome",
-      });
-    } catch (error) {
-      console.error(
-        "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
-        error
-      );
-      throw new Error(
-        "[ /api/payments/utils/handleSessionCompleted ] Error sending email"
-      );
-    }
-
-    console.log(
-      `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`
-    );
   });
+
+  // notify them
+
+  try {
+    await sendEmail({
+      locale: user.messageLanguage.toLowerCase(),
+      subject: "Witamy w serwisie Wieczorny Szept",
+      subscriptionType: getSubscriptionType(productType),
+      to: user.email,
+      template: "welcome",
+    });
+  } catch (error) {
+    console.error(
+      "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
+      error
+    );
+    throw new Error(
+      "[ /api/payments/utils/handleSessionCompleted ] Error sending email"
+    );
+  }
+
+  console.log(
+    `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`
+  );
+
+  return {
+    success: true,
+  };
 }
