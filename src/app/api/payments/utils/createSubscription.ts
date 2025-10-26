@@ -3,7 +3,7 @@ import {
   subscriptionFactory,
   SubscriptionFactoryInput,
 } from "./subscriptionFactory";
-import { Subscription } from "@prisma/client";
+import { Prisma, Subscription } from "@prisma/client";
 
 export async function createSubscription({
   created,
@@ -11,7 +11,10 @@ export async function createSubscription({
   productType,
   subscriptionId,
   user,
-}: SubscriptionFactoryInput): Promise<Subscription> {
+  tx,
+}: SubscriptionFactoryInput & {
+  tx?: Prisma.TransactionClient;
+}): Promise<Subscription> {
   console.log(
     "[ /api/payments/utils/createSubscription ] createSubscription",
     JSON.stringify(
@@ -39,13 +42,16 @@ export async function createSubscription({
   );
 
   try {
-    const subscription = await prisma.subscription.create({
+    const client = tx ?? prisma;
+    const subscription = await client.subscription.create({
       data: subscriptionData,
     });
 
     return subscription;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to create subscription");
+    throw new Error(
+      "[ /api/payments/utils/createSubscription ] Failed to create subscription"
+    );
   }
 }

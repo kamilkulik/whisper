@@ -4,7 +4,12 @@ import { createSubscription } from "./createSubscription";
 import { prisma } from "@/lib/prisma";
 import { getSubscriptionType } from "@/lib/consts";
 import { sendEmail } from "@/lib/emailapi";
-import { SubscriptionStatus, SubscriptionType, User } from "@prisma/client";
+import {
+  Subscription,
+  SubscriptionStatus,
+  SubscriptionType,
+  User,
+} from "@prisma/client";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session
@@ -78,73 +83,76 @@ export async function handleSessionCompleted(
     );
   }
 
-  const subscription = await createSubscription({
-    created: eventData.created * 1000,
-    expiryAdjustmentInMilis,
-    productType: getSubscriptionType(productType),
-    subscriptionId: eventData?.subscription
-      ? eventData.subscription.toString()
-      : eventData.payment_intent!.toString(),
-    user,
-  });
+  await prisma.$transaction(async (tx) => {
+    const subscription = await createSubscription({
+      created: eventData.created * 1000,
+      expiryAdjustmentInMilis,
+      productType: getSubscriptionType(productType),
+      subscriptionId: eventData?.subscription
+        ? eventData.subscription.toString()
+        : eventData.payment_intent!.toString(),
+      user,
+      tx,
+    });
 
-  if (!subscription) {
-    throw new Error(
-      "[ /api/payments/utils/handleSessionCompleted ] Subscription couldn't be created. Aborting notifying user"
-    );
-  } else {
+    if (!subscription) {
+      throw new Error(
+        "[ /api/payments/utils/handleSessionCompleted ] Subscription couldn't be created. Aborting notifying user"
+      );
+    } else {
+      console.log(
+        `[ /api/payments/utils/handleSessionCompleted ] Subscription ${subscription.id} created successfully`
+      );
+    }
+
+    // TODO below could be performed async so the user doesn't have to wait
+
+    // mark user as premium
+    if (!user.premium) {
+      await tx.user.update({
+        where: { id: user.id },
+        data: { premium: true },
+      });
+    }
+
     console.log(
-      `[ /api/payments/utils/handleSessionCompleted ] Subscription ${subscription.id} created successfully`
+      `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`
     );
-  }
 
-  // TODO below could be performed async so the user doesn't have to wait
-
-  // mark user as premium
-  if (!user.premium) {
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { premium: true },
+    // Log the webhook event
+    await tx.webhookEventLog.create({
+      data: {
+        eventId: eventData.id.toString(),
+        eventData: JSON.stringify(eventData),
+        eventType: "checkout.session.completed",
+      },
     });
-  }
 
-  console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`
-  );
-
-  // notify them
-  try {
-    await sendEmail({
-      locale: user.messageLanguage.toLowerCase(),
-      subject: "Witamy w serwisie Wieczorny Szept",
-      subscriptionType: subscription.type,
-      to: user.email,
-      template: "welcome",
-    });
-  } catch (error) {
-    console.error(
-      "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
-      error
+    console.log(
+      `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`
     );
-    throw new Error(
-      "[ /api/payments/utils/handleSessionCompleted ] Error sending email"
+
+    // notify them
+    try {
+      await sendEmail({
+        locale: user.messageLanguage.toLowerCase(),
+        subject: "Witamy w serwisie Wieczorny Szept",
+        subscriptionType: subscription.type,
+        to: user.email,
+        template: "welcome",
+      });
+    } catch (error) {
+      console.error(
+        "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
+        error
+      );
+      throw new Error(
+        "[ /api/payments/utils/handleSessionCompleted ] Error sending email"
+      );
+    }
+
+    console.log(
+      `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`
     );
-  }
-
-  console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`
-  );
-
-  // Log the webhook event
-  await prisma.webhookEventLog.create({
-    data: {
-      eventId: eventData.id.toString(),
-      eventData: JSON.stringify(eventData),
-      eventType: "checkout.session.completed",
-    },
   });
-
-  console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`
-  );
 }

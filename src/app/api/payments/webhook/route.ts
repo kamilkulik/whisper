@@ -134,57 +134,68 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Handle the event
-      switch (event.type) {
-        // for NOW, let's focus on handling on checkout session completed
-        case "checkout.session.completed":
-          const checkoutSession = event.data.object;
-          console.log(
-            `[ /api/payments/webhook ] ✅ CheckoutSession for ${
-              checkoutSession.amount_total
-                ? checkoutSession.amount_total / 100
-                : 0
-            } was successful!`
-          );
-          handleSessionCompleted(checkoutSession);
-          break;
-        case "customer.subscription.updated":
-          const subscription = event.data.object;
-          console.log(
-            `[ /api/payments/webhook ] ✅ Subscription ${subscription.id} was updated`
-          );
-          handleSubscriptionUpdated(subscription);
-          break;
-        case "refund.created":
-          const refund = event.data.object;
-          console.log(
-            `[ /api/payments/webhook ] ✅ Refund ${refund.id} was created`
-          );
-          handleRefundCreated(refund);
-          break;
-        // case "customer.subscription.created":
-        //   const subscriptionCreated = event.data.object;
-        //   console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);
-        //   handleSubscriptionCreated(subscriptionCreated);
-        //   break;
-        // case "payment_intent.succeeded":
-        //   const paymentIntent = event.data.object;
-        //   console.log(
-        //     `✅ PaymentIntent for ${paymentIntent.amount / 100} was successful!`
-        //   );
-        //   // handlePaymentIntentSucceeded(paymentIntent);
-        //   break;
-        // case "payment_method.attached":
-        //   const paymentMethod = event.data.object;
-        //   console.log(`PaymentMethod ${paymentMethod.id} was attached`);
-        //   // Then define and call a method to handle the successful attachment of a PaymentMethod.
-        //   // handlePaymentMethodAttached(paymentMethod);
-        //   break;
-        default:
-          // Unexpected event type (shouldn't reach here due to validation above)
-          console.log(
-            `[ /api/payments/webhook ] Unhandled event type ${event.type}.`
-          );
+      try {
+        // Handle the event
+        switch (event.type) {
+          // for NOW, let's focus on handling on checkout session completed
+          case "checkout.session.completed":
+            const checkoutSession = event.data.object;
+            console.log(
+              `[ /api/payments/webhook ] ✅ CheckoutSession for ${
+                checkoutSession.amount_total
+                  ? checkoutSession.amount_total / 100
+                  : 0
+              } was successful!`
+            );
+            await handleSessionCompleted(checkoutSession);
+            break;
+          case "customer.subscription.updated":
+            const subscription = event.data.object;
+            console.log(
+              `[ /api/payments/webhook ] ✅ Subscription ${subscription.id} was updated`
+            );
+            await handleSubscriptionUpdated(subscription);
+            break;
+          case "refund.created":
+            const refund = event.data.object;
+            console.log(
+              `[ /api/payments/webhook ] ✅ Refund ${refund.id} was created`
+            );
+            await handleRefundCreated(refund);
+            break;
+          // case "customer.subscription.created":
+          //   const subscriptionCreated = event.data.object;
+          //   console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);
+          //   handleSubscriptionCreated(subscriptionCreated);
+          //   break;
+          // case "payment_intent.succeeded":
+          //   const paymentIntent = event.data.object;
+          //   console.log(
+          //     `✅ PaymentIntent for ${paymentIntent.amount / 100} was successful!`
+          //   );
+          //   // handlePaymentIntentSucceeded(paymentIntent);
+          //   break;
+          // case "payment_method.attached":
+          //   const paymentMethod = event.data.object;
+          //   console.log(`PaymentMethod ${paymentMethod.id} was attached`);
+          //   // Then define and call a method to handle the successful attachment of a PaymentMethod.
+          //   // handlePaymentMethodAttached(paymentMethod);
+          //   break;
+          default:
+            // Unexpected event type (shouldn't reach here due to validation above)
+            console.log(
+              `[ /api/payments/webhook ] Unhandled event type ${event.type}.`
+            );
+        }
+      } catch (error) {
+        console.error(
+          "[ /api/payments/webhook ] Error processing event:",
+          error
+        );
+        return NextResponse.json(
+          { error: "[ /api/payments/webhook ] Failed to process webhook" },
+          { status: 500 }
+        );
       }
     } else {
       console.log(
