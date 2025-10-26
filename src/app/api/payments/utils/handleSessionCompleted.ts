@@ -78,6 +78,10 @@ export async function handleSessionCompleted(
     );
   }
 
+  console.log(
+    "[ /api/payments/utils/handleSessionCompleted ] Starting transaction to create subscription, update user and log webhook event"
+  );
+
   await prisma.$transaction(async (tx) => {
     const subscription = await createSubscription({
       created: eventData.created * 1000,
