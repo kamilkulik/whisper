@@ -4,7 +4,7 @@ import Stripe from "stripe";
 
 export async function handleRefundCreated(refund: Stripe.Refund) {
   console.log(
-    `[ /api/payments/utils/handleRefundCreated ] ✅ Refund ${refund.id} was created`
+    `[ /api/payments/utils/handleRefundCreated ] ✅ Received refund ${refund.id}. Finding subscription...`
   );
 
   const subscriptionId = await prisma.subscription.findFirst({
@@ -17,7 +17,13 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
   });
 
   if (!subscriptionId) {
-    throw new Error("Subscription not found");
+    throw new Error(
+      "[ /api/payments/utils/handleRefundCreated ] Subscription not found"
+    );
+  } else {
+    console.log(
+      `[ /api/payments/utils/handleRefundCreated ] Subscription ${subscriptionId.id} found`
+    );
   }
 
   await prisma.subscription.update({
@@ -30,6 +36,10 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
     },
   });
 
+  console.log(
+    `[ /api/payments/utils/handleRefundCreated ] Subscription ${subscriptionId.id} updated with refund information`
+  );
+
   // Log the webhook event
   await prisma.webhookEventLog.create({
     data: {
@@ -38,4 +48,8 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
       eventType: "refund.created",
     },
   });
+
+  console.log(
+    `[ /api/payments/utils/handleRefundCreated ] Webhook event logged: ${refund.id}`
+  );
 }
