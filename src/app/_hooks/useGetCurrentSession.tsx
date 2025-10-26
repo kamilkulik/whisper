@@ -8,19 +8,22 @@ export const useGetCurrentSession = (): {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getSessionId = () => {
-      // Use document.cookie to get the sessionId cookie on the client side
-      const cookies = document.cookie.split(";");
-      const sessionCookie = cookies.find((cookie) =>
-        cookie.trim().startsWith("sessionId=")
-      );
+    const getSessionId = async () => {
+      try {
+        const response = await fetch("/api/auth/check");
+        const data = await response.json();
 
-      if (sessionCookie) {
-        const sessionId = sessionCookie.split("=")[1];
-        setSessionId(sessionId);
+        if (data.authenticated && data.sessionId) {
+          setSessionId(data.sessionId);
+        } else {
+          setSessionId(null);
+        }
+      } catch (error) {
+        console.error("Error fetching session:", error);
+        setSessionId(null);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     getSessionId();

@@ -21,7 +21,10 @@ export async function GET(request: NextRequest) {
     });
 
     if (user && user.sessionId === sessionId.value) {
-      return NextResponse.json({ authenticated: true });
+      return NextResponse.json({
+        authenticated: true,
+        sessionId: sessionId.value,
+      });
     } else {
       return NextResponse.json({ authenticated: false });
     }
