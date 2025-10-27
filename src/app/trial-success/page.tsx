@@ -1,12 +1,19 @@
 import { getTranslations } from "next-intl/server";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import NavigationBar from "../_components/NavigationBar";
+import { GB_CONTACT_EMAIL, GB_DOMAIN, PL_CONTACT_EMAIL } from "../_consts";
 
 export const dynamic = "force-dynamic";
 
 export default async function TrialSuccess() {
   const userEmailFromSessionCookie = await userEmailFromCookie();
   const t = await getTranslations("SuccessPage");
+
+  // Set contact email based on hostname
+  const contactEmail =
+    process.env.CURRENT_HOST === GB_DOMAIN
+      ? GB_CONTACT_EMAIL
+      : PL_CONTACT_EMAIL;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] overflow-hidden">
@@ -71,10 +78,10 @@ export default async function TrialSuccess() {
             <p className="text-white/80 text-sm">
               {t("contact-us")}{" "}
               <a
-                href="mailto:kontakt@wieczornyszept.pl"
+                href={`mailto:${contactEmail}`}
                 className="text-blue-300 hover:text-blue-200 underline transition-colors"
               >
-                kontakt@wieczornyszept.pl
+                {contactEmail}
               </a>
             </p>
           </div>

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
 import { getTranslations } from "next-intl/server";
 import NavigationBar from "../_components/NavigationBar";
+import { GB_CONTACT_EMAIL, GB_DOMAIN, PL_CONTACT_EMAIL } from "../_consts";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,12 @@ export default async function Success({
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
 
   const t = await getTranslations("SuccessPage");
+
+  // Set contact email based on hostname
+  const contactEmail =
+    process.env.CURRENT_HOST === GB_DOMAIN
+      ? GB_CONTACT_EMAIL
+      : PL_CONTACT_EMAIL;
 
   // TODO is this safe?
   const { status, customer_details } = await stripe.checkout.sessions.retrieve(
@@ -95,10 +102,10 @@ export default async function Success({
               <p className="text-white/80 text-sm">
                 {t("contact-us")}{" "}
                 <a
-                  href="mailto:kontakt@wieczornyszept.pl"
+                  href={`mailto:${contactEmail}`}
                   className="text-blue-300 hover:text-blue-200 underline transition-colors"
                 >
-                  kontakt@wieczornyszept.pl
+                  {contactEmail}
                 </a>
               </p>
             </div>

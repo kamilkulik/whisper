@@ -1,5 +1,7 @@
 export const GB_DOMAIN = "eveningwhisper.co.uk";
+export const GB_CONTACT_EMAIL = "contact@eveningwhisper.co.uk";
 export const PL_DOMAIN = "wieczornyszept.pl";
+export const PL_CONTACT_EMAIL = "kontakt@wieczornyszept.pl";
 export const PL_COUNTRY_CODE = "PL";
 export const GB_COUNTRY_CODE = "GB";
 

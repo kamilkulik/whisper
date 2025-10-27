@@ -84,6 +84,7 @@ export async function sendEmail(props: SendEmailProps) {
   const configuredEmailClient = process.env.EMAIL_API_PROVIDER;
   const { locale, template } = props;
   let templateToUse: React.ReactElement;
+  const CURRENT_HOST = process.env.CURRENT_HOST;
 
   switch (template) {
     case "welcome":
@@ -96,8 +97,7 @@ export async function sendEmail(props: SendEmailProps) {
     case "confirm-email":
       templateToUse = await ConfirmEmail({
         locale,
-        verificationLink:
-          props.verificationLink ?? "https://wieczornyszept.pl/verify-email",
+        verificationLink: props.verificationLink,
       });
       break;
     case "confirmation-code-via-email":
@@ -110,8 +110,7 @@ export async function sendEmail(props: SendEmailProps) {
     case "payment-link":
       templateToUse = PaymentLink({
         locale,
-        paymentLinkUrl:
-          props.paymentLinkUrl ?? "https://wieczornyszept.pl/payment-link",
+        paymentLinkUrl: props.paymentLinkUrl,
       });
       break;
     case "trial-expiration-notification":

@@ -7,12 +7,14 @@ export async function Footer({ locale }: { locale: string }) {
     locale,
     namespace: "EmailTemplates.SHARED",
   });
+  const CURRENT_HOST = process.env.CURRENT_HOST;
+  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
   return (
     <Text style={footerText}>
       {t("footer")}
       {t("our")}
       <Link
-        href="https://wieczornyszept.pl/regulamin"
+        href={`${protocol}://${CURRENT_HOST}/regulamin`}
         target="_blank"
         style={footerLink}
       >
@@ -20,7 +22,7 @@ export async function Footer({ locale }: { locale: string }) {
       </Link>
       {t("and")}
       <Link
-        href="https://wieczornyszept.pl/polityka-prywatnosci"
+        href={`${protocol}://${CURRENT_HOST}/polityka-prywatnosci`}
         target="_blank"
         style={footerLink}
       >
