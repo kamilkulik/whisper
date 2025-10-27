@@ -549,5 +549,9 @@
       "invalid-phone-number": "Nieprawidłowy format numeru telefonu",
       "phone-number-already-taken": "Nie możesz użyć tego numeru telefonu"
     }
+  },
+  "LEGAL": {
+    "terms-and-conditions": {},
+    "privacy-policy": {}
   }
 }

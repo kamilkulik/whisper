@@ -558,5 +558,9 @@
         "phone-number-already-taken": "You cannot use this phone number"
       }
     }
+  },
+  "LEGAL": {
+    "terms-and-conditions": {},
+    "privacy-policy": {}
   }
 }
