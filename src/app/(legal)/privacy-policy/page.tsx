@@ -1,10 +1,26 @@
-// server component
-import { ReturnButton } from "../../_components/ReturnButton";
+"use client";
 
-export default async function PrivacyPolicyPage() {
+import { ReturnButton } from "../../_components/ReturnButton";
+import { useLegalContentRenderer } from "../utils/renderLegalContent";
+
+export default function PrivacyPolicyPage() {
+  const { renderSection, t } = useLegalContentRenderer("LEGAL.privacy-policy");
+
   return (
-    <div className="flex flex-col items-center mb-3">
+    <div className="w-full max-w-4xl mx-auto px-6 py-8">
       <ReturnButton href="/" />
+
+      <div className="mt-16">
+        <h1 className="text-3xl font-bold text-white mb-8 elegant-text text-center">
+          {t("title")}
+        </h1>
+
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-8 border border-white/10 text-justify">
+          {["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"].map(
+            renderSection
+          )}
+        </div>
+      </div>
     </div>
   );
 }

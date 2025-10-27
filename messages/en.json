@@ -560,7 +560,217 @@
     }
   },
   "LEGAL": {
-    "terms-and-conditions": {},
-    "privacy-policy": {}
+    "terms-and-conditions": {
+      "title": "Terms and Conditions",
+      "sections": {
+        "I": {
+          "title": "General Provisions",
+          "terms": {
+            "1": "These terms and conditions (\"Terms\") set out the rules for using the Wieczorny Szept service, available at https://wieczornyszept.pl (\"Service\").",
+            "2": "The Service is an online platform that allows users to receive daily SMS messages of a literary, emotional or nostalgic nature (\"Messages\").",
+            "3": "Using the Service constitutes acceptance of these Terms."
+          }
+        },
+        "II": {
+          "title": "Scope and Nature of the Service",
+          "terms": {
+            "1": "The Service allows users (\"User\") to subscribe to daily SMS messages sent to the phone number provided by them.",
+            "2": "The Messages are of an artistic and entertainment nature and do not constitute commercial, promotional, psychological or therapeutic advice.",
+            "3": "The Service may offer a trial period, a monthly subscription, and a paid 30-day access period — each defined in the current price list available on the Service’s website.",
+            "4": "The Operator reserves the right to modify message content, delivery frequency, or subscription terms, provided this does not infringe on Users’ acquired rights."
+          }
+        },
+        "III": {
+          "title": "Terms of Use",
+          "terms": {
+            "1": {
+              "text": "To use the Service, the following conditions must be met:",
+              "subitems": [
+                "possession of an active mobile phone number",
+                "consent to receive SMS messages",
+                "acceptance of these Terms"
+              ]
+            },
+            "2": "The User undertakes to provide a valid phone number and is responsible for any consequences resulting from entering an incorrect one.",
+            "3": "The User may unsubscribe from receiving messages at any time by clicking the unsubscribe link included in the message or by contacting the Operator at: kontakt@wieczornyszept.pl.",
+            "4": "The Service is not intended for persons under 18 years of age."
+          }
+        },
+        "IV": {
+          "title": "Payments",
+          "terms": {
+            "1": "If paid subscriptions are made available, information on pricing, duration, and payment methods will be presented to the User before purchase.",
+            "2": "Payments may be processed through external payment operators (e.g. Stripe, Autopay), in accordance with their respective terms and conditions.",
+            "3": "The User has the right to cancel their subscription at any time. In the event of cancellation, access to the Service will remain active until the end of the prepaid period.",
+            "4": "In case of an unauthorised payment, the User should immediately contact the Operator."
+          }
+        },
+        "V": {
+          "title": "Personal Data and Privacy",
+          "terms": {
+            "1": "The Operator of Users’ personal data is the Operator of the Service.",
+            "2": "Personal data (phone number, e-mail address, payment details) is processed solely for the purpose of providing the Service, managing subscriptions, and communicating with the User.",
+            "3": "The Operator processes data in accordance with applicable law, including Regulation (EU) 2016/679 of the European Parliament and of the Council (\"GDPR\").",
+            "4": "The User has the right to access, rectify, delete, or restrict the processing of their data, as well as to withdraw consent at any time.",
+            "5": "Detailed information about personal data processing is provided in the Privacy Policy available on the Service’s website."
+          }
+        },
+        "VI": {
+          "title": "Liability",
+          "terms": {
+            "1": "The Operator shall not be held liable for interruptions in the operation of the Service caused by factors beyond its control, particularly telecommunication or server failures, or force majeure.",
+            "2": "The content of the Messages is subjective and artistic — it must not be interpreted as advice, recommendations, or behavioural guidance.",
+            "3": "The Operator shall not be liable for any emotional or interpretative consequences resulting from receiving the Messages.",
+            "4": "The User undertakes to use the Service in compliance with the law and with respect for the principles of social conduct."
+          }
+        },
+        "VII": {
+          "title": "Complaints",
+          "terms": {
+            "1": "Complaints concerning the operation of the Service should be submitted via e-mail to: kontakt@wieczornyszept.pl.",
+            "2": {
+              "text": "A complaint should include:",
+              "subitems": [
+                "User’s contact details",
+                "a description of the issue",
+                "any supporting attachments documenting the situation"
+              ]
+            },
+            "6": "The Operator will review the complaint within 14 working days from the date of its receipt."
+          }
+        },
+        "VIII": {
+          "title": "Amendments to the Terms",
+          "terms": {
+            "1": "The Operator reserves the right to amend these Terms.",
+            "2": "If the User does not accept the amendments, they have the right to cease using the Service."
+          }
+        },
+        "IX": {
+          "title": "Final Provisions",
+          "terms": {
+            "1": "In matters not covered by these Terms, the provisions of Polish law shall apply.",
+            "2": "Any disputes between the Operator and the User shall be settled by the court having jurisdiction over the Operator’s registered office.",
+            "3": "These Terms come into force on the date of their publication on the Service’s website."
+          }
+        }
+      }
+    },
+    "privacy-policy": {
+      "title": "Privacy Policy",
+      "sections": {
+        "I": {
+          "title": "General Provisions",
+          "terms": {
+            "1": "This Privacy Policy sets out the rules for processing personal data of users of the Wieczorny Szept service, available at https://wieczornyszept.pl (\"Service\").",
+            "2": "The Controller takes particular care to ensure that users’ personal data is processed in accordance with applicable law, including Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 (GDPR)."
+          }
+        },
+        "II": {
+          "title": "Scope and Purpose of Data Processing",
+          "terms": {
+            "1": "The Controller processes users’ personal data only to the extent necessary to:",
+            "subitems": [
+              "provide the daily SMS message service (\"Messages\")",
+              "manage subscriptions and payments",
+              "maintain contact with users (handling enquiries, complaints, and correspondence)",
+              "fulfil the Controller’s legal obligations",
+              "pursue the Controller’s legitimate interests, such as defending against claims or collecting due payments"
+            ],
+            "2": "Providing personal data is voluntary but necessary to use the Service."
+          }
+        },
+        "III": {
+          "title": "Types of Data Processed",
+          "terms": {
+            "1": "The Controller may process the following categories of personal data:",
+            "subitems": [
+              "mobile phone number – for sending SMS messages",
+              "e-mail address – for contact or subscription confirmation",
+              "payment details – when using paid subscriptions",
+              "technical data – such as IP address, device identifiers, browser and operating system data, for security and proper Service operation"
+            ]
+          }
+        },
+        "IV": {
+          "title": "Legal Basis for Processing",
+          "terms": {
+            "1": "Personal data is processed on the following legal grounds:",
+            "subitems": [
+              "Article 6(1)(b) GDPR – performance of a contract for the provision of electronic services",
+              "Article 6(1)(c) GDPR – compliance with legal obligations of the Controller",
+              "Article 6(1)(f) GDPR – pursuit of the Controller’s legitimate interests (e.g. claims, fraud prevention)",
+              "Article 6(1)(a) GDPR – user consent where applicable"
+            ]
+          }
+        },
+        "V": {
+          "title": "Data Sharing",
+          "terms": {
+            "1": "The Controller may share users’ personal data only with entities providing services on its behalf, in particular:",
+            "subitems": [
+              "telecommunication service providers (e.g. SMS operators)",
+              "payment operators (e.g. Stripe, Autopay)",
+              "IT and hosting providers (e.g. Vercel)",
+              "accounting and legal service providers"
+            ],
+            "2": "All such entities process data under written data processing agreements and are bound by confidentiality obligations.",
+            "3": "Personal data is not transferred outside the European Economic Area (EEA) unless the recipient ensures an adequate level of protection in accordance with GDPR (e.g. by using standard contractual clauses)."
+          }
+        },
+        "VI": {
+          "title": "Data Retention Period",
+          "terms": {
+            "1": "Personal data is retained only for as long as necessary to fulfil the purposes for which it was collected, and thereafter:",
+            "subitems": [
+              "until consent is withdrawn – where processing is based on consent",
+              "for the duration of the contract – where processing is necessary for its performance",
+              "until the limitation period for potential claims has expired",
+              "for the period required by law – in relation to tax or accounting obligations"
+            ]
+          }
+        },
+        "VII": {
+          "title": "Users’ Rights",
+          "terms": {
+            "1": "Each user has the following rights in relation to their personal data:",
+            "subitems": [
+              "the right to access their data and obtain a copy of it",
+              "the right to rectify (correct) data",
+              "the right to erasure (the “right to be forgotten”)",
+              "the right to restrict processing",
+              "the right to data portability",
+              "the right to object to processing based on the Controller’s legitimate interests",
+              "the right to withdraw consent at any time"
+            ],
+            "2": "To exercise any of these rights, please contact the Controller via e-mail at: kontakt@wieczornyszept.pl.",
+            "3": "Users also have the right to lodge a complaint with the President of the Personal Data Protection Office (UODO)."
+          }
+        },
+        "VIII": {
+          "title": "Cookies and Technical Data",
+          "terms": {
+            "1": "The Service may use cookies and similar technologies to ensure proper website functionality, analyse traffic, and personalise content.",
+            "2": "Users may change their cookie settings at any time in their web browser.",
+            "3": "Restricting cookies may affect certain functions of the Service."
+          }
+        },
+        "IX": {
+          "title": "Data Security",
+          "terms": {
+            "1": "The Controller applies appropriate technical and organisational measures to protect personal data against loss, destruction, unauthorised access, or disclosure.",
+            "2": "Access to data is granted only to authorised individuals who have been properly trained in personal data protection."
+          }
+        },
+        "X": {
+          "title": "Changes to the Privacy Policy",
+          "terms": {
+            "1": "The Controller reserves the right to amend this Privacy Policy.",
+            "2": "Users will be informed of any significant changes via a notice published on the Service’s website.",
+            "3": "The current version of the Privacy Policy is effective from the date of its publication on the website."
+          }
+        }
+      }
+    }
   }
 }

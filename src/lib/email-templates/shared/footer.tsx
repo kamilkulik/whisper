@@ -14,7 +14,7 @@ export async function Footer({ locale }: { locale: string }) {
       {t("footer")}
       {t("our")}
       <Link
-        href={`${protocol}://${CURRENT_HOST}/regulamin`}
+        href={`${protocol}://${CURRENT_HOST}/terms`}
         target="_blank"
         style={footerLink}
       >
@@ -22,7 +22,7 @@ export async function Footer({ locale }: { locale: string }) {
       </Link>
       {t("and")}
       <Link
-        href={`${protocol}://${CURRENT_HOST}/polityka-prywatnosci`}
+        href={`${protocol}://${CURRENT_HOST}/privacy-policy`}
         target="_blank"
         style={footerLink}
       >

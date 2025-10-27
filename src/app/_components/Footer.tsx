@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export function Footer() {
   const t = useTranslations("Components.Footer");
@@ -22,20 +23,20 @@ export function Footer() {
               </h3>
               <ul className="space-y-4">
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/terms"
                     className="text-white/80 hover:text-white transition-colors"
                   >
                     {t("link-1")}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/privacy-policy"
                     className="text-white/80 hover:text-white transition-colors"
                   >
                     {t("link-2")}
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a

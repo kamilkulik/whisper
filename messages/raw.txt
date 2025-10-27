@@ -1,0 +1,58 @@
+Regulamin
+I. Postanowienia ogólne
+1. Niniejszy regulamin („Regulamin”) określa zasady korzystania z serwisu Wieczorny Szept, dostępnego pod adresem https://wieczornyszept.pl („Serwis”).
+2. Serwis jest usługą internetową, która umożliwia użytkownikom otrzymywanie codziennych wiadomości SMS o charakterze literackim, emocjonalnym lub nostalgicznym („Wiadomości”).
+3. Korzystanie z Serwisu oznacza akceptację niniejszego Regulaminu.
+
+II. Zakres i charakter usługi
+1. Serwis umożliwia subskrypcję codziennych wiadomości SMS wysyłanych na numer telefonu wskazany przez użytkownika („Użytkownik”).
+2. Wiadomości mają charakter rozrywkowo-literacki i nie stanowią informacji handlowych, reklamowych ani porad o charakterze psychologicznym lub terapeutycznym.
+3. Serwis może oferować okres próbny, subskrypcję miesięczną oraz 30 dniowy płatny okres — każdorazowo określone w aktualnym cenniku dostępnym na stronie internetowej Serwisu.
+4. Operator zastrzega sobie prawo do modyfikowania treści wiadomości, częstotliwości ich wysyłki, a także warunków subskrypcji, o ile nie narusza to praw nabytych Użytkowników.
+
+III. Zasady korzystania
+1. Warunkiem korzystania z Serwisu jest:
+  - posiadanie aktywnego numeru telefonu komórkowego,
+  - wyrażenie zgody na otrzymywanie wiadomości SMS,
+  - akceptacja niniejszego Regulaminu.
+2. Użytkownik zobowiązuje się do podania prawdziwego numeru telefonu i ponosi odpowiedzialność za skutki jego błędnego wprowadzenia.
+3. Użytkownik może w każdej chwili zrezygnować z otrzymywania wiadomości, klikając w link rezygnacyjny zawarty w otrzymanej wiadomości lub kontaktując się z Operatorem na adres: kontakt@wieczornyszept.pl.
+4. Serwis nie jest przeznaczony dla osób poniżej 18 roku życia.
+
+IV. Płatności
+1. W przypadku uruchomienia płatnych subskrypcji, informacje o cenie, czasie trwania subskrypcji oraz sposobie płatności zostaną każdorazowo przedstawione Użytkownikowi przed dokonaniem zakupu.
+2. Płatności mogą być realizowane za pośrednictwem zewnętrznych operatorów płatności (np. Stripe, Autopay), zgodnie z ich regulaminami.
+3. Użytkownik ma prawo do rezygnacji z subskrypcji w dowolnym momencie. W przypadku rezygnacji, dostęp do usługi będzie utrzymany do końca okresu opłaconego z góry.
+4. W przypadku nieautoryzowanej płatności Użytkownik powinien niezwłocznie skontaktować się z Operatorem.
+
+V. Dane osobowe i prywatność
+1. Operatorem danych osobowych Użytkowników jest Operator Serwisu.
+2. Dane osobowe (numer telefonu, adres e-mail, dane płatności) są przetwarzane wyłącznie w celu realizacji usługi, obsługi subskrypcji oraz komunikacji z Użytkownikiem.
+3. Operator przetwarza dane zgodnie z obowiązującymi przepisami prawa, w tym Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 („RODO”).
+4. Użytkownik ma prawo dostępu do swoich danych, ich poprawiania, usunięcia, ograniczenia przetwarzania oraz cofnięcia zgody.
+5. Szczegółowe informacje o przetwarzaniu danych osobowych zawiera Polityka prywatności dostępna na stronie Serwisu.
+
+VI. Odpowiedzialność
+1. Operator nie ponosi odpowiedzialności za przerwy w działaniu Serwisu spowodowane czynnikami niezależnymi od niego, w szczególności awariami sieci telekomunikacyjnych, serwerów lub siłą wyższą.
+2. Treści wiadomości mają charakter subiektywny i artystyczny — nie mogą być traktowane jako porady, rekomendacje ani sugestie dotyczące zachowań życiowych.
+3. Operator nie ponosi odpowiedzialności za ewentualne skutki emocjonalne lub interpretacyjne wynikające z odbioru treści wysyłanych wiadomości.
+4. Użytkownik zobowiązuje się do korzystania z Serwisu w sposób zgodny z prawem oraz z poszanowaniem zasad współżycia społecznego.
+
+VII. Reklamacje
+1. Reklamacje dotyczące funkcjonowania Serwisu należy zgłaszać drogą mailową na adres: kontakt@wieczornyszept.pl.
+2. Reklamacja powinna zawierać:
+  - dane kontaktowe Użytkownika,
+  - opis problemu,
+  - ewentualne załączniki dokumentujące sytuację.
+6. Operator rozpatrzy reklamację w terminie do 14 dni roboczych od dnia jej otrzymania.
+
+VIII. Zmiany Regulaminu
+1. Operator zastrzega sobie prawo do zmiany niniejszego Regulaminu.
+2. W przypadku braku akceptacji zmian, Użytkownik ma prawo zrezygnować z korzystania z Serwisu.
+
+IX. Postanowienia końcowe
+1. W sprawach nieuregulowanych niniejszym Regulaminem zastosowanie mają przepisy prawa polskiego.
+2. Ewentualne spory pomiędzy Operatorem a Użytkownikiem będą rozstrzygane przez sąd właściwy miejscowo dla siedziby Operatora.
+3. Regulamin wchodzi w życie z dniem jego publikacji na stronie internetowej Serwisu.
+
+

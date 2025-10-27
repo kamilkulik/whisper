@@ -503,7 +503,7 @@ export default function ContactForm({
           >
             {t("form-terms-of-service-1")}{" "}
             <a
-              href="/regulamin"
+              href="/terms"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white underline hover:text-white/80"
