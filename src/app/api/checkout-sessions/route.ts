@@ -45,7 +45,14 @@ export async function POST(request: NextRequest) {
       `Attempting to get config for product type: ${productType} in country: ${triangulatedCountry}`
     );
 
-    const config = productConfigs[triangulatedCountry]?.[productType];
+    const nodeEnv = process.env.NODE_ENV;
+    const environment =
+      nodeEnv === "test" || nodeEnv === "development" || !nodeEnv
+        ? "development"
+        : "production";
+
+    const config =
+      productConfigs[environment][triangulatedCountry]?.[productType];
 
     if (!config) {
       throw new Error(

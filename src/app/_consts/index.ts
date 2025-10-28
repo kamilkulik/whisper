@@ -4,6 +4,7 @@ export const PL_DOMAIN = "wieczornyszept.pl";
 export const PL_CONTACT_EMAIL = "kontakt@wieczornyszept.pl";
 export const PL_COUNTRY_CODE = "PL";
 export const GB_COUNTRY_CODE = "GB";
+export const DEFAULT_COUNTRY_CODE = "DEFAULT";
 
 export const GEO_CONTEXT = [
   {
@@ -29,15 +30,15 @@ export interface PricingContextData {
 export const PRICING_CONTEXT: PricingContextData[] = [
   {
     country: GB_COUNTRY_CODE,
-    oneTimePrice: "10",
+    oneTimePrice: "9",
     subscriptionPrice: "8",
     currency: "GBP",
     currencySign: "£",
   },
   {
     country: PL_COUNTRY_CODE,
-    oneTimePrice: "25",
-    subscriptionPrice: "20",
+    oneTimePrice: "24",
+    subscriptionPrice: "19",
     currency: "PLN",
     currencySign: "zł",
   },
