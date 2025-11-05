@@ -283,6 +283,16 @@ export default function Home() {
     }
   }, [modal]);
 
+  // Helper function to generate srcset for responsive images
+  const getImageSrcset = (baseName: string, locale: string | null): string => {
+    if (!locale) return "";
+
+    const sizes = [640, 1080, 1280];
+    return sizes
+      .map((size) => `/${locale}/${baseName}_${size}.jpeg ${size}w`)
+      .join(", ");
+  };
+
   // Testimonial data
   const testimonials = [
     {
@@ -336,12 +346,30 @@ export default function Home() {
   ];
 
   // Image carousel data
-  const carouselImages = [
-    { src: `/${currentLocale}/szept_1.jpeg`, alt: "Wieczorny Szept Image 1" },
-    { src: `/${currentLocale}/szept_2.jpeg`, alt: "Wieczorny Szept Image 2" },
-    { src: `/${currentLocale}/szept_3.jpeg`, alt: "Wieczorny Szept Image 3" },
-    { src: `/${currentLocale}/szept_4.jpeg`, alt: "Wieczorny Szept Image 4" },
-  ];
+  const carouselImages = currentLocale
+    ? [
+        {
+          src: `/${currentLocale}/szept_1_1280.jpeg`,
+          srcset: getImageSrcset("szept_1", currentLocale),
+          alt: "Wieczorny Szept Image 1",
+        },
+        {
+          src: `/${currentLocale}/szept_2_1280.jpeg`,
+          srcset: getImageSrcset("szept_2", currentLocale),
+          alt: "Wieczorny Szept Image 2",
+        },
+        {
+          src: `/${currentLocale}/szept_3_1280.jpeg`,
+          srcset: getImageSrcset("szept_3", currentLocale),
+          alt: "Wieczorny Szept Image 3",
+        },
+        {
+          src: `/${currentLocale}/szept_4_1280.jpeg`,
+          srcset: getImageSrcset("szept_4", currentLocale),
+          alt: "Wieczorny Szept Image 4",
+        },
+      ]
+    : [];
 
   // FAQ data
   const faqData = [
@@ -889,7 +917,8 @@ export default function Home() {
                   <div className="order-2 lg:order-2 flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     {currentLocale ? (
                       <img
-                        src={`/${currentLocale}/single_whisper.jpeg`}
+                        src={`/${currentLocale}/single_whisper_1280.jpeg`}
+                        srcSet={getImageSrcset("single_whisper", currentLocale)}
                         alt="Smartphone showing Wieczorny Szept notification"
                         className="max-w-full max-h-full object-contain rounded-2xl"
                         style={{
@@ -970,15 +999,20 @@ export default function Home() {
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12">
                 {/* Image */}
                 <div className="order-2 lg:order-1 md:max-lg:my-12 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 lg:row-span-3 self-center">
-                  <img
-                    src="/szept_4.jpeg"
-                    alt="Smartphone showing Wieczorny Szept notification"
-                    className="max-w-full max-h-full object-contain rounded-2xl"
-                    style={{
-                      filter:
-                        "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                    }}
-                  />
+                  {currentLocale ? (
+                    <img
+                      src={`/${currentLocale}/szept_4_1280.jpeg`}
+                      srcSet={getImageSrcset("szept_4", currentLocale)}
+                      alt="Smartphone showing Wieczorny Szept notification"
+                      className="max-w-full max-h-full object-contain rounded-2xl"
+                      style={{
+                        filter:
+                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                      }}
+                    />
+                  ) : (
+                    <Spinner size="xl" />
+                  )}
                 </div>
 
                 <div className="order-1 lg:order-2 lg:col-start-4 lg:col-span-2 self-start">

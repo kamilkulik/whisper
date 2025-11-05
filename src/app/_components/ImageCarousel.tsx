@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 
 interface ImageSlide {
   src: string;
+  srcset?: string;
+  sizes?: string;
   alt: string;
 }
 
@@ -117,6 +119,8 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
                 <div key={index} className="w-full flex-shrink-0 h-full">
                   <img
                     src={image.src}
+                    srcSet={image.srcset}
+                    sizes={image.sizes || "100vw"}
                     alt={image.alt}
                     className="w-full h-full"
                   />
