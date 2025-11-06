@@ -1,7 +1,11 @@
 {
+  "metadata": {
+    "title": "Evening Whisper 🌙 - A little whisper each day",
+    "description": "A short message to warm your heart and lift your spirit. Every evening, at the same time. Free for 7 days."
+  },
   "LandingPage": {
     "hero": {
-      "brand": "SECRET PROJECT",
+      "brand": "EVENING WHISPER",
       "title-1": "A little whisper each day — like from a ",
       "title-2": "loved one",
       "title-3": "who remembers and cares about you",
@@ -288,7 +292,7 @@
     "return-to-home": "Return to home"
   },
   "NavigationBar": {
-    "title": "SECRET PROJECT"
+    "title": "EVENING WHISPER"
   },
   "NotFoundPage": {
     "title": "Page not found",

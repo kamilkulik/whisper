@@ -1,7 +1,11 @@
 {
+  "metadata": {
+    "title": "Wieczorny Szept 🌙 - Codziennie mały szept",
+    "description": "Krótka wiadomość, która ogrzeje serce i doda otuchy. Codziennie wieczorem, o tej samej porze. Darmowy dostęp przez 7 dni."
+  },
   "LandingPage": {
     "hero": {
-      "brand": "SECRET PROJECT",
+      "brand": "WIECZORNY SZEPT",
       "title-1": "Codziennie mały szept — jak od ",
       "title-2": "ukochanej osoby",
       "title-3": "która pamięta i troszczy się o Ciebie",
@@ -288,7 +292,7 @@
     "return-to-home": "Powrót do strony głównej"
   },
   "NavigationBar": {
-    "title": "SECRET PROJECT"
+    "title": "WIECZORNY SZEPT"
   },
   "NotFoundPage": {
     "title": "Strona nie znaleziona",

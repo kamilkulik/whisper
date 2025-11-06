@@ -8,15 +8,23 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { FullPageLoader } from "./_components/FullPageLoader";
 import { headers } from "next/headers"; // this needs to be used from a server component
+import { createTranslatorFromLocale } from "@/i18n/utils";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Secret Project 🌙", // TODO change to the proper title
-  description: "Otrzymuj codzienne szepty, które ogrzewają serce.", // TODO translation
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await createTranslatorFromLocale(locale, "metadata");
+
+  const metadata = {
+    title: t("title"),
+    description: t("description"),
+  };
+
+  return metadata;
+}
 
 export default async function RootLayout({
   children,
