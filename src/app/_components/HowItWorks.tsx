@@ -39,7 +39,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
             >
               {currentLocale ? (
                 <img
-                  src={`/${currentLocale}/process_1.jpeg`}
+                  src={`/${currentLocale}/process_1.jpg`}
                   alt="Ciesz się chwilą"
                   className="w-full h-full object-cover object-top"
                 />
@@ -73,7 +73,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               data-oid="2k9yuv8"
             >
               <img
-                src="/process_2.jpeg"
+                src="/process_2.jpg"
                 alt="Ciesz się chwilą"
                 className="w-full h-full object-cover object-top"
               />
@@ -104,7 +104,7 @@ export default function HowItWorks({ onGetStarted }: HowItWorksProps) {
               data-oid="2k9yuv8"
             >
               <img
-                src="/process_3.jpeg"
+                src="/process_3.jpg"
                 alt="Ciesz się chwilą"
                 className="w-full h-full object-cover object-top"
               />
