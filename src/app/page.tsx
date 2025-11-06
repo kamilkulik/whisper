@@ -263,7 +263,7 @@ export default function Home() {
         if (video) observer.unobserve(video);
       });
     };
-  }, []);
+  }, [currentLocale]);
 
   // Handle modal deep links - scroll to pricing section when modal is present (except login and contact)
   useEffect(() => {
@@ -756,16 +756,20 @@ export default function Home() {
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
                   <div className="order-2 lg:order-1 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     {prefersReducedMotion ? (
-                      <img
-                        src="/VIDEOS/POSTERS/pl-notification.jpg"
-                        alt="Podgląd Szeptu"
-                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                        style={{
-                          filter:
-                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                        }}
-                      />
-                    ) : (
+                      currentLocale ? (
+                        <img
+                          src={`/${currentLocale}/videos/posters/notification_received.jpg`}
+                          alt="Podgląd Szeptu"
+                          className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                          style={{
+                            filter:
+                              "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                          }}
+                        />
+                      ) : (
+                        <Spinner size="xl" />
+                      )
+                    ) : currentLocale ? (
                       <video
                         ref={videoRef}
                         className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
@@ -779,13 +783,15 @@ export default function Home() {
                         controls={false}
                         controlsList="nodownload nofullscreen noremoteplayback"
                         preload="metadata"
-                        poster="/VIDEOS/POSTERS/pl-notification.jpg"
+                        poster={`/${currentLocale}/videos/posters/notification_received.jpg`}
                       >
                         <source
-                          data-src="/VIDEOS/5-SEC-LOOP_notification-received-POL.mp4"
+                          data-src={`/${currentLocale}/videos/notification_received.mp4`}
                           type="video/mp4"
                         />
                       </video>
+                    ) : (
+                      <Spinner size="xl" />
                     )}
                   </div>
                 </div>
@@ -813,16 +819,20 @@ export default function Home() {
                   {/* Image - Order 2 on mobile, Order 2 on desktop */}
                   <div className="order-2 lg:order-2 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     {prefersReducedMotion ? (
-                      <img
-                        src="/VIDEOS/POSTERS/pl-message-reveal.jpg"
-                        alt="Podgląd Szeptu"
-                        className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                        style={{
-                          filter:
-                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                        }}
-                      />
-                    ) : (
+                      currentLocale ? (
+                        <img
+                          src={`/${currentLocale}/videos/posters/message_reveal.jpg`}
+                          alt="Podgląd Szeptu"
+                          className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                          style={{
+                            filter:
+                              "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                          }}
+                        />
+                      ) : (
+                        <Spinner size="xl" />
+                      )
+                    ) : currentLocale ? (
                       <video
                         ref={videoRef3}
                         className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
@@ -837,13 +847,15 @@ export default function Home() {
                         controls={false}
                         controlsList="nodownload nofullscreen noremoteplayback"
                         preload="metadata"
-                        poster="/VIDEOS/POSTERS/pl-message-reveal.jpg"
+                        poster={`/${currentLocale}/videos/posters/message_reveal.jpg`}
                       >
                         <source
-                          data-src="/VIDEOS/6-SEC-LOOP_whisper-open-POL.mp4"
+                          data-src={`/${currentLocale}/videos/message_reveal.mp4`}
                           type="video/mp4"
                         />
                       </video>
+                    ) : (
+                      <Spinner size="xl" />
                     )}
                   </div>
                 </div>
@@ -870,26 +882,30 @@ export default function Home() {
                   </div>
                   {/* Image - Order 2 on mobile, Order 1 on desktop */}
                   <div className="order-2 lg:order-1 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
-                    <video
-                      ref={videoRef2}
-                      className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                      style={{
-                        filter:
-                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                      }}
-                      loop={true}
-                      muted
-                      playsInline
-                      controls={false}
-                      controlsList="nodownload nofullscreen noremoteplayback"
-                      preload="metadata"
-                      poster="/VIDEOS/POSTERS/pl-scroll.jpg"
-                    >
-                      <source
-                        data-src="/VIDEOS/12.3-SEC-FINAL-SCROLL.mp4"
-                        type="video/mp4"
-                      />
-                    </video>
+                    {currentLocale ? (
+                      <video
+                        ref={videoRef2}
+                        className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                        style={{
+                          filter:
+                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                        }}
+                        loop={true}
+                        muted
+                        playsInline
+                        controls={false}
+                        controlsList="nodownload nofullscreen noremoteplayback"
+                        preload="metadata"
+                        poster={`/${currentLocale}/videos/posters/scroll.jpg`}
+                      >
+                        <source
+                          data-src={`/${currentLocale}/videos/scroll.mp4`}
+                          type="video/mp4"
+                        />
+                      </video>
+                    ) : (
+                      <Spinner size="xl" />
+                    )}
                   </div>
                 </div>
               </div>
@@ -977,7 +993,7 @@ export default function Home() {
                       controls={false}
                       controlsList="nodownload nofullscreen noremoteplayback"
                       preload="metadata"
-                      poster="/VIDEOS/POSTERS/pl-heartfelt.jpg"
+                      poster="/VIDEOS/POSTERS/heartfelt_message.jpg"
                     >
                       <source
                         data-src="/VIDEOS/heartfelt_message.mp4"
