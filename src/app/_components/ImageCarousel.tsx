@@ -123,6 +123,8 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
                     sizes={image.sizes || "100vw"}
                     alt={image.alt}
                     className="w-full h-full"
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                 </div>
               ))}

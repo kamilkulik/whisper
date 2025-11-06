@@ -28,8 +28,25 @@ export default async function RootLayout({
   const messages = await getMessages();
   const locale = await getLocale();
 
+  // Preload the first carousel image (LCP image) for the current locale
+  const lcpImageSrc = `/${locale}/szept_1_1280.jpg`;
+  const lcpImageSrcset = `/${locale}/szept_1_640.jpg 640w, /${locale}/szept_1_1080.jpg 1080w, /${locale}/szept_1_1280.jpg 1280w`;
+
   return (
     <html lang={locale} className={montserrat.className}>
+      <head>
+        <link
+          rel="preload"
+          as="image"
+          href={lcpImageSrc}
+          {...{
+            imagesrcset: lcpImageSrcset,
+            imagesizes:
+              "(max-width: 640px) 640px, (max-width: 1080px) 1080px, 1280px",
+            fetchpriority: "high",
+          }}
+        />
+      </head>
       <body>
         <Suspense fallback={<FullPageLoader />}>
           <LocaleProvider locale={locale}>
