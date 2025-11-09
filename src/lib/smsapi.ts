@@ -53,7 +53,7 @@ class SmsPlanetClient implements SmsClientInterface {
       );
 
       const formData = new URLSearchParams({
-        from: "TEST",
+        from: phoneNumber.startsWith("+48") ? "Szept" : "Shept",
         to: phoneNumber,
         msg: message,
       });

@@ -6,7 +6,6 @@ import {
   ConfirmEmail,
   PaymentLink,
   WelcomeEmail,
-  EmailProps,
   SendEmailProps,
   SendEmailClientProps,
   TrialExpirationNotification,

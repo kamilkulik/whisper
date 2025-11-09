@@ -72,6 +72,16 @@ function transformItem(
 }
 
 async function main() {
+  // Step 1: Fetch the greatest message ID from the messages table
+  const greatestMessage = await prisma.message.findFirst({
+    orderBy: { id: "desc" },
+    select: { id: true },
+  });
+
+  const greatestMessageId = greatestMessage?.id ?? 0;
+  console.log(`Greatest message ID in database: ${greatestMessageId}`);
+
+  // Step 2: Read and validate the upload file
   const filePath = path.resolve(".shepts/shepts_upload.json");
 
   // Check if file exists
@@ -89,10 +99,30 @@ async function main() {
     process.exit(1);
   }
 
-  const items = parsed.messageTranslations;
+  let items = parsed.messageTranslations;
   if (!Array.isArray(items) || items.length === 0) {
     console.log("No items to import");
     return;
+  }
+
+  // Step 2b: Check and correct messageId fields if needed
+  const expectedFirstMessageId = greatestMessageId + 1;
+  const firstItem = items[0] as RawMessageTranslation;
+
+  if (firstItem.messageId !== expectedFirstMessageId) {
+    console.log(
+      `First messageId is ${firstItem.messageId}, expected ${expectedFirstMessageId}. Correcting all messageIds...`
+    );
+
+    const offset = expectedFirstMessageId - firstItem.messageId;
+    items = items.map((item) => {
+      const rawItem = item as RawMessageTranslation;
+      return {
+        ...rawItem,
+        messageId: rawItem.messageId + offset,
+      };
+    });
+    console.log(`✅ Corrected messageIds with offset of ${offset}`);
   }
 
   // Validate and transform data
@@ -104,7 +134,7 @@ async function main() {
 
   for (const item of items) {
     if (validateItem(item)) {
-      const transformed = transformItem(item);
+      const transformed = transformItem(item as RawMessageTranslation);
       if (transformed) {
         validData.push(transformed);
       } else {
@@ -127,62 +157,74 @@ async function main() {
     return;
   }
 
-  // Try bulk insert first
+  // Step 3: Get unique message IDs and insert into messages table
+  const uniqueMessageIds = [
+    ...new Set(validData.map((item) => item.messageId)),
+  ].sort((a, b) => a - b);
+
+  console.log(
+    `Inserting ${uniqueMessageIds.length} new message(s) with IDs: ${uniqueMessageIds.join(", ")}`
+  );
+
   try {
-    const res = await prisma.messageTranslation.createMany({
-      data: validData,
-      skipDuplicates: true, // Uses the unique constraint [messageId, language]
-    });
-    console.log(`✅ Successfully inserted ${res.count} new translation(s)`);
-  } catch (err) {
-    console.error(
-      "Bulk insert failed, falling back to individual upserts:",
-      err
+    // Insert new message rows
+    for (const messageId of uniqueMessageIds) {
+      await prisma.message.create({
+        data: { id: messageId },
+      });
+    }
+    console.log(
+      `✅ Successfully inserted ${uniqueMessageIds.length} message(s)`
     );
+  } catch (err) {
+    console.error("Failed to insert messages:", err);
     console.error(
       "Error details:",
       err instanceof Error ? err.message : String(err)
     );
-
-    // Fallback: upsert one-by-one to handle duplicates and get better error messages
-    let successCount = 0;
-    let errorCount = 0;
-
-    for (const row of validData) {
-      try {
-        await prisma.messageTranslation.upsert({
-          where: {
-            // Use the composite unique constraint [messageId, language]
-            messageId_language: {
-              messageId: row.messageId,
-              language: row.language,
-            },
-          },
-          create: row,
-          update: {
-            // Update all fields if record already exists
-            text: row.text,
-            length: row.length,
-            encoding: row.encoding,
-            parts: row.parts,
-          },
-        });
-        successCount++;
-      } catch (e) {
-        errorCount++;
-        console.error(
-          `Failed to upsert translation for messageId=${row.messageId}, language=${row.language}:`,
-          e instanceof Error ? e.message : String(e)
-        );
-      }
-    }
-
-    console.log(
-      `✅ Upserted ${successCount} translation(s), ${errorCount} error(s)`
-    );
-  } finally {
-    await prisma.$disconnect();
+    process.exit(1);
   }
+
+  // Step 4: Upsert message translations
+  let successCount = 0;
+  let errorCount = 0;
+
+  console.log(`Upserting ${validData.length} translation(s)...`);
+
+  for (const row of validData) {
+    try {
+      await prisma.messageTranslation.upsert({
+        where: {
+          // Use the composite unique constraint [messageId, language]
+          messageId_language: {
+            messageId: row.messageId,
+            language: row.language,
+          },
+        },
+        create: row,
+        update: {
+          // Update all fields if record already exists
+          text: row.text,
+          length: row.length,
+          encoding: row.encoding,
+          parts: row.parts,
+        },
+      });
+      successCount++;
+    } catch (e) {
+      errorCount++;
+      console.error(
+        `Failed to upsert translation for messageId=${row.messageId}, language=${row.language}:`,
+        e instanceof Error ? e.message : String(e)
+      );
+    }
+  }
+
+  console.log(
+    `✅ Upserted ${successCount} translation(s), ${errorCount} error(s)`
+  );
+
+  await prisma.$disconnect();
 }
 
 main().catch((e) => {
