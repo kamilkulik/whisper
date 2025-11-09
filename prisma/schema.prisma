@@ -11,6 +11,11 @@ datasource db {
   directUrl = env("DATABASE_DIRECT_URL")
 }
 
+enum MessageEncodingEnum {
+  UCS2
+  GSM7
+}
+
 enum SupportedLanguagesEnum {
   PL
   EN
@@ -60,6 +65,8 @@ model MessageTranslation {
   language SupportedLanguagesEnum
   text     String
   length   Int // precomputed length of `text`
+  encoding MessageEncodingEnum
+  parts    Int // number of parts the message will be split into
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")

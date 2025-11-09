@@ -84,7 +84,6 @@ export async function sendEmail(props: SendEmailProps) {
   const configuredEmailClient = process.env.EMAIL_API_PROVIDER;
   const { locale, template } = props;
   let templateToUse: React.ReactElement;
-  const CURRENT_HOST = process.env.CURRENT_HOST;
 
   switch (template) {
     case "welcome":
