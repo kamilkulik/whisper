@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { checkCronSecret } from "../../utils/checkCronSecret";
+import { isCronSecretValid } from "../../utils/checkCronSecret";
 
 export async function POST(request: NextRequest) {
-  checkCronSecret(request);
+  if (!isCronSecretValid(request)) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     // Delete all expired key-value records

@@ -118,8 +118,8 @@ export async function sendSms(phoneNumber: string, message: string) {
       await smsApiClient.sendSms(phoneNumber, message);
       break;
     case "smsplanet":
-      const smsPlanetClient = new SmsPlanetClient();
-      await smsPlanetClient.sendSms(phoneNumber, message);
+      // const smsPlanetClient = new SmsPlanetClient();
+      // await smsPlanetClient.sendSms(phoneNumber, message);
       break;
     case "local":
       const localSmsClient = new LocalSmsClient();

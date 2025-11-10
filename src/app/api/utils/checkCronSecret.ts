@@ -1,18 +1,22 @@
 import { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
-export function checkCronSecret(
-  request: NextRequest
-): NextResponse | undefined {
+export function isCronSecretValid(request: NextRequest): boolean {
   const smsProvider = process.env.SMS_API_PROVIDER;
   const emailProvider = process.env.EMAIL_API_PROVIDER;
   const isLocalMode = smsProvider === "local" && emailProvider === "local";
 
   if (!isLocalMode) {
     // Verify that this is a legitimate Vercel cron request
-    const authHeader = request.headers.get("authorization");
+    const authHeader = request.headers.get("Authorization");
+    console.log("🔍 [ isCronSecretValid ] authHeader:", authHeader);
+    console.log(
+      "🔍 [ isCronSecretValid ] process.env.CRON_SECRET:",
+      process.env.CRON_SECRET
+    );
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return false;
     }
   }
+
+  return true;
 }

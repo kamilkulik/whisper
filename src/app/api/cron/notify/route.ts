@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkCronSecret } from "../../utils/checkCronSecret";
+import { isCronSecretValid } from "../../utils/checkCronSecret";
 import { prisma } from "@/lib/prisma";
 import { SubscriptionType } from "@prisma/client";
 import { sendSms } from "@/lib/smsapi";
 import { sendEmail } from "@/lib/emailapi";
 import { getTranslations } from "next-intl/server";
-import { getBaseUrl } from "../../utils/baseUrl";
 
 export const GET = async (request: NextRequest) => {
   /**
@@ -25,7 +24,9 @@ export const GET = async (request: NextRequest) => {
   }
 
   try {
-    checkCronSecret(request);
+    if (!isCronSecretValid(request)) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
     const now = new Date();
     console.log(

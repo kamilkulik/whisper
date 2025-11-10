@@ -8,7 +8,7 @@ import {
   SupportedLanguagesEnum,
   User,
 } from "@prisma/client";
-import { checkCronSecret } from "../../utils/checkCronSecret";
+import { isCronSecretValid } from "../../utils/checkCronSecret";
 
 export type UserRawType = {
   id: number;
@@ -28,7 +28,9 @@ export const GET = async (request: NextRequest) => {
   }
 
   try {
-    checkCronSecret(request);
+    if (!isCronSecretValid(request)) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
     const now = new Date();
     console.log(
@@ -117,14 +119,16 @@ export const GET = async (request: NextRequest) => {
       try {
         const message = messagesHash.get(user.next_message);
         if (!message) {
-          console.error(`Message not found for user ${user.id}`);
+          console.error(
+            `[ /api/cron/distribute ] Message not found for user ${user.id}`
+          );
           continue;
         }
         const messageText = message[user.message_language];
 
         if (messageText) {
           console.log(
-            `[ /api/cron/distribute ] Sending message to user ${user.id}: ${messageText}`
+            `[ /api/cron/distribute ] Sending message to user ${user.id} with message: ${messageText}`
           );
           await sendSms(user.phone_number, messageText);
 
@@ -136,7 +140,10 @@ export const GET = async (request: NextRequest) => {
         }
       } catch (error) {
         // in case of message service failure log the error
-        console.error(`Failed to send message to user ${user.id}:`, error);
+        console.error(
+          `[ /api/cron/distribute ] Failed to send message to user ${user.id}:`,
+          error
+        );
       }
     }
 
@@ -154,11 +161,11 @@ export const GET = async (request: NextRequest) => {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Cron job error:", error);
+    console.error("[ /api/cron/distribute ] Cron job error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: "Cron job failed",
+        message: "[ /api/cron/distribute ] Cron job failed",
         error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
