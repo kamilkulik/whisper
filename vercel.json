@@ -3,11 +3,11 @@
   "crons": [
     {
       "path": "/api/cron/distribute",
-      "schedule": "58 20 * * *"
+      "schedule": "*/30 * * * *"
     },
     {
       "path": "/api/cron/notify",
-      "schedule": "20 9 * * *"
+      "schedule": "20 8 * * *"
     }
   ]
 }
