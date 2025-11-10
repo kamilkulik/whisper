@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
     {
-      "path": "https://wieczornyszept.pl/api/cron/distribute",
-      "schedule": "47 3 * * *"
+      "path": "/api/cron/distribute",
+      "schedule": "58 19 * * *"
     },
     {
       "path": "/api/cron/notify",
