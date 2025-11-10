@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "https://wieczornyszept.pl/api/cron/distribute",
-      "schedule": "45 3 * * *"
+      "schedule": "47 3 * * *"
     },
     {
       "path": "/api/cron/notify",
