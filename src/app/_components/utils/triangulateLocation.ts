@@ -9,13 +9,14 @@ export async function triangulateLocationOnFe(
     longitude: number | undefined;
   } | null
 ): Promise<string | null> {
-  if (ipCountry) {
-    return ipCountry;
-  }
+  // TODO disable for now
+  // if (ipCountry) {
+  //   return ipCountry;
+  // }
 
-  if (browserGeo?.latitude && browserGeo?.longitude) {
-    return reverseGeoCode(browserGeo.latitude, browserGeo.longitude);
-  }
+  // if (browserGeo?.latitude && browserGeo?.longitude) {
+  //   return reverseGeoCode(browserGeo.latitude, browserGeo.longitude);
+  // }
 
   // LOCAL DEVELOPMENT
   if (
