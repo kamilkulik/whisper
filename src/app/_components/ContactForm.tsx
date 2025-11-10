@@ -8,6 +8,7 @@ import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 import { GatheredUserData, prepSaveUserBody } from "./utils/saveUserBodyPrep";
 import { useTranslations } from "next-intl";
+import { languageOptions } from "../_consts";
 
 // Validation schema
 const localisedFormSchema = (
@@ -77,12 +78,12 @@ export default function ContactForm({
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const languageDropdownRef = useRef<HTMLDivElement>(null);
 
-  const languageOptions = [
-    { code: SupportedLanguagesEnum.PL, name: "Polski" },
-    { code: SupportedLanguagesEnum.EN, name: "English" },
-    //   { code: SupportedLanguagesEnum.ES, name: "Español" },
-    //   { code: SupportedLanguagesEnum.IT, name: "Italiano" },
-  ];
+  // const languageOptions = [
+  //   { code: SupportedLanguagesEnum.PL, name: "Polski" },
+  //   // { code: SupportedLanguagesEnum.EN, name: "English" },
+  //   //   { code: SupportedLanguagesEnum.ES, name: "Español" },
+  //   //   { code: SupportedLanguagesEnum.IT, name: "Italiano" },
+  // ];
 
   // Update form data when locale context is loaded
   useEffect(() => {
@@ -91,7 +92,7 @@ export default function ContactForm({
         ...prev,
         countryCode: countryCode,
         messageLanguage:
-          languageOptions.find((o) => o.name === language)?.code ||
+          languageOptions.find((o) => o.label === language)?.value ||
           SupportedLanguagesEnum.PL,
       }));
     }
@@ -407,8 +408,8 @@ export default function ContactForm({
               data-oid="c3lmv88"
             >
               {languageOptions.find(
-                (option) => option.code === formData.messageLanguage
-              )?.name || formData.messageLanguage}
+                (option) => option.value === formData.messageLanguage
+              )?.label || formData.messageLanguage}
             </button>
             <div
               className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
@@ -439,17 +440,17 @@ export default function ContactForm({
               >
                 {languageOptions.map((option) => (
                   <button
-                    key={option.code}
+                    key={option.value}
                     type="button"
-                    onClick={() => handleLanguageSelect(option.code)}
+                    onClick={() => handleLanguageSelect(option.value)}
                     className={`w-full px-6 py-3 text-2xl md:text-lg text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
-                      formData.messageLanguage === option.code
+                      formData.messageLanguage === option.value
                         ? "bg-gray-700"
                         : ""
                     }`}
                     data-oid=":i4l0zm"
                   >
-                    {option.name}
+                    {option.label}
                   </button>
                 ))}
               </div>

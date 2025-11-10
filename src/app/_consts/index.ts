@@ -1,3 +1,5 @@
+import { SupportedLanguagesEnum } from "@prisma/client";
+
 export const GB_DOMAIN = "eveningwhisper.co.uk";
 export const GB_CONTACT_EMAIL = "contact@eveningwhisper.co.uk";
 export const PL_DOMAIN = "wieczornyszept.pl";
@@ -57,3 +59,10 @@ export function getPricingContext(country: string) {
     PRICING_CONTEXT[2]
   );
 }
+
+export const languageOptions = [
+  { value: SupportedLanguagesEnum.PL, label: "Polski", locale: "pl" },
+  // { value: SupportedLanguagesEnum.EN, label: "English" },
+  // { value: SupportedLanguagesEnum.ES, label: "Español" },
+  // { value: SupportedLanguagesEnum.IT, label: "Italiano" },
+];

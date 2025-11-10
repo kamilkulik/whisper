@@ -21,6 +21,7 @@ import { useCurrentLocale } from "./_hooks/useCurrentLocale";
 import InformationModal from "./_components/InformationModal";
 import { useGetCurrentSession } from "./_hooks/useGetCurrentSession";
 import { useTriangulatedLocation } from "./_hooks/useTriangulatedLocation";
+import { languageOptions } from "./_consts";
 
 export default function Home() {
   const router = useRouter();
@@ -40,12 +41,6 @@ export default function Home() {
   const pricingSectionRef = useRef<any>(null);
   const currentLocale = useCurrentLocale();
   const { triangulatedCountry } = useTriangulatedLocation();
-
-  // Language options for switcher
-  const languageOptions = [
-    { code: "pl", name: "PL" },
-    { code: "en", name: "EN" },
-  ];
 
   // Handle language selection
   const handleLanguageSelect = (locale: string) => {
@@ -581,19 +576,19 @@ export default function Home() {
                 >
                   {
                     languageOptions.find(
-                      (option) => option.code === currentLocale
-                    )?.name
+                      (option) => option.locale === currentLocale
+                    )?.value
                   }
                 </button>
                 {isLanguageDropdownOpen && (
                   <div className="absolute top-full mt-1 bg-gray-800 rounded-lg shadow-xl z-50 min-w-[80px]">
                     {languageOptions.map((option) => (
                       <button
-                        key={option.code}
-                        onClick={() => handleLanguageSelect(option.code)}
+                        key={option.locale}
+                        onClick={() => handleLanguageSelect(option.locale)}
                         className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg transition-colors"
                       >
-                        {option.name}
+                        {option.value}
                       </button>
                     ))}
                   </div>

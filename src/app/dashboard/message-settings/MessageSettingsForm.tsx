@@ -3,17 +3,11 @@
 import { useState } from "react";
 import { User, SupportedLanguagesEnum } from "@prisma/client";
 import { useTranslations } from "next-intl";
+import { languageOptions } from "@/app/_consts";
 
 interface MessageSettingsFormProps {
   user: Pick<User, "messageLanguage">;
 }
-
-const languageOptions = [
-  { value: SupportedLanguagesEnum.PL, label: "Polski" },
-  { value: SupportedLanguagesEnum.EN, label: "English" },
-  // { value: SupportedLanguagesEnum.ES, label: "Español" },
-  // { value: SupportedLanguagesEnum.IT, label: "Italiano" },
-];
 
 export default function MessageSettingsForm({
   user,

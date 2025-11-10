@@ -48,10 +48,10 @@ export default async function RootLayout({
           as="image"
           href={lcpImageSrc}
           {...{
-            imagesrcset: lcpImageSrcset,
-            imagesizes:
+            imageSrcSet: lcpImageSrcset,
+            imageSizes:
               "(max-width: 640px) 640px, (max-width: 1080px) 1080px, 1280px",
-            fetchpriority: "high",
+            fetchPriority: "high",
           }}
         />
       </head>
