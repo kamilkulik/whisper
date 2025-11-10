@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PL_DOMAIN, GB_DOMAIN } from "./app/_consts";
+import { PL_DOMAIN, GB_DOMAIN, languageOptions } from "./app/_consts";
 import { getBaseUrl } from "./app/api/utils/baseUrl";
 
-const DEFAULT_LOCALE = "en";
-const POSSIBLE_LOCALES = ["pl", "en"] as const;
+const DEFAULT_LOCALE = languageOptions[0].locale;
+const POSSIBLE_LOCALES = languageOptions.map((option) => option.locale);
 
 type Locale = (typeof POSSIBLE_LOCALES)[number];
 
 function inferDefaultFromHost(host?: string): Locale {
+  console.log("🔍 [ Middleware - inferDefaultFromHost ] host:", host);
   if (!host) return DEFAULT_LOCALE;
-  if (host.endsWith(PL_DOMAIN)) return "pl";
-  if (host.endsWith(GB_DOMAIN)) return DEFAULT_LOCALE;
+  if (host.endsWith(PL_DOMAIN)) return languageOptions[0].locale;
+  // if (host.endsWith(GB_DOMAIN)) return languageOptions[1].locale;
   return DEFAULT_LOCALE;
 }
 
