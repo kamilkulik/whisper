@@ -51,6 +51,12 @@ export function PhoneForm({
         ? GEO_CONTEXT.filter((option) => option.country === triangulatedCountry)
         : GEO_CONTEXT;
       setPhoneCountryCodeOptions(phoneCountryCodeOptions);
+
+      console.log("phoneCountryCodeOptions", phoneCountryCodeOptions);
+      // Set the first country code as default if not already set
+      if (phoneCountryCodeOptions.length > 0) {
+        handleCountrySelect(phoneCountryCodeOptions[0].countryCode);
+      }
     }
   }, [isLoaded, triangulatedCountry]);
 

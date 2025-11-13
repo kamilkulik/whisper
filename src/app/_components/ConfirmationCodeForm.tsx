@@ -182,17 +182,18 @@ export default function ConfirmationCodeForm({
 
     // TODO make sure this shows up first
     // Start by verifying phone country code matches detected country
-    if (!isEmailMode) {
-      const phoneCountryCode = GEO_CONTEXT.find(
-        (option) => option.countryCode === formData.countryCode
-      )?.country!;
+    // ACTUALLY that's not required. It's on the user the provide the right country code
+    // if (!isEmailMode) {
+    //   const phoneCountryCode = GEO_CONTEXT.find(
+    //     (option) => option.countryCode === formData.countryCode
+    //   )?.country!;
 
-      if (phoneCountryCode !== triangulatedCountry) {
-        errors.phoneNumber = t(
-          "form-validation-errors.phone-number.country-mismatch"
-        );
-      }
-    }
+    //   if (phoneCountryCode !== triangulatedCountry) {
+    //     errors.phoneNumber = t(
+    //       "form-validation-errors.phone-number.country-mismatch"
+    //     );
+    //   }
+    // }
 
     // Validate all input fields based on mode
     const sanitizedData = isEmailMode

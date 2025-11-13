@@ -19,6 +19,11 @@ export const GEO_CONTEXT = [
     country: PL_COUNTRY_CODE,
     countryCode: "+48",
   },
+  {
+    domain: PL_DOMAIN,
+    country: DEFAULT_COUNTRY_CODE,
+    countryCode: "+48",
+  },
 ];
 
 export interface PricingContextData {

@@ -342,7 +342,7 @@
           "min": "Numer telefonu musi mieć co najmniej 6 cyfr",
           "max": "Numer telefonu nie może być dłuższy niż 15 cyfr",
           "regex": "Numer telefonu może zawierać tylko cyfry, spacje, myślniki",
-          "country-mismatch": "Selected phone country code is not supported in your country"
+          "country-mismatch": "W Twoim kraju nie obsługujemy tego numeru telefonu"
         },
         "email": {
           "min": "Email jest wymagany",
