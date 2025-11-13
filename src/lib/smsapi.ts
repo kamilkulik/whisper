@@ -46,16 +46,49 @@ class SmsPlanetClient implements SmsClientInterface {
     }
   }
 
+  private createToday2059CET(): Date {
+    // Current local Date (UTC)
+    const nowUtc = new Date();
+
+    const year = nowUtc.getUTCFullYear();
+    const month = nowUtc.getUTCMonth();
+    const day = nowUtc.getUTCDate();
+
+    // CET = UTC+1 → so 20:59 CET = 19:59 UTC
+    const utcHour = 19; // 19
+    const minute = 59;
+    const second = 0;
+
+    // Build the exact UTC timestamp
+    return new Date(Date.UTC(year, month, day, utcHour, minute, second));
+  }
+
+  private formatDate(date: Date): string {
+    const pad = (n: number) => (n < 10 ? "0" + n : n.toString());
+
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1); // 0-based
+    const year = date.getFullYear();
+
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+  }
+
   async sendSms(phoneNumber: string, message: string): Promise<void> {
     try {
       console.log(
         `[ SmsPlanetClient.sendSms ] Sending SMS via SmsPlanet to ${phoneNumber}: ${message}`
       );
 
+      // Date format dd-MM-yyyy HH:mm:ss e.g. 13-11-2025 08:38:00
       const formData = new URLSearchParams({
         from: "Szept",
         to: phoneNumber,
         msg: message,
+        date: this.formatDate(this.createToday2059CET()),
       });
 
       const response = await fetch(this.apiUrl, {
