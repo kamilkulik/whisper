@@ -2,7 +2,11 @@ import "server-only";
 import { SMSAPI } from "smsapi";
 
 interface SmsClientInterface {
-  sendSms(phoneNumber: string, message: string): Promise<void>;
+  sendSms(
+    phoneNumber: string,
+    message: string,
+    scheduled: boolean
+  ): Promise<void>;
 }
 
 class SmsApiClient implements SmsClientInterface {
@@ -46,7 +50,8 @@ class SmsPlanetClient implements SmsClientInterface {
     }
   }
 
-  private createToday2059CET(): Date {
+  // ON server
+  private createUTCdistributionDate(): Date {
     // Current local Date (UTC)
     const nowUtc = new Date();
 
@@ -63,21 +68,22 @@ class SmsPlanetClient implements SmsClientInterface {
     return new Date(Date.UTC(year, month, day, utcHour, minute, second));
   }
 
-  private formatDate(date: Date): string {
-    const pad = (n: number) => (n < 10 ? "0" + n : n.toString());
-
-    const day = pad(date.getDate());
-    const month = pad(date.getMonth() + 1); // 0-based
-    const year = date.getFullYear();
-
-    const hours = pad(date.getHours());
-    const minutes = pad(date.getMinutes());
-    const seconds = pad(date.getSeconds());
-
-    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+  // DD-MM-YYYY
+  private toCETDate(date: Date): string {
+    return new Intl.DateTimeFormat("nl-NL", {
+      dateStyle: "short",
+      timeStyle: "medium",
+      timeZone: "CET",
+    })
+      .format(date)
+      .replace(",", "");
   }
 
-  async sendSms(phoneNumber: string, message: string): Promise<void> {
+  async sendSms(
+    phoneNumber: string,
+    message: string,
+    scheduled: boolean
+  ): Promise<void> {
     try {
       console.log(
         `[ SmsPlanetClient.sendSms ] Sending SMS via SmsPlanet to ${phoneNumber}: ${message}`
@@ -88,7 +94,9 @@ class SmsPlanetClient implements SmsClientInterface {
         from: "Szept",
         to: phoneNumber,
         msg: message,
-        date: this.formatDate(this.createToday2059CET()),
+        ...(scheduled
+          ? { date: this.toCETDate(this.createUTCdistributionDate()) }
+          : {}),
       });
 
       const response = await fetch(this.apiUrl, {
@@ -142,7 +150,11 @@ class LocalSmsClient implements SmsClientInterface {
   }
 }
 
-export async function sendSms(phoneNumber: string, message: string) {
+export async function sendSms(
+  phoneNumber: string,
+  message: string,
+  scheduled: boolean
+) {
   const configuredSmsClient = process.env.SMS_API_PROVIDER;
 
   switch (configuredSmsClient) {
@@ -152,7 +164,7 @@ export async function sendSms(phoneNumber: string, message: string) {
       break;
     case "smsplanet":
       const smsPlanetClient = new SmsPlanetClient();
-      await smsPlanetClient.sendSms(phoneNumber, message);
+      await smsPlanetClient.sendSms(phoneNumber, message, scheduled);
       break;
     case "local":
       const localSmsClient = new LocalSmsClient();

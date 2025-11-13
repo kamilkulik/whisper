@@ -130,7 +130,7 @@ export const GET = async (request: NextRequest) => {
           console.log(
             `[ /api/cron/distribute ] Sending message to user ${user.id} with message: ${messageText}`
           );
-          await sendSms(user.phone_number, messageText);
+          await sendSms(user.phone_number, messageText, true);
 
           // update what message got sent
           await prisma.user.update({

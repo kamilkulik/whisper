@@ -99,7 +99,7 @@ export const GET = async (request: NextRequest) => {
         );
 
         if (user?.phoneNumber) {
-          await sendSms(user?.phoneNumber, t("message"));
+          await sendSms(user?.phoneNumber, t("message"), false);
         } else {
           console.error(
             `[ GET /api/cron/notify ] User ${user?.email} has no phone number`

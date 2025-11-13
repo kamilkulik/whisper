@@ -50,7 +50,8 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   } else if (phoneNumber) {
     await sendSms(
       phoneNumber,
-      `${t("sendSms.message")} ${confirmationCode.toString()}`
+      `${t("sendSms.message")} ${confirmationCode.toString()}`,
+      false
     );
   }
 
