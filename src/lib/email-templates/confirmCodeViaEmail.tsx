@@ -5,8 +5,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
-  Link,
   Preview,
   Section,
   Text,
@@ -15,10 +13,6 @@ import { ConfirmationCodeViaEmailProps } from "./types";
 import { Footer } from "./shared/footer";
 import { Disclaimer } from "./shared/disclaimer";
 import { createTranslatorFromLocale } from "@/i18n/utils";
-
-// const baseUrl = process.env.VERCEL_URL
-//   ? `https://${process.env.VERCEL_URL}`
-//   : "";
 
 export async function ConfirmCodeViaEmail({
   locale,

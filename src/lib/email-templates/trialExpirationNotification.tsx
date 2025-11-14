@@ -13,8 +13,8 @@ import { Footer, text } from "./shared";
 import { Disclaimer } from "./shared/disclaimer";
 import { createTranslatorFromLocale } from "@/i18n/utils";
 
-const baseUrl = process.env.SZEPT_URL
-  ? `https://${process.env.SZEPT_URL}`
+const baseUrl = process.env.CURRENT_HOST
+  ? `https://${process.env.CURRENT_HOST}`
   : "http://localhost:3000";
 
 export async function TrialExpirationNotification({

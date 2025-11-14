@@ -5,7 +5,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Section,
@@ -15,10 +14,6 @@ import { ConfirmEmailProps } from "./types";
 import { Disclaimer } from "./shared/disclaimer";
 import { Footer } from "./shared/footer";
 import { createTranslatorFromLocale } from "@/i18n/utils";
-
-// const baseUrl = process.env.VERCEL_URL
-//   ? `https://${process.env.VERCEL_URL}`
-//   : "";
 
 export async function ConfirmEmail({
   locale,
