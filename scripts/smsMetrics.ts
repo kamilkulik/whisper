@@ -1,5 +1,8 @@
 // Calculate SMS encoding, length accounting, and segment count.
 export function smsMetrics(text: string) {
+  // Remove newline characters from text before processing
+  text = text.replace(/\n/g, "");
+
   // GSM-7 basic and extension tables
   const GSM7_BASIC =
     "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?" +
