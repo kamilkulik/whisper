@@ -72,6 +72,47 @@ function transformItem(
 }
 
 async function main() {
+  // Step 0: Drop and recreate tables
+  console.log("🗑️  Dropping and recreating message tables...");
+
+  try {
+    // Drop tables in order (foreign key dependencies first)
+    await prisma.$executeRawUnsafe(
+      "DROP TABLE IF EXISTS message_translations CASCADE"
+    );
+    await prisma.$executeRawUnsafe("DROP TABLE IF EXISTS messages CASCADE");
+    console.log("✅ Dropped existing tables");
+
+    // Recreate tables according to Prisma schema
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE messages (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP(3)
+      )
+    `);
+
+    await prisma.$executeRawUnsafe(`
+      CREATE TABLE message_translations (
+        id SERIAL PRIMARY KEY,
+        message_id INTEGER NOT NULL REFERENCES messages(id) ON DELETE CASCADE,
+        language "SupportedLanguagesEnum" NOT NULL,
+        text TEXT NOT NULL,
+        length INTEGER NOT NULL,
+        encoding "MessageEncodingEnum" NOT NULL,
+        parts INTEGER NOT NULL,
+        created_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP(3),
+        UNIQUE(message_id, language)
+      )
+    `);
+
+    console.log("✅ Recreated tables according to Prisma schema\n");
+  } catch (err) {
+    console.error("Failed to drop/recreate tables:", err);
+    process.exit(1);
+  }
+
   // Step 1: Fetch the greatest message ID from the messages table
   const greatestMessage = await prisma.message.findFirst({
     orderBy: { id: "desc" },

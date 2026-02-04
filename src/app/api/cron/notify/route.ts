@@ -110,7 +110,7 @@ export const GET = async (request: NextRequest) => {
           await sendEmail({
             locale: user?.messageLanguage.toLowerCase(),
             to: user?.email,
-            subject: "TODO write a good message - needs to be translated",
+            subject: t("sendEmail.subject"),
             template: "trial-expiration-notification",
           });
         } else {

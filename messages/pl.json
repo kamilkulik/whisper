@@ -529,6 +529,11 @@
         }
       }
     },
+    "cron": {
+      "notify": {
+        "message": "Cieszymy się, że korzystasz z Wieczornego Szeptu! Aby kontynuować otrzymywanie wiadomości po upływie okresu próbnego, musisz dokonać zakupu płatnej subskrypcji. Możesz to zrobić w Panelu Użytkownika. Odwiedź teraz stronę Wieczornego Szeptu!"
+      }
+    },
     "users": {
       "POST": {
         "trial-used": "Błąd. Z okresu próbnego można skorzystać tylko raz"
