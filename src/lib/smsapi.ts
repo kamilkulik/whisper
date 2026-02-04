@@ -1,19 +1,50 @@
 import "server-only";
 import { SMSAPI } from "smsapi";
+import twilio, { RestException } from "twilio";
 
-interface SmsClientInterface {
-  sendSms(
+abstract class SmsClientInterface {
+  abstract sendSms(
     phoneNumber: string,
     message: string,
     scheduled: boolean
   ): Promise<void>;
+
+  // ON server
+  protected createUTCdistributionDate(): Date {
+    // Current local Date (UTC)
+    const nowUtc = new Date();
+
+    const year = nowUtc.getUTCFullYear();
+    const month = nowUtc.getUTCMonth();
+    const day = nowUtc.getUTCDate();
+
+    // CET = UTC+1 → so 20:59 CET = 19:59 UTC
+    const utcHour = 19; // 19
+    const minute = 59;
+    const second = 0;
+
+    // Build the exact UTC timestamp
+    return new Date(Date.UTC(year, month, day, utcHour, minute, second));
+  }
+
+  // DD-MM-YYYY
+  protected toCETDate(date: Date): string {
+    return new Intl.DateTimeFormat("nl-NL", {
+      dateStyle: "short",
+      timeStyle: "medium",
+      timeZone: "CET",
+    })
+      .format(date)
+      .replace(",", "");
+  }
 }
 
-class SmsApiClient implements SmsClientInterface {
+class SmsApiClient extends SmsClientInterface {
   private readonly authToken: string;
   private readonly smsapi: SMSAPI;
 
   constructor() {
+    super();
     this.authToken = process.env.SMS_API_TOKEN || "";
     if (!this.authToken) {
       throw new Error("SMS_API_TOKEN environment variable is required");
@@ -37,46 +68,18 @@ class SmsApiClient implements SmsClientInterface {
   }
 }
 
-class SmsPlanetClient implements SmsClientInterface {
+class SmsPlanetClient extends SmsClientInterface {
   private readonly apiUrl = "https://api2.smsplanet.pl/sms";
   private readonly authToken: string;
 
   constructor() {
+    super();
     this.authToken = process.env.SMS_PLANET_TOKEN || "";
     if (!this.authToken) {
       throw new Error(
         "[ SmsPlanetClient] SMS_PLANET_TOKEN environment variable is required"
       );
     }
-  }
-
-  // ON server
-  private createUTCdistributionDate(): Date {
-    // Current local Date (UTC)
-    const nowUtc = new Date();
-
-    const year = nowUtc.getUTCFullYear();
-    const month = nowUtc.getUTCMonth();
-    const day = nowUtc.getUTCDate();
-
-    // CET = UTC+1 → so 20:59 CET = 19:59 UTC
-    const utcHour = 19; // 19
-    const minute = 59;
-    const second = 0;
-
-    // Build the exact UTC timestamp
-    return new Date(Date.UTC(year, month, day, utcHour, minute, second));
-  }
-
-  // DD-MM-YYYY
-  private toCETDate(date: Date): string {
-    return new Intl.DateTimeFormat("nl-NL", {
-      dateStyle: "short",
-      timeStyle: "medium",
-      timeZone: "CET",
-    })
-      .format(date)
-      .replace(",", "");
   }
 
   async sendSms(
@@ -142,7 +145,98 @@ class SmsPlanetClient implements SmsClientInterface {
   }
 }
 
-class LocalSmsClient implements SmsClientInterface {
+class TwilioClient extends SmsClientInterface {
+  private readonly client: twilio.Twilio;
+  private readonly fromPhoneNumber: string;
+
+  constructor() {
+    super();
+    const accountSid = process.env.TWILIO_ACCOUNT_SID || "";
+    const authToken = process.env.TWILIO_AUTH_TOKEN || "";
+    const fromPhoneNumber = process.env.TWILIO_PHONE_NUMBER || "";
+
+    if (!accountSid) {
+      throw new Error(
+        "[ TwilioClient ] TWILIO_ACCOUNT_SID environment variable is required"
+      );
+    }
+    if (!authToken) {
+      throw new Error(
+        "[ TwilioClient ] TWILIO_AUTH_TOKEN environment variable is required"
+      );
+    }
+    if (!fromPhoneNumber) {
+      throw new Error(
+        "[ TwilioClient ] TWILIO_PHONE_NUMBER environment variable is required"
+      );
+    }
+
+    this.client = twilio(accountSid, authToken);
+    this.fromPhoneNumber = fromPhoneNumber;
+  }
+
+  async sendSms(
+    phoneNumber: string,
+    message: string,
+    scheduled: boolean
+  ): Promise<void> {
+    try {
+      console.log(
+        `[ TwilioClient.sendSms ] Sending SMS via Twilio to ${phoneNumber}: ${message}`
+      );
+
+      const messageOptions: {
+        body: string;
+        to: string;
+        from: string;
+        sendAt?: Date;
+      } = {
+        body: message,
+        to: phoneNumber,
+        from: this.fromPhoneNumber,
+      };
+
+      // If scheduled is true, set the sendAt time to the UTC distribution date
+      if (scheduled) {
+        const sendAtDate = this.createUTCdistributionDate();
+        messageOptions.sendAt = sendAtDate;
+        console.log(
+          `[ TwilioClient.sendSms ] Scheduling SMS for ${sendAtDate.toISOString()}`
+        );
+      }
+
+      const result = await this.client.messages.create(messageOptions);
+      console.log(
+        `[ TwilioClient.sendSms ] Twilio message sent successfully. SID: ${result.sid}`
+      );
+    } catch (error) {
+      if (error instanceof RestException) {
+        console.error(
+          `[ TwilioClient.sendSms ] Twilio Error ${error.code}: ${error.message}`,
+          {
+            status: error.status,
+            moreInfo: error.moreInfo,
+          }
+        );
+        throw new Error(
+          `Twilio API error ${error.code}: ${error.message}`
+        );
+      } else {
+        console.error(
+          `[ TwilioClient.sendSms ] Failed to send SMS via Twilio to ${phoneNumber}:`,
+          error
+        );
+        throw error;
+      }
+    }
+  }
+}
+
+class LocalSmsClient extends SmsClientInterface {
+  constructor() {
+    super();
+  }
+
   async sendSms(phoneNumber: string, message: string): Promise<void> {
     console.log(
       `[ LocalSmsClient.sendSms ] Sending SMS to ${phoneNumber}: ${message}`
@@ -165,6 +259,10 @@ export async function sendSms(
     case "smsplanet":
       const smsPlanetClient = new SmsPlanetClient();
       await smsPlanetClient.sendSms(phoneNumber, message, scheduled);
+      break;
+    case "twilio":
+      const twilioClient = new TwilioClient();
+      await twilioClient.sendSms(phoneNumber, message, scheduled);
       break;
     case "local":
       const localSmsClient = new LocalSmsClient();
