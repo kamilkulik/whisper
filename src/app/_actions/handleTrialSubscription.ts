@@ -4,6 +4,7 @@ import { getUserFromEmail, prisma } from "@/lib/prisma";
 import { Subscription, SubscriptionType, User } from "@prisma/client";
 import { subscriptionFactory } from "../api/payments/utils/subscriptionFactory";
 import { sendEmail } from "@/lib/emailapi";
+import { getTranslations } from "next-intl/server";
 
 export async function handleTrialSubscription(userEmail: string): Promise<{
   success: boolean;
@@ -44,9 +45,10 @@ export async function handleTrialSubscription(userEmail: string): Promise<{
 
     if (savedSubscription && savedUser) {
       try {
+        const t = await getTranslations("EmailTemplates.Welcome");
         await sendEmail({
           locale: savedUser.messageLanguage.toLowerCase(),
-          subject: "Witamy w serwisie Wieczorny Szept",
+          subject: t("subject"),
           subscriptionType: SubscriptionType.TRIAL,
           template: "welcome",
           to: savedUser.email,

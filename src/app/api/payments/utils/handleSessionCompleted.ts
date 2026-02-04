@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getSubscriptionType } from "@/lib/consts";
 import { sendEmail } from "@/lib/emailapi";
 import { SubscriptionStatus, SubscriptionType, User } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session
@@ -132,9 +133,10 @@ export async function handleSessionCompleted(
   // notify them
 
   try {
+    const t = await getTranslations("EmailTemplates.Welcome");
     await sendEmail({
       locale: user.messageLanguage.toLowerCase(),
-      subject: "Witamy w serwisie Wieczorny Szept",
+      subject: t("subject"),
       subscriptionType: getSubscriptionType(productType),
       to: user.email,
       template: "welcome",

@@ -3,6 +3,7 @@ import { subscriptionFactory } from "./subscriptionFactory";
 import Stripe from "stripe";
 import { SubscriptionType } from "@prisma/client";
 import { sendEmail } from "@/lib/emailapi";
+import { getTranslations } from "next-intl/server";
 
 export async function handlePaymentIntentSucceeded(
   eventData: Stripe.PaymentIntent
@@ -77,9 +78,10 @@ export async function handlePaymentIntentSucceeded(
   }
 
   try {
+    const t = await getTranslations("EmailTemplates.Welcome");
     await sendEmail({
       locale: user.messageLanguage.toLowerCase(),
-      subject: "Witamy w serwisie Wieczorny Szept",
+      subject: t("subject"),
       template: "welcome",
       to: user.email,
       subscriptionType: SubscriptionType.ONE_TIME,

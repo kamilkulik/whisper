@@ -491,6 +491,7 @@
       "link-2": "privacy policy"
     },
     "ConfirmEmail": {
+      "subject": "Confirm your email",
       "preview": "Confirm your email",
       "title": "Confirm your email",
       "paragraph-1": "Thank you for starting your registration with Evening Whisper. To confirm it’s really you, please enter the verification code below. If you are not creating an account, simply ignore this message.",
@@ -507,6 +508,7 @@
       "signature-team": "The Evening Whisper Team 🌙"
     },
     "Welcome": {
+      "subject": "Welcome to Evening Whisper!",
       "greeting": "Dear Reader,",
       "paragraph-1-trial": "We are grateful for your trust and for starting your trial with Evening Whisper.",
       "paragraph-1-one-time": "We are grateful for your trust and for beginning your 30-day one-off subscription with Evening Whisper.",
@@ -535,7 +537,10 @@
     },
     "cron": {
       "notify": {
-        "message": "We hope you're enjoying Evening Whisper! To continue receiving messages after your trial ends, you’ll need to purchase a paid subscription. You can do this in the user dashboard. Visit evening whisper website right now!"
+        "message": "We hope you're enjoying Evening Whisper! To continue receiving messages after your trial ends, you’ll need to purchase a paid subscription. You can do this in the user dashboard. Visit evening whisper website right now!",
+        "sendEmail": {
+          "subject": "Evening Whisper - Trial Ending Soon"
+        }
       }
     },
     "users": {

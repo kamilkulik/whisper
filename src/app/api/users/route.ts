@@ -286,9 +286,10 @@ export const POST = async (request: NextRequest) => {
           });
 
           try {
+            const t = await getTranslations("EmailTemplates.Welcome");
             await sendEmail({
               locale: savedUser.messageLanguage.toLowerCase(),
-              subject: "Witamy w serwisie Wieczorny Szept",
+              subject: t("subject"),
               subscriptionType: trialSubscription.type,
               template: "welcome",
               to: savedUser.email,
@@ -307,10 +308,11 @@ export const POST = async (request: NextRequest) => {
         }
       }
 
+      const t = await getTranslations("EmailTemplates.ConfirmEmail");
       // send email to new user for them to verify their email
       await sendEmail({
         locale: savedUser.messageLanguage.toLowerCase(),
-        subject: "Zweryfikuj swój email",
+        subject: t("subject"),
         template: "confirm-email",
         to: savedUser.email,
         verificationLink: await generateOneTimeUrl(
