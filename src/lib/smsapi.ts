@@ -1,6 +1,7 @@
 import "server-only";
 import { SMSAPI } from "smsapi";
 import twilio, { RestException } from "twilio";
+import { isValidE164, normalizeE164 } from "./consts";
 
 abstract class SmsClientInterface {
   abstract sendSms(
@@ -249,24 +250,32 @@ export async function sendSms(
   message: string,
   scheduled: boolean
 ) {
+  // Normalize and validate E.164 format before sending
+  const normalizedPhone = normalizeE164(phoneNumber);
+  if (!isValidE164(normalizedPhone)) {
+    throw new Error(
+      `[ sendSms ] Invalid phone number format. Expected E.164 format (e.g., +48791321431), got: ${phoneNumber}`
+    );
+  }
+
   const configuredSmsClient = process.env.SMS_API_PROVIDER;
 
   switch (configuredSmsClient) {
     case "smsapi":
       const smsApiClient = new SmsApiClient();
-      await smsApiClient.sendSms(phoneNumber, message);
+      await smsApiClient.sendSms(normalizedPhone, message);
       break;
     case "smsplanet":
       const smsPlanetClient = new SmsPlanetClient();
-      await smsPlanetClient.sendSms(phoneNumber, message, scheduled);
+      await smsPlanetClient.sendSms(normalizedPhone, message, scheduled);
       break;
     case "twilio":
       const twilioClient = new TwilioClient();
-      await twilioClient.sendSms(phoneNumber, message, scheduled);
+      await twilioClient.sendSms(normalizedPhone, message, scheduled);
       break;
     case "local":
       const localSmsClient = new LocalSmsClient();
-      await localSmsClient.sendSms(phoneNumber, message);
+      await localSmsClient.sendSms(normalizedPhone, message);
       break;
     default:
       throw new Error(

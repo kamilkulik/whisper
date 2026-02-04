@@ -1,6 +1,54 @@
 import { SubscriptionType } from "@prisma/client";
 import Stripe from "stripe";
 
+/**
+ * E.164 Phone Number Utilities
+ * E.164 format: [+][country code][subscriber number including area code]
+ * Example: +48791321431
+ */
+
+/**
+ * Combines country code and phone number into E.164 format
+ * @param countryCode - The country code with + prefix (e.g., "+48", "+44")
+ * @param phoneNumber - The subscriber number (e.g., "791321431")
+ * @returns Phone number in E.164 format (e.g., "+48791321431")
+ */
+export function toE164Format(countryCode: string, phoneNumber: string): string {
+  // Remove any spaces, dashes, or other formatting from phone number
+  const cleanPhone = phoneNumber.replace(/[\s\-\(\)]/g, "");
+  // Ensure country code starts with +
+  const cleanCountryCode = countryCode.startsWith("+")
+    ? countryCode
+    : `+${countryCode}`;
+
+  return `${cleanCountryCode}${cleanPhone}`;
+}
+
+/**
+ * Validates if a phone number is in E.164 format
+ * @param phoneNumber - The phone number to validate
+ * @returns true if the phone number is in valid E.164 format
+ */
+export function isValidE164(phoneNumber: string): boolean {
+  // E.164 format: + followed by 1-3 digit country code, then 1-14 digits
+  // Total length should be 8-15 characters including +
+  const e164Regex = /^\+[1-9]\d{6,14}$/;
+  return e164Regex.test(phoneNumber);
+}
+
+/**
+ * Normalizes a phone number to E.164 format
+ * Removes spaces, dashes, parentheses
+ * @param phoneNumber - The phone number (should already have country code)
+ * @returns Normalized E.164 phone number
+ */
+export function normalizeE164(phoneNumber: string): string {
+  // Remove all non-digit characters except the leading +
+  const hasPlus = phoneNumber.startsWith("+");
+  const digitsOnly = phoneNumber.replace(/\D/g, "");
+  return hasPlus ? `+${digitsOnly}` : `+${digitsOnly}`;
+}
+
 // Define the config structure for a product
 type ProductConfig = {
   mode: Stripe.Checkout.Session.Mode;

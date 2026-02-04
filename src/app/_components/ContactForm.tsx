@@ -15,11 +15,12 @@ const localisedFormSchema = (
   t: Awaited<ReturnType<typeof useTranslations>>
 ) => {
   return z.object({
+    // E.164 format: +[country code][number], e.g., +48791321431
     phoneNumber: z
       .string()
-      .min(6, t("form-validation-errors.phone-number.min"))
-      .max(15, t("form-validation-errors.phone-number.max"))
-      .regex(/^[0-9\s\-]+$/, t("form-validation-errors.phone-number.regex")),
+      .min(8, t("form-validation-errors.phone-number.min"))
+      .max(16, t("form-validation-errors.phone-number.max"))
+      .regex(/^\+[1-9]\d{6,14}$/, t("form-validation-errors.phone-number.regex")),
     name: z
       .string()
       .min(2, t("form-validation-errors.name.min"))

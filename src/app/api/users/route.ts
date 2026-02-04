@@ -7,6 +7,7 @@ import { csfrProtection } from "../utils/csfrProtection";
 import { createSubscription } from "../payments/utils/createSubscription";
 import { generateOneTimeUrl } from "../utils/oneTimeJwt";
 import { getTranslations } from "next-intl/server";
+import { isValidE164, normalizeE164 } from "@/lib/consts";
 
 export type UserData = Omit<
   User,
@@ -92,15 +93,13 @@ export const PUT = async (request: NextRequest) => {
       updateData.email = email;
     }
 
-    // Validate and add phone number if provided
+    // Validate and add phone number if provided (must be in E.164 format)
     if (phoneNumber) {
-      const phoneRegex = /^(\+[1-9]\d{0,3})?[0-9\s\-]{6,15}$/;
-      const cleanPhone = phoneNumber.replace(/[\s\-]/g, "");
-      if (
-        !phoneRegex.test(phoneNumber) ||
-        cleanPhone.length < 6 ||
-        cleanPhone.length > 18
-      ) {
+      // Normalize the phone number first
+      const normalizedPhone = normalizeE164(phoneNumber);
+
+      // Validate E.164 format
+      if (!isValidE164(normalizedPhone)) {
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-phone-number") },
           { status: 400 }
@@ -110,7 +109,7 @@ export const PUT = async (request: NextRequest) => {
       // Check if phone number is already taken by another user
       const existingPhoneUser: Pick<User, "id"> | null =
         await prisma.user.findUnique({
-          where: { phoneNumber },
+          where: { phoneNumber: normalizedPhone },
           select: {
             id: true,
           },
@@ -125,7 +124,7 @@ export const PUT = async (request: NextRequest) => {
         );
       }
 
-      updateData.phoneNumber = phoneNumber;
+      updateData.phoneNumber = normalizedPhone;
     }
 
     // Add message language if provided
@@ -193,19 +192,16 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    // Validate phone number (accepts international country codes)
-    const phoneRegex = /^(\+[1-9]\d{0,3})?[0-9\s\-]{6,15}$/;
-    const cleanPhone = body.phoneNumber.replace(/[\s\-]/g, "");
-    if (
-      !phoneRegex.test(body.phoneNumber) ||
-      cleanPhone.length < 6 ||
-      cleanPhone.length > 18
-    ) {
+    // Normalize and validate phone number (must be in E.164 format: +[country code][number])
+    const normalizedPhone = normalizeE164(body.phoneNumber);
+    if (!isValidE164(normalizedPhone)) {
       return NextResponse.json(
         { error: tShared("form-validation-errors.invalid-phone-number") },
         { status: 400 }
       );
     }
+    // Update body with normalized phone number
+    body.phoneNumber = normalizedPhone;
 
     // Check if user already exists
     const existingEmailUser: Pick<User, "id" | "trialEnds"> | null =

@@ -11,7 +11,7 @@ import { ValidationErrors } from "../_types";
 import { PhoneForm } from "./PhoneForm";
 import { useTranslations } from "next-intl";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
-import { GEO_CONTEXT } from "../_consts";
+import { toE164Format } from "@/lib/consts";
 // ContactForm is switched at the parent level; no import/render here
 
 // Validation schemas
@@ -232,7 +232,12 @@ export default function ConfirmationCodeForm({
       if (isEmailMode) {
         params.append("email", formData.email);
       } else {
-        params.append("phoneNumber", formData.phoneNumber);
+        // Combine country code and phone number in E.164 format
+        const e164PhoneNumber = toE164Format(
+          formData.countryCode,
+          formData.phoneNumber
+        );
+        params.append("phoneNumber", e164PhoneNumber);
       }
 
       const response = await fetch(`/api/confirm/otp?${params.toString()}`, {
@@ -284,6 +289,12 @@ export default function ConfirmationCodeForm({
         return;
       }
 
+      // Combine country code and phone number in E.164 format for POST
+      const e164PhoneNumber = toE164Format(
+        formData.countryCode,
+        formData.phoneNumber
+      );
+
       const response = await fetch("/api/confirm/otp", {
         method: "POST",
         headers: {
@@ -294,7 +305,7 @@ export default function ConfirmationCodeForm({
           sessionId: storedSessionId,
           ...(isEmailMode
             ? { email: formData.email }
-            : { phoneNumber: formData.phoneNumber }),
+            : { phoneNumber: e164PhoneNumber }),
           isLoginMode,
         }),
       });
@@ -356,8 +367,12 @@ export default function ConfirmationCodeForm({
           setTimeout(() => {
             setShowSuccessMessage(false);
             if (onShowContactForm) {
-              const sanitizedPhone = (formData.phoneNumber || "").trim();
-              onShowContactForm(sanitizedPhone);
+              // Pass the full E.164 formatted phone number to contact form
+              const e164Phone = toE164Format(
+                formData.countryCode,
+                formData.phoneNumber
+              );
+              onShowContactForm(e164Phone);
             }
           }, 2000);
         }
