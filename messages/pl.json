@@ -460,13 +460,26 @@
   },
   "Shared": {
     "countries": {
-      "PL": "Polska",
-      "GB": "Wielka Brytania",
-      "usa": "Stany Zjednoczone",
-      "spain": "Hiszpania",
-      "mexico": "Meksyk",
-      "chile": "Chile",
-      "italy": "Włochy"
+      "United States, Canada": "Stany Zjednoczone, Kanada",
+      "United Kingdom": "Wielka Brytania",
+      "Australia": "Australia",
+      "New Zealand": "Nowa Zelandia",
+      "Ireland": "Irlandia",
+      "Austria": "Austria",
+      "Belgium": "Belgia",
+      "Switzerland": "Szwajcaria",
+      "Denmark": "Dania",
+      "Sweden": "Szwecja",
+      "Netherlands": "Holandia",
+      "Czech Republic": "Czechy",
+      "Estonia": "Estonia",
+      "Finland": "Finlandia",
+      "Germany": "Niemcy",
+      "France": "Francja",
+      "Spain": "Hiszpania",
+      "Italy": "Włochy",
+      "Portugal": "Portugalia",
+      "Poland": "Polska"
     },
     "contact-us-email": "kontakt@wieczornyszept.pl"
   },

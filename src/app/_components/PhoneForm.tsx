@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { ValidationErrors } from "../_types";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
-import { GEO_CONTEXT } from "../_consts";
+import { GEO_CONTEXT, supportedPhoneCountryCodes } from "../_consts";
 import { useEffect, useState } from "react";
 
 type PhoneFormProps = {
@@ -39,26 +39,11 @@ export function PhoneForm({
 }: PhoneFormProps) {
   const t = useTranslations("Components.PhoneForm");
   const sharedMessages = useTranslations("Shared.countries");
-  const { isLoaded, triangulatedCountry } = useTriangulatedLocation();
-  const [phoneCountryCodeOptions, setPhoneCountryCodeOptions] =
-    useState<typeof GEO_CONTEXT>(GEO_CONTEXT);
-
+  const phoneCountryCodeOptions = supportedPhoneCountryCodes;
+  
   useEffect(() => {
-    if (isLoaded) {
-      const phoneCountryCodeOptions = GEO_CONTEXT.find(
-        (option) => option.country === triangulatedCountry
-      )
-        ? GEO_CONTEXT.filter((option) => option.country === triangulatedCountry)
-        : GEO_CONTEXT;
-      setPhoneCountryCodeOptions(phoneCountryCodeOptions);
-
-      console.log("phoneCountryCodeOptions", phoneCountryCodeOptions);
-      // Set the first country code as default if not already set
-      if (phoneCountryCodeOptions.length > 0) {
-        handleCountrySelect(phoneCountryCodeOptions[0].countryCode);
-      }
-    }
-  }, [isLoaded, triangulatedCountry]);
+    handleCountrySelect(phoneCountryCodeOptions[0].phoneCountryCode);
+  }, []);
 
   return (
     <>
@@ -128,19 +113,19 @@ export function PhoneForm({
                     >
                       {phoneCountryCodeOptions.map((option) => (
                         <button
-                          key={option.countryCode}
+                          key={option.phoneCountryCode}
                           type="button"
                           onClick={() =>
-                            handleCountrySelect(option.countryCode)
+                            handleCountrySelect(option.phoneCountryCode)
                           }
                           className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-2xl ${
-                            formData.countryCode === option.countryCode
+                            formData.countryCode === option.phoneCountryCode
                               ? "bg-gray-700"
                               : ""
                           }`}
                           data-oid="jp414j."
                         >
-                          {option.countryCode} {sharedMessages(option.country)}
+                          {option.phoneCountryCode} {sharedMessages(option.country)}
                         </button>
                       ))}
                     </div>

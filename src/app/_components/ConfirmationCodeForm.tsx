@@ -359,7 +359,7 @@ export default function ConfirmationCodeForm({
           setFormData({
             phoneNumber: "",
             email: "",
-            countryCode: countryCode,
+            countryCode,
           });
           setSessionId("");
 

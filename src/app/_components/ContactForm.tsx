@@ -91,7 +91,7 @@ export default function ContactForm({
     if (isLoaded) {
       setFormData((prev) => ({
         ...prev,
-        countryCode: countryCode,
+        countryCode,
         messageLanguage:
           languageOptions.find((o) => o.label === language)?.value ||
           SupportedLanguagesEnum.PL,

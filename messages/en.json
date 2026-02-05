@@ -288,7 +288,7 @@
     "email-already-verified-2": "already confirmed.",
     "error-contact-us": "If you need a new confirmation link, contact us.",
     "error-contact-us-2": "If you have any questions or problems with confirmation, contact us:",
-    "error-contact-us-email": "contact@eveningwhisper.co.uk",
+    "error-contact-us-email": "contact@eveningwhisper.app",
     "return-to-home": "Return to home"
   },
   "NavigationBar": {
@@ -460,15 +460,28 @@
   },
   "Shared": {
     "countries": {
-      "PL": "Poland",
-      "GB": "United Kingdom",
-      "usa": "United States",
-      "spain": "Spain",
-      "mexico": "Mexico",
-      "chile": "Chile",
-      "italy": "Italy"
+      "United States, Canada": "United States, Canada",
+      "United Kingdom": "United Kingdom",
+      "Australia": "Australia",
+      "New Zealand": "New Zealand",
+      "Ireland": "Ireland",
+      "Austria": "Austria",
+      "Belgium": "Belgium",
+      "Switzerland": "Switzerland",
+      "Denmark": "Denmark",
+      "Sweden": "Sweden",
+      "Netherlands": "Netherlands",
+      "Czech Republic": "Czech Republic",
+      "Estonia": "Estonia",
+      "Finland": "Finland",
+      "Germany": "Germany",
+      "France": "France",
+      "Spain": "Spain",
+      "Italy": "Italy",
+      "Portugal": "Portugal",
+      "Poland": "Poland"
     },
-    "contact-us-email": "contact@eveningwhisper.co.uk"
+    "contact-us-email": "contact@eveningwhisper.app"
   },
   "EmailTemplates": {
     "SHARED": {
