@@ -16,7 +16,7 @@ III. Zasady korzystania
   - wyrażenie zgody na otrzymywanie wiadomości SMS,
   - akceptacja niniejszego Regulaminu.
 2. Użytkownik zobowiązuje się do podania prawdziwego numeru telefonu i ponosi odpowiedzialność za skutki jego błędnego wprowadzenia.
-3. Użytkownik może w każdej chwili zrezygnować z otrzymywania wiadomości, klikając w link rezygnacyjny zawarty w otrzymanej wiadomości lub kontaktując się z Operatorem na adres: kontakt@wieczornyszept.pl.
+3. Użytkownik może w każdej chwili zrezygnować z otrzymywania wiadomości, klikając w link rezygnacyjny zawarty w otrzymanej wiadomości lub kontaktując się z Operatorem na adres: contact@eveningwhisper.app.
 4. Serwis nie jest przeznaczony dla osób poniżej 18 roku życia.
 
 IV. Płatności
@@ -39,7 +39,7 @@ VI. Odpowiedzialność
 4. Użytkownik zobowiązuje się do korzystania z Serwisu w sposób zgodny z prawem oraz z poszanowaniem zasad współżycia społecznego.
 
 VII. Reklamacje
-1. Reklamacje dotyczące funkcjonowania Serwisu należy zgłaszać drogą mailową na adres: kontakt@wieczornyszept.pl.
+1. Reklamacje dotyczące funkcjonowania Serwisu należy zgłaszać drogą mailową na adres: contact@eveningwhisper.app.
 2. Reklamacja powinna zawierać:
   - dane kontaktowe Użytkownika,
   - opis problemu,

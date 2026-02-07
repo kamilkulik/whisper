@@ -33,7 +33,7 @@ class ResendEmailClient implements EmailClientInterface {
       throw new Error("RESEND_API_KEY environment variable is required");
     }
     this.fromEmail =
-      process.env.FROM_EMAIL || "Wieczorny Szept <noreply@wieczornyszept.pl>";
+      process.env.FROM_EMAIL || "Evening Whisper <noreply@eveningwhisper.app>";
     this.resend = new Resend(this.apiKey);
   }
 

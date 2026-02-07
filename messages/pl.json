@@ -288,7 +288,7 @@
     "email-already-verified-2": "już potwierdzony.",
     "error-contact-us": "Jeśli potrzebujesz nowego linku potwierdzającego, skontaktuj się z nami.",
     "error-contact-us-2": "Jeśli masz pytania lub problemy z potwierdzeniem, skontaktuj się z nami:",
-    "error-contact-us-email": "kontakt@wieczornyszept.pl",
+    "error-contact-us-email": "contact@eveningwhisper.app",
     "return-to-home": "Powrót do strony głównej"
   },
   "NavigationBar": {
@@ -420,7 +420,7 @@
       "newsletter-subtitle": "Zapisz się, aby otrzymywać ekskluzywne oferty, oryginalne historie, wydarzenia i więcej.",
       "newsletter-button": "SUBMIT",
       "newsletter-placeholder": "Wprowadź swój adres email",
-      "copyright": "© 2025 Wieczorny Szept. Wszelkie prawa zastrzeżone."
+      "copyright": "© 2026 Evening Whisper. Wszelkie prawa zastrzeżone."
     },
     "PhoneForm": {
       "form-title": {
@@ -481,7 +481,7 @@
       "Portugal": "Portugalia",
       "Poland": "Polska"
     },
-    "contact-us-email": "kontakt@wieczornyszept.pl"
+    "contact-us-email": "contact@eveningwhisper.app"
   },
   "EmailTemplates": {
     "SHARED": {
@@ -610,7 +610,7 @@
               ]
             },
             "2": "Użytkownik zobowiązuje się do podania prawdziwego numeru telefonu i ponosi odpowiedzialność za skutki jego błędnego wprowadzenia.",
-            "3": "Użytkownik może w każdej chwili zrezygnować z otrzymywania wiadomości, klikając w link rezygnacyjny zawarty w otrzymanej wiadomości lub kontaktując się z Operatorem na adres: kontakt@wieczornyszept.pl.",
+            "3": "Użytkownik może w każdej chwili zrezygnować z otrzymywania wiadomości, klikając w link rezygnacyjny zawarty w otrzymanej wiadomości lub kontaktując się z Operatorem na adres: contact@eveningwhisper.app.",
             "4": "Serwis nie jest przeznaczony dla osób poniżej 18 roku życia."
           }
         },
@@ -645,7 +645,7 @@
         "VII": {
           "title": "Reklamacje",
           "terms": {
-            "1": "Reklamacje dotyczące funkcjonowania Serwisu należy zgłaszać drogą mailową na adres: kontakt@wieczornyszept.pl.",
+            "1": "Reklamacje dotyczące funkcjonowania Serwisu należy zgłaszać drogą mailową na adres: contact@eveningwhisper.app.",
             "2": {
               "text": "Reklamacja powinna zawierać:",
               "subitems": [
@@ -761,7 +761,7 @@
               "prawo sprzeciwu wobec przetwarzania danych na podstawie uzasadnionego interesu Administratora",
               "prawo cofnięcia zgody na przetwarzanie danych w dowolnym momencie"
             ],
-            "2": "Aby skorzystać z powyższych praw, należy skontaktować się z Administratorem na adres e-mail: kontakt@wieczornyszept.pl.",
+            "2": "Aby skorzystać z powyższych praw, należy skontaktować się z Administratorem na adres e-mail: contact@eveningwhisper.app.",
             "3": "Użytkownik ma również prawo złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (UODO)."
           }
         },

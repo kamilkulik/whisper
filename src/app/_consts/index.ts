@@ -3,7 +3,7 @@ import { SupportedLanguagesEnum } from "@prisma/client";
 export const GB_DOMAIN = "eveningwhisper.co.uk";
 export const GB_CONTACT_EMAIL = "contact@eveningwhisper.co.uk";
 export const PL_DOMAIN = "wieczornyszept.pl";
-export const PL_CONTACT_EMAIL = "kontakt@wieczornyszept.pl";
+export const PL_CONTACT_EMAIL = "contact@eveningwhisper.app";
 export const DEFAULT_COUNTRY_DOMAIN = "eveningwhisper.app";
 export const DEFAULT_COUNTRY_CONTACT_EMAIL = "contact@eveningwhisper.app";
 export const PL_COUNTRY_CODE = "PL";
