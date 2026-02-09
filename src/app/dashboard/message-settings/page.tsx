@@ -15,10 +15,12 @@ export default async function MessageSettingsPage() {
     redirect("/?modal=login");
   }
 
-  const userFromSession = await getUserFromSessionId<"messageLanguage">(
+  const userFromSession = await getUserFromSessionId<"messageLanguage" | "timezone" | "deliveryHour">(
     sessionId.value,
     {
       messageLanguage: true,
+      timezone: true,
+      deliveryHour: true,
     }
   );
 

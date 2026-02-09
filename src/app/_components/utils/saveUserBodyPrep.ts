@@ -1,5 +1,6 @@
 import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { UserData } from "@/app/api/users/route";
+import { DEFAULT_TIMEZONE, DEFAULT_DELIVERY_HOUR } from "@/app/_consts";
 
 export interface GatheredUserData {
   email: string;
@@ -45,5 +46,7 @@ export function prepSaveUserBody({
     phoneNumber,
     phoneNumberVerified: true,
     premium,
+    timezone: DEFAULT_TIMEZONE,
+    deliveryHour: DEFAULT_DELIVERY_HOUR,
   };
 }

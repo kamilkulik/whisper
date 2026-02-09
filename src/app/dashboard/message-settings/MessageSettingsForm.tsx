@@ -3,16 +3,18 @@
 import { useState } from "react";
 import { User, SupportedLanguagesEnum } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { languageOptions } from "@/app/_consts";
+import { languageOptions, timezoneOptions, deliveryHourOptions } from "@/app/_consts";
 
 interface MessageSettingsFormProps {
-  user: Pick<User, "messageLanguage">;
+  user: Pick<User, "messageLanguage" | "timezone" | "deliveryHour">;
 }
 
 export default function MessageSettingsForm({
   user,
 }: MessageSettingsFormProps) {
   const [messageLanguage, setMessageLanguage] = useState(user.messageLanguage);
+  const [timezone, setTimezone] = useState(user.timezone);
+  const [deliveryHour, setDeliveryHour] = useState(user.deliveryHour);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -33,6 +35,8 @@ export default function MessageSettingsForm({
         },
         body: JSON.stringify({
           messageLanguage,
+          timezone,
+          deliveryHour,
         }),
       });
 
@@ -41,23 +45,32 @@ export default function MessageSettingsForm({
       if (response.ok) {
         setMessage({
           type: "success",
-          text: t("language-set-success"),
+          text: t("settings-saved-success"),
         });
       } else {
         setMessage({
           type: "error",
-          text: data.message || t("language-set-error"),
+          text: data.message || t("settings-saved-error"),
         });
       }
     } catch (error) {
       setMessage({
         type: "error",
-        text: t("language-set-error"),
+        text: t("settings-saved-error"),
       });
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Group timezones by region for better UX
+  const groupedTimezones = timezoneOptions.reduce((acc, tz) => {
+    if (!acc[tz.region]) {
+      acc[tz.region] = [];
+    }
+    acc[tz.region].push(tz);
+    return acc;
+  }, {} as Record<string, (typeof timezoneOptions)[number][]>);
 
   return (
     <div className="space-y-6">
@@ -73,38 +86,101 @@ export default function MessageSettingsForm({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-16">
-        <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="messageLanguage"
-              className="block text-white text-left font-medium mb-2"
-            >
-              {t("message-language")}
-            </label>
-            <select
-              id="messageLanguage"
-              value={messageLanguage}
-              onChange={(e) =>
-                setMessageLanguage(e.target.value as SupportedLanguagesEnum)
-              }
-              className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent"
-              required
-            >
-              {languageOptions.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                  className="bg-gray-800 text-white"
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Message Language */}
+        <div>
+          <label
+            htmlFor="messageLanguage"
+            className="block text-white text-left font-medium mb-2"
+          >
+            {t("message-language")}
+          </label>
+          <select
+            id="messageLanguage"
+            value={messageLanguage}
+            onChange={(e) =>
+              setMessageLanguage(e.target.value as SupportedLanguagesEnum)
+            }
+            className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent"
+            required
+          >
+            {languageOptions.map((option) => (
+              <option
+                key={option.value}
+                value={option.value}
+                className="bg-gray-800 text-white"
+              >
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <div className="flex gap-4">
+        {/* Timezone */}
+        <div>
+          <label
+            htmlFor="timezone"
+            className="block text-white text-left font-medium mb-2"
+          >
+            {t("timezone")}
+          </label>
+          <p className="text-gray-400 text-sm mb-2">
+            {t("timezone-description")}
+          </p>
+          <select
+            id="timezone"
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+            className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent"
+            required
+          >
+            {Object.entries(groupedTimezones).map(([region, tzs]) => (
+              <optgroup key={region} label={region} className="bg-gray-800 text-gray-400">
+                {tzs.map((tz) => (
+                  <option
+                    key={tz.value}
+                    value={tz.value}
+                    className="bg-gray-800 text-white"
+                  >
+                    {tz.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+
+        {/* Delivery Hour */}
+        <div>
+          <label
+            htmlFor="deliveryHour"
+            className="block text-white text-left font-medium mb-2"
+          >
+            {t("delivery-hour")}
+          </label>
+          <p className="text-gray-400 text-sm mb-2">
+            {t("delivery-hour-description")}
+          </p>
+          <select
+            id="deliveryHour"
+            value={deliveryHour}
+            onChange={(e) => setDeliveryHour(parseInt(e.target.value, 10))}
+            className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent"
+            required
+          >
+            {deliveryHourOptions.map((option) => (
+              <option
+                key={option.value}
+                value={option.value}
+                className="bg-gray-800 text-white"
+              >
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex gap-4 pt-4">
           <button
             type="submit"
             disabled={isLoading}

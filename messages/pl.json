@@ -259,11 +259,17 @@
     "settings": {
       "title": "Ustawienia",
       "change-email-and-phone": "Zmień email i telefon →",
-      "change-message-language": "Zmień język wiadomości →",
+      "change-message-language": "Zmień ustawienia wiadomości →",
       "message-settings": {
         "language-set-success": "Język wiadomości został zaktualizowany pomyślnie!",
         "language-set-error": "Wystąpił błąd podczas aktualizacji języka.",
+        "settings-saved-success": "Ustawienia zostały zapisane pomyślnie!",
+        "settings-saved-error": "Wystąpił błąd podczas zapisywania ustawień.",
         "message-language": "Język wiadomości",
+        "timezone": "Twoja strefa czasowa",
+        "timezone-description": "Wybierz swoją strefę czasową, aby otrzymywać wiadomości o odpowiedniej porze.",
+        "delivery-hour": "Godzina dostawy",
+        "delivery-hour-description": "Wybierz, o której godzinie chcesz otrzymywać codzienną wiadomość.",
         "cancel": "Anuluj",
         "form-loading": "Aktualizowanie...",
         "form-save-changes": "Zapisz zmiany"
@@ -574,7 +580,9 @@
       "invalid-email": "Nieprawidłowy format email",
       "email-already-taken": "Nie możesz użyć tego emaila",
       "invalid-phone-number": "Nieprawidłowy format numeru telefonu",
-      "phone-number-already-taken": "Nie możesz użyć tego numeru telefonu"
+      "phone-number-already-taken": "Nie możesz użyć tego numeru telefonu",
+      "invalid-timezone": "Wybrana strefa czasowa jest nieprawidłowa",
+      "invalid-delivery-hour": "Nieprawidłowa godzina dostawy. Wybierz wartość od 0 do 23."
     }
   },
   "LEGAL": {

@@ -89,6 +89,8 @@ model User {
   lastUsedMessageId       Int?                   @map("last_used_message")
   messageLanguage         SupportedLanguagesEnum @map("message_language")
   sessionId               String?                @unique @map("session_id")
+  timezone                String                 @default("Europe/Warsaw") @map("timezone")
+  deliveryHour            Int                    @default(20) @map("delivery_hour") // 0-23, message sent at HH:59
   createdAt               DateTime               @default(now()) @map("created_at")
   updatedAt               DateTime?              @updatedAt @map("updated_at")
 

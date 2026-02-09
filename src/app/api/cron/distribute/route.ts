@@ -15,6 +15,8 @@ export type UserRawType = {
   phone_number: string;
   message_language: SupportedLanguagesEnum;
   last_used_message: number;
+  timezone: string;
+  delivery_hour: number;
 };
 
 export const GET = async (request: NextRequest) => {
@@ -43,7 +45,7 @@ export const GET = async (request: NextRequest) => {
 
     // 1. get all users who should receive a message
     const users: UserRawType[] = await prisma.$queryRaw`
-      SELECT u.id, u.last_used_message, u.message_language, u.phone_number
+      SELECT u.id, u.last_used_message, u.message_language, u.phone_number, u.timezone, u.delivery_hour
       FROM users u 
       LEFT JOIN subscriptions s ON s.user_id = u.id 
       AND s.status = ${SubscriptionStatus.ACTIVE}::"SubscriptionStatus"
@@ -128,9 +130,12 @@ export const GET = async (request: NextRequest) => {
 
         if (messageText) {
           console.log(
-            `[ /api/cron/distribute ] Sending message to user ${user.id} with message: ${messageText}`
+            `[ /api/cron/distribute ] Sending message to user ${user.id} with message: ${messageText} (timezone: ${user.timezone}, hour: ${user.delivery_hour}:59)`
           );
-          await sendSms(user.phone_number, messageText, true);
+          await sendSms(user.phone_number, messageText, true, {
+            timezone: user.timezone,
+            deliveryHour: user.delivery_hour,
+          });
 
           // update what message got sent
           await prisma.user.update({

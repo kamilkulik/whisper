@@ -8,6 +8,7 @@ import { createSubscription } from "../payments/utils/createSubscription";
 import { generateOneTimeUrl } from "../utils/oneTimeJwt";
 import { getTranslations } from "next-intl/server";
 import { isValidE164, normalizeE164 } from "@/lib/consts";
+import { isValidTimezone, isValidDeliveryHour, DEFAULT_TIMEZONE, DEFAULT_DELIVERY_HOUR } from "@/app/_consts";
 
 export type UserData = Omit<
   User,
@@ -49,10 +50,10 @@ export const PUT = async (request: NextRequest) => {
     }
 
     const body = await request.json();
-    const { email, phoneNumber, messageLanguage } = body;
+    const { email, phoneNumber, messageLanguage, timezone, deliveryHour } = body;
 
     // Validate that at least one field is provided
-    if (!email && !phoneNumber && !messageLanguage) {
+    if (!email && !phoneNumber && !messageLanguage && !timezone && deliveryHour === undefined) {
       return NextResponse.json(
         { error: tShared("form-validation-errors.missing-fields") },
         { status: 400 }
@@ -130,6 +131,28 @@ export const PUT = async (request: NextRequest) => {
     // Add message language if provided
     if (messageLanguage) {
       updateData.messageLanguage = messageLanguage;
+    }
+
+    // Validate and add timezone if provided
+    if (timezone) {
+      if (!isValidTimezone(timezone)) {
+        return NextResponse.json(
+          { error: tShared("form-validation-errors.invalid-timezone") },
+          { status: 400 }
+        );
+      }
+      updateData.timezone = timezone;
+    }
+
+    // Validate and add delivery hour if provided
+    if (deliveryHour !== undefined) {
+      if (!isValidDeliveryHour(deliveryHour)) {
+        return NextResponse.json(
+          { error: tShared("form-validation-errors.invalid-delivery-hour") },
+          { status: 400 }
+        );
+      }
+      updateData.deliveryHour = deliveryHour;
     }
 
     // Update user
@@ -237,14 +260,35 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: t("trial-used") }, { status: 400 });
       }
 
+      // Determine which user ID to update (prefer phone number user if both exist)
+      const userIdToUpdate = existingPhoneNumberUser?.id || existingEmailUser?.id;
+      if (!userIdToUpdate) {
+        return NextResponse.json(
+          { error: tShared("PUT.error") },
+          { status: 500 }
+        );
+      }
+
       // Update existing user
+      // Type assertion needed because UserData type may not include new fields yet
+      const bodyWithDefaults = body as UserData & {
+        timezone?: string;
+        deliveryHour?: number;
+      };
+
       await prisma.user.update({
-        where: { phoneNumber: body.phoneNumber },
+        where: { id: userIdToUpdate },
         data: {
-          phoneNumber: body.email,
+          email: body.email,
+          phoneNumber: body.phoneNumber,
           name: body.name,
-          updatedAt: new Date(),
+          messageLanguage: body.messageLanguage,
+          emailVerified: body.emailVerified ?? false,
+          phoneNumberVerified: body.phoneNumberVerified ?? false,
           premium: body.premium,
+          timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
+          deliveryHour: bodyWithDefaults.deliveryHour ?? DEFAULT_DELIVERY_HOUR,
+          updatedAt: new Date(),
         },
       });
     } else {

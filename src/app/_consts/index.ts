@@ -31,7 +31,7 @@ export const supportedPhoneCountryCodes = [
   { "country": "Sweden", "phoneCountryCode": "+46" },
   { "country": "Switzerland", "phoneCountryCode": "+41" },
   { "country": "United Kingdom", "phoneCountryCode": "+44" },
-];
+] as const;
 
 export const GEO_CONTEXT = [
   {
@@ -96,3 +96,89 @@ export const languageOptions = [
   // { value: SupportedLanguagesEnum.ES, label: "Español" },
   // { value: SupportedLanguagesEnum.IT, label: "Italiano" },
 ];
+
+// IANA timezone identifiers for user timezone selection
+// Note: Offsets are for standard time (winter). DST adjustments are handled automatically by JavaScript Date
+export const timezoneOptions = [
+  // Europe
+  { value: "Europe/Warsaw", label: "Warsaw (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/London", label: "London (GMT/BST)", region: "Europe", offset: "+00:00" },
+  { value: "Europe/Paris", label: "Paris (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Berlin", label: "Berlin (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Madrid", label: "Madrid (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Rome", label: "Rome (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Amsterdam", label: "Amsterdam (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Brussels", label: "Brussels (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Vienna", label: "Vienna (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Prague", label: "Prague (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Stockholm", label: "Stockholm (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Copenhagen", label: "Copenhagen (CET/CEST)", region: "Europe", offset: "+01:00" },
+  { value: "Europe/Helsinki", label: "Helsinki (EET/EEST)", region: "Europe", offset: "+02:00" },
+  { value: "Europe/Lisbon", label: "Lisbon (WET/WEST)", region: "Europe", offset: "+00:00" },
+  { value: "Europe/Dublin", label: "Dublin (GMT/IST)", region: "Europe", offset: "+00:00" },
+  { value: "Europe/Zurich", label: "Zurich (CET/CEST)", region: "Europe", offset: "+01:00" },
+  // Americas
+  { value: "America/New_York", label: "New York (EST/EDT)", region: "Americas", offset: "-05:00" },
+  { value: "America/Chicago", label: "Chicago (CST/CDT)", region: "Americas", offset: "-06:00" },
+  { value: "America/Denver", label: "Denver (MST/MDT)", region: "Americas", offset: "-07:00" },
+  { value: "America/Los_Angeles", label: "Los Angeles (PST/PDT)", region: "Americas", offset: "-08:00" },
+  { value: "America/Toronto", label: "Toronto (EST/EDT)", region: "Americas", offset: "-05:00" },
+  { value: "America/Vancouver", label: "Vancouver (PST/PDT)", region: "Americas", offset: "-08:00" },
+  // Oceania
+  { value: "Australia/Sydney", label: "Sydney (AEST/AEDT)", region: "Oceania", offset: "+10:00" },
+  { value: "Australia/Melbourne", label: "Melbourne (AEST/AEDT)", region: "Oceania", offset: "+10:00" },
+  { value: "Australia/Perth", label: "Perth (AWST)", region: "Oceania", offset: "+08:00" },
+  { value: "Pacific/Auckland", label: "Auckland (NZST/NZDT)", region: "Oceania", offset: "+12:00" },
+] as const;
+
+export type TimezoneOption = (typeof timezoneOptions)[number]["value"];
+
+// Delivery hour options (0-23)
+export const deliveryHourOptions = Array.from({ length: 24 }, (_, i) => ({
+  value: i,
+  label: `${i.toString().padStart(2, "0")}:59`,
+}));
+
+// Default timezone
+export const DEFAULT_TIMEZONE: TimezoneOption = "Europe/Warsaw";
+export const DEFAULT_DELIVERY_HOUR = 20;
+
+// Get timezone offset for a given timezone
+export function getTimezoneOffset(timezone: TimezoneOption): string {
+  const tzOption = timezoneOptions.find((opt) => opt.value === timezone);
+  if (!tzOption) {
+    return "+00:00"; // Default to UTC if timezone not found
+  }
+  // Get the actual current offset (handles DST automatically)
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat("en", {
+    timeZone: timezone,
+    timeZoneName: "longOffset",
+  });
+  const parts = formatter.formatToParts(now);
+  const offsetPart = parts.find((p) => p.type === "timeZoneName");
+  
+  if (offsetPart?.value) {
+    // Parse formats like "GMT+1", "GMT-5", "GMT+5:30"
+    const match = offsetPart.value.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/);
+    if (match) {
+      const sign = match[1];
+      const hours = match[2].padStart(2, "0");
+      const minutes = (match[3] || "00").padStart(2, "0");
+      return `${sign}${hours}:${minutes}`;
+    }
+  }
+  
+  // Fallback to standard offset if we can't determine current offset
+  return tzOption.offset;
+}
+
+// Validate timezone against known list
+export function isValidTimezone(tz: TimezoneOption): boolean {
+  return timezoneOptions.some((option) => option.value === tz);
+}
+
+// Validate delivery hour (0-23)
+export function isValidDeliveryHour(hour: number): boolean {
+  return Number.isInteger(hour) && hour >= 0 && hour <= 23;
+}
