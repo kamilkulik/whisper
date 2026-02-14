@@ -4,7 +4,10 @@ import twilio, { RestException } from "twilio";
 import { isValidE164, normalizeE164 } from "./consts";
 import { getTimezoneOffset, TimezoneOption } from "@/app/_consts";
 import { DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE } from "@/app/_consts";
-import { MessageListInstanceCreateOptions, MessageScheduleType } from "twilio/lib/rest/api/v2010/account/message";
+import {
+  MessageListInstanceCreateOptions,
+  MessageScheduleType,
+} from "twilio/lib/rest/api/v2010/account/message";
 
 export interface SchedulingOptions {
   timezone: string; // IANA timezone (e.g., "Europe/Warsaw", "America/New_York")
@@ -16,7 +19,7 @@ abstract class SmsClientInterface {
     phoneNumber: string,
     message: string,
     scheduled: boolean,
-    schedulingOptions?: SchedulingOptions
+    schedulingOptions?: SchedulingOptions,
   ): Promise<void>;
 
   /**
@@ -29,7 +32,7 @@ abstract class SmsClientInterface {
    */
   protected createUTCdistributionDate(
     timezone: TimezoneOption = DEFAULT_TIMEZONE,
-    deliveryHour: number = DEFAULT_DELIVERY_HOUR
+    deliveryHour: number = DEFAULT_DELIVERY_HOUR,
   ): Date {
     const nowUtc = new Date();
 
@@ -86,18 +89,18 @@ class SmsApiClient extends SmsClientInterface {
     phoneNumber: string,
     message: string,
     _scheduled: boolean,
-    _schedulingOptions?: SchedulingOptions
+    _schedulingOptions?: SchedulingOptions,
   ): Promise<void> {
     try {
       console.log(
-        `[ SmsApiClient.sendSms ]Sending SMS to ${phoneNumber}: ${message}`
+        `[ SmsApiClient.sendSms ]Sending SMS to ${phoneNumber}: ${message}`,
       );
       const result = await this.smsapi.sms.sendSms(`${phoneNumber}`, message);
       console.log(`[ SmsApiClient.sendSms ] SMS API response:`, result);
     } catch (error) {
       console.error(
         `[ SmsApiClient.sendSms ] Failed to send SMS to ${phoneNumber}:`,
-        error
+        error,
       );
     }
   }
@@ -112,7 +115,7 @@ class SmsPlanetClient extends SmsClientInterface {
     this.authToken = process.env.SMS_PLANET_TOKEN || "";
     if (!this.authToken) {
       throw new Error(
-        "[ SmsPlanetClient] SMS_PLANET_TOKEN environment variable is required"
+        "[ SmsPlanetClient] SMS_PLANET_TOKEN environment variable is required",
       );
     }
   }
@@ -121,23 +124,28 @@ class SmsPlanetClient extends SmsClientInterface {
     phoneNumber: string,
     message: string,
     scheduled: boolean,
-    schedulingOptions?: SchedulingOptions
+    schedulingOptions?: SchedulingOptions,
   ): Promise<void> {
     try {
       console.log(
-        `[ SmsPlanetClient.sendSms ] Sending SMS via SmsPlanet to ${phoneNumber}: ${message}`
+        `[ SmsPlanetClient.sendSms ] Sending SMS via SmsPlanet to ${phoneNumber}: ${message}`,
       );
 
       // Calculate scheduled time based on user's timezone and delivery hour
       let scheduledDate: string | undefined;
       if (scheduled) {
-        const timezone = schedulingOptions?.timezone as TimezoneOption ?? DEFAULT_TIMEZONE;
-        const deliveryHour = schedulingOptions?.deliveryHour ?? DEFAULT_DELIVERY_HOUR;
-        const utcDistributionDate = this.createUTCdistributionDate(timezone, deliveryHour);
+        const timezone =
+          (schedulingOptions?.timezone as TimezoneOption) ?? DEFAULT_TIMEZONE;
+        const deliveryHour =
+          schedulingOptions?.deliveryHour ?? DEFAULT_DELIVERY_HOUR;
+        const utcDistributionDate = this.createUTCdistributionDate(
+          timezone,
+          deliveryHour,
+        );
         // SMS Planet expects CET time format: dd-MM-yyyy HH:mm:ss
         scheduledDate = this.toTimezoneDate(utcDistributionDate, "CET");
         console.log(
-          `[ SmsPlanetClient.sendSms ] Scheduling for timezone ${timezone}, hour ${deliveryHour}:59, CET: ${scheduledDate}`
+          `[ SmsPlanetClient.sendSms ] Scheduling for timezone ${timezone}, hour ${deliveryHour}:59, CET: ${scheduledDate}`,
         );
       }
 
@@ -179,13 +187,13 @@ class SmsPlanetClient extends SmsClientInterface {
       // Check HTTP status code as well
       if (!response.ok) {
         throw new Error(
-          `SMS Planet API HTTP error: ${response.status} ${response.statusText}`
+          `SMS Planet API HTTP error: ${response.status} ${response.statusText}`,
         );
       }
     } catch (error) {
       console.error(
         `[ SmsPlanetClient.sendSms ] Failed to send SMS via SmsPlanet to ${phoneNumber}:`,
-        error
+        error,
       );
       throw error;
     }
@@ -195,67 +203,76 @@ class SmsPlanetClient extends SmsClientInterface {
 class TwilioClient extends SmsClientInterface {
   private readonly client: twilio.Twilio;
   private readonly fromPhoneNumber: string;
+  private readonly messagingServiceSid: string;
 
   constructor() {
     super();
     const accountSid = process.env.TWILIO_ACCOUNT_SID || "";
+    const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID || "";
     const authToken = process.env.TWILIO_AUTH_TOKEN || "";
     const fromPhoneNumber = process.env.TWILIO_PHONE_NUMBER || "";
 
     if (!accountSid) {
       throw new Error(
-        "[ TwilioClient ] TWILIO_ACCOUNT_SID environment variable is required"
+        "[ TwilioClient ] TWILIO_ACCOUNT_SID environment variable is required",
       );
     }
     if (!authToken) {
       throw new Error(
-        "[ TwilioClient ] TWILIO_AUTH_TOKEN environment variable is required"
+        "[ TwilioClient ] TWILIO_AUTH_TOKEN environment variable is required",
       );
     }
     if (!fromPhoneNumber) {
       throw new Error(
-        "[ TwilioClient ] TWILIO_PHONE_NUMBER environment variable is required"
+        "[ TwilioClient ] TWILIO_PHONE_NUMBER environment variable is required",
       );
     }
 
     this.client = twilio(accountSid, authToken);
     this.fromPhoneNumber = fromPhoneNumber;
+    this.messagingServiceSid = messagingServiceSid;
   }
 
   async sendSms(
     phoneNumber: string,
     message: string,
     scheduled: boolean,
-    schedulingOptions?: SchedulingOptions
+    schedulingOptions?: SchedulingOptions,
   ): Promise<void> {
     try {
       console.log(
-        `[ TwilioClient.sendSms ] Sending SMS via Twilio to ${phoneNumber}: ${message}`
+        `[ TwilioClient.sendSms ] Sending SMS via Twilio to ${phoneNumber}: ${message}`,
       );
 
       const messageOptions: MessageListInstanceCreateOptions = {
         body: message,
         to: phoneNumber,
         from: this.fromPhoneNumber,
+        messagingServiceSid: this.messagingServiceSid,
       };
 
       // If scheduled is true, set the sendAt time based on user's timezone and delivery hour
       if (scheduled) {
-        const timezone = schedulingOptions?.timezone as TimezoneOption ?? DEFAULT_TIMEZONE;
-        const deliveryHour = schedulingOptions?.deliveryHour ?? DEFAULT_DELIVERY_HOUR;
-        const sendAtDate = this.createUTCdistributionDate(timezone, deliveryHour);
+        const timezone =
+          (schedulingOptions?.timezone as TimezoneOption) ?? DEFAULT_TIMEZONE;
+        const deliveryHour =
+          schedulingOptions?.deliveryHour ?? DEFAULT_DELIVERY_HOUR;
+        const sendAtDate = this.createUTCdistributionDate(
+          timezone,
+          deliveryHour,
+        );
         messageOptions.sendAt = sendAtDate; // ISO-8601
         messageOptions.scheduleType = "fixed";
-        
+
         console.log(
-          `[ TwilioClient.sendSms ] Scheduling SMS for ${sendAtDate.toISOString()} (timezone: ${timezone}, hour: ${deliveryHour}:59)`
+          `[ TwilioClient.sendSms ] Scheduling SMS for ${sendAtDate.toISOString()} (timezone: ${timezone}, hour: ${deliveryHour}:59)`,
         );
       }
 
       const result = await this.client.messages.create(messageOptions);
-      
+
       console.log(
-        `[ TwilioClient.sendSms ] Twilio message sent successfully. SID: ${result.sid}`
+        `[ TwilioClient.sendSms ] Twilio message sent successfully. SID: ${result.sid}`,
       );
     } catch (error) {
       if (error instanceof RestException) {
@@ -264,15 +281,13 @@ class TwilioClient extends SmsClientInterface {
           {
             status: error.status,
             moreInfo: error.moreInfo,
-          }
+          },
         );
-        throw new Error(
-          `Twilio API error ${error.code}: ${error.message}`
-        );
+        throw new Error(`Twilio API error ${error.code}: ${error.message}`);
       } else {
         console.error(
           `[ TwilioClient.sendSms ] Failed to send SMS via Twilio to ${phoneNumber}:`,
-          error
+          error,
         );
         throw error;
       }
@@ -289,13 +304,16 @@ class LocalSmsClient extends SmsClientInterface {
     phoneNumber: string,
     message: string,
     scheduled: boolean,
-    schedulingOptions?: SchedulingOptions
+    schedulingOptions?: SchedulingOptions,
   ): Promise<void> {
     const timezone = schedulingOptions?.timezone ?? DEFAULT_TIMEZONE;
-    const deliveryHour = schedulingOptions?.deliveryHour ?? DEFAULT_DELIVERY_HOUR;
+    const deliveryHour =
+      schedulingOptions?.deliveryHour ?? DEFAULT_DELIVERY_HOUR;
     console.log(
       `[ LocalSmsClient.sendSms ] Sending SMS to ${phoneNumber}: ${message}`,
-      scheduled ? `(scheduled for ${deliveryHour}:59 in ${timezone})` : "(immediate)"
+      scheduled
+        ? `(scheduled for ${deliveryHour}:59 in ${timezone})`
+        : "(immediate)",
     );
   }
 }
@@ -304,13 +322,13 @@ export async function sendSms(
   phoneNumber: string,
   message: string,
   scheduled: boolean,
-  schedulingOptions?: SchedulingOptions
+  schedulingOptions?: SchedulingOptions,
 ) {
   // Normalize and validate E.164 format before sending
   const normalizedPhone = normalizeE164(phoneNumber);
   if (!isValidE164(normalizedPhone)) {
     throw new Error(
-      `[ sendSms ] Invalid phone number format. Expected E.164 format (e.g., +48791321431), got: ${phoneNumber}`
+      `[ sendSms ] Invalid phone number format. Expected E.164 format (e.g., +48791321431), got: ${phoneNumber}`,
     );
   }
 
@@ -319,23 +337,43 @@ export async function sendSms(
   switch (configuredSmsClient) {
     case "smsapi":
       const smsApiClient = new SmsApiClient();
-      await smsApiClient.sendSms(normalizedPhone, message, scheduled, schedulingOptions);
+      await smsApiClient.sendSms(
+        normalizedPhone,
+        message,
+        scheduled,
+        schedulingOptions,
+      );
       break;
     case "smsplanet":
       const smsPlanetClient = new SmsPlanetClient();
-      await smsPlanetClient.sendSms(normalizedPhone, message, scheduled, schedulingOptions);
+      await smsPlanetClient.sendSms(
+        normalizedPhone,
+        message,
+        scheduled,
+        schedulingOptions,
+      );
       break;
     case "twilio":
       const twilioClient = new TwilioClient();
-      await twilioClient.sendSms(normalizedPhone, message, scheduled, schedulingOptions);
+      await twilioClient.sendSms(
+        normalizedPhone,
+        message,
+        scheduled,
+        schedulingOptions,
+      );
       break;
     case "local":
       const localSmsClient = new LocalSmsClient();
-      await localSmsClient.sendSms(normalizedPhone, message, scheduled, schedulingOptions);
+      await localSmsClient.sendSms(
+        normalizedPhone,
+        message,
+        scheduled,
+        schedulingOptions,
+      );
       break;
     default:
       throw new Error(
-        `[ sendSms ] Unsupported SMS API provider: ${configuredSmsClient}`
+        `[ sendSms ] Unsupported SMS API provider: ${configuredSmsClient}`,
       );
   }
 }
