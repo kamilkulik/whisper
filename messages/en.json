@@ -6,9 +6,9 @@
   "LandingPage": {
     "hero": {
       "brand": "EVENING WHISPER",
-      "title-1": "A little whisper each day — like from a ",
-      "title-2": "loved one",
-      "title-3": "who remembers and cares about you",
+      "title-1": "End your day feeling",
+      "title-2": "loved",
+      "title-3": "",
       "copy": {
         "c-1": "A short message to warm your heart and lift your spirit.",
         "c-2": "Every evening, at the same time.",
@@ -152,10 +152,10 @@
       "subtitle-5": "evening",
       "trial-card": {
         "title": "Test for free",
-        "duration": "NO STRINGS ATTACHED",
+        "duration": "First 7 days free",
         "currency": "£",
         "period": "for 7 days",
-        "CTA-button": "Start your trial"
+        "CTA-button": "Start free trial"
       },
       "one-time-purchase-card": {
         "tooltip": "popular choice",
@@ -577,17 +577,17 @@
         "error": "An error occurred while saving your data"
       },
       "unauthorized": "Unauthorized - No valid session",
-    "form-validation-errors": {
-      "all-fields-required": "All fields are required",
-      "missing-fields": "At least one field must be provided",
-      "invalid-email": "Invalid email format",
-      "email-already-taken": "You cannot use this email",
-      "invalid-phone-number": "Invalid phone number format",
-      "phone-number-already-taken": "You cannot use this phone number",
-      "invalid-timezone": "Invalid timezone selected",
-      "invalid-delivery-hour": "Invalid delivery hour. Please select a value between 0 and 23."
+      "form-validation-errors": {
+        "all-fields-required": "All fields are required",
+        "missing-fields": "At least one field must be provided",
+        "invalid-email": "Invalid email format",
+        "email-already-taken": "You cannot use this email",
+        "invalid-phone-number": "Invalid phone number format",
+        "phone-number-already-taken": "You cannot use this phone number",
+        "invalid-timezone": "Invalid timezone selected",
+        "invalid-delivery-hour": "Invalid delivery hour. Please select a value between 0 and 23."
+      }
     }
-  }
   },
   "LEGAL": {
     "terms-and-conditions": {

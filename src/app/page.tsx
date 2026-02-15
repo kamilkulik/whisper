@@ -615,7 +615,7 @@ export default function Home() {
                 <div className="lg:col-span-2 space-y-8">
                   <div>
                     <h1
-                      className="copy-line text-5xl lg:text-4xl font-bold text-white leading-tight"
+                      className="copy-line text-6xl lg:text-6xl font-bold text-white leading-tight"
                       data-delay="0"
                     >
                       {t("hero.title-1")}{" "}
