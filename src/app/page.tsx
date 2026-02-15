@@ -282,7 +282,7 @@ export default function Home() {
   const getImageSrcset = (baseName: string, locale: string | null): string => {
     if (!locale) return "";
 
-    const sizes = [640, 1080, 1280];
+    const sizes = [480, 640, 1080];
     return sizes
       .map((size) => `/${locale}/${baseName}_${size}.jpg ${size}w`)
       .join(", ");
@@ -344,22 +344,22 @@ export default function Home() {
   const carouselImages = currentLocale
     ? [
         {
-          src: `/${currentLocale}/szept_1_1280.jpg`,
+          src: `/${currentLocale}/szept_1_1080.jpg`,
           srcset: getImageSrcset("szept_1", currentLocale),
           alt: "Wieczorny Szept Image 1",
         },
         {
-          src: `/${currentLocale}/szept_2_1280.jpg`,
+          src: `/${currentLocale}/szept_2_1080.jpg`,
           srcset: getImageSrcset("szept_2", currentLocale),
           alt: "Wieczorny Szept Image 2",
         },
         {
-          src: `/${currentLocale}/szept_3_1280.jpg`,
+          src: `/${currentLocale}/szept_3_1080.jpg`,
           srcset: getImageSrcset("szept_3", currentLocale),
           alt: "Wieczorny Szept Image 3",
         },
         {
-          src: `/${currentLocale}/szept_4_1280.jpg`,
+          src: `/${currentLocale}/szept_4_1080.jpg`,
           srcset: getImageSrcset("szept_4", currentLocale),
           alt: "Wieczorny Szept Image 4",
         },
@@ -928,7 +928,7 @@ export default function Home() {
                   <div className="order-2 lg:order-2 flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     {currentLocale ? (
                       <img
-                        src={`/${currentLocale}/single_whisper_1280.jpg`}
+                        src={`/${currentLocale}/single_whisper_1080.jpg`}
                         srcSet={getImageSrcset("single_whisper", currentLocale)}
                         alt="Smartphone showing Wieczorny Szept notification"
                         className="max-w-full max-h-full object-contain rounded-2xl"
@@ -1012,7 +1012,7 @@ export default function Home() {
                 <div className="order-2 lg:order-1 md:max-lg:my-12 relative flex justify-center items-center h-[400px] lg:h-[550px] lg:col-span-3 lg:row-span-3 self-center">
                   {currentLocale ? (
                     <img
-                      src={`/${currentLocale}/szept_4_1280.jpg`}
+                      src={`/${currentLocale}/szept_4_1080.jpg`}
                       srcSet={getImageSrcset("szept_4", currentLocale)}
                       alt="Smartphone showing Wieczorny Szept notification"
                       className="max-w-full max-h-full object-contain rounded-2xl"

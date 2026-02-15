@@ -37,8 +37,8 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   // Preload the first carousel image (LCP image) for the current locale
-  const lcpImageSrc = `/${locale}/szept_1_1280.jpg`;
-  const lcpImageSrcset = `/${locale}/szept_1_640.jpg 640w, /${locale}/szept_1_1080.jpg 1080w, /${locale}/szept_1_1280.jpg 1280w`;
+  const lcpImageSrc = `/${locale}/szept_1_1080.jpg`;
+  const lcpImageSrcset = `/${locale}/szept_1_480.jpg 640w, /${locale}/szept_1_640.jpg 1080w, /${locale}/szept_1_1080.jpg 1280w`;
 
   return (
     <html lang={locale} className={montserrat.className}>
