@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
 import { getTranslations } from "next-intl/server";
 import NavigationBar from "../_components/NavigationBar";
+import { SuccessPageTrack } from "../_components/SuccessPageTrack";
 import { GB_CONTACT_EMAIL, GB_DOMAIN, PL_CONTACT_EMAIL } from "../_consts";
 
 export const dynamic = "force-dynamic";
@@ -25,12 +26,10 @@ export default async function Success({
       : PL_CONTACT_EMAIL;
 
   // TODO is this safe?
-  const { status, customer_details } = await stripe.checkout.sessions.retrieve(
-    session_id,
-    {
+  const { status, customer_details, amount_total, currency } =
+    await stripe.checkout.sessions.retrieve(session_id, {
       expand: ["line_items", "payment_intent"],
-    }
-  );
+    });
 
   if (status === "open") {
     return redirect("/");
@@ -39,8 +38,11 @@ export default async function Success({
   const customerEmail = customer_details?.email;
 
   if (status === "complete") {
+    const value = amount_total != null ? amount_total / 100 : 9;
+    const currencyCode = currency?.toUpperCase() ?? "USD";
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] overflow-hidden">
+        <SuccessPageTrack value={value} currency={currencyCode} />
         {/* Background Orbs */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/40 rounded-full blur-2xl heartbeat"></div>

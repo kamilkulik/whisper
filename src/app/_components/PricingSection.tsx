@@ -16,6 +16,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { GeoLocationContext } from "../_contexts/GeoLocationContext";
 import Spinner from "./Spinner";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
+import { trackEvent, Event } from "@/lib/fbq";
 
 interface PricingSectionProps {
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
@@ -98,6 +99,9 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
   // Wrapper function that handles loading state for both onGetStarted and handleClickWithoutOnGetStarted
   const handleButtonClick = (product: SubscriptionType) => async () => {
+    if (product === SubscriptionType.TRIAL) {
+      trackEvent(Event.InitiateCheckout);
+    }
     const productKey = product.toString();
 
     // Set loading state

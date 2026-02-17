@@ -22,6 +22,7 @@ import InformationModal from "./_components/InformationModal";
 import { useGetCurrentSession } from "./_hooks/useGetCurrentSession";
 import { useTriangulatedLocation } from "./_hooks/useTriangulatedLocation";
 import { languageOptions } from "./_consts";
+import { trackEvent, Event } from "@/lib/fbq";
 
 export default function Home() {
   const router = useRouter();
@@ -432,6 +433,9 @@ export default function Home() {
 
   const handleStartJourneyWithScroll =
     (product: SubscriptionType) => async () => {
+      if (product === SubscriptionType.TRIAL) {
+        trackEvent(Event.InitiateCheckout);
+      }
       // Set the selected product
       setSelectedProduct(product);
 

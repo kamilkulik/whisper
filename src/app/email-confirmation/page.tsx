@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import NavigationBar from "../_components/NavigationBar";
 import { useTranslations } from "next-intl";
+import { trackEvent, Event } from "@/lib/fbq";
 
 // Force dynamic rendering since we use searchParams
 export const dynamic = "force-dynamic";
@@ -12,6 +14,12 @@ export default function EmailConfirmation() {
   const status = searchParams.get("status");
   const customerEmail = searchParams.get("email") || "test@test.pl";
   const t = useTranslations("EmailConfirmation");
+
+  useEffect(() => {
+    if (status === "success") {
+      trackEvent(Event.Lead);
+    }
+  }, [status]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E]">
