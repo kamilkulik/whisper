@@ -7,6 +7,8 @@ import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../../utils/csfrProtection";
 import { getLocale, getTranslations } from "next-intl/server";
 import { TemporarySessionIdCache } from "@/lib/temporarySessionIdCache";
+import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
+import { generateEventId } from "@/lib/eventId";
 
 const temporarySessionIdCache = TemporarySessionIdCache.getInstance();
 
@@ -55,8 +57,22 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     );
   }
 
+  // Contact CAPI when OTP requested (Contact requires event_id for dedup with Pixel)
+  const contactEventId = generateEventId("Contact");
+  const fbp = request.cookies.get("_fbp")?.value;
+  const fbc = request.cookies.get("_fbc")?.value;
+  const userAgent = request.headers.get("user-agent") ?? "";
+  sendCapiEvent({
+    eventName: "Contact",
+    eventTime: Math.floor(Date.now() / 1000),
+    actionSource: "website",
+    userData: buildCapiUserData({ fbp, fbc }),
+    clientUserAgent: userAgent,
+    eventId: contactEventId,
+  }).catch(() => {});
+
   // For local development, include the verification code in the response
-  const response: any = { sessionId, confirmationCodeExpires };
+  const response: any = { sessionId, confirmationCodeExpires, eventId: contactEventId };
   if (
     process.env.VERCEL_ENV === "development" ||
     process.env.NODE_ENV === "development"

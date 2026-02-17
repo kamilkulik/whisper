@@ -6,18 +6,29 @@ import { SubscriptionType } from "@prisma/client";
 import { productConfigs } from "@/lib/consts";
 import { triangulateLocationBe } from "../utils/triangulateLocationBe";
 import { getBaseUrl } from "../utils/baseUrl";
+import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
+import { generateEventId } from "@/lib/eventId";
 
 export interface CheckoutSessionsPayload {
   productType: SubscriptionType;
   email: string;
+  /** For CAPI dedup: from client when available (e.g. from getMetaCookies + generateEventId). */
+  fbp?: string;
+  fbc?: string;
+  eventId?: string;
+  eventSourceUrl?: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body: CheckoutSessionsPayload = await request.json();
-    const { productType } = body;
+    const { productType, fbp: bodyFbp, fbc: bodyFbc, eventId: bodyEventId, eventSourceUrl } = body;
 
     const headersList = await headers();
+    const fbp = bodyFbp ?? request.cookies.get("_fbp")?.value;
+    const fbc = bodyFbc ?? request.cookies.get("_fbc")?.value;
+    const userAgent = headersList.get("user-agent") ?? "";
+    const purchaseEventId = bodyEventId ?? generateEventId("Purchase");
     const baseUrl = await getBaseUrl();
 
     const ipCountry = headersList.get("x-vercel-ip-country"); // Vercel IP country header will be set to location of function that called this API
@@ -66,6 +77,17 @@ export async function POST(request: NextRequest) {
       config
     );
 
+    // InitiateCheckout CAPI (fire-and-forget)
+    sendCapiEvent({
+      eventName: "InitiateCheckout",
+      eventTime: Math.floor(Date.now() / 1000),
+      actionSource: "website",
+      userData: buildCapiUserData({ fbp, fbc, email: body.email }),
+      clientUserAgent: userAgent,
+      eventSourceUrl: eventSourceUrl ?? undefined,
+      eventId: purchaseEventId,
+    }).catch(() => {});
+
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       client_reference_id: body.email,
@@ -74,6 +96,10 @@ export async function POST(request: NextRequest) {
         productType: productType.toString(),
         productId: config.prod,
         priceId: config.price,
+        fbp: fbp ?? "",
+        fbc: fbc ?? "",
+        purchase_event_id: purchaseEventId,
+        ...(eventSourceUrl ? { event_source_url: eventSourceUrl } : {}),
       },
       line_items: [
         {

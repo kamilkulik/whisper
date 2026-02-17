@@ -203,12 +203,10 @@ class SmsPlanetClient extends SmsClientInterface {
 class TwilioClient extends SmsClientInterface {
   private readonly client: twilio.Twilio;
   private readonly fromPhoneNumber: string;
-  private readonly messagingServiceSid: string;
 
   constructor() {
     super();
     const accountSid = process.env.TWILIO_ACCOUNT_SID || "";
-    const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID || "";
     const authToken = process.env.TWILIO_AUTH_TOKEN || "";
     const fromPhoneNumber = process.env.TWILIO_PHONE_NUMBER || "";
 
@@ -230,7 +228,6 @@ class TwilioClient extends SmsClientInterface {
 
     this.client = twilio(accountSid, authToken);
     this.fromPhoneNumber = fromPhoneNumber;
-    this.messagingServiceSid = messagingServiceSid;
   }
 
   async sendSms(
@@ -248,7 +245,6 @@ class TwilioClient extends SmsClientInterface {
         body: message,
         to: phoneNumber,
         from: this.fromPhoneNumber,
-        messagingServiceSid: this.messagingServiceSid,
       };
 
       // If scheduled is true, set the sendAt time based on user's timezone and delivery hour

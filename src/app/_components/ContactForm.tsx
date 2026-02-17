@@ -6,6 +6,8 @@ import { z } from "zod";
 import DOMPurify from "dompurify";
 import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
+import { getMetaCookies } from "@/lib/metaCookies";
+import { generateEventId } from "@/lib/eventId";
 import { GatheredUserData, prepSaveUserBody } from "./utils/saveUserBodyPrep";
 import { useTranslations } from "next-intl";
 import { languageOptions } from "../_consts";
@@ -261,9 +263,14 @@ export default function ContactForm({
         } else {
           // For other products, redirect to Stripe checkout
           setMessage(t("form-submit-checkout"));
+          const cookies = getMetaCookies();
           const checkoutSessionsPayload: CheckoutSessionsPayload = {
             productType: selectedProduct || SubscriptionType.TRIAL,
             email: sanitizedData.email,
+            fbp: cookies.fbp,
+            fbc: cookies.fbc,
+            eventId: generateEventId("Purchase"),
+            eventSourceUrl: typeof window !== "undefined" ? window.location.href : undefined,
           };
           setTimeout(async () => {
             try {

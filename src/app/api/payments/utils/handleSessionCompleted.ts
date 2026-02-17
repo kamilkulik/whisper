@@ -6,6 +6,7 @@ import { getSubscriptionType } from "@/lib/consts";
 import { sendEmail } from "@/lib/emailapi";
 import { SubscriptionStatus, SubscriptionType, User } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
+import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session
@@ -154,6 +155,23 @@ export async function handleSessionCompleted(
   console.log(
     `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`
   );
+
+  // Purchase CAPI (fire-and-forget); fbp/fbc/eventId from session metadata
+  const fbp = eventData.metadata?.fbp;
+  const fbc = eventData.metadata?.fbc;
+  const purchaseEventId = eventData.metadata?.purchase_event_id;
+  const amountTotal = eventData.amount_total ?? 0;
+  const value = (amountTotal / 100).toFixed(2);
+  const currency = (eventData.currency ?? "usd").toUpperCase();
+  sendCapiEvent({
+    eventName: "Purchase",
+    eventTime: eventData.created,
+    actionSource: "website",
+    userData: buildCapiUserData({ fbp, fbc, email: user.email }),
+    clientUserAgent: "",
+    eventId: purchaseEventId ?? undefined,
+    customData: { currency, value },
+  }).catch(() => {});
 
   return {
     success: true,

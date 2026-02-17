@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 import { trackEvent, Event } from "@/lib/fbq";
+import { generateEventId } from "@/lib/eventId";
 
 export function TrialSuccessTrack() {
   useEffect(() => {
-    trackEvent(Event.StartTrial, {
+    trackEvent<typeof Event.StartTrial>(Event.StartTrial, {
       value: 0,
       currency: "USD",
-      prediction_ltv: 9,
-    });
+      predicted_ltv: 9,
+    }, { eventID: generateEventId("StartTrial") });
   }, []);
   return null;
 }

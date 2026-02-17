@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 import { toE164Format } from "@/lib/consts";
 import { trackEvent, Event } from "@/lib/fbq";
+import { generateEventId } from "@/lib/eventId";
 // ContactForm is switched at the parent level; no import/render here
 
 // Validation schemas
@@ -249,7 +250,9 @@ export default function ConfirmationCodeForm({
 
       if (response.ok) {
         if (!isEmailMode) {
-          trackEvent(Event.Contact);
+          // Use server-provided eventId for CAPI dedup when available
+          const contactEventId = data.eventId ?? generateEventId("Contact");
+          trackEvent(Event.Contact, {}, { eventID: contactEventId });
         }
         // Save sessionId to localStorage
         localStorage.setItem("confirmationSessionId", data.sessionId);

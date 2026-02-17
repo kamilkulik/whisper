@@ -8,7 +8,14 @@ import { createSubscription } from "../payments/utils/createSubscription";
 import { generateOneTimeUrl } from "../utils/oneTimeJwt";
 import { getTranslations } from "next-intl/server";
 import { isValidE164, normalizeE164 } from "@/lib/consts";
-import { isValidTimezone, isValidDeliveryHour, DEFAULT_TIMEZONE, DEFAULT_DELIVERY_HOUR } from "@/app/_consts";
+import {
+  isValidTimezone,
+  isValidDeliveryHour,
+  DEFAULT_TIMEZONE,
+  DEFAULT_DELIVERY_HOUR,
+} from "@/app/_consts";
+import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
+import { generateEventId } from "@/lib/eventId";
 
 export type UserData = Omit<
   User,
@@ -30,7 +37,7 @@ export const PUT = async (request: NextRequest) => {
     if (!sessionId) {
       return NextResponse.json(
         { error: tShared("unauthorized") },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -45,18 +52,25 @@ export const PUT = async (request: NextRequest) => {
     if (!user) {
       return NextResponse.json(
         { error: tShared("unauthorized") },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     const body = await request.json();
-    const { email, phoneNumber, messageLanguage, timezone, deliveryHour } = body;
+    const { email, phoneNumber, messageLanguage, timezone, deliveryHour } =
+      body;
 
     // Validate that at least one field is provided
-    if (!email && !phoneNumber && !messageLanguage && !timezone && deliveryHour === undefined) {
+    if (
+      !email &&
+      !phoneNumber &&
+      !messageLanguage &&
+      !timezone &&
+      deliveryHour === undefined
+    ) {
       return NextResponse.json(
         { error: tShared("form-validation-errors.missing-fields") },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -71,7 +85,7 @@ export const PUT = async (request: NextRequest) => {
       if (!emailRegex.test(email)) {
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-email") },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -87,7 +101,7 @@ export const PUT = async (request: NextRequest) => {
       if (existingEmailUser && existingEmailUser.id !== user.id) {
         return NextResponse.json(
           { error: tShared("form-validation-errors.email-already-taken") },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -103,7 +117,7 @@ export const PUT = async (request: NextRequest) => {
       if (!isValidE164(normalizedPhone)) {
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-phone-number") },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -121,7 +135,7 @@ export const PUT = async (request: NextRequest) => {
           {
             error: tShared("form-validation-errors.phone-number-already-taken"),
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -138,7 +152,7 @@ export const PUT = async (request: NextRequest) => {
       if (!isValidTimezone(timezone)) {
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-timezone") },
-          { status: 400 }
+          { status: 400 },
         );
       }
       updateData.timezone = timezone;
@@ -149,7 +163,7 @@ export const PUT = async (request: NextRequest) => {
       if (!isValidDeliveryHour(deliveryHour)) {
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-delivery-hour") },
-          { status: 400 }
+          { status: 400 },
         );
       }
       updateData.deliveryHour = deliveryHour;
@@ -163,7 +177,7 @@ export const PUT = async (request: NextRequest) => {
 
     return NextResponse.json(
       { message: tShared("PUT.success") },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("[ users PUT ] Error updating user data:", error);
@@ -180,7 +194,7 @@ export const POST = async (request: NextRequest) => {
     if (!sessionId) {
       return NextResponse.json(
         { error: tShared("unauthorized") },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -188,13 +202,13 @@ export const POST = async (request: NextRequest) => {
 
     const body: UserData = await request.json();
     const cachedSessionId = await sessionIdCache.get(
-      body.phoneNumber ?? body.email
+      body.phoneNumber ?? body.email,
     );
 
     if (cachedSessionId !== sessionId) {
       return NextResponse.json(
         { error: tShared("unauthorized") },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -202,7 +216,7 @@ export const POST = async (request: NextRequest) => {
     if (!body.phoneNumber || !body.email || !body.name) {
       return NextResponse.json(
         { error: tShared("form-validation-errors.all-fields-required") },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -211,7 +225,7 @@ export const POST = async (request: NextRequest) => {
     if (!emailRegex.test(body.email)) {
       return NextResponse.json(
         { error: tShared("form-validation-errors.invalid-email") },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -220,7 +234,7 @@ export const POST = async (request: NextRequest) => {
     if (!isValidE164(normalizedPhone)) {
       return NextResponse.json(
         { error: tShared("form-validation-errors.invalid-phone-number") },
-        { status: 400 }
+        { status: 400 },
       );
     }
     // Update body with normalized phone number
@@ -261,11 +275,12 @@ export const POST = async (request: NextRequest) => {
       }
 
       // Determine which user ID to update (prefer phone number user if both exist)
-      const userIdToUpdate = existingPhoneNumberUser?.id || existingEmailUser?.id;
+      const userIdToUpdate =
+        existingPhoneNumberUser?.id || existingEmailUser?.id;
       if (!userIdToUpdate) {
         return NextResponse.json(
           { error: tShared("PUT.error") },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
@@ -337,13 +352,32 @@ export const POST = async (request: NextRequest) => {
           } catch (error) {
             console.error(
               "[ users POST ] Error sending welcome email to new user",
-              error
+              error,
             );
           }
+
+          // StartTrial CAPI (fire-and-forget)
+          const fbp = request.cookies.get("_fbp")?.value;
+          const fbc = request.cookies.get("_fbc")?.value;
+          const userAgent = request.headers.get("user-agent") ?? "";
+          sendCapiEvent({
+            eventName: "StartTrial",
+            eventTime: Math.floor(Date.now() / 1000),
+            actionSource: "website",
+            userData: buildCapiUserData({
+              fbp,
+              fbc,
+              // email: savedUser.email,
+              // phone: savedUser.phoneNumber,
+            }),
+            clientUserAgent: userAgent,
+            eventId: generateEventId("StartTrial"),
+            customData: { value: 0, currency: "USD" },
+          }).catch(() => {});
         } catch (error) {
           console.error(
             "[ users POST ] Error creating trial subscription for new user",
-            error
+            error,
           );
         }
       }
@@ -357,7 +391,7 @@ export const POST = async (request: NextRequest) => {
         to: savedUser.email,
         verificationLink: await generateOneTimeUrl(
           savedUser.id.toString(),
-          savedUser.email
+          savedUser.email,
         ),
       });
     }
@@ -370,7 +404,7 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.json(
       { message: tShared("POST.success") },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("[ users POST ] Error processing user data:", error);

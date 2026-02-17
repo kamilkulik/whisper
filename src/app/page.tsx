@@ -23,6 +23,8 @@ import { useGetCurrentSession } from "./_hooks/useGetCurrentSession";
 import { useTriangulatedLocation } from "./_hooks/useTriangulatedLocation";
 import { languageOptions } from "./_consts";
 import { trackEvent, Event } from "@/lib/fbq";
+import { generateEventId } from "@/lib/eventId";
+import { getMetaCookies } from "@/lib/metaCookies";
 
 export default function Home() {
   const router = useRouter();
@@ -86,7 +88,7 @@ export default function Home() {
   useEffect(() => {
     const checkReducedMotion = () => {
       const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
+        "(prefers-reduced-motion: reduce)",
       ).matches;
       setPrefersReducedMotion(prefersReducedMotion);
     };
@@ -129,7 +131,7 @@ export default function Home() {
   useEffect(() => {
     if (!CSS.supports("animation-timeline: scroll()")) {
       const bar = document.querySelector(
-        ".reading-progress-bar"
+        ".reading-progress-bar",
       ) as HTMLElement;
       if (bar) {
         bar.style.setProperty("visibility", "visible", "important");
@@ -160,7 +162,7 @@ export default function Home() {
   // Intersection Observer for copy line and float-in animations
   useEffect(() => {
     const animatedElements = document.querySelectorAll(
-      ".copy-line, .float-in, .float-in-right"
+      ".copy-line, .float-in, .float-in-right",
     );
 
     const observer = new IntersectionObserver(
@@ -182,7 +184,7 @@ export default function Home() {
       {
         threshold: 0.1, // Trigger when 10% of the element is visible
         rootMargin: "0px 0px -50px 0px", // Start animation slightly before element is fully visible
-      }
+      },
     );
 
     animatedElements.forEach((element) => {
@@ -245,7 +247,7 @@ export default function Home() {
       {
         threshold: 0.25, // Trigger when 25% of the video is visible
         rootMargin: "0px 0px -10% 0px", // Start playing slightly before video is fully visible
-      }
+      },
     );
 
     // Observe all videos
@@ -434,7 +436,11 @@ export default function Home() {
   const handleStartJourneyWithScroll =
     (product: SubscriptionType) => async () => {
       if (product === SubscriptionType.TRIAL) {
-        trackEvent(Event.InitiateCheckout);
+        trackEvent(
+          Event.StartTrial,
+          {},
+          { eventID: generateEventId("StartTrial") },
+        );
       }
       // Set the selected product
       setSelectedProduct(product);
@@ -443,10 +449,19 @@ export default function Home() {
       const userEmailFromSessionCookie = await userEmailFromCookie();
 
       if (userEmailFromSessionCookie) {
+        const meta =
+          product !== SubscriptionType.TRIAL && typeof window !== "undefined"
+            ? {
+                ...getMetaCookies(),
+                eventId: generateEventId("InitiateCheckout"),
+                eventSourceUrl: window.location.href,
+              }
+            : undefined;
         const result = await navigateToCheckout(
           product,
           userEmailFromSessionCookie,
-          triangulatedCountry || undefined
+          triangulatedCountry || undefined,
+          meta,
         );
         if (result?.success) {
           if (result?.hasCurrentActiveSubscription) {
@@ -580,7 +595,7 @@ export default function Home() {
                 >
                   {
                     languageOptions.find(
-                      (option) => option.locale === currentLocale
+                      (option) => option.locale === currentLocale,
                     )?.value
                   }
                 </button>
@@ -1205,7 +1220,7 @@ export default function Home() {
           <InformationModal
             message={t("modal-wrapper.already-subscribed.description")}
             acknowledgeText={t(
-              "modal-wrapper.already-subscribed.acknowledgeText"
+              "modal-wrapper.already-subscribed.acknowledgeText",
             )}
             handleModalClose={handleModalClose}
           />

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import NavigationBar from "../_components/NavigationBar";
 import { useTranslations } from "next-intl";
 import { trackEvent, Event } from "@/lib/fbq";
+import { generateEventId } from "@/lib/eventId";
 
 // Force dynamic rendering since we use searchParams
 export const dynamic = "force-dynamic";
@@ -17,7 +18,7 @@ export default function EmailConfirmation() {
 
   useEffect(() => {
     if (status === "success") {
-      trackEvent(Event.Lead);
+      trackEvent(Event.Lead, {}, { eventID: generateEventId("Lead") });
     }
   }, [status]);
 

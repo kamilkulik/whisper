@@ -17,6 +17,8 @@ import { GeoLocationContext } from "../_contexts/GeoLocationContext";
 import Spinner from "./Spinner";
 import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 import { trackEvent, Event } from "@/lib/fbq";
+import { generateEventId } from "@/lib/eventId";
+import { getMetaCookies } from "@/lib/metaCookies";
 
 interface PricingSectionProps {
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
@@ -26,7 +28,7 @@ interface PricingSectionProps {
 const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
   const [showTrial, setShowTrial] = useState(false);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
-    {}
+    {},
   );
   const router = useRouter();
 
@@ -76,10 +78,19 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
         const userEmailFromSessionCookie = await userEmailFromCookie();
 
         if (userEmailFromSessionCookie) {
+          const meta =
+            product !== SubscriptionType.TRIAL && typeof window !== "undefined"
+              ? {
+                  ...getMetaCookies(),
+                  eventId: generateEventId("InitiateCheckout"),
+                  eventSourceUrl: window.location.href,
+                }
+              : undefined;
           const result = await navigateToCheckout(
             product,
             userEmailFromSessionCookie,
-            triangulatedCountry ?? undefined
+            triangulatedCountry ?? undefined,
+            meta,
           );
 
           if (result?.success) {
@@ -100,7 +111,11 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
   // Wrapper function that handles loading state for both onGetStarted and handleClickWithoutOnGetStarted
   const handleButtonClick = (product: SubscriptionType) => async () => {
     if (product === SubscriptionType.TRIAL) {
-      trackEvent(Event.InitiateCheckout);
+      trackEvent(
+        Event.InitiateCheckout,
+        {},
+        { eventID: generateEventId("InitiateCheckout") },
+      );
     }
     const productKey = product.toString();
 
@@ -227,7 +242,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                     <div className="flex items-baseline justify-center">
                       {formatCurrency(
                         pricingData.subscriptionPrice,
-                        pricingData.currency
+                        pricingData.currency,
                       )}
                       <span className="text-gray-400">
                         {t("pricing-section.subscription-card.period")}
@@ -293,7 +308,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                   {isLoaded && pricingData ? (
                     formatCurrency(
                       pricingData.oneTimePrice,
-                      pricingData.currency
+                      pricingData.currency,
                     )
                   ) : (
                     <Spinner size="xl" />
@@ -316,7 +331,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                       <>
                         <Spinner size="sm" />
                         {t(
-                          "pricing-section.one-time-purchase-card.CTA-button"
+                          "pricing-section.one-time-purchase-card.CTA-button",
                         ) +
                           new Intl.NumberFormat(locale, {
                             style: "currency",

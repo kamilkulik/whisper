@@ -6,10 +6,18 @@ import { handleTrialSubscription } from "./handleTrialSubscription";
 import { getLatestActiveSubscriptionForUserEmail } from "@/lib/prisma";
 import { getBaseUrl } from "../api/utils/baseUrl";
 
+export interface CheckoutMeta {
+  fbp?: string;
+  fbc?: string;
+  eventId?: string;
+  eventSourceUrl?: string;
+}
+
 export async function navigateToCheckout(
   productType: SubscriptionType,
   email: string,
-  triangulatedCountry?: string
+  triangulatedCountry?: string,
+  meta?: CheckoutMeta
 ): Promise<{
   success: boolean;
   savedSubscription?: Subscription;
@@ -44,6 +52,12 @@ export async function navigateToCheckout(
     const checkoutSessionsPayload: CheckoutSessionsPayload = {
       productType,
       email,
+      ...(meta && {
+        fbp: meta.fbp,
+        fbc: meta.fbc,
+        eventId: meta.eventId,
+        eventSourceUrl: meta.eventSourceUrl,
+      }),
     };
 
     const baseUrl = await getBaseUrl();

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyOneTimeToken } from "../../utils/oneTimeJwt";
 import { prisma } from "@/lib/prisma";
 import { getBaseUrl } from "../../utils/baseUrl";
+import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
+import { generateEventId } from "@/lib/eventId";
 
 export async function GET(request: NextRequest) {
   try {
@@ -91,6 +93,19 @@ export async function GET(request: NextRequest) {
         emailVerified: true,
       },
     });
+
+    // Lead CAPI (fire-and-forget)
+    const fbp = request.cookies.get("_fbp")?.value;
+    const fbc = request.cookies.get("_fbc")?.value;
+    const userAgent = request.headers.get("user-agent") ?? "";
+    sendCapiEvent({
+      eventName: "Lead",
+      eventTime: Math.floor(Date.now() / 1000),
+      actionSource: "website",
+      userData: buildCapiUserData({ fbp, fbc, email: user.email }),
+      clientUserAgent: userAgent,
+      eventId: generateEventId("Lead"),
+    }).catch(() => {});
 
     // Redirect to success page
     return NextResponse.redirect(

@@ -26,10 +26,10 @@ export default async function Success({
       : PL_CONTACT_EMAIL;
 
   // TODO is this safe?
-  const { status, customer_details, amount_total, currency } =
-    await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ["line_items", "payment_intent"],
-    });
+  const session = await stripe.checkout.sessions.retrieve(session_id, {
+    expand: ["line_items", "payment_intent"],
+  });
+  const { status, customer_details, amount_total, currency } = session;
 
   if (status === "open") {
     return redirect("/");
