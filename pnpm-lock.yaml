@@ -32,6 +32,9 @@ importers:
       '@types/dompurify':
         specifier: ^3.2.0
         version: 3.2.0
+      '@types/facebook-pixel':
+        specifier: ^0.0.31
+        version: 0.0.31
       '@types/node':
         specifier: ^20
         version: 20.19.9
@@ -108,9 +111,6 @@ importers:
       '@react-email/preview':
         specifier: ^0.0.13
         version: 0.0.13(react@19.1.0)
-      '@types/facebook-pixel':
-        specifier: ^0.0.31
-        version: 0.0.31
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
