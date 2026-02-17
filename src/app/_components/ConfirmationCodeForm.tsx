@@ -18,7 +18,7 @@ import { generateEventId } from "@/lib/eventId";
 
 // Validation schemas
 const localisedPhoneSchema = (
-  t: Awaited<ReturnType<typeof useTranslations>>
+  t: Awaited<ReturnType<typeof useTranslations>>,
 ) => {
   return z.object({
     phoneNumber: z
@@ -30,7 +30,7 @@ const localisedPhoneSchema = (
 };
 
 const localisedEmailSchema = (
-  t: Awaited<ReturnType<typeof useTranslations>>
+  t: Awaited<ReturnType<typeof useTranslations>>,
 ) => {
   return z.object({
     email: z
@@ -62,7 +62,7 @@ export default function ConfirmationCodeForm({
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
-    {}
+    {},
   );
   const { countryCode } = useLocale();
   const [formData, setFormData] = useState({
@@ -106,7 +106,7 @@ export default function ConfirmationCodeForm({
   // Handle input blur with validation and sanitization
   const handleInputBlur = (
     fieldName: keyof ValidationErrors,
-    value: string
+    value: string,
   ) => {
     const sanitizedValue = sanitizeInput(value);
     const error = validateField(fieldName, sanitizedValue, isEmailMode);
@@ -140,7 +140,7 @@ export default function ConfirmationCodeForm({
   const validateField = (
     fieldName: keyof ValidationErrors,
     value: string,
-    isEmailMode: boolean
+    isEmailMode: boolean,
   ): string | undefined => {
     try {
       let fieldSchema;
@@ -162,7 +162,7 @@ export default function ConfirmationCodeForm({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -206,7 +206,7 @@ export default function ConfirmationCodeForm({
       const error = validateField(
         key as keyof ValidationErrors,
         value,
-        isEmailMode
+        isEmailMode,
       );
       if (error) {
         errors[key as keyof ValidationErrors] = error;
@@ -237,7 +237,7 @@ export default function ConfirmationCodeForm({
         // Combine country code and phone number in E.164 format
         const e164PhoneNumber = toE164Format(
           formData.countryCode,
-          formData.phoneNumber
+          formData.phoneNumber,
         );
         params.append("phoneNumber", e164PhoneNumber);
       }
@@ -251,14 +251,14 @@ export default function ConfirmationCodeForm({
       if (response.ok) {
         if (!isEmailMode) {
           // Use server-provided eventId for CAPI dedup when available
-          const contactEventId = data.eventId ?? generateEventId("Contact");
+          const contactEventId = data.eventId ?? generateEventId(Event.Contact);
           trackEvent(Event.Contact, {}, { eventID: contactEventId });
         }
         // Save sessionId to localStorage
         localStorage.setItem("confirmationSessionId", data.sessionId);
         localStorage.setItem(
           "confirmationCodeExpires",
-          data.confirmationCodeExpires
+          data.confirmationCodeExpires,
         );
         setSessionId(data.sessionId);
         setShowConfirmationCode(true);
@@ -299,7 +299,7 @@ export default function ConfirmationCodeForm({
       // Combine country code and phone number in E.164 format for POST
       const e164PhoneNumber = toE164Format(
         formData.countryCode,
-        formData.phoneNumber
+        formData.phoneNumber,
       );
 
       const response = await fetch("/api/confirm/otp", {
@@ -377,7 +377,7 @@ export default function ConfirmationCodeForm({
               // Pass the full E.164 formatted phone number to contact form
               const e164Phone = toE164Format(
                 formData.countryCode,
-                formData.phoneNumber
+                formData.phoneNumber,
               );
               onShowContactForm(e164Phone);
             }
@@ -385,7 +385,7 @@ export default function ConfirmationCodeForm({
         }
       } else {
         setMessage(
-          responseData.error || t("form-submit-message.incorrect-code")
+          responseData.error || t("form-submit-message.incorrect-code"),
         );
         // Clear localStorage on error to force new session
         localStorage.removeItem("confirmationSessionId");

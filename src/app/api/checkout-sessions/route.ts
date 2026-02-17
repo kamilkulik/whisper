@@ -8,6 +8,7 @@ import { triangulateLocationBe } from "../utils/triangulateLocationBe";
 import { getBaseUrl } from "../utils/baseUrl";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { generateEventId } from "@/lib/eventId";
+import { Event } from "@/lib/fbq";
 
 export interface CheckoutSessionsPayload {
   productType: SubscriptionType;
@@ -22,7 +23,13 @@ export interface CheckoutSessionsPayload {
 export async function POST(request: NextRequest) {
   try {
     const body: CheckoutSessionsPayload = await request.json();
-    const { productType, fbp: bodyFbp, fbc: bodyFbc, eventId: bodyEventId, eventSourceUrl } = body;
+    const {
+      productType,
+      fbp: bodyFbp,
+      fbc: bodyFbc,
+      eventId: bodyEventId,
+      eventSourceUrl,
+    } = body;
 
     const headersList = await headers();
     const fbp = bodyFbp ?? request.cookies.get("_fbp")?.value;
@@ -38,12 +45,12 @@ export async function POST(request: NextRequest) {
       null,
       ipCountry,
       baseUrl,
-      triangulatedCountryHeader
+      triangulatedCountryHeader,
     );
 
     if (!triangulatedCountry) {
       throw new Error(
-        "[ /api/checkout-sessions ] Failed to triangulate country"
+        "[ /api/checkout-sessions ] Failed to triangulate country",
       );
     }
 
@@ -53,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     console.log(
       "[ /api/checkout-sessions ]",
-      `Attempting to get config for product type: ${productType} in country: ${triangulatedCountry}`
+      `Attempting to get config for product type: ${productType} in country: ${triangulatedCountry}`,
     );
 
     const nodeEnv = process.env.NODE_ENV;
@@ -67,19 +74,19 @@ export async function POST(request: NextRequest) {
 
     if (!config) {
       throw new Error(
-        "[ /api/checkout-sessions ] Service is not available in your country"
+        "[ /api/checkout-sessions ] Service is not available in your country",
       );
     }
 
     console.log(
       "[ /api/checkout-sessions ]",
       "--- IMPORTANT --- config",
-      config
+      config,
     );
 
     // InitiateCheckout CAPI (fire-and-forget)
     sendCapiEvent({
-      eventName: "InitiateCheckout",
+      eventName: Event.InitiateCheckout,
       eventTime: Math.floor(Date.now() / 1000),
       actionSource: "website",
       userData: buildCapiUserData({ fbp, fbc, email: body.email }),
@@ -121,7 +128,7 @@ export async function POST(request: NextRequest) {
     console.error("Error creating checkout session", err);
     return NextResponse.json(
       { error: err.message },
-      { status: err.statusCode || 500 }
+      { status: err.statusCode || 500 },
     );
   }
 }

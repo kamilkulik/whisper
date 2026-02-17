@@ -9,6 +9,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { TemporarySessionIdCache } from "@/lib/temporarySessionIdCache";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { generateEventId } from "@/lib/eventId";
+import { Event } from "@/lib/fbq";
 
 const temporarySessionIdCache = TemporarySessionIdCache.getInstance();
 
@@ -29,7 +30,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   if (!phoneNumber && !email) {
     return NextResponse.json(
       { error: "Phone number or email is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -53,17 +54,17 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     await sendSms(
       phoneNumber,
       `${t("sendSms.message")} ${confirmationCode.toString()}`,
-      false
+      false,
     );
   }
 
   // Contact CAPI when OTP requested (Contact requires event_id for dedup with Pixel)
-  const contactEventId = generateEventId("Contact");
+  const contactEventId = generateEventId(Event.Contact);
   const fbp = request.cookies.get("_fbp")?.value;
   const fbc = request.cookies.get("_fbc")?.value;
   const userAgent = request.headers.get("user-agent") ?? "";
   sendCapiEvent({
-    eventName: "Contact",
+    eventName: Event.Contact,
     eventTime: Math.floor(Date.now() / 1000),
     actionSource: "website",
     userData: buildCapiUserData({ fbp, fbc }),
@@ -72,7 +73,11 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   }).catch(() => {});
 
   // For local development, include the verification code in the response
-  const response: any = { sessionId, confirmationCodeExpires, eventId: contactEventId };
+  const response: any = {
+    sessionId,
+    confirmationCodeExpires,
+    eventId: contactEventId,
+  };
   if (
     process.env.VERCEL_ENV === "development" ||
     process.env.NODE_ENV === "development"
@@ -102,13 +107,13 @@ export const POST = async (request: NextRequest) => {
 
   console.log(
     "[ POST /api/confirm/otp ] body: ",
-    JSON.stringify(body, null, 2)
+    JSON.stringify(body, null, 2),
   );
 
   if (!confirmationCode || !sessionId) {
     return NextResponse.json(
       { error: "confirmationCode and sessionId are required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -121,7 +126,7 @@ export const POST = async (request: NextRequest) => {
   ) {
     return NextResponse.json(
       { error: "Invalid sessionId or confirmationCode" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -160,7 +165,7 @@ export const POST = async (request: NextRequest) => {
             "[ POST /api/confirm/otp ]",
             "no existing user",
             email,
-            " - redirecting to signup"
+            " - redirecting to signup",
           );
           // return raw 307 redirect with desition /?modal=phone
           return NextResponse.json({
@@ -182,7 +187,7 @@ export const POST = async (request: NextRequest) => {
           console.log(
             "[ POST /api/confirm/otp ]",
             "existing user",
-            phoneNumber
+            phoneNumber,
           );
           try {
             await prisma.user.update({
@@ -198,7 +203,7 @@ export const POST = async (request: NextRequest) => {
             "[ POST /api/confirm/otp ]",
             "no existing user",
             phoneNumber,
-            " - redirecting to signup"
+            " - redirecting to signup",
           );
           return NextResponse.json({
             redirectUrl: "/?modal=phone",
@@ -244,7 +249,7 @@ export const POST = async (request: NextRequest) => {
   } else {
     return NextResponse.json(
       { error: "Invalid or expired confirmation code" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 };

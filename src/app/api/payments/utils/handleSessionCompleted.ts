@@ -7,9 +7,10 @@ import { sendEmail } from "@/lib/emailapi";
 import { SubscriptionStatus, SubscriptionType, User } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
+import { Event } from "@/lib/fbq";
 
 export async function handleSessionCompleted(
-  eventData: Stripe.Checkout.Session
+  eventData: Stripe.Checkout.Session,
 ) {
   if (!eventData.metadata) {
     throw new Error("Metadata not found");
@@ -18,7 +19,7 @@ export async function handleSessionCompleted(
   const { productType } = eventData.metadata;
 
   console.log(
-    "[ /api/payments/utils/handleSessionCompleted ] metadata present, proceeding..."
+    "[ /api/payments/utils/handleSessionCompleted ] metadata present, proceeding...",
   );
 
   let user: Pick<User, "id" | "email" | "messageLanguage" | "premium"> | null =
@@ -38,13 +39,13 @@ export async function handleSessionCompleted(
   } catch (error) {
     console.error(
       "[ /api/payments/utils/handleSessionCompleted ] Error finding user",
-      error
+      error,
     );
   }
 
   if (!user) {
     throw new Error(
-      "[ /api/payments/utils/handleSessionCompleted ] User not found"
+      "[ /api/payments/utils/handleSessionCompleted ] User not found",
     );
   }
 
@@ -73,15 +74,15 @@ export async function handleSessionCompleted(
     productType === SubscriptionType.ONE_TIME
   ) {
     expiryAdjustmentInMilis = Math.floor(
-      latestActiveSubscription.dateExpires.getTime() - new Date().getTime()
+      latestActiveSubscription.dateExpires.getTime() - new Date().getTime(),
     );
     console.log(
-      `[ /api/payments/utils/handleSessionCompleted ] Expiry adjustment in milis: ${expiryAdjustmentInMilis}`
+      `[ /api/payments/utils/handleSessionCompleted ] Expiry adjustment in milis: ${expiryAdjustmentInMilis}`,
     );
   }
 
   console.log(
-    "[ /api/payments/utils/handleSessionCompleted ] Starting transaction to create subscription, update user and log webhook event"
+    "[ /api/payments/utils/handleSessionCompleted ] Starting transaction to create subscription, update user and log webhook event",
   );
 
   const subscription = await createSubscription({
@@ -96,11 +97,11 @@ export async function handleSessionCompleted(
 
   if (!subscription) {
     throw new Error(
-      "[ /api/payments/utils/handleSessionCompleted ] Subscription couldn't be created. Aborting notifying user"
+      "[ /api/payments/utils/handleSessionCompleted ] Subscription couldn't be created. Aborting notifying user",
     );
   } else {
     console.log(
-      `[ /api/payments/utils/handleSessionCompleted ] Subscription ${subscription.id} created successfully`
+      `[ /api/payments/utils/handleSessionCompleted ] Subscription ${subscription.id} created successfully`,
     );
   }
 
@@ -115,7 +116,7 @@ export async function handleSessionCompleted(
   }
 
   console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`
+    `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`,
   );
 
   // Log the webhook event
@@ -128,7 +129,7 @@ export async function handleSessionCompleted(
   });
 
   console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`
+    `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`,
   );
 
   // notify them
@@ -145,15 +146,15 @@ export async function handleSessionCompleted(
   } catch (error) {
     console.error(
       "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
-      error
+      error,
     );
     throw new Error(
-      "[ /api/payments/utils/handleSessionCompleted ] Error sending email"
+      "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
     );
   }
 
   console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`
+    `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`,
   );
 
   // Purchase CAPI (fire-and-forget); fbp/fbc/eventId from session metadata
@@ -164,7 +165,7 @@ export async function handleSessionCompleted(
   const value = (amountTotal / 100).toFixed(2);
   const currency = (eventData.currency ?? "usd").toUpperCase();
   sendCapiEvent({
-    eventName: "Purchase",
+    eventName: Event.Purchase,
     eventTime: eventData.created,
     actionSource: "website",
     userData: buildCapiUserData({ fbp, fbc, email: user.email }),

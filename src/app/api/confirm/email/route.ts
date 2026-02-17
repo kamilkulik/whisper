@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getBaseUrl } from "../../utils/baseUrl";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { generateEventId } from "@/lib/eventId";
+import { Event } from "@/lib/fbq";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (!token) {
       console.error("Email confirmation failed: Missing token");
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", baseUrl)
+        new URL("/email-confirmation?status=error", baseUrl),
       );
     }
 
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
         error: error instanceof Error ? error.message : String(error),
       });
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", baseUrl)
+        new URL("/email-confirmation?status=error", baseUrl),
       );
     }
 
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
         email: claims.userEmail,
       });
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", baseUrl)
+        new URL("/email-confirmation?status=error", baseUrl),
       );
     }
 
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
         userId: claims.userId,
       });
       return NextResponse.redirect(
-        new URL("/email-confirmation?status=error", baseUrl)
+        new URL("/email-confirmation?status=error", baseUrl),
       );
     }
 
@@ -73,14 +74,14 @@ export async function GET(request: NextRequest) {
         {
           userId: claims.userId,
           email: claims.userEmail,
-        }
+        },
       );
       return NextResponse.redirect(
         new URL(
           "/email-confirmation?status=already-verified&email=" +
             claims.userEmail,
-          baseUrl
-        )
+          baseUrl,
+        ),
       );
     }
 
@@ -99,26 +100,26 @@ export async function GET(request: NextRequest) {
     const fbc = request.cookies.get("_fbc")?.value;
     const userAgent = request.headers.get("user-agent") ?? "";
     sendCapiEvent({
-      eventName: "Lead",
+      eventName: Event.Lead,
       eventTime: Math.floor(Date.now() / 1000),
       actionSource: "website",
       userData: buildCapiUserData({ fbp, fbc, email: user.email }),
       clientUserAgent: userAgent,
-      eventId: generateEventId("Lead"),
+      eventId: generateEventId(Event.Lead),
     }).catch(() => {});
 
     // Redirect to success page
     return NextResponse.redirect(
       new URL(
         "/email-confirmation?status=success&email=" + claims.userEmail,
-        baseUrl
-      )
+        baseUrl,
+      ),
     );
   } catch (error) {
     console.error("Email confirmation error:", error);
     const baseUrl = await getBaseUrl();
     return NextResponse.redirect(
-      new URL("/email-confirmation?status=error", baseUrl)
+      new URL("/email-confirmation?status=error", baseUrl),
     );
   }
 }

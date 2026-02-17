@@ -16,6 +16,7 @@ import {
 } from "@/app/_consts";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { generateEventId } from "@/lib/eventId";
+import { Event } from "@/lib/fbq";
 
 export type UserData = Omit<
   User,
@@ -361,17 +362,17 @@ export const POST = async (request: NextRequest) => {
           const fbc = request.cookies.get("_fbc")?.value;
           const userAgent = request.headers.get("user-agent") ?? "";
           sendCapiEvent({
-            eventName: "StartTrial",
+            eventName: Event.StartTrial,
             eventTime: Math.floor(Date.now() / 1000),
             actionSource: "website",
             userData: buildCapiUserData({
               fbp,
               fbc,
-              // email: savedUser.email,
-              // phone: savedUser.phoneNumber,
+              email: savedUser.email,
+              phone: savedUser.phoneNumber,
             }),
             clientUserAgent: userAgent,
-            eventId: generateEventId("StartTrial"),
+            eventId: generateEventId(Event.StartTrial),
             customData: { value: 0, currency: "USD" },
           }).catch(() => {});
         } catch (error) {

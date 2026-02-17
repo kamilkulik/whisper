@@ -439,7 +439,7 @@ export default function Home() {
         trackEvent(
           Event.StartTrial,
           {},
-          { eventID: generateEventId("StartTrial") },
+          { eventID: generateEventId(Event.StartTrial) },
         );
       }
       // Set the selected product
@@ -453,7 +453,7 @@ export default function Home() {
           product !== SubscriptionType.TRIAL && typeof window !== "undefined"
             ? {
                 ...getMetaCookies(),
-                eventId: generateEventId("InitiateCheckout"),
+                eventId: generateEventId(Event.InitiateCheckout),
                 eventSourceUrl: window.location.href,
               }
             : undefined;

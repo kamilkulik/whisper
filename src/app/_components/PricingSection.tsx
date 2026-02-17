@@ -110,11 +110,11 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
   // Wrapper function that handles loading state for both onGetStarted and handleClickWithoutOnGetStarted
   const handleButtonClick = (product: SubscriptionType) => async () => {
-    if (product === SubscriptionType.TRIAL) {
+    if (product !== SubscriptionType.TRIAL) {
       trackEvent(
         Event.InitiateCheckout,
         {},
-        { eventID: generateEventId("InitiateCheckout") },
+        { eventID: generateEventId(Event.InitiateCheckout) },
       );
     }
     const productKey = product.toString();
