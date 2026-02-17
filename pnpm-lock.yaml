@@ -108,6 +108,9 @@ importers:
       '@react-email/preview':
         specifier: ^0.0.13
         version: 0.0.13(react@19.1.0)
+      '@types/facebook-pixel':
+        specifier: ^0.0.31
+        version: 0.0.31
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -702,6 +705,9 @@ packages:
 
   '@types/dompurify@3.2.0':
     resolution: {integrity: sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg==}
+
+  '@types/facebook-pixel@0.0.31':
+    resolution: {integrity: sha512-NyfutSDY9Cabk7IUsEMy2pcVPGVVQjsFI3caZkeZvJ9lffz/CZjJA84mUhluTRM/iHjZ96VwBMPORpDSioNeyg==}
 
   '@types/node@20.19.9':
     resolution: {integrity: sha512-cuVNgarYWZqxRJDQHEB58GEONhOK79QVR/qYx4S7kcUObQvUwvFnYxJuuHUKm2aieN9X3yZB4LZsuYNU1Qphsw==}
@@ -2277,6 +2283,8 @@ snapshots:
   '@types/dompurify@3.2.0':
     dependencies:
       dompurify: 3.2.6
+
+  '@types/facebook-pixel@0.0.31': {}
 
   '@types/node@20.19.9':
     dependencies:
