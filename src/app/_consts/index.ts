@@ -182,3 +182,75 @@ export function isValidTimezone(tz: TimezoneOption): boolean {
 export function isValidDeliveryHour(hour: number): boolean {
   return Number.isInteger(hour) && hour >= 0 && hour <= 23;
 }
+
+/**
+ * Converts a local hour (0-23) in a given timezone to UTC hour (0-23)
+ * Handles DST automatically by using the current date/time
+ * 
+ * @param localHour - Hour in user's local timezone (0-23)
+ * @param timezone - IANA timezone identifier (e.g., "Europe/Warsaw")
+ * @returns UTC hour (0-23)
+ */
+export function convertLocalHourToUTC(
+  localHour: number,
+  timezone: TimezoneOption
+): number {
+  const now = new Date();
+  
+  // Get the current date in the user's timezone (YYYY-MM-DD)
+  const dateFormatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: timezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const localDateStr = dateFormatter.format(now);
+  
+  // Get the timezone offset (handles DST automatically)
+  const offset = getTimezoneOffset(timezone);
+  
+  // Build ISO-8601 date-time string: "YYYY-MM-DDTHH:00:00±hh:mm"
+  const iso8601String = `${localDateStr}T${localHour.toString().padStart(2, "0")}:00:00${offset}`;
+  
+  // Convert to UTC Date object
+  const utcDate = new Date(iso8601String);
+  
+  // Extract UTC hour
+  return utcDate.getUTCHours();
+}
+
+/**
+ * Converts a UTC hour (0-23) to local hour (0-23) in a given timezone
+ * Handles DST automatically by using the current date/time
+ * 
+ * @param utcHour - Hour in UTC (0-23)
+ * @param timezone - IANA timezone identifier (e.g., "Europe/Warsaw")
+ * @returns Local hour (0-23)
+ */
+export function convertUTCHourToLocal(
+  utcHour: number,
+  timezone: TimezoneOption
+): number {
+  const now = new Date();
+  
+  // Create a UTC date with the specified hour
+  const utcDate = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    utcHour,
+    0,
+    0
+  ));
+  
+  // Get the hour in the user's timezone
+  const localHour = parseInt(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      hour: "numeric",
+      hour12: false,
+    }).format(utcDate)
+  );
+  
+  return localHour;
+}

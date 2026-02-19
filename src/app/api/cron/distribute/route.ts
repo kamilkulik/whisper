@@ -9,6 +9,7 @@ import {
   User,
 } from "@prisma/client";
 import { isCronSecretValid } from "../../utils/checkCronSecret";
+import { convertUTCHourToLocal, TimezoneOption } from "@/app/_consts";
 
 export type UserRawType = {
   id: number;
@@ -60,24 +61,17 @@ export const GET = async (request: NextRequest) => {
       `[ /api/cron/distribute ] Found ${users.length} users to send messages to`
     );
 
-    // 2. Filter users to only those whose delivery hour matches the current hour in their timezone
+    // 2. Filter users to only those whose delivery hour matches the current UTC hour
+    // Note: delivery_hour is stored in UTC in the database
     const nowUtc = new Date();
+    const currentUTCHour = nowUtc.getUTCHours();
     const usersInDeliveryHour = users.filter((user) => {
-      // Get current hour in user's timezone
-      const currentHourInTimezone = parseInt(
-        new Intl.DateTimeFormat("en-US", {
-          timeZone: user.timezone,
-          hour: "numeric",
-          hour12: false,
-        }).format(nowUtc)
-      );
-
-      // Only process if current hour matches delivery hour
-      const shouldProcess = currentHourInTimezone === user.delivery_hour;
+      // Compare current UTC hour with the UTC delivery hour stored in the database
+      const shouldProcess = currentUTCHour === user.delivery_hour;
       
       if (!shouldProcess) {
         console.log(
-          `[ /api/cron/distribute ] Skipping user ${user.id} - current hour in ${user.timezone}: ${currentHourInTimezone}, delivery hour: ${user.delivery_hour}`
+          `[ /api/cron/distribute ] Skipping user ${user.id} - current UTC hour: ${currentUTCHour}, delivery hour (UTC): ${user.delivery_hour}`
         );
       }
       
@@ -157,12 +151,18 @@ export const GET = async (request: NextRequest) => {
         const messageText = message[user.message_language];
 
         if (messageText) {
+          // Convert UTC delivery hour back to user's local timezone for SMS scheduling
+          // (smsapi expects local time, but we store UTC in the database)
+          const localDeliveryHour = convertUTCHourToLocal(
+            user.delivery_hour,
+            user.timezone as TimezoneOption
+          );
           console.log(
-            `[ /api/cron/distribute ] Sending message to user ${user.id} with message: ${messageText} (timezone: ${user.timezone}, hour: ${user.delivery_hour}:59)`
+            `[ /api/cron/distribute ] Sending message to user ${user.id} with message: ${messageText} (timezone: ${user.timezone}, hour: ${localDeliveryHour}:59 local / ${user.delivery_hour}:59 UTC)`
           );
           await sendSms(user.phone_number, messageText, true, {
             timezone: user.timezone,
-            deliveryHour: user.delivery_hour,
+            deliveryHour: localDeliveryHour,
           });
 
           // update what message got sent

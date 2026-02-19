@@ -13,6 +13,8 @@ import {
   isValidDeliveryHour,
   DEFAULT_TIMEZONE,
   DEFAULT_DELIVERY_HOUR,
+  convertLocalHourToUTC,
+  TimezoneOption,
 } from "@/app/_consts";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { generateEventId } from "@/lib/eventId";
@@ -42,11 +44,12 @@ export const PUT = async (request: NextRequest) => {
       );
     }
 
-    // Get user from session
-    const user: Pick<User, "id"> | null = await prisma.user.findUnique({
+    // Get user from session (include timezone for delivery hour conversion)
+    const user: Pick<User, "id" | "timezone"> | null = await prisma.user.findUnique({
       where: { sessionId },
       select: {
         id: true,
+        timezone: true,
       },
     });
 
@@ -167,7 +170,12 @@ export const PUT = async (request: NextRequest) => {
           { status: 400 },
         );
       }
-      updateData.deliveryHour = deliveryHour;
+      
+      // Convert delivery hour from user's timezone to UTC before saving
+      // Use the timezone from the request body if provided, otherwise use the user's current timezone
+      const userTimezone = (timezone || user.timezone) as TimezoneOption;
+      const utcDeliveryHour = convertLocalHourToUTC(deliveryHour, userTimezone);
+      updateData.deliveryHour = utcDeliveryHour;
     }
 
     // Update user
@@ -303,7 +311,12 @@ export const POST = async (request: NextRequest) => {
           phoneNumberVerified: body.phoneNumberVerified ?? false,
           premium: body.premium,
           timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
-          deliveryHour: bodyWithDefaults.deliveryHour ?? DEFAULT_DELIVERY_HOUR,
+          deliveryHour: bodyWithDefaults.deliveryHour !== undefined
+            ? convertLocalHourToUTC(
+                bodyWithDefaults.deliveryHour,
+                (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
+              )
+            : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
           updatedAt: new Date(),
         },
       });
@@ -313,6 +326,12 @@ export const POST = async (request: NextRequest) => {
        * CREATE NEW USER FLOW START
        *
        * */
+      // Type assertion needed because UserData type may not include new fields yet
+      const bodyWithDefaults = body as UserData & {
+        timezone?: string;
+        deliveryHour?: number;
+      };
+
       const savedUser = await prisma.user.create({
         data: {
           email: body.email,
@@ -323,6 +342,13 @@ export const POST = async (request: NextRequest) => {
           phoneNumberVerified: body.phoneNumberVerified,
           premium: body.premium,
           sessionId,
+          timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
+          deliveryHour: bodyWithDefaults.deliveryHour !== undefined
+            ? convertLocalHourToUTC(
+                bodyWithDefaults.deliveryHour,
+                (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
+              )
+            : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
           trialEnds:
             !body.premium && !body.emailVerified // user not premium && email not verified means signup through login with email
               ? new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
