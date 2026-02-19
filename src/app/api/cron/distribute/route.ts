@@ -60,8 +60,36 @@ export const GET = async (request: NextRequest) => {
       `[ /api/cron/distribute ] Found ${users.length} users to send messages to`
     );
 
-    // 2. create a unique set of message ids which should be sent next to each user
-    const usersWithNextMessage = users.map((user) => ({
+    // 2. Filter users to only those whose delivery hour matches the current hour in their timezone
+    const nowUtc = new Date();
+    const usersInDeliveryHour = users.filter((user) => {
+      // Get current hour in user's timezone
+      const currentHourInTimezone = parseInt(
+        new Intl.DateTimeFormat("en-US", {
+          timeZone: user.timezone,
+          hour: "numeric",
+          hour12: false,
+        }).format(nowUtc)
+      );
+
+      // Only process if current hour matches delivery hour
+      const shouldProcess = currentHourInTimezone === user.delivery_hour;
+      
+      if (!shouldProcess) {
+        console.log(
+          `[ /api/cron/distribute ] Skipping user ${user.id} - current hour in ${user.timezone}: ${currentHourInTimezone}, delivery hour: ${user.delivery_hour}`
+        );
+      }
+      
+      return shouldProcess;
+    });
+
+    console.log(
+      `[ /api/cron/distribute ] ${usersInDeliveryHour.length} users are in their delivery hour`
+    );
+
+    // 3. create a unique set of message ids which should be sent next to each user
+    const usersWithNextMessage = usersInDeliveryHour.map((user) => ({
       ...user,
       next_message: (user.last_used_message || 0) + 1,
     }));
@@ -73,7 +101,7 @@ export const GET = async (request: NextRequest) => {
       `[ /api/cron/distribute ] Found ${nextMessages.size} unique messages to send`
     );
 
-    // 3. get all the messages which should be sent next to each user - convert to a hash table
+    // 4. get all the messages which should be sent next to each user - convert to a hash table
     const messages = await prisma.message.findMany({
       where: {
         id: { in: Array.from(nextMessages) },
@@ -116,7 +144,7 @@ export const GET = async (request: NextRequest) => {
       new Map<number, Record<string, string>>()
     );
 
-    // 4. Send message for each user
+    // 5. Send message for each user
     for (const user of usersWithNextMessage) {
       try {
         const message = messagesHash.get(user.next_message);
