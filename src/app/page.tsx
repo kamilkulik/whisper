@@ -233,11 +233,21 @@ export default function Home() {
               });
               video.load();
               video.dataset.loaded = "true";
+              
+              // Wait for video to be ready before playing (fixes mobile race condition)
+              const handleCanPlay = () => {
+                video.play().catch((error) => {
+                  console.log("Video autoplay failed:", error);
+                });
+                video.removeEventListener("canplay", handleCanPlay);
+              };
+              video.addEventListener("canplay", handleCanPlay);
+            } else {
+              // Video already loaded, play immediately
+              video.play().catch((error) => {
+                console.log("Video autoplay failed:", error);
+              });
             }
-            // Video is in view, play it
-            video.play().catch((error) => {
-              console.log("Video autoplay failed:", error);
-            });
           } else {
             // Video is out of view, pause it
             video.pause();
@@ -784,26 +794,33 @@ export default function Home() {
                         <Spinner size="xl" />
                       )
                     ) : currentLocale ? (
-                      <video
-                        ref={videoRef}
-                        className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
+                      <div
+                        className="max-w-full max-h-full rounded-2xl"
                         style={{
                           filter:
                             "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                          willChange: "filter",
+                          transform: "translateZ(0)",
+                          WebkitTransform: "translateZ(0)",
                         }}
-                        loop={true}
-                        muted
-                        playsInline
-                        controls={false}
-                        controlsList="nodownload nofullscreen noremoteplayback"
-                        preload="metadata"
-                        poster={`/${currentLocale}/videos/posters/notification_received.jpg`}
                       >
-                        <source
-                          data-src={`/${currentLocale}/videos/notification_received.mp4`}
-                          type="video/mp4"
-                        />
-                      </video>
+                        <video
+                          ref={videoRef}
+                          className="w-full h-full object-contain rounded-2xl"
+                          loop={true}
+                          muted
+                          playsInline
+                          controls={false}
+                          controlsList="nodownload nofullscreen noremoteplayback"
+                          preload="metadata"
+                          poster={`/${currentLocale}/videos/posters/notification_received.jpg`}
+                        >
+                          <source
+                            data-src={`/${currentLocale}/videos/notification_received.mp4`}
+                            type="video/mp4"
+                          />
+                        </video>
+                      </div>
                     ) : (
                       <Spinner size="xl" />
                     )}
