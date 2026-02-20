@@ -233,7 +233,7 @@ export default function Home() {
               });
               video.load();
               video.dataset.loaded = "true";
-              
+
               // Wait for video to be ready before playing (fixes mobile race condition)
               const handleCanPlay = () => {
                 video.play().catch((error) => {
@@ -784,43 +784,28 @@ export default function Home() {
                         <img
                           src={`/${currentLocale}/videos/posters/notification_received.jpg`}
                           alt="Podgląd Szeptu"
-                          className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                          style={{
-                            filter:
-                              "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                          }}
+                          className="w-full max-h-full object-contain rounded-2xl"
                         />
                       ) : (
                         <Spinner size="xl" />
                       )
                     ) : currentLocale ? (
-                      <div
-                        className="max-w-full max-h-full rounded-2xl"
-                        style={{
-                          filter:
-                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                          willChange: "filter",
-                          transform: "translateZ(0)",
-                          WebkitTransform: "translateZ(0)",
-                        }}
+                      <video
+                        ref={videoRef}
+                        className="max-w-full max-h-full object-contain rounded-2xl"
+                        loop={true}
+                        muted
+                        playsInline
+                        controls={false}
+                        controlsList="nodownload nofullscreen noremoteplayback"
+                        preload="metadata"
+                        poster={`/${currentLocale}/videos/posters/notification_received.jpg`}
                       >
-                        <video
-                          ref={videoRef}
-                          className="w-full h-full object-contain rounded-2xl"
-                          loop={true}
-                          muted
-                          playsInline
-                          controls={false}
-                          controlsList="nodownload nofullscreen noremoteplayback"
-                          preload="metadata"
-                          poster={`/${currentLocale}/videos/posters/notification_received.jpg`}
-                        >
-                          <source
-                            data-src={`/${currentLocale}/videos/notification_received.mp4`}
-                            type="video/mp4"
-                          />
-                        </video>
-                      </div>
+                        <source
+                          data-src={`/${currentLocale}/videos/notification_received.mp4`}
+                          type="video/mp4"
+                        />
+                      </video>
                     ) : (
                       <Spinner size="xl" />
                     )}
@@ -854,11 +839,7 @@ export default function Home() {
                         <img
                           src={`/${currentLocale}/videos/posters/message_reveal.jpg`}
                           alt="Podgląd Szeptu"
-                          className="w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                          style={{
-                            filter:
-                              "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                          }}
+                          className="w-full max-h-full object-contain rounded-2xl"
                         />
                       ) : (
                         <Spinner size="xl" />
@@ -866,11 +847,7 @@ export default function Home() {
                     ) : currentLocale ? (
                       <video
                         ref={videoRef3}
-                        className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                        style={{
-                          filter:
-                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                        }}
+                        className="max-w-full max-h-full object-contain rounded-2xl"
                         loop={true}
                         muted
                         autoPlay={true}
@@ -916,11 +893,7 @@ export default function Home() {
                     {currentLocale ? (
                       <video
                         ref={videoRef2}
-                        className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                        style={{
-                          filter:
-                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                        }}
+                        className="max-w-full max-h-full object-contain rounded-2xl"
                         loop={true}
                         muted
                         playsInline
@@ -968,10 +941,6 @@ export default function Home() {
                         srcSet={getImageSrcset("single_whisper", currentLocale)}
                         alt="Smartphone showing Wieczorny Szept notification"
                         className="max-w-full max-h-full object-contain rounded-2xl"
-                        style={{
-                          filter:
-                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                        }}
                       />
                     ) : (
                       <Spinner size="xl" />
@@ -1012,11 +981,7 @@ export default function Home() {
                   <div className="order-2 lg:order-1 relative flex justify-center items-center md:max-lg:h-[400px] h-[300px] lg:h-[550px] lg:col-span-3">
                     <video
                       ref={videoRef4}
-                      className="max-w-full max-h-full object-contain drop-shadow-3xl rounded-2xl"
-                      style={{
-                        filter:
-                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                      }}
+                      className="max-w-full max-h-full object-contain rounded-2xl"
                       loop={true}
                       muted
                       autoPlay={true}
@@ -1052,10 +1017,6 @@ export default function Home() {
                       srcSet={getImageSrcset("szept_4", currentLocale)}
                       alt="Smartphone showing Wieczorny Szept notification"
                       className="max-w-full max-h-full object-contain rounded-2xl"
-                      style={{
-                        filter:
-                          "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                      }}
                     />
                   ) : (
                     <Spinner size="xl" />
