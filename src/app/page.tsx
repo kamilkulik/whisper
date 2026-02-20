@@ -209,6 +209,8 @@ export default function Home() {
 
     if (videos.length === 0) return;
 
+    const pendingHandlers = new Map<HTMLVideoElement, () => void>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -231,26 +233,35 @@ export default function Home() {
                   el.src = el.dataset.src;
                 }
               });
-              video.load();
               video.dataset.loaded = "true";
 
-              // Wait for video to be ready before playing (fixes mobile race condition)
               const handleCanPlay = () => {
-                video.play().catch((error) => {
-                  console.log("Video autoplay failed:", error);
-                });
+                video.play().catch(() => { });
                 video.removeEventListener("canplay", handleCanPlay);
+                pendingHandlers.delete(video);
               };
+              pendingHandlers.set(video, handleCanPlay);
               video.addEventListener("canplay", handleCanPlay);
+              
+              video.load();
+
+              // If already ready (cached), play immediately
+              if (video.readyState >= 3) {
+                video.removeEventListener("canplay", handleCanPlay);
+                pendingHandlers.delete(video);
+                video.play().catch(() => { });
+              }
             } else {
-              // Video already loaded, play immediately
-              video.play().catch((error) => {
-                console.log("Video autoplay failed:", error);
-              });
+              video.play().catch(() => { });
             }
           } else {
             // Video is out of view, pause it
             video.pause();
+            const pending = pendingHandlers.get(video);
+            if (pending) {
+              video.removeEventListener("canplay", pending);
+              pendingHandlers.delete(video);
+            }
           }
         });
       },
@@ -260,18 +271,16 @@ export default function Home() {
       },
     );
 
-    // Observe all videos
     videos.forEach((video) => {
       if (video) observer.observe(video);
     });
 
     return () => {
-      // Clean up all observations
       videos.forEach((video) => {
         if (video) observer.unobserve(video);
       });
     };
-  }, [currentLocale]);
+  }, [currentLocale, prefersReducedMotion]);
 
   // Handle modal deep links - scroll to pricing section when modal is present (except login and contact)
   useEffect(() => {
@@ -356,27 +365,27 @@ export default function Home() {
   // Image carousel data
   const carouselImages = currentLocale
     ? [
-        {
-          src: `/${currentLocale}/szept_1_1080.jpg`,
-          srcset: getImageSrcset("szept_1", currentLocale),
-          alt: "Wieczorny Szept Image 1",
-        },
-        {
-          src: `/${currentLocale}/szept_2_1080.jpg`,
-          srcset: getImageSrcset("szept_2", currentLocale),
-          alt: "Wieczorny Szept Image 2",
-        },
-        {
-          src: `/${currentLocale}/szept_3_1080.jpg`,
-          srcset: getImageSrcset("szept_3", currentLocale),
-          alt: "Wieczorny Szept Image 3",
-        },
-        {
-          src: `/${currentLocale}/szept_4_1080.jpg`,
-          srcset: getImageSrcset("szept_4", currentLocale),
-          alt: "Wieczorny Szept Image 4",
-        },
-      ]
+      {
+        src: `/${currentLocale}/szept_1_1080.jpg`,
+        srcset: getImageSrcset("szept_1", currentLocale),
+        alt: "Wieczorny Szept Image 1",
+      },
+      {
+        src: `/${currentLocale}/szept_2_1080.jpg`,
+        srcset: getImageSrcset("szept_2", currentLocale),
+        alt: "Wieczorny Szept Image 2",
+      },
+      {
+        src: `/${currentLocale}/szept_3_1080.jpg`,
+        srcset: getImageSrcset("szept_3", currentLocale),
+        alt: "Wieczorny Szept Image 3",
+      },
+      {
+        src: `/${currentLocale}/szept_4_1080.jpg`,
+        srcset: getImageSrcset("szept_4", currentLocale),
+        alt: "Wieczorny Szept Image 4",
+      },
+    ]
     : [];
 
   // FAQ data
@@ -462,10 +471,10 @@ export default function Home() {
         const meta =
           product !== SubscriptionType.TRIAL && typeof window !== "undefined"
             ? {
-                ...getMetaCookies(),
-                eventId: generateEventId(Event.InitiateCheckout),
-                eventSourceUrl: window.location.href,
-              }
+              ...getMetaCookies(),
+              eventId: generateEventId(Event.InitiateCheckout),
+              eventSourceUrl: window.location.href,
+            }
             : undefined;
         const result = await navigateToCheckout(
           product,
@@ -561,11 +570,10 @@ export default function Home() {
       <div className="bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] relative">
         {/* Navigation Bar */}
         <nav
-          className={`fixed top-0 left-0 right-0 z-[10] transition-all duration-300 ${
-            scrolled
+          className={`fixed top-0 left-0 right-0 z-[10] transition-all duration-300 ${scrolled
               ? "bg-black/40 backdrop-blur-md shadow-lg [backdrop-filter:blur(6px)] [-webkit-backdrop-filter:blur(6px)] will-change-[backdrop-filter]"
               : "bg-transparent"
-          }`}
+            }`}
         >
           <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
             <div className="flex items-center space-x-8">
@@ -793,6 +801,10 @@ export default function Home() {
                       <video
                         ref={videoRef}
                         className="max-w-full max-h-full object-contain rounded-2xl"
+                        style={{
+                          filter:
+                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
+                        }}
                         loop={true}
                         muted
                         playsInline
@@ -850,7 +862,6 @@ export default function Home() {
                         className="max-w-full max-h-full object-contain rounded-2xl"
                         loop={true}
                         muted
-                        autoPlay={true}
                         playsInline
                         controls={false}
                         controlsList="nodownload nofullscreen noremoteplayback"
@@ -984,7 +995,6 @@ export default function Home() {
                       className="max-w-full max-h-full object-contain rounded-2xl"
                       loop={true}
                       muted
-                      autoPlay={true}
                       playsInline
                       controls={false}
                       controlsList="nodownload nofullscreen noremoteplayback"
