@@ -242,7 +242,7 @@ export default function Home() {
               };
               pendingHandlers.set(video, handleCanPlay);
               video.addEventListener("canplay", handleCanPlay);
-              
+
               video.load();
 
               // If already ready (cached), play immediately
@@ -571,8 +571,8 @@ export default function Home() {
         {/* Navigation Bar */}
         <nav
           className={`fixed top-0 left-0 right-0 z-[10] transition-all duration-300 ${scrolled
-              ? "bg-black/40 backdrop-blur-md shadow-lg [backdrop-filter:blur(6px)] [-webkit-backdrop-filter:blur(6px)] will-change-[backdrop-filter]"
-              : "bg-transparent"
+            ? "bg-black/40 backdrop-blur-md shadow-lg [backdrop-filter:blur(6px)] [-webkit-backdrop-filter:blur(6px)] will-change-[backdrop-filter]"
+            : "bg-transparent"
             }`}
         >
           <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
@@ -801,10 +801,6 @@ export default function Home() {
                       <video
                         ref={videoRef}
                         className="max-w-full max-h-full object-contain rounded-2xl"
-                        style={{
-                          filter:
-                            "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4))",
-                        }}
                         loop={true}
                         muted
                         playsInline
