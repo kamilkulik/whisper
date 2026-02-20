@@ -209,25 +209,68 @@ export default function Home() {
 
     if (videos.length === 0) return;
 
-    // Track which videos are currently in the viewport.
-    // This decouples "readiness" from "visibility" — the key problem on mobile
-    // where the user scrolls past before the video finishes buffering.
     const visibleVideos = new Set<HTMLVideoElement>();
     const eventCleanups: (() => void)[] = [];
+    // Track pending play() promises to avoid load()/play() race conditions.
+    const pendingPlays = new WeakMap<HTMLVideoElement, Promise<void>>();
 
-    // For every video, set up a PERSISTENT canplay handler that fires whenever
-    // the video becomes ready. Unlike the old approach, this listener is never
-    // removed when the video leaves the viewport — so even if the user scrolls
-    // past before buffering completes, the handler will still play the video
-    // the moment it becomes ready AND visible.
+    /**
+     * Attempt to play a video only when it is both visible AND buffered.
+     * - Checks readyState >= HAVE_FUTURE_DATA before calling play().
+     * - On NotAllowedError (Low Power Mode / strict policy) attaches a
+     *   one-shot tap-to-play handler so the user can start it manually.
+     * - AbortError and other transient errors are silently ignored.
+     */
+    const tryPlay = (video: HTMLVideoElement) => {
+      if (!visibleVideos.has(video)) return;
+      // HAVE_FUTURE_DATA (3) or HAVE_ENOUGH_DATA (4) — safe to call play()
+      if (video.readyState < 3) return;
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        pendingPlays.set(video, playPromise);
+        playPromise
+          .then(() => {
+            pendingPlays.delete(video);
+          })
+          .catch((err) => {
+            pendingPlays.delete(video);
+            if (err.name === "NotAllowedError") {
+              // Low Power Mode or strict autoplay policy — let user tap to play
+              const tapHandler = () => {
+                video.play().catch(() => { });
+                video.removeEventListener("click", tapHandler);
+                video.removeEventListener("touchend", tapHandler);
+              };
+              video.addEventListener("click", tapHandler, { once: true });
+              video.addEventListener("touchend", tapHandler, { once: true });
+              eventCleanups.push(() => {
+                video.removeEventListener("click", tapHandler);
+                video.removeEventListener("touchend", tapHandler);
+              });
+            }
+            // AbortError and others are silently ignored
+          });
+      }
+    };
+
+    // iOS Safari does not reliably fire `canplay`. Listen to multiple
+    // readiness events as a fallback chain — whichever fires first wins.
+    const readinessEvents = [
+      "loadedmetadata",
+      "loadeddata",
+      "canplay",
+      "canplaythrough",
+    ];
+
     videos.forEach((video) => {
-      const onCanPlay = () => {
-        if (visibleVideos.has(video)) {
-          video.play().catch(() => { });
-        }
-      };
-      video.addEventListener("canplay", onCanPlay);
-      eventCleanups.push(() => video.removeEventListener("canplay", onCanPlay));
+      readinessEvents.forEach((eventName) => {
+        const handler = () => tryPlay(video);
+        video.addEventListener(eventName, handler);
+        eventCleanups.push(
+          () => video.removeEventListener(eventName, handler),
+        );
+      });
     });
 
     const observer = new IntersectionObserver(
@@ -250,18 +293,29 @@ export default function Home() {
 
               // Start loading. Do NOT call play() here — on mobile Safari,
               // calling play() right after load() causes the load algorithm
-              // to abort the play (AbortError). Instead, the persistent
-              // canplay handler above will play the video once it's ready.
+              // to abort the play (AbortError). The readiness event handlers
+              // above will call tryPlay() once the video is buffered.
               video.load();
             } else {
               // Sources already loaded from a previous visit — play directly.
-              video.play().catch(() => { });
+              tryPlay(video);
             }
           } else {
             visibleVideos.delete(video);
-            // Pause when out of viewport, but do NOT remove canplay listeners.
-            // The video may still be buffering and we want to know when it's ready.
-            video.pause();
+            // Wait for any pending play() to settle before pausing to
+            // avoid "play() interrupted by pause()" AbortErrors.
+            const pending = pendingPlays.get(video);
+            if (pending) {
+              pending
+                .then(() => {
+                  if (!visibleVideos.has(video)) video.pause();
+                })
+                .catch(() => {
+                  if (!visibleVideos.has(video)) video.pause();
+                });
+            } else {
+              video.pause();
+            }
           }
         });
       },
@@ -282,7 +336,6 @@ export default function Home() {
       videos.forEach((video) => {
         if (video) observer.unobserve(video);
       });
-      // Remove all persistent canplay handlers
       eventCleanups.forEach((fn) => fn());
       visibleVideos.clear();
     };
@@ -807,6 +860,7 @@ export default function Home() {
                       <video
                         ref={videoRef}
                         className="max-w-full max-h-full object-contain rounded-2xl"
+                        autoPlay
                         loop={true}
                         muted
                         playsInline
@@ -862,6 +916,7 @@ export default function Home() {
                       <video
                         ref={videoRef3}
                         className="max-w-full max-h-full object-contain rounded-2xl"
+                        autoPlay
                         loop={true}
                         muted
                         playsInline
@@ -907,6 +962,7 @@ export default function Home() {
                       <video
                         ref={videoRef2}
                         className="max-w-full max-h-full object-contain rounded-2xl"
+                        autoPlay
                         loop={true}
                         muted
                         playsInline
@@ -995,6 +1051,7 @@ export default function Home() {
                     <video
                       ref={videoRef4}
                       className="max-w-full max-h-full object-contain rounded-2xl"
+                      autoPlay
                       loop={true}
                       muted
                       playsInline
