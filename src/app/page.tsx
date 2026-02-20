@@ -209,23 +209,45 @@ export default function Home() {
 
     if (videos.length === 0) return;
 
-    const pendingHandlers = new Map<HTMLVideoElement, () => void>();
+    // Track pending retry handlers so we can clean them up
+    const pendingRetries = new Map<HTMLVideoElement, () => void>();
+
+    /**
+     * Attempt to play a video. If play() rejects (common on mobile when 
+     * the video isn't buffered yet), set up a one-time retry listener on
+     * "canplaythrough" so it plays as soon as it's truly ready.
+     */
+    const attemptPlay = (video: HTMLVideoElement) => {
+      // Remove any stale retry handler before setting a new one
+      const stale = pendingRetries.get(video);
+      if (stale) {
+        video.removeEventListener("canplaythrough", stale);
+        pendingRetries.delete(video);
+      }
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // play() failed — video probably isn't ready yet.
+          // Retry once the browser has buffered enough to play through.
+          const retryPlay = () => {
+            video.play().catch(() => { });
+            video.removeEventListener("canplaythrough", retryPlay);
+            pendingRetries.delete(video);
+          };
+          pendingRetries.set(video, retryPlay);
+          video.addEventListener("canplaythrough", retryPlay);
+        });
+      }
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const video = entry.target as HTMLVideoElement;
-          // Each entry describes an intersection change for one observed
-          // target element:
-          //   entry.boundingClientRect
-          //   entry.intersectionRatio
-          //   entry.intersectionRect
-          //   entry.isIntersecting
-          //   entry.rootBounds
-          //   entry.target
-          //   entry.time
+
           if (entry.isIntersecting) {
-            // lazy-load sources if not loaded yet
+            // Lazy-load sources on first intersection
             if (!video.dataset.loaded) {
               video.querySelectorAll("source").forEach((source) => {
                 const el = source as HTMLSourceElement;
@@ -234,40 +256,29 @@ export default function Home() {
                 }
               });
               video.dataset.loaded = "true";
-
-              const handleCanPlay = () => {
-                video.play().catch(() => { });
-                video.removeEventListener("canplay", handleCanPlay);
-                pendingHandlers.delete(video);
-              };
-              pendingHandlers.set(video, handleCanPlay);
-              video.addEventListener("canplay", handleCanPlay);
-
               video.load();
-
-              // If already ready (cached), play immediately
-              if (video.readyState >= 3) {
-                video.removeEventListener("canplay", handleCanPlay);
-                pendingHandlers.delete(video);
-                video.play().catch(() => { });
-              }
-            } else {
-              video.play().catch(() => { });
             }
+
+            // Always attempt to play when the video enters the viewport.
+            // attemptPlay handles the case where the video isn't ready yet.
+            attemptPlay(video);
           } else {
-            // Video is out of view, pause it
+            // Video left the viewport — pause and cancel any pending retry
             video.pause();
-            const pending = pendingHandlers.get(video);
+            const pending = pendingRetries.get(video);
             if (pending) {
-              video.removeEventListener("canplay", pending);
-              pendingHandlers.delete(video);
+              video.removeEventListener("canplaythrough", pending);
+              pendingRetries.delete(video);
             }
           }
         });
       },
       {
-        threshold: 0.25, // Trigger when 25% of the video is visible
-        rootMargin: "0px 0px -10% 0px", // Start playing slightly before video is fully visible
+        // Lower threshold so it triggers earlier on small mobile screens
+        threshold: 0.15,
+        // Positive bottom margin eagerly triggers the observer before the
+        // video is fully scrolled into view, giving it time to buffer.
+        rootMargin: "0px 0px 200px 0px",
       },
     );
 
@@ -276,9 +287,17 @@ export default function Home() {
     });
 
     return () => {
+      // Full cleanup: unobserve AND remove any pending event listeners
       videos.forEach((video) => {
-        if (video) observer.unobserve(video);
+        if (video) {
+          observer.unobserve(video);
+          const pending = pendingRetries.get(video);
+          if (pending) {
+            video.removeEventListener("canplaythrough", pending);
+          }
+        }
       });
+      pendingRetries.clear();
     };
   }, [currentLocale, prefersReducedMotion]);
 
