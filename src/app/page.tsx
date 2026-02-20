@@ -205,41 +205,30 @@ export default function Home() {
       videoRef2.current,
       videoRef3.current,
       videoRef4.current,
-    ].filter(Boolean);
+    ].filter(Boolean) as HTMLVideoElement[];
 
     if (videos.length === 0) return;
 
-    // Track pending retry handlers so we can clean them up
-    const pendingRetries = new Map<HTMLVideoElement, () => void>();
+    // Track which videos are currently in the viewport.
+    // This decouples "readiness" from "visibility" — the key problem on mobile
+    // where the user scrolls past before the video finishes buffering.
+    const visibleVideos = new Set<HTMLVideoElement>();
+    const eventCleanups: (() => void)[] = [];
 
-    /**
-     * Attempt to play a video. If play() rejects (common on mobile when 
-     * the video isn't buffered yet), set up a one-time retry listener on
-     * "canplaythrough" so it plays as soon as it's truly ready.
-     */
-    const attemptPlay = (video: HTMLVideoElement) => {
-      // Remove any stale retry handler before setting a new one
-      const stale = pendingRetries.get(video);
-      if (stale) {
-        video.removeEventListener("canplaythrough", stale);
-        pendingRetries.delete(video);
-      }
-
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // play() failed — video probably isn't ready yet.
-          // Retry once the browser has buffered enough to play through.
-          const retryPlay = () => {
-            video.play().catch(() => { });
-            video.removeEventListener("canplaythrough", retryPlay);
-            pendingRetries.delete(video);
-          };
-          pendingRetries.set(video, retryPlay);
-          video.addEventListener("canplaythrough", retryPlay);
-        });
-      }
-    };
+    // For every video, set up a PERSISTENT canplay handler that fires whenever
+    // the video becomes ready. Unlike the old approach, this listener is never
+    // removed when the video leaves the viewport — so even if the user scrolls
+    // past before buffering completes, the handler will still play the video
+    // the moment it becomes ready AND visible.
+    videos.forEach((video) => {
+      const onCanPlay = () => {
+        if (visibleVideos.has(video)) {
+          video.play().catch(() => { });
+        }
+      };
+      video.addEventListener("canplay", onCanPlay);
+      eventCleanups.push(() => video.removeEventListener("canplay", onCanPlay));
+    });
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -247,6 +236,8 @@ export default function Home() {
           const video = entry.target as HTMLVideoElement;
 
           if (entry.isIntersecting) {
+            visibleVideos.add(video);
+
             // Lazy-load sources on first intersection
             if (!video.dataset.loaded) {
               video.querySelectorAll("source").forEach((source) => {
@@ -256,29 +247,30 @@ export default function Home() {
                 }
               });
               video.dataset.loaded = "true";
-              video.load();
-            }
 
-            // Always attempt to play when the video enters the viewport.
-            // attemptPlay handles the case where the video isn't ready yet.
-            attemptPlay(video);
-          } else {
-            // Video left the viewport — pause and cancel any pending retry
-            video.pause();
-            const pending = pendingRetries.get(video);
-            if (pending) {
-              video.removeEventListener("canplaythrough", pending);
-              pendingRetries.delete(video);
+              // Start loading. Do NOT call play() here — on mobile Safari,
+              // calling play() right after load() causes the load algorithm
+              // to abort the play (AbortError). Instead, the persistent
+              // canplay handler above will play the video once it's ready.
+              video.load();
+            } else {
+              // Sources already loaded from a previous visit — play directly.
+              video.play().catch(() => { });
             }
+          } else {
+            visibleVideos.delete(video);
+            // Pause when out of viewport, but do NOT remove canplay listeners.
+            // The video may still be buffering and we want to know when it's ready.
+            video.pause();
           }
         });
       },
       {
-        // Lower threshold so it triggers earlier on small mobile screens
-        threshold: 0.15,
-        // Positive bottom margin eagerly triggers the observer before the
-        // video is fully scrolled into view, giving it time to buffer.
-        rootMargin: "0px 0px 200px 0px",
+        threshold: 0.1,
+        // Neutral rootMargin: only trigger when the video is actually visible.
+        // Mobile browsers may throttle loading for off-screen elements, so
+        // triggering early (positive margin) is counterproductive.
+        rootMargin: "0px",
       },
     );
 
@@ -287,17 +279,12 @@ export default function Home() {
     });
 
     return () => {
-      // Full cleanup: unobserve AND remove any pending event listeners
       videos.forEach((video) => {
-        if (video) {
-          observer.unobserve(video);
-          const pending = pendingRetries.get(video);
-          if (pending) {
-            video.removeEventListener("canplaythrough", pending);
-          }
-        }
+        if (video) observer.unobserve(video);
       });
-      pendingRetries.clear();
+      // Remove all persistent canplay handlers
+      eventCleanups.forEach((fn) => fn());
+      visibleVideos.clear();
     };
   }, [currentLocale, prefersReducedMotion]);
 
