@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { verifyOneTimeToken } from "../../utils/oneTimeJwt";
 import { prisma } from "@/lib/prisma";
 import { getBaseUrl } from "../../utils/baseUrl";
@@ -100,14 +100,16 @@ export async function GET(request: NextRequest) {
     const fbc = request.cookies.get("_fbc")?.value;
     const userAgent = request.headers.get("user-agent") ?? "";
 
-    sendCapiEvent({
-      eventName: Event.Lead,
-      eventTime: Math.floor(Date.now() / 1000),
-      actionSource: "website",
-      userData: buildCapiUserData({ fbp, fbc, email: user.email }),
-      clientUserAgent: userAgent,
-      eventId: generateEventId(Event.Lead),
-    }).catch(() => { });
+    after(
+      sendCapiEvent({
+        eventName: Event.Lead,
+        eventTime: Math.floor(Date.now() / 1000),
+        actionSource: "website",
+        userData: buildCapiUserData({ fbp, fbc, email: user.email }),
+        clientUserAgent: userAgent,
+        eventId: generateEventId(Event.Lead),
+      }).catch(() => { })
+    );
 
     // Redirect to success page
     return NextResponse.redirect(

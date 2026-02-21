@@ -1,7 +1,7 @@
 import { sendEmail } from "@/lib/emailapi";
 import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { generateCsrfToken } from "../../utils/csfrProtection";
@@ -64,14 +64,16 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const fbc = request.cookies.get("_fbc")?.value;
   const userAgent = request.headers.get("user-agent") ?? "";
 
-  sendCapiEvent({
-    eventName: Event.Contact,
-    eventTime: Math.floor(Date.now() / 1000),
-    actionSource: "website",
-    userData: buildCapiUserData({ fbp, fbc }),
-    clientUserAgent: userAgent,
-    eventId: contactEventId,
-  }).catch(() => { });
+  after(
+    sendCapiEvent({
+      eventName: Event.Contact,
+      eventTime: Math.floor(Date.now() / 1000),
+      actionSource: "website",
+      userData: buildCapiUserData({ fbp, fbc }),
+      clientUserAgent: userAgent,
+      eventId: contactEventId,
+    }).catch(() => { })
+  );
 
   // For local development, include the verification code in the response
   const response: any = {

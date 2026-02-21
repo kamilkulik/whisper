@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { after, NextResponse, NextRequest } from "next/server";
 import { headers } from "next/headers";
 
 import { stripe } from "@/lib/stripe";
@@ -113,15 +113,17 @@ export async function POST(request: NextRequest) {
     }
 
     // InitiateCheckout CAPI (fire-and-forget)
-    sendCapiEvent({
-      eventName: Event.InitiateCheckout,
-      eventTime: Math.floor(Date.now() / 1000),
-      actionSource: "website",
-      userData: buildCapiUserData({ fbp, fbc, email: body.email }),
-      clientUserAgent: userAgent,
-      eventSourceUrl: eventSourceUrl ?? undefined,
-      eventId: purchaseEventId,
-    }).catch(() => { });
+    after(
+      sendCapiEvent({
+        eventName: Event.InitiateCheckout,
+        eventTime: Math.floor(Date.now() / 1000),
+        actionSource: "website",
+        userData: buildCapiUserData({ fbp, fbc, email: body.email }),
+        clientUserAgent: userAgent,
+        eventSourceUrl: eventSourceUrl ?? undefined,
+        eventId: purchaseEventId,
+      }).catch(() => { })
+    );
 
     return NextResponse.json({ url: session.url });
   } catch (err: any) {

@@ -8,6 +8,7 @@ import { SubscriptionStatus, SubscriptionType, User } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { Event } from "@/lib/fbq";
+import { after } from "next/server";
 
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session,
@@ -165,15 +166,17 @@ export async function handleSessionCompleted(
   const value = (amountTotal / 100).toFixed(2);
   const currency = (eventData.currency ?? "usd").toUpperCase();
 
-  sendCapiEvent({
-    eventName: Event.Purchase,
-    eventTime: eventData.created,
-    actionSource: "website",
-    userData: buildCapiUserData({ fbp, fbc, email: user.email }),
-    clientUserAgent: "",
-    eventId: purchaseEventId ?? undefined,
-    customData: { currency, value },
-  }).catch(() => { });
+  after(
+    sendCapiEvent({
+      eventName: Event.Purchase,
+      eventTime: eventData.created,
+      actionSource: "website",
+      userData: buildCapiUserData({ fbp, fbc, email: user.email }),
+      clientUserAgent: "",
+      eventId: purchaseEventId ?? undefined,
+      customData: { currency, value },
+    }).catch(() => { })
+  );
 
   return {
     success: true,

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { SubscriptionType, User } from "@prisma/client";
 import { sendEmail } from "@/lib/emailapi";
@@ -388,20 +388,22 @@ export const POST = async (request: NextRequest) => {
           const fbc = request.cookies.get("_fbc")?.value;
           const userAgent = request.headers.get("user-agent") ?? "";
 
-          sendCapiEvent({
-            eventName: Event.StartTrial,
-            eventTime: Math.floor(Date.now() / 1000),
-            actionSource: "website",
-            userData: buildCapiUserData({
-              fbp,
-              fbc,
-              email: savedUser.email,
-              phone: savedUser.phoneNumber,
-            }),
-            clientUserAgent: userAgent,
-            eventId: generateEventId(Event.StartTrial),
-            customData: { value: 0, currency: "USD" },
-          }).catch(() => { });
+          after(
+            sendCapiEvent({
+              eventName: Event.StartTrial,
+              eventTime: Math.floor(Date.now() / 1000),
+              actionSource: "website",
+              userData: buildCapiUserData({
+                fbp,
+                fbc,
+                email: savedUser.email,
+                phone: savedUser.phoneNumber,
+              }),
+              clientUserAgent: userAgent,
+              eventId: generateEventId(Event.StartTrial),
+              customData: { value: 0, currency: "USD" },
+            }).catch(() => { })
+          );
         } catch (error) {
           console.error(
             "[ users POST ] Error creating trial subscription for new user",
