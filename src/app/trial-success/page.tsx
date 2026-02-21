@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server";
-import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import NavigationBar from "../_components/NavigationBar";
 import { TrialSuccessTrack } from "../_components/TrialSuccessTrack";
 import { GB_CONTACT_EMAIL, GB_DOMAIN, PL_CONTACT_EMAIL } from "../_consts";
@@ -7,7 +6,6 @@ import { GB_CONTACT_EMAIL, GB_DOMAIN, PL_CONTACT_EMAIL } from "../_consts";
 export const dynamic = "force-dynamic";
 
 export default async function TrialSuccess({ searchParams }: { searchParams: Promise<{ eventId?: string }> }) {
-  const userEmailFromSessionCookie = await userEmailFromCookie();
   const t = await getTranslations("SuccessPage");
 
   // Set contact email based on hostname
@@ -62,19 +60,10 @@ export default async function TrialSuccess({ searchParams }: { searchParams: Pro
             <p className="text-xl text-blue-200 leading-relaxed">
               {t("copy-1")}{" "}
               {`${new Date() > new Date(new Date().setHours(20, 59, 0, 0))
-                  ? t("tomorrow")
-                  : t("today")
+                ? t("tomorrow")
+                : t("today")
                 } ${t("evening")}.`}
             </p>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <p className="text-white text-lg">
-                {t("email-confirmation")}{" "}
-                <span className="font-semibold text-blue-200">
-                  {userEmailFromSessionCookie}
-                </span>
-              </p>
-            </div>
 
             <p className="text-white/80 text-sm">
               {t("contact-us")}{" "}

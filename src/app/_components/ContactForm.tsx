@@ -2,48 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useLocale } from "../_contexts/LocaleContext";
-import { z } from "zod";
-import DOMPurify from "dompurify";
 import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 import { getMetaCookies } from "@/lib/metaCookies";
 import { generateEventId } from "@/lib/eventId";
 import { GatheredUserData, prepSaveUserBody } from "./utils/saveUserBodyPrep";
 import { useTranslations } from "next-intl";
-import { languageOptions } from "../_consts";
+import { languageOptions, deliveryHourOptions, DEFAULT_DELIVERY_HOUR } from "../_consts";
 import { UserData } from "../api/users/route";
-
-// Validation schema
-const localisedFormSchema = (
-  t: Awaited<ReturnType<typeof useTranslations>>
-) => {
-  return z.object({
-    // E.164 format: +[country code][number], e.g., +48791321431
-    phoneNumber: z
-      .string()
-      .min(8, t("form-validation-errors.phone-number.min"))
-      .max(16, t("form-validation-errors.phone-number.max"))
-      .regex(/^\+[1-9]\d{6,14}$/, t("form-validation-errors.phone-number.regex")),
-    name: z
-      .string()
-      .min(2, t("form-validation-errors.name.min"))
-      .max(50, t("form-validation-errors.name.max"))
-      .regex(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]+$/,
-        t("form-validation-errors.name.regex")
-      ),
-    email: z
-      .string()
-      .min(1, t("form-validation-errors.email.min"))
-      .max(254, t("form-validation-errors.email.max"))
-      .email(t("form-validation-errors.email.email")),
-  });
-};
-
-type ValidationErrors = {
-  name?: string;
-  email?: string;
-};
 
 export default function ContactForm({
   isEmailVerified,
@@ -64,30 +30,20 @@ export default function ContactForm({
     GatheredUserData & { acceptTerms: boolean }
   >({
     acceptTerms: false,
+    deliveryHour: DEFAULT_DELIVERY_HOUR,
     email:
       isEmailVerified?.isEmailVerified && isEmailVerified.email
         ? isEmailVerified.email
-        : "",
+        : undefined,
     messageLanguage: SupportedLanguagesEnum.PL, // Default fallback
-    name: "",
     phoneNumber: verifiedPhoneNumber,
     product: SubscriptionType.TRIAL,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
-    {}
-  );
 
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const languageDropdownRef = useRef<HTMLDivElement>(null);
-
-  // const languageOptions = [
-  //   { code: SupportedLanguagesEnum.PL, name: "Polski" },
-  //   // { code: SupportedLanguagesEnum.EN, name: "English" },
-  //   //   { code: SupportedLanguagesEnum.ES, name: "Español" },
-  //   //   { code: SupportedLanguagesEnum.IT, name: "Italiano" },
-  // ];
 
   // Update form data when locale context is loaded
   useEffect(() => {
@@ -108,59 +64,6 @@ export default function ContactForm({
       messageLanguage: language,
     }));
     setIsLanguageDropdownOpen(false);
-  };
-
-  // Sanitize input function
-  const sanitizeInput = (input: string): string => {
-    return DOMPurify.sanitize(input.trim());
-  };
-
-  // Validate single field
-  const validateField = (
-    fieldName: keyof ValidationErrors,
-    value: string
-  ): string | undefined => {
-    try {
-      const fieldSchema = localisedFormSchema(t).shape[fieldName];
-      fieldSchema.parse(value);
-      return undefined; // No error
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return error.issues[0]?.message;
-      }
-      return t("form-validation-errors.validation-error");
-    }
-  };
-
-  // Handle input blur with validation and sanitization
-  const handleInputBlur = (
-    fieldName: keyof ValidationErrors,
-    value: string
-  ) => {
-    const sanitizedValue = sanitizeInput(value);
-    const error = validateField(fieldName, sanitizedValue);
-
-    // Update form data with sanitized value
-    setFormData((prev) => ({
-      ...prev,
-      [fieldName]: sanitizedValue,
-    }));
-
-    // Update validation errors
-    setValidationErrors((prev) => ({
-      ...prev,
-      [fieldName]: error,
-    }));
-  };
-
-  // Clear validation error when user starts typing
-  const clearValidationError = (fieldName: keyof ValidationErrors) => {
-    if (validationErrors[fieldName]) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        [fieldName]: undefined,
-      }));
-    }
   };
 
   const handleChange = (
@@ -185,47 +88,18 @@ export default function ContactForm({
       return;
     }
 
-    // Validate all input fields
-    const sanitizedData = {
-      name: sanitizeInput(formData.name),
-      email: sanitizeInput(formData.email.toLowerCase()),
-      phoneNumber: sanitizeInput(formData.phoneNumber || ""),
-    };
-
-    const errors: ValidationErrors = {};
-    Object.entries(sanitizedData).forEach(([key, value]) => {
-      const error = validateField(
-        key as keyof ValidationErrors,
-        value as string
-      );
-      if (error) {
-        errors[key as keyof ValidationErrors] = error;
-      }
-    });
-
-    // If there are validation errors, show them and don't submit
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      setMessage(t("form-validation-errors.form-submit"));
-      return;
-    }
-
-    // Update form data with sanitized values
-    setFormData((prev) => ({
-      ...prev,
-      ...sanitizedData,
-    }));
-
     setIsSubmitting(true);
 
     try {
       // First, save the contact information
       const body = prepSaveUserBody({
-        email: sanitizedData.email,
+        deliveryHour: formData.deliveryHour,
+        email: isEmailVerified?.isEmailVerified
+          ? isEmailVerified.email
+          : undefined,
         emailVerified: isEmailVerified?.isEmailVerified,
         messageLanguage: formData.messageLanguage,
-        name: sanitizedData.name,
-        phoneNumber: sanitizedData.phoneNumber,
+        phoneNumber: formData.phoneNumber,
         product: selectedProduct,
       });
       const response = await fetch("/api/users", {
@@ -241,8 +115,7 @@ export default function ContactForm({
       if (response.ok) {
         // Clear the form
         setFormData({
-          email: "",
-          name: "",
+          deliveryHour: DEFAULT_DELIVERY_HOUR,
           messageLanguage: SupportedLanguagesEnum.EN,
           acceptTerms: false,
           phoneNumber: verifiedPhoneNumber,
@@ -267,7 +140,7 @@ export default function ContactForm({
           const cookies = getMetaCookies();
           const checkoutSessionsPayload: CheckoutSessionsPayload = {
             productType: selectedProduct || SubscriptionType.TRIAL,
-            email: sanitizedData.email,
+            email: isEmailVerified?.email || "",
             fbp: cookies.fbp,
             fbc: cookies.fbc,
             eventId: generateEventId("Purchase"),
@@ -323,75 +196,33 @@ export default function ContactForm({
         className="space-y-4 md:max-lg:space-y-8 lg:space-y-4"
         data-oid="d937n0b"
       >
-        <div data-oid="1x7_v4l">
+
+        {/* Delivery Hour */}
+        <div>
           <label
-            htmlFor="name"
+            htmlFor="deliveryHour"
             className="block text-white font-medium mb-2 text-xl lg:text-base"
-            data-oid="er2p-26"
           >
-            {t("form-label-name")}
+            {t("form-label-delivery-hour")}
           </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={(e) => {
-              handleChange(e);
-              clearValidationError("name");
-            }}
-            onBlur={(e) => handleInputBlur("name", e.target.value)}
+          <select
+            id="deliveryHour"
+            value={formData.deliveryHour}
+            onChange={(e) => setFormData((prev) => ({ ...prev, deliveryHour: parseInt(e.target.value, 10) }))}
+            className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent"
             required
-            className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl lg:text-base ${validationErrors.name
-              ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-              : "focus:ring-white/30"
-              }`}
-            placeholder={t("form-placeholder-name")}
-            data-oid="6qn7m1j"
-          />
-
-          {validationErrors.name && (
-            <p className="mt-1 text-lg text-red-300" data-oid="669b2e6">
-              {validationErrors.name}
-            </p>
-          )}
+          >
+            {deliveryHourOptions.map((option) => (
+              <option
+                key={option.value}
+                value={option.value}
+                className="bg-gray-800 text-white"
+              >
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
-
-        {!isEmailVerified?.isEmailVerified && (
-          <div data-oid="u4p0sqc">
-            <label
-              htmlFor="email"
-              className="block text-white font-medium mb-2 text-xl lg:text-base"
-              data-oid="cvsh.:4"
-            >
-              {t("form-label-email")}
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={(e) => {
-                handleChange(e);
-                clearValidationError("email");
-              }}
-              onBlur={(e) => handleInputBlur("email", e.target.value)}
-              required
-              className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl lg:text-base ${validationErrors.email
-                ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                : "focus:ring-white/30"
-                }`}
-              placeholder={t("form-placeholder-email")}
-              data-oid="253.e9u"
-            />
-
-            {validationErrors.email && (
-              <p className="mt-1 text-lg text-red-300" data-oid="k51k.9b">
-                {validationErrors.email}
-              </p>
-            )}
-          </div>
-        )}
 
         <div data-oid="isekqo7">
           <label
@@ -467,7 +298,6 @@ export default function ContactForm({
             className="flex-1 border-t border-gray-600"
             data-oid="-w4krbe"
           ></div>
-          {/* <span className="px-3 text-sm text-gray-400">lub</span> */}
           <div
             className="flex-1 border-t border-gray-600"
             data-oid="121n8te"

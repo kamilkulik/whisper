@@ -131,6 +131,15 @@ export const timezoneOptions = [
   { value: "Pacific/Auckland", label: "Auckland (NZST/NZDT)", region: "Oceania", offset: "+12:00" },
 ] as const;
 
+// Group timezones by region for better UX
+export const groupedTimezones = timezoneOptions.reduce((acc, tz) => {
+  if (!acc[tz.region]) {
+    acc[tz.region] = [];
+  }
+  acc[tz.region].push(tz);
+  return acc;
+}, {} as Record<string, (typeof timezoneOptions)[number][]>);
+
 export type TimezoneOption = (typeof timezoneOptions)[number]["value"];
 
 // Delivery hour options (0-23)
@@ -157,7 +166,7 @@ export function getTimezoneOffset(timezone: TimezoneOption): string {
   });
   const parts = formatter.formatToParts(now);
   const offsetPart = parts.find((p) => p.type === "timeZoneName");
-  
+
   if (offsetPart?.value) {
     // Parse formats like "GMT+1", "GMT-5", "GMT+5:30"
     const match = offsetPart.value.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/);
@@ -168,7 +177,7 @@ export function getTimezoneOffset(timezone: TimezoneOption): string {
       return `${sign}${hours}:${minutes}`;
     }
   }
-  
+
   // Fallback to standard offset if we can't determine current offset
   return tzOption.offset;
 }
@@ -196,7 +205,7 @@ export function convertLocalHourToUTC(
   timezone: TimezoneOption
 ): number {
   const now = new Date();
-  
+
   // Get the current date in the user's timezone (YYYY-MM-DD)
   const dateFormatter = new Intl.DateTimeFormat("en-CA", {
     timeZone: timezone,
@@ -205,16 +214,16 @@ export function convertLocalHourToUTC(
     day: "2-digit",
   });
   const localDateStr = dateFormatter.format(now);
-  
+
   // Get the timezone offset (handles DST automatically)
   const offset = getTimezoneOffset(timezone);
-  
+
   // Build ISO-8601 date-time string: "YYYY-MM-DDTHH:00:00±hh:mm"
   const iso8601String = `${localDateStr}T${localHour.toString().padStart(2, "0")}:00:00${offset}`;
-  
+
   // Convert to UTC Date object
   const utcDate = new Date(iso8601String);
-  
+
   // Extract UTC hour
   return utcDate.getUTCHours();
 }
@@ -232,7 +241,7 @@ export function convertUTCHourToLocal(
   timezone: TimezoneOption
 ): number {
   const now = new Date();
-  
+
   // Create a UTC date with the specified hour
   const utcDate = new Date(Date.UTC(
     now.getUTCFullYear(),
@@ -242,7 +251,7 @@ export function convertUTCHourToLocal(
     0,
     0
   ));
-  
+
   // Get the hour in the user's timezone
   const localHour = parseInt(
     new Intl.DateTimeFormat("en-US", {
@@ -251,6 +260,6 @@ export function convertUTCHourToLocal(
       hour12: false,
     }).format(utcDate)
   );
-  
+
   return localHour;
 }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { User, SupportedLanguagesEnum } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { languageOptions, timezoneOptions, deliveryHourOptions } from "@/app/_consts";
+import { languageOptions, deliveryHourOptions, groupedTimezones } from "@/app/_consts";
 
 interface MessageSettingsFormProps {
   user: Pick<User, "messageLanguage" | "timezone" | "deliveryHour">;
@@ -63,24 +63,14 @@ export default function MessageSettingsForm({
     }
   };
 
-  // Group timezones by region for better UX
-  const groupedTimezones = timezoneOptions.reduce((acc, tz) => {
-    if (!acc[tz.region]) {
-      acc[tz.region] = [];
-    }
-    acc[tz.region].push(tz);
-    return acc;
-  }, {} as Record<string, (typeof timezoneOptions)[number][]>);
-
   return (
     <div className="space-y-6">
       {message && (
         <div
-          className={`p-4 rounded-xl border ${
-            message.type === "success"
-              ? "bg-green-500/20 border-green-400/30 text-green-400"
-              : "bg-red-500/20 border-red-400/30 text-red-400"
-          }`}
+          className={`p-4 rounded-xl border ${message.type === "success"
+            ? "bg-green-500/20 border-green-400/30 text-green-400"
+            : "bg-red-500/20 border-red-400/30 text-red-400"
+            }`}
         >
           {message.text}
         </div>

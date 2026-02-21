@@ -2,15 +2,15 @@ import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { UserData } from "@/app/api/users/route";
 import {
   DEFAULT_TIMEZONE,
-  DEFAULT_DELIVERY_HOUR,
   timezoneOptions,
 } from "@/app/_consts";
 
 export interface GatheredUserData {
-  email: string;
+  deliveryHour: number;
+  email?: string;
   emailVerified?: boolean;
   messageLanguage: SupportedLanguagesEnum;
-  name: string;
+  name?: string;
   phoneNumber: string;
   product: SubscriptionType | null;
 }
@@ -48,6 +48,7 @@ function detectBrowserTimezone(): string {
 }
 
 export function prepSaveUserBody({
+  deliveryHour,
   email,
   emailVerified,
   messageLanguage,
@@ -58,14 +59,14 @@ export function prepSaveUserBody({
   const premium = isPremium(product);
 
   return {
-    email,
+    email: email || null,
     emailVerified: emailVerified ?? false,
     messageLanguage,
-    name,
+    name: name || null,
     phoneNumber,
     phoneNumberVerified: true,
     premium,
     timezone: detectBrowserTimezone(),
-    deliveryHour: DEFAULT_DELIVERY_HOUR,
+    deliveryHour,
   };
 }

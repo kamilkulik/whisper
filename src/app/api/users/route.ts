@@ -1,11 +1,10 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { SubscriptionType, User } from "@prisma/client";
-import { sendEmail } from "@/lib/emailapi";
 import { sessionIdCache } from "@/lib/sessionIdCache";
 import { csfrProtection } from "../utils/csfrProtection";
 import { createSubscription } from "../payments/utils/createSubscription";
-import { generateOneTimeUrl } from "../utils/oneTimeJwt";
+
 import { getTranslations } from "next-intl/server";
 import { isValidE164, normalizeE164 } from "@/lib/consts";
 import {
@@ -22,6 +21,8 @@ import { Event } from "@/lib/fbq";
 
 export type UserData = Omit<
   User,
+  | "email"
+  | "name"
   | "id"
   | "confirmationCode"
   | "confirmationCodeExpires"
@@ -30,7 +31,7 @@ export type UserData = Omit<
   | "createdAt"
   | "updatedAt"
   | "trialEnds"
-> & { fbEventId?: string };
+> & { fbEventId?: string; deliveryHour?: number, email?: string | null, name?: string | null };
 
 export const PUT = async (request: NextRequest) => {
   const tShared = await getTranslations("API.SHARED");
@@ -211,7 +212,7 @@ export const POST = async (request: NextRequest) => {
 
     const body: UserData = await request.json();
     const cachedSessionId = await sessionIdCache.get(
-      body.phoneNumber ?? body.email,
+      body.phoneNumber,
     );
 
     if (cachedSessionId !== sessionId) {
@@ -222,20 +223,22 @@ export const POST = async (request: NextRequest) => {
     }
 
     // Validate required fields
-    if (!body.phoneNumber || !body.email || !body.name) {
+    if (!body.phoneNumber) {
       return NextResponse.json(
         { error: tShared("form-validation-errors.all-fields-required") },
         { status: 400 },
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(body.email)) {
-      return NextResponse.json(
-        { error: tShared("form-validation-errors.invalid-email") },
-        { status: 400 },
-      );
+    // Validate email format if provided
+    if (body.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(body.email)) {
+        return NextResponse.json(
+          { error: tShared("form-validation-errors.invalid-email") },
+          { status: 400 },
+        );
+      }
     }
 
     // Normalize and validate phone number (must be in E.164 format: +[country code][number])
@@ -251,15 +254,17 @@ export const POST = async (request: NextRequest) => {
 
     // Check if user already exists
     const existingEmailUser: Pick<User, "id" | "trialEnds"> | null =
-      await prisma.user.findUnique({
-        where: {
-          email: body.email,
-        },
-        select: {
-          id: true,
-          trialEnds: true,
-        },
-      });
+      body.email
+        ? await prisma.user.findUnique({
+          where: {
+            email: body.email,
+          },
+          select: {
+            id: true,
+            trialEnds: true,
+          },
+        })
+        : null;
 
     const existingPhoneNumberUser: Pick<User, "id" | "trialEnds"> | null =
       await prisma.user.findUnique({
@@ -300,25 +305,33 @@ export const POST = async (request: NextRequest) => {
         deliveryHour?: number;
       };
 
+      const updateData: Record<string, unknown> = {
+        phoneNumber: body.phoneNumber,
+        messageLanguage: body.messageLanguage,
+        phoneNumberVerified: body.phoneNumberVerified ?? false,
+        premium: body.premium,
+        timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
+        deliveryHour: bodyWithDefaults.deliveryHour !== undefined
+          ? convertLocalHourToUTC(
+            bodyWithDefaults.deliveryHour,
+            (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
+          )
+          : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
+        updatedAt: new Date(),
+      };
+
+      // Only update optional fields if provided
+      if (body.email) {
+        updateData.email = body.email;
+        updateData.emailVerified = body.emailVerified ?? false;
+      }
+      if (body.name) {
+        updateData.name = body.name;
+      }
+
       await prisma.user.update({
         where: { id: userIdToUpdate },
-        data: {
-          email: body.email,
-          phoneNumber: body.phoneNumber,
-          name: body.name,
-          messageLanguage: body.messageLanguage,
-          emailVerified: body.emailVerified ?? false,
-          phoneNumberVerified: body.phoneNumberVerified ?? false,
-          premium: body.premium,
-          timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
-          deliveryHour: bodyWithDefaults.deliveryHour !== undefined
-            ? convertLocalHourToUTC(
-              bodyWithDefaults.deliveryHour,
-              (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
-            )
-            : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
-          updatedAt: new Date(),
-        },
+        data: updateData,
       });
     } else {
       /**
@@ -332,56 +345,48 @@ export const POST = async (request: NextRequest) => {
         deliveryHour?: number;
       };
 
+      const createData: Record<string, unknown> = {
+        messageLanguage: body.messageLanguage,
+        phoneNumber: body.phoneNumber,
+        phoneNumberVerified: body.phoneNumberVerified,
+        premium: body.premium,
+        sessionId,
+        timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
+        deliveryHour: bodyWithDefaults.deliveryHour !== undefined
+          ? convertLocalHourToUTC(
+            bodyWithDefaults.deliveryHour,
+            (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
+          )
+          : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
+        trialEnds:
+          !body.premium
+            ? new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
+            : null,
+      };
+
+      // Only set optional fields if provided
+      if (body.email) {
+        createData.email = body.email;
+        createData.emailVerified = body.emailVerified;
+      }
+      if (body.name) {
+        createData.name = body.name;
+      }
+
       const savedUser = await prisma.user.create({
-        data: {
-          email: body.email,
-          emailVerified: body.emailVerified,
-          messageLanguage: body.messageLanguage,
-          name: body.name,
-          phoneNumber: body.phoneNumber,
-          phoneNumberVerified: body.phoneNumberVerified,
-          premium: body.premium,
-          sessionId,
-          timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
-          deliveryHour: bodyWithDefaults.deliveryHour !== undefined
-            ? convertLocalHourToUTC(
-              bodyWithDefaults.deliveryHour,
-              (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
-            )
-            : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
-          trialEnds:
-            !body.premium && !body.emailVerified // user not premium && email not verified means signup through login with email
-              ? new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
-              : null,
-        },
+        data: createData as any,
       });
 
       // if the new user is not premium and has a trial ends, create a trial subscription
       if (!savedUser.premium && savedUser.trialEnds) {
         try {
-          const trialSubscription = await createSubscription({
+          await createSubscription({
             created: new Date().getTime(),
             expiryAdjustmentInMilis: 0,
             productType: SubscriptionType.TRIAL,
             subscriptionId: "",
             user: savedUser,
           });
-
-          try {
-            const t = await getTranslations("EmailTemplates.Welcome");
-            await sendEmail({
-              locale: savedUser.messageLanguage.toLowerCase(),
-              subject: t("subject"),
-              subscriptionType: trialSubscription.type,
-              template: "welcome",
-              to: savedUser.email,
-            });
-          } catch (error) {
-            console.error(
-              "[ users POST ] Error sending welcome email to new user",
-              error,
-            );
-          }
 
           // StartTrial CAPI (fire-and-forget)
           const fbp = request.cookies.get("_fbp")?.value;
@@ -399,7 +404,7 @@ export const POST = async (request: NextRequest) => {
               userData: buildCapiUserData({
                 fbp,
                 fbc,
-                email: savedUser.email,
+                email: savedUser.email ?? undefined,
                 phone: savedUser.phoneNumber,
               }),
               clientUserAgent: userAgent,
@@ -414,19 +419,6 @@ export const POST = async (request: NextRequest) => {
           );
         }
       }
-
-      const t = await getTranslations("EmailTemplates.ConfirmEmail");
-      // send email to new user for them to verify their email
-      await sendEmail({
-        locale: savedUser.messageLanguage.toLowerCase(),
-        subject: t("subject"),
-        template: "confirm-email",
-        to: savedUser.email,
-        verificationLink: await generateOneTimeUrl(
-          savedUser.id.toString(),
-          savedUser.email,
-        ),
-      });
     }
     /** CREATE NEW USER FLOW END */
 
