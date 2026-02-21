@@ -63,6 +63,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const fbp = request.cookies.get("_fbp")?.value;
   const fbc = request.cookies.get("_fbc")?.value;
   const userAgent = request.headers.get("user-agent") ?? "";
+
   sendCapiEvent({
     eventName: Event.Contact,
     eventTime: Math.floor(Date.now() / 1000),
@@ -70,7 +71,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     userData: buildCapiUserData({ fbp, fbc }),
     clientUserAgent: userAgent,
     eventId: contactEventId,
-  }).catch(() => {});
+  }).catch(() => { });
 
   // For local development, include the verification code in the response
   const response: any = {

@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(
         new URL(
           "/email-confirmation?status=already-verified&email=" +
-            claims.userEmail,
+          claims.userEmail,
           baseUrl,
         ),
       );
@@ -99,6 +99,7 @@ export async function GET(request: NextRequest) {
     const fbp = request.cookies.get("_fbp")?.value;
     const fbc = request.cookies.get("_fbc")?.value;
     const userAgent = request.headers.get("user-agent") ?? "";
+
     sendCapiEvent({
       eventName: Event.Lead,
       eventTime: Math.floor(Date.now() / 1000),
@@ -106,7 +107,7 @@ export async function GET(request: NextRequest) {
       userData: buildCapiUserData({ fbp, fbc, email: user.email }),
       clientUserAgent: userAgent,
       eventId: generateEventId(Event.Lead),
-    }).catch(() => {});
+    }).catch(() => { });
 
     // Redirect to success page
     return NextResponse.redirect(

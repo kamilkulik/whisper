@@ -170,7 +170,7 @@ export const PUT = async (request: NextRequest) => {
           { status: 400 },
         );
       }
-      
+
       // Convert delivery hour from user's timezone to UTC before saving
       // Use the timezone from the request body if provided, otherwise use the user's current timezone
       const userTimezone = (timezone || user.timezone) as TimezoneOption;
@@ -313,9 +313,9 @@ export const POST = async (request: NextRequest) => {
           timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
           deliveryHour: bodyWithDefaults.deliveryHour !== undefined
             ? convertLocalHourToUTC(
-                bodyWithDefaults.deliveryHour,
-                (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
-              )
+              bodyWithDefaults.deliveryHour,
+              (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
+            )
             : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
           updatedAt: new Date(),
         },
@@ -345,9 +345,9 @@ export const POST = async (request: NextRequest) => {
           timezone: bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE,
           deliveryHour: bodyWithDefaults.deliveryHour !== undefined
             ? convertLocalHourToUTC(
-                bodyWithDefaults.deliveryHour,
-                (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
-              )
+              bodyWithDefaults.deliveryHour,
+              (bodyWithDefaults.timezone ?? DEFAULT_TIMEZONE) as TimezoneOption
+            )
             : convertLocalHourToUTC(DEFAULT_DELIVERY_HOUR, DEFAULT_TIMEZONE),
           trialEnds:
             !body.premium && !body.emailVerified // user not premium && email not verified means signup through login with email
@@ -387,6 +387,7 @@ export const POST = async (request: NextRequest) => {
           const fbp = request.cookies.get("_fbp")?.value;
           const fbc = request.cookies.get("_fbc")?.value;
           const userAgent = request.headers.get("user-agent") ?? "";
+
           sendCapiEvent({
             eventName: Event.StartTrial,
             eventTime: Math.floor(Date.now() / 1000),
@@ -400,7 +401,7 @@ export const POST = async (request: NextRequest) => {
             clientUserAgent: userAgent,
             eventId: generateEventId(Event.StartTrial),
             customData: { value: 0, currency: "USD" },
-          }).catch(() => {});
+          }).catch(() => { });
         } catch (error) {
           console.error(
             "[ users POST ] Error creating trial subscription for new user",

@@ -164,6 +164,7 @@ export async function handleSessionCompleted(
   const amountTotal = eventData.amount_total ?? 0;
   const value = (amountTotal / 100).toFixed(2);
   const currency = (eventData.currency ?? "usd").toUpperCase();
+
   sendCapiEvent({
     eventName: Event.Purchase,
     eventTime: eventData.created,
@@ -172,7 +173,7 @@ export async function handleSessionCompleted(
     clientUserAgent: "",
     eventId: purchaseEventId ?? undefined,
     customData: { currency, value },
-  }).catch(() => {});
+  }).catch(() => { });
 
   return {
     success: true,

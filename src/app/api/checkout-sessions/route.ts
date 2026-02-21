@@ -84,17 +84,6 @@ export async function POST(request: NextRequest) {
       config,
     );
 
-    // InitiateCheckout CAPI (fire-and-forget)
-    sendCapiEvent({
-      eventName: Event.InitiateCheckout,
-      eventTime: Math.floor(Date.now() / 1000),
-      actionSource: "website",
-      userData: buildCapiUserData({ fbp, fbc, email: body.email }),
-      clientUserAgent: userAgent,
-      eventSourceUrl: eventSourceUrl ?? undefined,
-      eventId: purchaseEventId,
-    }).catch(() => {});
-
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       client_reference_id: body.email,
@@ -122,6 +111,17 @@ export async function POST(request: NextRequest) {
     if (!session.url) {
       throw new Error("Failed to create checkout session URL");
     }
+
+    // InitiateCheckout CAPI (fire-and-forget)
+    sendCapiEvent({
+      eventName: Event.InitiateCheckout,
+      eventTime: Math.floor(Date.now() / 1000),
+      actionSource: "website",
+      userData: buildCapiUserData({ fbp, fbc, email: body.email }),
+      clientUserAgent: userAgent,
+      eventSourceUrl: eventSourceUrl ?? undefined,
+      eventId: purchaseEventId,
+    }).catch(() => { });
 
     return NextResponse.json({ url: session.url });
   } catch (err: any) {
