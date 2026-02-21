@@ -371,7 +371,8 @@
     "ConfirmationCodeGrid": {
       "countdown-timer": "Code expires in:",
       "code-input-title": "Enter 6-digit code",
-      "code-input-description": "Sent to your phone number"
+      "code-input-description": "Sent to your phone number",
+      "code-input-description-email": "Sent to your email"
     },
     "ContactForm": {
       "form-validation-errors": {

@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 export function ConfirmationCodeGrid({
   onCodeComplete,
   isSubmitting,
+  isLoginMode,
 }: {
   onCodeComplete: (code: string) => void;
   isSubmitting: boolean;
+  isLoginMode: boolean;
 }) {
   const [code, setCode] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -115,7 +117,7 @@ export function ConfirmationCodeGrid({
         <h3 className="text-xl font-bold text-white mb-2">
           {t("code-input-title")}
         </h3>
-        <p className="text-white/80 text-lg">{t("code-input-description")}</p>
+        <p className="text-white/80 text-lg">{isLoginMode ? t("code-input-description-email") : t("code-input-description")}</p>
       </div>
 
       <div className="flex justify-center gap-3">

@@ -441,6 +441,7 @@ export default function ConfirmationCodeForm({
         {showConfirmationCode && (
           <ConfirmationCodeGrid
             onCodeComplete={handleConfirmationCodeComplete}
+            isLoginMode={isLoginMode}
             isSubmitting={isSubmitting}
           />
         )}
@@ -448,11 +449,10 @@ export default function ConfirmationCodeForm({
         {message && (
           <div className="mt-4 text-center">
             <p
-              className={`text-lg ${
-                ["błąd", "error"].includes(message.toLowerCase())
+              className={`text-lg ${["błąd", "error"].includes(message.toLowerCase())
                   ? "text-red-300"
                   : "text-green-300"
-              }`}
+                }`}
             >
               {message}
             </p>
