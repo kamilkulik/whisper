@@ -122,6 +122,8 @@ export async function sendCapiEvent(
 
   const url = `https://graph.facebook.com/${FB_API_VERSION}/${PIXEL_ID}/events?access_token=${encodeURIComponent(FB_CAPI_AUTH_TOKEN)}`;
 
+  console.log("[ fbCapi ] Sending event:", JSON.stringify(eventPayload, null, 2));
+
   try {
     const res = await fetch(url, {
       method: "POST",
