@@ -43,33 +43,11 @@ export async function handleTrialSubscription(userEmail: string): Promise<{
       userUpdate,
     ]);
 
-    if (savedSubscription && savedUser) {
-      try {
-        const t = await getTranslations("EmailTemplates.Welcome");
-        await sendEmail({
-          locale: savedUser.messageLanguage.toLowerCase(),
-          subject: t("subject"),
-          subscriptionType: SubscriptionType.TRIAL,
-          template: "welcome",
-          to: savedUser.email,
-        });
-      } catch (error) {
-        console.error(
-          "Error sending welcome email",
-          error
-        );
-      }
-
-      return {
-        success: true,
-        savedSubscription,
-        savedUser,
-      };
-    } else {
-      return {
-        success: false,
-      };
-    }
+    return {
+      success: true,
+      savedSubscription,
+      savedUser,
+    };
   } catch (error) {
     console.error(
       "Error creating trial subscription",

@@ -101,18 +101,4 @@ export async function handleSubscriptionCreated(
     console.error("Error creating subscription", error);
     throw new Error("Error creating subscription");
   }
-
-  try {
-    const t = await getTranslations("EmailTemplates.Welcome");
-    await sendEmail({
-      locale: user.messageLanguage.toLowerCase(),
-      subject: t("subject"),
-      subscriptionType: productType,
-      template: "welcome",
-      to: user.email,
-    });
-  } catch (error) {
-    console.error("Error sending email", error);
-    throw new Error("Error sending email");
-  }
 }

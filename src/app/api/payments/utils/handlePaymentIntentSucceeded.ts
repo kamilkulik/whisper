@@ -2,8 +2,6 @@ import { prisma } from "@/lib/prisma";
 import { subscriptionFactory } from "./subscriptionFactory";
 import Stripe from "stripe";
 import { SubscriptionType } from "@prisma/client";
-import { sendEmail } from "@/lib/emailapi";
-import { getTranslations } from "next-intl/server";
 
 export async function handlePaymentIntentSucceeded(
   eventData: Stripe.PaymentIntent
@@ -75,19 +73,5 @@ export async function handlePaymentIntentSucceeded(
   } catch (error) {
     console.error("Error creating subscription", error);
     throw new Error("Error creating subscription");
-  }
-
-  try {
-    const t = await getTranslations("EmailTemplates.Welcome");
-    await sendEmail({
-      locale: user.messageLanguage.toLowerCase(),
-      subject: t("subject"),
-      template: "welcome",
-      to: user.email,
-      subscriptionType: SubscriptionType.ONE_TIME,
-    });
-  } catch (error) {
-    console.error("Error sending email", error);
-    throw new Error("Error sending email");
   }
 }

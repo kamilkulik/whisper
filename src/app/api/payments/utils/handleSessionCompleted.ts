@@ -133,31 +133,6 @@ export async function handleSessionCompleted(
     `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`,
   );
 
-  // notify them
-
-  try {
-    const t = await getTranslations("EmailTemplates.Welcome");
-    await sendEmail({
-      locale: user.messageLanguage.toLowerCase(),
-      subject: t("subject"),
-      subscriptionType: getSubscriptionType(productType),
-      to: user.email,
-      template: "welcome",
-    });
-  } catch (error) {
-    console.error(
-      "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
-      error,
-    );
-    throw new Error(
-      "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
-    );
-  }
-
-  console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] Email sent to ${user.email}`,
-  );
-
   // Purchase CAPI (fire-and-forget); fbp/fbc/eventId from session metadata
   const fbp = eventData.metadata?.fbp;
   const fbc = eventData.metadata?.fbc;

@@ -62,11 +62,10 @@ export default function UserSettingsForm({ user }: UserSettingsFormProps) {
     <div className="space-y-6">
       {message && (
         <div
-          className={`p-4 rounded-xl border ${
-            message.type === "success"
+          className={`p-4 rounded-xl border ${message.type === "success"
               ? "bg-green-500/20 border-green-400/30 text-green-400"
               : "bg-red-500/20 border-red-400/30 text-red-400"
-          }`}
+            }`}
         >
           {message.text}
         </div>
@@ -84,7 +83,7 @@ export default function UserSettingsForm({ user }: UserSettingsFormProps) {
             <input
               type="email"
               id="email"
-              value={email}
+              value={email || ""}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent"
               placeholder={t("email-placeholder")}
