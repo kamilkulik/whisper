@@ -1227,7 +1227,7 @@ export default function Home() {
         >
           <ConfirmationCodeForm
             isLoginMode={true}
-            isEmailMode={true}
+            isEmailMode={false}
             setIsEmailVerified={setIsEmailVerified}
           />
         </ModalWrapper>
