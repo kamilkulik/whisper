@@ -55,7 +55,7 @@ export async function handleTrialSubscription(userEmail: string): Promise<{
         });
       } catch (error) {
         console.error(
-          "Wystąpił błąd podczas wysyłania emaila z powitalnym szeptem.",
+          "Error sending welcome email",
           error
         );
       }
@@ -72,7 +72,7 @@ export async function handleTrialSubscription(userEmail: string): Promise<{
     }
   } catch (error) {
     console.error(
-      "Wystąpił błąd podczas tworzenia subskrypcji na okres próbny.",
+      "Error creating trial subscription",
       error
     );
     return { success: false };
