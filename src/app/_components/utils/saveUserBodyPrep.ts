@@ -1,6 +1,10 @@
 import { SubscriptionType, SupportedLanguagesEnum } from "@prisma/client";
 import { UserData } from "@/app/api/users/route";
-import { DEFAULT_TIMEZONE, DEFAULT_DELIVERY_HOUR } from "@/app/_consts";
+import {
+  DEFAULT_TIMEZONE,
+  DEFAULT_DELIVERY_HOUR,
+  timezoneOptions,
+} from "@/app/_consts";
 
 export interface GatheredUserData {
   email: string;
@@ -28,6 +32,21 @@ function isPremium(product: SubscriptionType | null | undefined): boolean {
   }
 }
 
+/**
+ * Detects the user's IANA timezone from the browser.
+ * Falls back to DEFAULT_TIMEZONE if detection fails or the timezone is not in our supported list.
+ */
+function detectBrowserTimezone(): string {
+  try {
+    const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // Only use the detected timezone if it's in our supported list
+    const isSupported = timezoneOptions.some((tz) => tz.value === detected);
+    return isSupported ? detected : DEFAULT_TIMEZONE;
+  } catch {
+    return DEFAULT_TIMEZONE;
+  }
+}
+
 export function prepSaveUserBody({
   email,
   emailVerified,
@@ -46,7 +65,7 @@ export function prepSaveUserBody({
     phoneNumber,
     phoneNumberVerified: true,
     premium,
-    timezone: DEFAULT_TIMEZONE,
+    timezone: detectBrowserTimezone(),
     deliveryHour: DEFAULT_DELIVERY_HOUR,
   };
 }
