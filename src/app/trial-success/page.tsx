@@ -6,7 +6,7 @@ import { GB_CONTACT_EMAIL, GB_DOMAIN, PL_CONTACT_EMAIL } from "../_consts";
 
 export const dynamic = "force-dynamic";
 
-export default async function TrialSuccess() {
+export default async function TrialSuccess({ searchParams }: { searchParams: { eventId?: string } }) {
   const userEmailFromSessionCookie = await userEmailFromCookie();
   const t = await getTranslations("SuccessPage");
 
@@ -18,7 +18,7 @@ export default async function TrialSuccess() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] overflow-hidden">
-      <TrialSuccessTrack />
+      <TrialSuccessTrack eventId={searchParams.eventId} />
       {/* Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/40 rounded-full blur-2xl heartbeat"></div>

@@ -30,7 +30,7 @@ export type UserData = Omit<
   | "createdAt"
   | "updatedAt"
   | "trialEnds"
->;
+> & { fbEventId?: string };
 
 export const PUT = async (request: NextRequest) => {
   const tShared = await getTranslations("API.SHARED");
@@ -387,6 +387,9 @@ export const POST = async (request: NextRequest) => {
           const fbp = request.cookies.get("_fbp")?.value;
           const fbc = request.cookies.get("_fbc")?.value;
           const userAgent = request.headers.get("user-agent") ?? "";
+          const fbEventId = generateEventId(Event.StartTrial);
+
+          body.fbEventId = fbEventId;
 
           after(
             sendCapiEvent({
@@ -400,7 +403,7 @@ export const POST = async (request: NextRequest) => {
                 phone: savedUser.phoneNumber,
               }),
               clientUserAgent: userAgent,
-              eventId: generateEventId(Event.StartTrial),
+              eventId: fbEventId,
               customData: { value: 0, currency: "USD" },
             }).catch(() => { })
           );
@@ -433,7 +436,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     return NextResponse.json(
-      { message: tShared("POST.success") },
+      { message: tShared("POST.success"), fbEventId: body.fbEventId },
       { status: 200 },
     );
   } catch (error) {

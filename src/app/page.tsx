@@ -513,14 +513,7 @@ export default function Home() {
 
   const handleStartJourneyWithScroll =
     (product: SubscriptionType) => async () => {
-      if (product === SubscriptionType.TRIAL) {
-        trackEvent(
-          Event.StartTrial,
-          {},
-          { eventID: generateEventId(Event.StartTrial) },
-        );
-      }
-      // Set the selected product
+      // don't track event here, track it in the success page
       setSelectedProduct(product);
 
       // Does the user have a valid session?
@@ -551,7 +544,7 @@ export default function Home() {
             window.location.href = result.checkoutUrl;
             return;
           }
-          router.push("/trial-success");
+          router.push(`/trial-success`);
           return;
         }
       }

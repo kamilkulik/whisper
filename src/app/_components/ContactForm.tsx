@@ -11,6 +11,7 @@ import { generateEventId } from "@/lib/eventId";
 import { GatheredUserData, prepSaveUserBody } from "./utils/saveUserBodyPrep";
 import { useTranslations } from "next-intl";
 import { languageOptions } from "../_consts";
+import { UserData } from "../api/users/route";
 
 // Validation schema
 const localisedFormSchema = (
@@ -235,7 +236,7 @@ export default function ContactForm({
         body: JSON.stringify(body),
       });
 
-      const data = await response.json();
+      const data: UserData = await response.json();
 
       if (response.ok) {
         // Clear the form
@@ -258,7 +259,7 @@ export default function ContactForm({
         } else if (selectedProduct === SubscriptionType.TRIAL) {
           setMessage(t("form-submit-success"));
           setTimeout(() => {
-            window.location.href = "/trial-success";
+            window.location.href = `/trial-success?eventId=${data.fbEventId}`;
           }, 1500);
         } else {
           // For other products, redirect to Stripe checkout
@@ -295,8 +296,6 @@ export default function ContactForm({
             }
           }, 1500);
         }
-      } else {
-        setMessage(data.error || t("form-submit-error"));
       }
     } catch (error) {
       setMessage(t("form-submit-error"));
@@ -344,8 +343,8 @@ export default function ContactForm({
             onBlur={(e) => handleInputBlur("name", e.target.value)}
             required
             className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl lg:text-base ${validationErrors.name
-                ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                : "focus:ring-white/30"
+              ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+              : "focus:ring-white/30"
               }`}
             placeholder={t("form-placeholder-name")}
             data-oid="6qn7m1j"
@@ -379,8 +378,8 @@ export default function ContactForm({
               onBlur={(e) => handleInputBlur("email", e.target.value)}
               required
               className={`w-full px-6 py-1 md:py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl lg:text-base ${validationErrors.email
-                  ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                  : "focus:ring-white/30"
+                ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                : "focus:ring-white/30"
                 }`}
               placeholder={t("form-placeholder-email")}
               data-oid="253.e9u"
@@ -449,8 +448,8 @@ export default function ContactForm({
                     type="button"
                     onClick={() => handleLanguageSelect(option.value)}
                     className={`w-full px-6 py-3 text-2xl md:text-lg text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors ${formData.messageLanguage === option.value
-                        ? "bg-gray-700"
-                        : ""
+                      ? "bg-gray-700"
+                      : ""
                       }`}
                     data-oid=":i4l0zm"
                   >
@@ -478,9 +477,9 @@ export default function ContactForm({
         {/* Terms and Conditions Checkbox */}
         <div
           className={`flex items-center space-x-3 ${!formData.acceptTerms &&
-              (message.includes("regulamin") || message.includes("terms"))
-              ? "p-3 border border-red-300 rounded-2xl bg-red-500/20"
-              : ""
+            (message.includes("regulamin") || message.includes("terms"))
+            ? "p-3 border border-red-300 rounded-2xl bg-red-500/20"
+            : ""
             }`}
           data-oid="jl32i:-"
         >
@@ -492,9 +491,9 @@ export default function ContactForm({
             onChange={handleChange}
             required
             className={`h-5 w-5 text-white focus:ring-white/30 rounded ${!formData.acceptTerms &&
-                (message.includes("regulamin") || message.includes("terms"))
-                ? "border-red-500 focus:ring-red-500"
-                : "border-white/30 bg-white/20"
+              (message.includes("regulamin") || message.includes("terms"))
+              ? "border-red-500 focus:ring-red-500"
+              : "border-white/30 bg-white/20"
               }`}
             data-oid="5lzh77p"
           />
@@ -532,9 +531,9 @@ export default function ContactForm({
       {message && (
         <div
           className={`mt-4 p-4 rounded-2xl text-sm backdrop-blur-sm ${t("form-submit-success").includes(message) ||
-              t("form-submit-checkout").includes(message)
-              ? "bg-green-500/20 text-green-100 border border-green-400/30"
-              : "bg-red-500/20 text-red-100 border border-red-400/30"
+            t("form-submit-checkout").includes(message)
+            ? "bg-green-500/20 text-green-100 border border-green-400/30"
+            : "bg-red-500/20 text-red-100 border border-red-400/30"
             }`}
           data-oid="5_mxp_h"
         >
