@@ -1,7 +1,9 @@
 export const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID!;
+const isProduction = process.env.NODE_ENV === "production";
 
 export const fbq = (...args: Parameters<typeof window.fbq>) => {
-  if (typeof window !== "undefined" && window.fbq) {
+  if (!isProduction) console.log(JSON.stringify(args, null, 2))
+  if (typeof window !== "undefined" && window.fbq && isProduction) {
     window.fbq(...args);
   }
 };
@@ -77,13 +79,13 @@ export interface CompleteRegistrationParams extends FbqEventParamsBase {
   value?: number;
 }
 
-export interface ContactParams extends FbqEventParamsBase {}
+export interface ContactParams extends FbqEventParamsBase { }
 
-export interface CustomizeProductParams extends FbqEventParamsBase {}
+export interface CustomizeProductParams extends FbqEventParamsBase { }
 
-export interface DonateParams extends FbqEventParamsBase {}
+export interface DonateParams extends FbqEventParamsBase { }
 
-export interface FindLocationParams extends FbqEventParamsBase {}
+export interface FindLocationParams extends FbqEventParamsBase { }
 
 export interface InitiateCheckoutParams extends FbqEventParamsBase {
   content_ids?: string[];
@@ -107,7 +109,7 @@ export interface PurchaseParams extends FbqEventParamsBase {
   value: number;
 }
 
-export interface ScheduleParams extends FbqEventParamsBase {}
+export interface ScheduleParams extends FbqEventParamsBase { }
 
 export interface SearchParams extends FbqEventParamsBase {
   content_ids?: string[];
@@ -124,7 +126,7 @@ export interface StartTrialParams extends FbqEventParamsBase {
   value?: number;
 }
 
-export interface SubmitApplicationParams extends FbqEventParamsBase {}
+export interface SubmitApplicationParams extends FbqEventParamsBase { }
 
 export interface SubscribeParams extends FbqEventParamsBase {
   currency?: string;
@@ -144,38 +146,38 @@ export interface ViewContentParams extends FbqEventParamsBase {
 export type EventParams<E extends EventName> = E extends "Purchase"
   ? PurchaseParams
   : E extends "AddPaymentInfo"
-    ? AddPaymentInfoParams
-    : E extends "AddToCart"
-      ? AddToCartParams
-      : E extends "AddToWishlist"
-        ? AddToWishlistParams
-        : E extends "CompleteRegistration"
-          ? CompleteRegistrationParams
-          : E extends "Contact"
-            ? ContactParams
-            : E extends "CustomizeProduct"
-              ? CustomizeProductParams
-              : E extends "Donate"
-                ? DonateParams
-                : E extends "FindLocation"
-                  ? FindLocationParams
-                  : E extends "InitiateCheckout"
-                    ? InitiateCheckoutParams
-                    : E extends "Lead"
-                      ? LeadParams
-                      : E extends "Schedule"
-                        ? ScheduleParams
-                        : E extends "Search"
-                          ? SearchParams
-                          : E extends "StartTrial"
-                            ? StartTrialParams
-                            : E extends "SubmitApplication"
-                              ? SubmitApplicationParams
-                              : E extends "Subscribe"
-                                ? SubscribeParams
-                                : E extends "ViewContent"
-                                  ? ViewContentParams
-                                  : FbqEventParamsBase;
+  ? AddPaymentInfoParams
+  : E extends "AddToCart"
+  ? AddToCartParams
+  : E extends "AddToWishlist"
+  ? AddToWishlistParams
+  : E extends "CompleteRegistration"
+  ? CompleteRegistrationParams
+  : E extends "Contact"
+  ? ContactParams
+  : E extends "CustomizeProduct"
+  ? CustomizeProductParams
+  : E extends "Donate"
+  ? DonateParams
+  : E extends "FindLocation"
+  ? FindLocationParams
+  : E extends "InitiateCheckout"
+  ? InitiateCheckoutParams
+  : E extends "Lead"
+  ? LeadParams
+  : E extends "Schedule"
+  ? ScheduleParams
+  : E extends "Search"
+  ? SearchParams
+  : E extends "StartTrial"
+  ? StartTrialParams
+  : E extends "SubmitApplication"
+  ? SubmitApplicationParams
+  : E extends "Subscribe"
+  ? SubscribeParams
+  : E extends "ViewContent"
+  ? ViewContentParams
+  : FbqEventParamsBase;
 
 // EventIDOptions: optional 4th argument for deduplication
 export interface FbqEventIDOptions {

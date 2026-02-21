@@ -6,7 +6,7 @@ import { GB_CONTACT_EMAIL, GB_DOMAIN, PL_CONTACT_EMAIL } from "../_consts";
 
 export const dynamic = "force-dynamic";
 
-export default async function TrialSuccess({ searchParams }: { searchParams: { eventId?: string } }) {
+export default async function TrialSuccess({ searchParams }: { searchParams: Promise<{ eventId?: string }> }) {
   const userEmailFromSessionCookie = await userEmailFromCookie();
   const t = await getTranslations("SuccessPage");
 
@@ -18,7 +18,7 @@ export default async function TrialSuccess({ searchParams }: { searchParams: { e
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-indigo-900 to-[#2A031E] overflow-hidden">
-      <TrialSuccessTrack eventId={searchParams.eventId} />
+      <TrialSuccessTrack eventId={(await searchParams).eventId} />
       {/* Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/40 rounded-full blur-2xl heartbeat"></div>
@@ -61,11 +61,10 @@ export default async function TrialSuccess({ searchParams }: { searchParams: { e
 
             <p className="text-xl text-blue-200 leading-relaxed">
               {t("copy-1")}{" "}
-              {`${
-                new Date() > new Date(new Date().setHours(20, 59, 0, 0))
+              {`${new Date() > new Date(new Date().setHours(20, 59, 0, 0))
                   ? t("tomorrow")
                   : t("today")
-              } ${t("evening")}.`}
+                } ${t("evening")}.`}
             </p>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
