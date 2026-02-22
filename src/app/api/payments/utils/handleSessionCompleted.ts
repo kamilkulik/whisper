@@ -23,16 +23,17 @@ export async function handleSessionCompleted(
     "[ /api/payments/utils/handleSessionCompleted ] metadata present, proceeding...",
   );
 
-  let user: Pick<User, "id" | "email" | "messageLanguage" | "premium"> | null =
+  let user: Pick<User, "id" | "email" | "phoneNumber" | "messageLanguage" | "premium"> | null =
     null;
   try {
     user = await prisma.user.findUnique({
       where: {
-        email: eventData.customer_email!,
+        phoneNumber: eventData.client_reference_id!
       },
       select: {
         id: true,
         email: true,
+        phoneNumber: true,
         messageLanguage: true,
         premium: true,
       },
@@ -112,7 +113,7 @@ export async function handleSessionCompleted(
   if (!user.premium) {
     await prisma.user.update({
       where: { id: user.id },
-      data: { premium: true },
+      data: { premium: true, email: eventData.customer_email },
     });
   }
 
@@ -128,6 +129,30 @@ export async function handleSessionCompleted(
       eventType: "checkout.session.completed",
     },
   });
+
+  // notify them
+
+  if (eventData.customer_email) {
+    try {
+      const t = await getTranslations("EmailTemplates.Welcome");
+      await sendEmail({
+        locale: user.messageLanguage.toLowerCase(),
+        subject: t("subject"),
+        subscriptionType: getSubscriptionType(productType),
+        to: eventData.customer_email,
+        template: "welcome",
+      });
+    } catch (error) {
+      console.error(
+        "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
+        error,
+      );
+      throw new Error(
+        "[ /api/payments/utils/handleSessionCompleted ] Error sending email",
+      );
+    }
+  }
+
 
   console.log(
     `[ /api/payments/utils/handleSessionCompleted ] Webhook event logged: ${eventData.id}`,

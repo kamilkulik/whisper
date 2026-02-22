@@ -15,7 +15,7 @@ import { SubscriptionType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { Footer } from "./_components/Footer";
 import { navigateToCheckout } from "./_actions/navigateToCheckout";
-import { userEmailFromCookie } from "./_actions/userEmailFromCookie";
+
 import Spinner from "./_components/Spinner";
 import { useCurrentLocale } from "./_hooks/useCurrentLocale";
 import InformationModal from "./_components/InformationModal";

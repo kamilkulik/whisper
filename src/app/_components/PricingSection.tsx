@@ -10,7 +10,7 @@ import {
 import { shouldShowTrial } from "../_actions/showTrial";
 import { navigateToCheckout } from "../_actions/navigateToCheckout";
 import { useRouter } from "next/navigation";
-import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
+import { userIdFromCookie } from "../_actions/userFromCookie";
 import { useTranslations, useLocale } from "next-intl";
 import Spinner from "./Spinner";
 import { trackEvent, Event } from "@/lib/fbq";
@@ -73,9 +73,9 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
   const handleClickWithoutOnGetStarted =
     (product: SubscriptionType) => async () => {
       try {
-        const userEmailFromSessionCookie = await userEmailFromCookie();
+        const userIdFromSessionCookie = await userIdFromCookie();
 
-        if (userEmailFromSessionCookie) {
+        if (userIdFromSessionCookie) {
           const meta =
             product !== SubscriptionType.TRIAL && typeof window !== "undefined"
               ? {
@@ -86,9 +86,11 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
               : undefined;
           const result = await navigateToCheckout(
             product,
-            userEmailFromSessionCookie,
+            undefined,
             undefined,
             meta,
+            undefined,
+            userIdFromSessionCookie,
           );
 
           if (result?.success) {

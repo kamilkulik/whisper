@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe";
 import { SubscriptionType } from "@prisma/client";
 import { productConfigs } from "@/lib/consts";
-import { triangulateLocationBe } from "../utils/triangulateLocationBe";
 import { getBaseUrl } from "../utils/baseUrl";
 import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { generateEventId } from "@/lib/eventId";
@@ -40,30 +39,13 @@ export async function POST(request: NextRequest) {
     const purchaseEventId = bodyEventId ?? generateEventId("Purchase");
     const baseUrl = await getBaseUrl();
 
-    // const ipCountry = headersList.get("x-vercel-ip-country"); // Vercel IP country header will be set to location of function that called this API
-    // const triangulatedCountryHeader = headersList.get("x-triangulated-country");
-
-    // const triangulatedCountry = triangulateLocationBe(
-    //   null,
-    //   ipCountry,
-    //   baseUrl,
-    //   triangulatedCountryHeader,
-    // );
-
-    // if (!triangulatedCountry) {
-    //   throw new Error(
-    //     "[ /api/checkout-sessions ] Failed to triangulate country",
-    //   );
-    // }
+    if (!clientReferenceId) {
+      throw new Error("[ /api/checkout-sessions ] Client reference ID is required");
+    }
 
     if (!productType) {
       throw new Error("[ /api/checkout-sessions ] Product type is required");
     }
-
-    // console.log(
-    //   "[ /api/checkout-sessions ]",
-    //   `Attempting to get config for product type: ${productType} in country: ${triangulatedCountry}`,
-    // );
 
     const nodeEnv = process.env.NODE_ENV;
     const environment =
@@ -76,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     if (!config) {
       throw new Error(
-        "[ /api/checkout-sessions ] Service is not available in your country",
+        `[ /api/checkout-sessions ] No product config found for type: ${productType}`,
       );
     }
 

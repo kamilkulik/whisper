@@ -36,7 +36,7 @@ export async function navigateToCheckout(
   console.log("[ navigateToCheckout ]", "productType", productType);
 
   // does the user already have an ACTIVE subscription?
-  const subscription = await getUsersLatestActiveSubscription(email);
+  const subscription = await getUsersLatestActiveSubscription(email, phoneNumber, userId);
   console.log(
     "[ navigateToCheckout ]",
     "latest active subscription: ",
@@ -54,6 +54,7 @@ export async function navigateToCheckout(
     const checkoutSessionsPayload: CheckoutSessionsPayload = {
       productType,
       clientReferenceId: email ?? phoneNumber ?? userId?.toString(),
+      ...(email ? { email } : {}),
       ...(meta && {
         fbp: meta.fbp,
         fbc: meta.fbc,

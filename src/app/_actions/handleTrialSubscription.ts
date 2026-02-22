@@ -3,8 +3,6 @@
 import { getUserFromEmail, getUserFromPhoneNumber, prisma } from "@/lib/prisma";
 import { Subscription, SubscriptionType, User } from "@prisma/client";
 import { subscriptionFactory } from "../api/payments/utils/subscriptionFactory";
-import { sendEmail } from "@/lib/emailapi";
-import { getTranslations } from "next-intl/server";
 
 export async function handleTrialSubscription(
   userEmail?: string,
