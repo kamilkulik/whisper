@@ -306,6 +306,7 @@ export const POST = async (request: NextRequest) => {
       };
 
       const updateData: Record<string, unknown> = {
+        sessionId,
         phoneNumber: body.phoneNumber,
         messageLanguage: body.messageLanguage,
         phoneNumberVerified: body.phoneNumberVerified ?? false,
