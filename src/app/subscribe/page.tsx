@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import PricingSection from "../_components/PricingSection";
 import { ReturnButton } from "../_components/ReturnButton";
 
-export default async function SubscribePage({ searchParams }: { searchParams: Promise<{ userId?: string }> }) {
+export default async function SubscribePage({ searchParams }: { searchParams: Promise<{ userId?: number }> }) {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId");
   const { userId } = await searchParams;
@@ -27,7 +27,7 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
   return (
     <div className="flex flex-col items-center mb-3">
       <ReturnButton href="/dashboard" />
-      <PricingSection showTrial={false} />
+      <PricingSection userId={userId} />
     </div>
   );
 }

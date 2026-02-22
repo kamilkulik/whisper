@@ -10,6 +10,7 @@ import { GatheredUserData, prepSaveUserBody } from "./utils/saveUserBodyPrep";
 import { useTranslations } from "next-intl";
 import { languageOptions, deliveryHourOptions, DEFAULT_DELIVERY_HOUR } from "../_consts";
 import { UserData } from "../api/users/route";
+import { useUserContext } from "../_contexts/UserContext";
 
 export default function ContactForm({
   isEmailVerified,
@@ -24,6 +25,7 @@ export default function ContactForm({
   verifiedPhoneNumber?: string;
 }) {
   const { language, countryCode, isLoaded } = useLocale();
+  const { setPhoneNumber } = useUserContext();
   const t = useTranslations("Components.ContactForm");
 
   const [formData, setFormData] = useState<
@@ -113,6 +115,11 @@ export default function ContactForm({
       const data: UserData = await response.json();
 
       if (response.ok) {
+        // Store verified phone number in user context for downstream use
+        if (formData.phoneNumber) {
+          setPhoneNumber(formData.phoneNumber);
+        }
+
         // Clear the form
         setFormData({
           deliveryHour: DEFAULT_DELIVERY_HOUR,
@@ -140,7 +147,7 @@ export default function ContactForm({
 
           const cookies = getMetaCookies();
           const checkoutSessionsPayload: CheckoutSessionsPayload = {
-            clientReferenceId: data.phoneNumber,
+            clientReferenceId: verifiedPhoneNumber,
             productType: selectedProduct || SubscriptionType.TRIAL,
             email: isEmailVerified?.email || "",
             fbp: cookies.fbp,
@@ -148,6 +155,8 @@ export default function ContactForm({
             eventId: generateEventId("Purchase"),
             eventSourceUrl: typeof window !== "undefined" ? window.location.href : undefined,
           };
+
+          console.log("[ ContactForm ] [ handleSubmit ] checkoutSessionsPayload: ", checkoutSessionsPayload);
 
           setTimeout(async () => {
             try {

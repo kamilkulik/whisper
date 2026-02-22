@@ -17,19 +17,25 @@ import { trackEvent, Event } from "@/lib/fbq";
 import { generateEventId } from "@/lib/eventId";
 import { getMetaCookies } from "@/lib/metaCookies";
 import { getPricingContext } from "../_consts";
+import { useUserContext } from "../_contexts/UserContext";
 
 
 interface PricingSectionProps {
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
-  showTrial?: boolean;
+  userId?: number; // userId will ONLY be passed from /subscribe page
 }
 
-const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
+const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, userId }, ref) => {
   const [showTrial, setShowTrial] = useState(false);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {},
   );
+  // Determine the time-based subtitle on the client only to avoid hydration mismatch.
+  // Default to "subtitle-4" (tomorrow) for the initial server/client render,
+  // then update on the client after mount if needed.
+  const [isAfterCutoff, setIsAfterCutoff] = useState(false);
   const router = useRouter();
+  const { phoneNumber: userPhoneNumber } = useUserContext();
 
   // Expose clearAllLoadingStates to parent component
   useImperativeHandle(ref, () => ({
@@ -38,7 +44,6 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
   const t = useTranslations("LandingPage");
   const locale = useLocale();
-
   const pricingData = getPricingContext("DEFAULT");
 
   // Helper function to format currency based on locale
@@ -70,16 +75,29 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
     fetchShowTrial();
   }, []);
 
+  // Check time on the client after hydration to avoid server/client mismatch
+  useEffect(() => {
+    const now = new Date();
+    const cutoff = new Date();
+    cutoff.setHours(20, 59, 0, 0);
+    setIsAfterCutoff(now > cutoff);
+  }, []);
+
+  /**
+   * This function is used when onGetStarted is not provided
+   * This happens when the user is in their Dashboard and wants to upgrade
+   */
   const handleClickWithoutOnGetStarted =
     (product: SubscriptionType) => async () => {
       try {
-        const userIdFromSessionCookie = await userIdFromCookie();
+        const cookieUserId = await userIdFromCookie();
+        const retrievedUserId = userId ?? cookieUserId;
 
-        console.log("[ PricingSection ]", "userIdFromSessionCookie: ", userIdFromSessionCookie);
+        console.log("[ PricingSection ] [ handleClickWithoutOnGetStarted ] retrievedUserId: ", retrievedUserId);
 
-        if (userIdFromSessionCookie) {
+        if (retrievedUserId) {
           const meta =
-            product !== SubscriptionType.TRIAL && typeof window !== "undefined"
+            product !== SubscriptionType.TRIAL
               ? {
                 ...getMetaCookies(),
                 eventId: generateEventId("InitiateCheckout"),
@@ -91,8 +109,8 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
             undefined,
             undefined,
             meta,
-            undefined,
-            userIdFromSessionCookie,
+            userPhoneNumber ?? undefined,
+            retrievedUserId,
           );
 
           if (result?.success) {
@@ -124,10 +142,15 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
     // Set loading state
     setLoadingStates((prev) => ({ ...prev, [productKey]: true }));
 
+    /**
+     * At this point the user is not available from the sessionCookie
+     * Because it would not have been saved to the database yet
+     * Need to get the user from cookie AFTER they were saved to db
+     */
     try {
-      if (props.onGetStarted) {
+      if (onGetStarted) {
         // Use the provided onGetStarted callback
-        await props.onGetStarted(product)();
+        await onGetStarted(product)();
       } else {
         // Use the default handler
         await handleClickWithoutOnGetStarted(product)();
@@ -142,6 +165,10 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
     }
   };
 
+  const subtitleTimeVariant = isAfterCutoff
+    ? t("pricing-section.subtitle-3")
+    : t("pricing-section.subtitle-4");
+
   return (
     <div className="relative py-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -154,10 +181,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
             {t("pricing-section.subtitle-1")}
           </p>
           <p className="text-2xl text-green-400 font-semibold">
-            {`${t("pricing-section.subtitle-2")} ${new Date() > new Date(new Date().setHours(20, 59, 0, 0))
-              ? t("pricing-section.subtitle-3")
-              : t("pricing-section.subtitle-4")
-              } ${t("pricing-section.subtitle-5")}`}
+            {`${t("pricing-section.subtitle-2")} ${subtitleTimeVariant} ${t("pricing-section.subtitle-5")}`}
           </p>
         </div>
 

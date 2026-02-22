@@ -26,6 +26,7 @@ import { trackEvent, Event } from "@/lib/fbq";
 import { generateEventId } from "@/lib/eventId";
 import { getMetaCookies } from "@/lib/metaCookies";
 import { userIdFromCookie } from "./_actions/userFromCookie";
+import { useUserContext } from "./_contexts/UserContext";
 
 export default function Home() {
   const router = useRouter();
@@ -44,6 +45,7 @@ export default function Home() {
   });
   const pricingSectionRef = useRef<any>(null);
   const currentLocale = useCurrentLocale();
+  const { phoneNumber: userPhoneNumber } = useUserContext();
 
   // Handle language selection
   const handleLanguageSelect = (locale: string) => {
@@ -516,12 +518,11 @@ export default function Home() {
       // don't track event here, track it in the success page
       setSelectedProduct(product);
 
-      // Does the user have a valid session?
-      const userIdFromSessionCookie = await userIdFromCookie();
+      const cookieUserId = await userIdFromCookie();
 
-      console.log("[ page ] userIdFromSessionCookie: ", userIdFromSessionCookie);
+      console.log("[ page ] [ handleStartJourneyWithScroll ] cookieUserId: ", cookieUserId);
 
-      if (userIdFromSessionCookie) {
+      if (cookieUserId) {
         const meta =
           product !== SubscriptionType.TRIAL && typeof window !== "undefined"
             ? {
@@ -535,8 +536,8 @@ export default function Home() {
           undefined,
           undefined,
           meta,
-          undefined,
-          userIdFromSessionCookie
+          userPhoneNumber ?? undefined,
+          cookieUserId // likely undefined
         );
         if (result?.success) {
           if (result?.hasCurrentActiveSubscription) {
@@ -1152,7 +1153,6 @@ export default function Home() {
             <PricingSection
               ref={pricingSectionRef}
               onGetStarted={handleStartJourneyWithScroll}
-              showTrial={true}
             />
           </div>
         </div>

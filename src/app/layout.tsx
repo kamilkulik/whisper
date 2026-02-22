@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "./_contexts/LocaleContext";
 import { GeoLocationProvider } from "./_contexts/GeoLocationContext";
+import { UserProvider } from "./_contexts/UserContext";
 import { Suspense } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -64,8 +65,10 @@ export default async function RootLayout({
               {/** NextIntlClientProvider used to provide configuration for Client Components */}
               {/**  */}
               <NextIntlClientProvider messages={messages} locale={locale}>
-                <FacebookPixel />
-                {children}
+                <UserProvider>
+                  <FacebookPixel />
+                  {children}
+                </UserProvider>
               </NextIntlClientProvider>
             </GeoLocationProvider>
           </LocaleProvider>
