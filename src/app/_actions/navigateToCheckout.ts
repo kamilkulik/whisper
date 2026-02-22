@@ -65,6 +65,7 @@ export async function navigateToCheckout(
 
     const baseUrl = await getBaseUrl();
     const checkoutUrl = `${baseUrl}/api/checkout-sessions`;
+    
     const checkoutResponse = await fetch(checkoutUrl, {
       method: "POST",
       headers: {

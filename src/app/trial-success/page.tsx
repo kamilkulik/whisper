@@ -58,11 +58,7 @@ export default async function TrialSuccess({ searchParams }: { searchParams: Pro
             </h1>
 
             <p className="text-xl text-blue-200 leading-relaxed">
-              {t("copy-1")}{" "}
-              {`${new Date() > new Date(new Date().setHours(20, 59, 0, 0))
-                ? t("tomorrow")
-                : t("today")
-                } ${t("evening")}.`}
+              {t("copy-1")}
             </p>
 
             <p className="text-white/80 text-sm">

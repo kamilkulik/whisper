@@ -44,7 +44,6 @@ export default function Home() {
   });
   const pricingSectionRef = useRef<any>(null);
   const currentLocale = useCurrentLocale();
-  const { triangulatedCountry } = useTriangulatedLocation();
 
   // Handle language selection
   const handleLanguageSelect = (locale: string) => {
@@ -520,6 +519,8 @@ export default function Home() {
       // Does the user have a valid session?
       const userIdFromSessionCookie = await userIdFromCookie();
 
+      console.log("[ page ] userIdFromSessionCookie: ", userIdFromSessionCookie);
+
       if (userIdFromSessionCookie) {
         const meta =
           product !== SubscriptionType.TRIAL && typeof window !== "undefined"
@@ -532,7 +533,7 @@ export default function Home() {
         const result = await navigateToCheckout(
           product,
           undefined,
-          triangulatedCountry || undefined,
+          undefined,
           meta,
           undefined,
           userIdFromSessionCookie

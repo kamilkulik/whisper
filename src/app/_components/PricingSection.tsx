@@ -75,6 +75,8 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
       try {
         const userIdFromSessionCookie = await userIdFromCookie();
 
+        console.log("[ PricingSection ]", "userIdFromSessionCookie: ", userIdFromSessionCookie);
+
         if (userIdFromSessionCookie) {
           const meta =
             product !== SubscriptionType.TRIAL && typeof window !== "undefined"

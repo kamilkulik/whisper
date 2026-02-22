@@ -137,8 +137,10 @@ export default function ContactForm({
         } else {
           // For other products, redirect to Stripe checkout
           setMessage(t("form-submit-checkout"));
+
           const cookies = getMetaCookies();
           const checkoutSessionsPayload: CheckoutSessionsPayload = {
+            clientReferenceId: data.phoneNumber,
             productType: selectedProduct || SubscriptionType.TRIAL,
             email: isEmailVerified?.email || "",
             fbp: cookies.fbp,
@@ -146,6 +148,7 @@ export default function ContactForm({
             eventId: generateEventId("Purchase"),
             eventSourceUrl: typeof window !== "undefined" ? window.location.href : undefined,
           };
+
           setTimeout(async () => {
             try {
               const checkoutResponse = await fetch("/api/checkout-sessions", {

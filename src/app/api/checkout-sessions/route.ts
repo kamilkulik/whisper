@@ -39,6 +39,8 @@ export async function POST(request: NextRequest) {
     const purchaseEventId = bodyEventId ?? generateEventId("Purchase");
     const baseUrl = await getBaseUrl();
 
+    console.log("[ /api/checkout-sessions ]", "body: ", JSON.stringify(body, null, 2));
+
     if (!clientReferenceId) {
       throw new Error("[ /api/checkout-sessions ] Client reference ID is required");
     }
