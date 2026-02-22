@@ -1233,6 +1233,22 @@ export default function Home() {
         </ModalWrapper>
       )}
 
+      {modal === "subscribe" && (
+        <ModalWrapper
+          description={t("modal-wrapper.login.description")}
+          title={t("modal-wrapper.login.title")}
+          isOpen={true}
+          onClose={handleModalClose}
+          modalId="subscribe"
+        >
+          <ConfirmationCodeForm
+            isLoginMode={true}
+            isEmailMode={false}
+            onLoginSuccess={() => router.push("/subscribe")}
+          />
+        </ModalWrapper>
+      )}
+
       {modal === "contact" && (
         <ModalWrapper
           isOpen={true}

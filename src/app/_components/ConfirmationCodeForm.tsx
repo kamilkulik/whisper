@@ -48,7 +48,7 @@ export default function ConfirmationCodeForm({
   setIsEmailVerified,
 }: {
   onShowContactForm?: (verifiedPhoneNumber: string) => void;
-  onLoginSuccess?: (userId: string) => void;
+  onLoginSuccess?: () => void;
   isLoginMode?: boolean;
   isEmailMode?: boolean;
   setIsEmailVerified?: (isEmailVerified: {
@@ -351,8 +351,12 @@ export default function ConfirmationCodeForm({
           // Show success message for 2 seconds, then redirect to dashboard
           setTimeout(() => {
             setShowSuccessMessage(false);
-            // Redirect to dashboard - the session cookie will be set by the API
-            window.location.href = "/dashboard";
+            // Redirect following onLoginSuccess callback or to dashboard - the session cookie will be set by the API
+            if (onLoginSuccess) {
+              onLoginSuccess();
+            } else {
+              window.location.href = "/dashboard";
+            }
           }, 2500);
         } else {
           // Handle signup success (existing flow)
@@ -450,8 +454,8 @@ export default function ConfirmationCodeForm({
           <div className="mt-4 text-center">
             <p
               className={`text-lg ${["błąd", "error"].includes(message.toLowerCase())
-                  ? "text-red-300"
-                  : "text-green-300"
+                ? "text-red-300"
+                : "text-green-300"
                 }`}
             >
               {message}

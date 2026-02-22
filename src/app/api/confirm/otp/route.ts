@@ -95,7 +95,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  * POST /api/confirm/otp
  * Will check whether the confirmation code matches that saved in
  * temporarySessionIdCache
- * If yes, will return to the user http only cookie which will expire in 7 days
+ * If yes, will return to the user http only cookie which will expire in 14 days
  * If no, will return 400
  * With that cookies in the users browser, they will be able to navigate into the dashboard
  * without having to go through the login process again
@@ -231,7 +231,7 @@ export const POST = async (request: NextRequest) => {
       httpOnly: process.env.VERCEL_ENV === "production",
       secure: process.env.VERCEL_ENV === "production", // Only secure in production
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 14, // 7 days
       path: "/",
     });
 
@@ -241,7 +241,7 @@ export const POST = async (request: NextRequest) => {
       httpOnly: false,
       secure: process.env.VERCEL_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 14, // 7 days
       path: "/",
     });
 

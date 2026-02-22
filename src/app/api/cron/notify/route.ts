@@ -6,6 +6,7 @@ import { sendSms } from "@/lib/smsapi";
 import { sendEmail } from "@/lib/emailapi";
 import { getTranslations } from "next-intl/server";
 
+
 export const GET = async (request: NextRequest) => {
   /**
     select *

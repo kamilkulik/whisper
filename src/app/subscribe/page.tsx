@@ -10,7 +10,7 @@ export default async function SubscribePage() {
   const sessionId = cookieStore.get("sessionId");
 
   if (!sessionId) {
-    redirect("/?modal=login");
+    redirect("/?modal=subscribe");
   }
 
   const userFromSession = await getUserFromSessionId<"id">(sessionId.value, {
@@ -18,7 +18,7 @@ export default async function SubscribePage() {
   });
 
   if (!userFromSession) {
-    redirect("/?modal=login");
+    redirect("/?modal=subscribe");
   }
 
   return (
