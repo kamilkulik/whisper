@@ -56,6 +56,17 @@ export async function getUserFromEmail(
   });
 }
 
+export async function getUserFromPhoneNumber(
+  phoneNumber: string
+): Promise<Pick<User, "id"> | null> {
+  return prisma.user.findUnique({
+    where: { phoneNumber },
+    select: {
+      id: true,
+    },
+  });
+}
+
 export async function getUserFromSessionId<T extends keyof User>(
   sessionId: string,
   selectFields?: Record<T, boolean>
@@ -88,16 +99,28 @@ export async function deleteSession(sessionId: string) {
   });
 }
 
-export async function getLatestActiveSubscriptionForUserEmail(
-  email: string
+export async function getUsersLatestActiveSubscription(
+  email?: string,
+  phoneNumber?: string,
+  userId?: number
 ): Promise<Pick<Subscription, "id" | "type"> | null> {
-  const user = await getUserFromEmail(email);
+  let user;
+
+  if (userId) {
+    user = userId;
+  } else if (email) {
+    user = (await getUserFromEmail(email))?.id;
+  } else if (phoneNumber) {
+    user = (await getUserFromPhoneNumber(phoneNumber))?.id;
+  }
+
   if (!user) {
     return null;
   }
+
   return prisma.subscription.findFirst({
     where: {
-      userId: user.id,
+      userId: user,
       status: SubscriptionStatus.ACTIVE,
       dateExpires: {
         gt: new Date(),

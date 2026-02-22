@@ -308,10 +308,7 @@
   "SuccessPage": {
     "title-1": "Dziękujemy za",
     "title-2": "subskrypcję!",
-    "copy-1": "Twoja subskrypcja została pomyślnie aktywowana. Pierwszy szept zostanie wysłany na Twój numer telefonu",
-    "today": "dzisiaj",
-    "tomorrow": "jutro",
-    "evening": "wieczorem o 20:59",
+    "copy-1": "Twoja subskrypcja została pomyślnie aktywowana. Pierwszy szept zostanie wysłany na Twój numer telefonu o najbliższej zaplanowanej godzinie.",
     "email-confirmation": "Email potwierdzający został wysłany na adres:",
     "contact-us": "Jeśli masz pytania, skontaktuj się z nami:",
     "return-to-home": "Powrót do strony głównej"

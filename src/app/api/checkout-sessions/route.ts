@@ -11,8 +11,9 @@ import { generateEventId } from "@/lib/eventId";
 import { Event } from "@/lib/fbq";
 
 export interface CheckoutSessionsPayload {
+  clientReferenceId?: string;
   productType: SubscriptionType;
-  email: string;
+  email?: string;
   /** For CAPI dedup: from client when available (e.g. from getMetaCookies + generateEventId). */
   fbp?: string;
   fbc?: string;
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
   try {
     const body: CheckoutSessionsPayload = await request.json();
     const {
+      clientReferenceId,
       productType,
       fbp: bodyFbp,
       fbc: bodyFbc,
@@ -38,30 +40,30 @@ export async function POST(request: NextRequest) {
     const purchaseEventId = bodyEventId ?? generateEventId("Purchase");
     const baseUrl = await getBaseUrl();
 
-    const ipCountry = headersList.get("x-vercel-ip-country"); // Vercel IP country header will be set to location of function that called this API
-    const triangulatedCountryHeader = headersList.get("x-triangulated-country");
+    // const ipCountry = headersList.get("x-vercel-ip-country"); // Vercel IP country header will be set to location of function that called this API
+    // const triangulatedCountryHeader = headersList.get("x-triangulated-country");
 
-    const triangulatedCountry = triangulateLocationBe(
-      null,
-      ipCountry,
-      baseUrl,
-      triangulatedCountryHeader,
-    );
+    // const triangulatedCountry = triangulateLocationBe(
+    //   null,
+    //   ipCountry,
+    //   baseUrl,
+    //   triangulatedCountryHeader,
+    // );
 
-    if (!triangulatedCountry) {
-      throw new Error(
-        "[ /api/checkout-sessions ] Failed to triangulate country",
-      );
-    }
+    // if (!triangulatedCountry) {
+    //   throw new Error(
+    //     "[ /api/checkout-sessions ] Failed to triangulate country",
+    //   );
+    // }
 
     if (!productType) {
       throw new Error("[ /api/checkout-sessions ] Product type is required");
     }
 
-    console.log(
-      "[ /api/checkout-sessions ]",
-      `Attempting to get config for product type: ${productType} in country: ${triangulatedCountry}`,
-    );
+    // console.log(
+    //   "[ /api/checkout-sessions ]",
+    //   `Attempting to get config for product type: ${productType} in country: ${triangulatedCountry}`,
+    // );
 
     const nodeEnv = process.env.NODE_ENV;
     const environment =
@@ -70,7 +72,7 @@ export async function POST(request: NextRequest) {
         : "production";
 
     const config =
-      productConfigs[environment][triangulatedCountry]?.[productType];
+      productConfigs[environment]["DEFAULT"]?.[productType];
 
     if (!config) {
       throw new Error(
@@ -86,8 +88,8 @@ export async function POST(request: NextRequest) {
 
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
-      client_reference_id: body.email,
-      customer_email: body.email,
+      client_reference_id: clientReferenceId,
+      ...(body.email ? { customer_email: body.email } : {}),
       metadata: {
         productType: productType.toString(),
         productId: config.prod,

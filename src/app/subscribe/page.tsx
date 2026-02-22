@@ -5,26 +5,29 @@ import { redirect } from "next/navigation";
 import PricingSection from "../_components/PricingSection";
 import { ReturnButton } from "../_components/ReturnButton";
 
-export default async function SubscribePage() {
+export default async function SubscribePage({ searchParams }: { searchParams: Promise<{ userId?: string }> }) {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId");
+  const { userId } = await searchParams;
 
-  if (!sessionId) {
-    redirect("/?modal=subscribe");
-  }
+  if (!userId) {
+    if (!sessionId) {
+      redirect("/?modal=subscribe");
+    }
 
-  const userFromSession = await getUserFromSessionId<"id">(sessionId.value, {
-    id: true,
-  });
+    const userFromSession = await getUserFromSessionId<"id">(sessionId.value, {
+      id: true,
+    });
 
-  if (!userFromSession) {
-    redirect("/?modal=subscribe");
+    if (!userFromSession) {
+      redirect("/?modal=subscribe");
+    }
   }
 
   return (
     <div className="flex flex-col items-center mb-3">
       <ReturnButton href="/dashboard" />
-      <PricingSection />
+      <PricingSection showTrial={false} />
     </div>
   );
 }

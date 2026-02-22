@@ -1,22 +1,39 @@
 "use server";
 
-import { getUserFromEmail, prisma } from "@/lib/prisma";
+import { getUserFromEmail, getUserFromPhoneNumber, prisma } from "@/lib/prisma";
 import { Subscription, SubscriptionType, User } from "@prisma/client";
 import { subscriptionFactory } from "../api/payments/utils/subscriptionFactory";
 import { sendEmail } from "@/lib/emailapi";
 import { getTranslations } from "next-intl/server";
 
-export async function handleTrialSubscription(userEmail: string): Promise<{
+export async function handleTrialSubscription(
+  userEmail?: string,
+  phoneNumber?: string,
+  userId?: number
+): Promise<{
   success: boolean;
   savedSubscription?: Subscription;
   savedUser?: User;
 }> {
   try {
-    const user = await getUserFromEmail(userEmail);
-    if (!user) {
+    let existingUserId: number | undefined;
+
+    if (!userId) {
+      if (userEmail) {
+        existingUserId = (await getUserFromEmail(userEmail))?.id;
+      } else if (phoneNumber) {
+        existingUserId = (await getUserFromPhoneNumber(phoneNumber))?.id;
+      }
+    } else {
+      existingUserId = userId;
+    }
+
+    if (!existingUserId) {
       console.error("User not found");
       return { success: false };
     }
+
+    const user = { id: existingUserId } as Pick<User, "id">;
 
     // in a single transaction create trial sub and update user
     // use nested writes

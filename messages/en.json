@@ -308,10 +308,7 @@
   "SuccessPage": {
     "title-1": "Thank you for",
     "title-2": "subscribing!",
-    "copy-1": "Your subscription has been successfully activated. The first whisper will be sent to your phone number",
-    "today": "this very",
-    "tomorrow": "tomorrow",
-    "evening": "evening at 20:59",
+    "copy-1": "Your subscription has been successfully activated. The first whisper will be sent to your phone number at the next scheduled time.",
     "email-confirmation": "The email confirmation has been sent to your email address",
     "contact-us": "If you have any questions, contact us:",
     "return-to-home": "Return to home"

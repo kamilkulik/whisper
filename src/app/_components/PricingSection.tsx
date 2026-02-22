@@ -4,7 +4,6 @@ import { SubscriptionType } from "@prisma/client";
 import {
   useEffect,
   useState,
-  useContext,
   forwardRef,
   useImperativeHandle,
 } from "react";
@@ -13,12 +12,12 @@ import { navigateToCheckout } from "../_actions/navigateToCheckout";
 import { useRouter } from "next/navigation";
 import { userEmailFromCookie } from "../_actions/userEmailFromCookie";
 import { useTranslations, useLocale } from "next-intl";
-import { GeoLocationContext } from "../_contexts/GeoLocationContext";
 import Spinner from "./Spinner";
-import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
 import { trackEvent, Event } from "@/lib/fbq";
 import { generateEventId } from "@/lib/eventId";
 import { getMetaCookies } from "@/lib/metaCookies";
+import { getPricingContext } from "../_consts";
+
 
 interface PricingSectionProps {
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
@@ -40,8 +39,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
   const t = useTranslations("LandingPage");
   const locale = useLocale();
 
-  const { isLoaded, pricingData, triangulatedCountry } =
-    useTriangulatedLocation();
+  const pricingData = getPricingContext("DEFAULT");
 
   // Helper function to format currency based on locale
   const formatCurrency = (amount: string, currency: string) => {
@@ -81,15 +79,15 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
           const meta =
             product !== SubscriptionType.TRIAL && typeof window !== "undefined"
               ? {
-                  ...getMetaCookies(),
-                  eventId: generateEventId("InitiateCheckout"),
-                  eventSourceUrl: window.location.href,
-                }
+                ...getMetaCookies(),
+                eventId: generateEventId("InitiateCheckout"),
+                eventSourceUrl: window.location.href,
+              }
               : undefined;
           const result = await navigateToCheckout(
             product,
             userEmailFromSessionCookie,
-            triangulatedCountry ?? undefined,
+            undefined,
             meta,
           );
 
@@ -152,21 +150,19 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
             {t("pricing-section.subtitle-1")}
           </p>
           <p className="text-2xl text-green-400 font-semibold">
-            {`${t("pricing-section.subtitle-2")} ${
-              new Date() > new Date(new Date().setHours(20, 59, 0, 0))
-                ? t("pricing-section.subtitle-3")
-                : t("pricing-section.subtitle-4")
-            } ${t("pricing-section.subtitle-5")}`}
+            {`${t("pricing-section.subtitle-2")} ${new Date() > new Date(new Date().setHours(20, 59, 0, 0))
+              ? t("pricing-section.subtitle-3")
+              : t("pricing-section.subtitle-4")
+              } ${t("pricing-section.subtitle-5")}`}
           </p>
         </div>
 
         {/* Pricing Cards */}
         <div
-          className={`grid gap-8 mb-12 ${
-            showTrial
-              ? "md:grid-cols-3"
-              : "md:grid-cols-2 md:max-w-4xl md:mx-auto"
-          }`}
+          className={`grid gap-8 mb-12 ${showTrial
+            ? "md:grid-cols-3"
+            : "md:grid-cols-2 md:max-w-4xl md:mx-auto"
+            }`}
         >
           {showTrial && (
             <>
@@ -185,7 +181,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
                 {/* Content Section */}
                 <div className="grid place-content-center grow py-8">
                   <div className="flex items-baseline justify-center">
-                    {isLoaded && pricingData ? (
+                    {pricingData ? (
                       formatCurrency("0", pricingData.currency)
                     ) : (
                       <Spinner size="xl" />
@@ -237,7 +233,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
-                {isLoaded && pricingData ? (
+                {pricingData ? (
                   <>
                     <div className="flex items-baseline justify-center">
                       {formatCurrency(
@@ -261,7 +257,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
               {/* Button Section */}
               <div className="px-8 pb-8 flex justify-center">
-                {isLoaded && pricingData ? (
+                {pricingData ? (
                   <button
                     onClick={handleButtonClick(SubscriptionType.MONTHLY)}
                     disabled={loadingStates[SubscriptionType.MONTHLY]}
@@ -305,7 +301,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
                 <div className="flex items-baseline justify-center">
-                  {isLoaded && pricingData ? (
+                  {pricingData ? (
                     formatCurrency(
                       pricingData.oneTimePrice,
                       pricingData.currency,
@@ -321,7 +317,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>((props, ref) => {
 
               {/* Button Section */}
               <div className="px-8 pb-8 flex justify-center">
-                {isLoaded && pricingData ? (
+                {pricingData ? (
                   <button
                     onClick={handleButtonClick(SubscriptionType.ONE_TIME)}
                     disabled={loadingStates[SubscriptionType.ONE_TIME]}

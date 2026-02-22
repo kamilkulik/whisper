@@ -63,7 +63,7 @@ export const productConfigs: Record<
   Record<string, Partial<Record<SubscriptionType, ProductConfig>>>
 > = {
   development: {
-    PL: {
+    DEFAULT: {
       [SubscriptionType.ONE_TIME]: {
         mode: "payment",
         price: "price_1RtLzh0JWfkzhBgp0ZDaEYyO", // One-time payment price

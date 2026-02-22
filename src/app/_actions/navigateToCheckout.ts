@@ -3,7 +3,7 @@
 import { Subscription, SubscriptionType, User } from "@prisma/client";
 import { CheckoutSessionsPayload } from "../api/checkout-sessions/route";
 import { handleTrialSubscription } from "./handleTrialSubscription";
-import { getLatestActiveSubscriptionForUserEmail } from "@/lib/prisma";
+import { getUsersLatestActiveSubscription } from "@/lib/prisma";
 import { getBaseUrl } from "../api/utils/baseUrl";
 
 export interface CheckoutMeta {
@@ -15,9 +15,11 @@ export interface CheckoutMeta {
 
 export async function navigateToCheckout(
   productType: SubscriptionType,
-  email: string,
+  email?: string,
   triangulatedCountry?: string,
-  meta?: CheckoutMeta
+  meta?: CheckoutMeta,
+  phoneNumber?: string,
+  userId?: number,
 ): Promise<{
   success: boolean;
   savedSubscription?: Subscription;
@@ -25,16 +27,16 @@ export async function navigateToCheckout(
   hasCurrentActiveSubscription?: boolean;
   checkoutUrl?: string;
 }> {
-  if (!email) {
-    console.error("User email not found");
+  if (!email && !phoneNumber && !userId) {
+    console.error("User email or phone number or user id not provided");
     return { success: false };
   }
 
-  console.log("[ navigateToCheckout ]", "user email", email);
+  console.log("[ navigateToCheckout ]", "user: ", email ?? phoneNumber ?? userId);
   console.log("[ navigateToCheckout ]", "productType", productType);
 
   // does the user already have an ACTIVE subscription?
-  const subscription = await getLatestActiveSubscriptionForUserEmail(email);
+  const subscription = await getUsersLatestActiveSubscription(email);
   console.log(
     "[ navigateToCheckout ]",
     "latest active subscription: ",
@@ -45,13 +47,13 @@ export async function navigateToCheckout(
   }
 
   if (productType === SubscriptionType.TRIAL) {
-    return handleTrialSubscription(email);
+    return handleTrialSubscription(email, phoneNumber, userId);
   }
 
   try {
     const checkoutSessionsPayload: CheckoutSessionsPayload = {
       productType,
-      email,
+      clientReferenceId: email ?? phoneNumber ?? userId?.toString(),
       ...(meta && {
         fbp: meta.fbp,
         fbc: meta.fbc,

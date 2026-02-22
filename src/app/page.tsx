@@ -25,6 +25,7 @@ import { languageOptions } from "./_consts";
 import { trackEvent, Event } from "@/lib/fbq";
 import { generateEventId } from "@/lib/eventId";
 import { getMetaCookies } from "@/lib/metaCookies";
+import { userIdFromCookie } from "./_actions/userFromCookie";
 
 export default function Home() {
   const router = useRouter();
@@ -517,9 +518,9 @@ export default function Home() {
       setSelectedProduct(product);
 
       // Does the user have a valid session?
-      const userEmailFromSessionCookie = await userEmailFromCookie();
+      const userIdFromSessionCookie = await userIdFromCookie();
 
-      if (userEmailFromSessionCookie) {
+      if (userIdFromSessionCookie) {
         const meta =
           product !== SubscriptionType.TRIAL && typeof window !== "undefined"
             ? {
@@ -530,9 +531,11 @@ export default function Home() {
             : undefined;
         const result = await navigateToCheckout(
           product,
-          userEmailFromSessionCookie,
+          undefined,
           triangulatedCountry || undefined,
           meta,
+          undefined,
+          userIdFromSessionCookie
         );
         if (result?.success) {
           if (result?.hasCurrentActiveSubscription) {

@@ -84,12 +84,7 @@ export default async function Success({
               </h1>
 
               <p className="text-xl text-blue-200 leading-relaxed">
-                {t("copy-1")}{" "}
-                {`${
-                  new Date() > new Date(new Date().setHours(20, 59, 0, 0))
-                    ? t("tomorrow")
-                    : t("today")
-                } ${t("evening")}.`}
+                {t("copy-1")}
               </p>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
