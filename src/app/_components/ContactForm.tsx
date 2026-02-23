@@ -28,10 +28,8 @@ export default function ContactForm({
   const { setPhoneNumber } = useUserContext();
   const t = useTranslations("Components.ContactForm");
 
-  const [formData, setFormData] = useState<
-    GatheredUserData & { acceptTerms: boolean }
-  >({
-    acceptTerms: false,
+  const [formData, setFormData] = useState<GatheredUserData>({
+
     deliveryHour: DEFAULT_DELIVERY_HOUR,
     email:
       isEmailVerified?.isEmailVerified && isEmailVerified.email
@@ -71,24 +69,17 @@ export default function ContactForm({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
+    const { name, value } = e.target;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
-
-    // Validate terms and conditions acceptance
-    if (!formData.acceptTerms) {
-      setMessage(t("form-submit-terms-of-service"));
-      return;
-    }
 
     setIsSubmitting(true);
 
@@ -124,7 +115,6 @@ export default function ContactForm({
         setFormData({
           deliveryHour: DEFAULT_DELIVERY_HOUR,
           messageLanguage: SupportedLanguagesEnum.EN,
-          acceptTerms: false,
           phoneNumber: verifiedPhoneNumber,
           product: SubscriptionType.TRIAL,
         });
@@ -316,48 +306,6 @@ export default function ContactForm({
           ></div>
         </div>
 
-        {/* Terms and Conditions Checkbox */}
-        <div
-          className={`flex items-center space-x-3 ${!formData.acceptTerms &&
-            (message.includes("regulamin") || message.includes("terms"))
-            ? "p-3 border border-red-300 rounded-2xl bg-red-500/20"
-            : ""
-            }`}
-          data-oid="jl32i:-"
-        >
-          <input
-            type="checkbox"
-            id="acceptTerms"
-            name="acceptTerms"
-            checked={formData.acceptTerms}
-            onChange={handleChange}
-            required
-            className={`h-5 w-5 text-white focus:ring-white/30 rounded ${!formData.acceptTerms &&
-              (message.includes("regulamin") || message.includes("terms"))
-              ? "border-red-500 focus:ring-red-500"
-              : "border-white/30 bg-white/20"
-              }`}
-            data-oid="5lzh77p"
-          />
-
-          <label
-            htmlFor="acceptTerms"
-            className="text-lg text-white/90"
-            data-oid="qbo8wve"
-          >
-            {t("form-terms-of-service-1")}{" "}
-            <a
-              href="/terms"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white underline hover:text-white/80"
-              data-oid="3mi774b"
-            >
-              {t("form-terms-of-service-2")}
-            </a>
-          </label>
-        </div>
-
         <button
           type="submit"
           disabled={isSubmitting}
@@ -368,6 +316,18 @@ export default function ContactForm({
             ? t("form-submit-button-loading")
             : t("form-submit-button")}
         </button>
+
+        <p className="text-center text-sm text-white/50 mt-3">
+          {t("form-terms-of-service-1")}{" "}
+          <a
+            href="/terms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-white/70 transition-colors"
+          >
+            {t("form-terms-of-service-2")}
+          </a>
+        </p>
       </form>
 
       {message && (
