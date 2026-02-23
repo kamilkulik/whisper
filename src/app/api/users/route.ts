@@ -202,6 +202,7 @@ export const POST = async (request: NextRequest) => {
   try {
     const sessionId = request.cookies.get("sessionId")?.value;
     if (!sessionId) {
+      console.log("[ users ] [ POST ] No sessionId cookie found");
       return NextResponse.json(
         { error: tShared("unauthorized") },
         { status: 401 },
@@ -216,6 +217,7 @@ export const POST = async (request: NextRequest) => {
     );
 
     if (cachedSessionId !== sessionId) {
+      console.log("[ users ] [ POST ] Cached sessionId does not match");
       return NextResponse.json(
         { error: tShared("unauthorized") },
         { status: 401 },
@@ -224,6 +226,7 @@ export const POST = async (request: NextRequest) => {
 
     // Validate required fields
     if (!body.phoneNumber) {
+      console.log("[ users ] [ POST ] No phoneNumber in body");
       return NextResponse.json(
         { error: tShared("form-validation-errors.all-fields-required") },
         { status: 400 },

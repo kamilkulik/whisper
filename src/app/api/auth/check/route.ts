@@ -21,11 +21,13 @@ export async function GET(request: NextRequest) {
     });
 
     if (user && user.sessionId === sessionId.value) {
+      console.log("[ /api/auth/check ] User found", user);
       return NextResponse.json({
         authenticated: true,
         sessionId: sessionId.value,
       });
     } else {
+      console.log("[ /api/auth/check ] User not found", user);
       return NextResponse.json({ authenticated: false });
     }
   } catch (error) {
