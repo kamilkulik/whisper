@@ -10,8 +10,8 @@ import { getLocale, getMessages } from "next-intl/server";
 import { FullPageLoader } from "./_components/FullPageLoader";
 import { headers } from "next/headers"; // this needs to be used from a server component
 import { createTranslatorFromLocale } from "@/i18n/utils";
-import Script from "next/script";
 import FacebookPixel from "./_components/FacebookPixel";
+import MicrosoftClarity from "./_components/MicrosoftClarity";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -67,6 +67,7 @@ export default async function RootLayout({
               <NextIntlClientProvider messages={messages} locale={locale}>
                 <UserProvider>
                   <FacebookPixel />
+                  <MicrosoftClarity />
                   {children}
                 </UserProvider>
               </NextIntlClientProvider>
