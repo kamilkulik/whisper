@@ -33,6 +33,129 @@ export const supportedPhoneCountryCodes = [
   { "country": "United Kingdom", "phoneCountryCode": "+44" },
 ] as const;
 
+// Map IANA timezone identifiers to phone country codes
+// This enables auto-detecting the user's country from their browser timezone
+export const timezoneToPhoneCountryCode: Record<string, string> = {
+  // United States & Canada (+1)
+  "America/New_York": "+1",
+  "America/Chicago": "+1",
+  "America/Denver": "+1",
+  "America/Los_Angeles": "+1",
+  "America/Anchorage": "+1",
+  "America/Phoenix": "+1",
+  "America/Detroit": "+1",
+  "America/Indiana/Indianapolis": "+1",
+  "America/Indiana/Knox": "+1",
+  "America/Indiana/Marengo": "+1",
+  "America/Indiana/Petersburg": "+1",
+  "America/Indiana/Tell_City": "+1",
+  "America/Indiana/Vevay": "+1",
+  "America/Indiana/Vincennes": "+1",
+  "America/Indiana/Winamac": "+1",
+  "America/Kentucky/Louisville": "+1",
+  "America/Kentucky/Monticello": "+1",
+  "America/North_Dakota/Beulah": "+1",
+  "America/North_Dakota/Center": "+1",
+  "America/North_Dakota/New_Salem": "+1",
+  "America/Boise": "+1",
+  "America/Juneau": "+1",
+  "America/Sitka": "+1",
+  "America/Yakutat": "+1",
+  "America/Nome": "+1",
+  "America/Adak": "+1",
+  "America/Menominee": "+1",
+  "Pacific/Honolulu": "+1",
+  // Canada
+  "America/Toronto": "+1",
+  "America/Vancouver": "+1",
+  "America/Winnipeg": "+1",
+  "America/Edmonton": "+1",
+  "America/Halifax": "+1",
+  "America/St_Johns": "+1",
+  "America/Regina": "+1",
+  "America/Moncton": "+1",
+  "America/Thunder_Bay": "+1",
+  "America/Iqaluit": "+1",
+  "America/Whitehorse": "+1",
+  "America/Yellowknife": "+1",
+  "America/Dawson": "+1",
+  "America/Dawson_Creek": "+1",
+  "America/Rankin_Inlet": "+1",
+  "America/Resolute": "+1",
+  "America/Glace_Bay": "+1",
+  "America/Goose_Bay": "+1",
+  // Australia
+  "Australia/Sydney": "+61",
+  "Australia/Melbourne": "+61",
+  "Australia/Brisbane": "+61",
+  "Australia/Perth": "+61",
+  "Australia/Adelaide": "+61",
+  "Australia/Hobart": "+61",
+  "Australia/Darwin": "+61",
+  "Australia/Canberra": "+61",
+  "Australia/Lord_Howe": "+61",
+  "Australia/Lindeman": "+61",
+  "Australia/Currie": "+61",
+  "Australia/Broken_Hill": "+61",
+  "Australia/Eucla": "+61",
+  // Europe
+  "Europe/Vienna": "+43",
+  "Europe/Brussels": "+32",
+  "Europe/Prague": "+420",
+  "Europe/Copenhagen": "+45",
+  "Europe/Tallinn": "+372",
+  "Europe/Helsinki": "+358",
+  "Europe/Paris": "+33",
+  "Europe/Berlin": "+49",
+  "Europe/Busingen": "+49",
+  "Europe/Dublin": "+353",
+  "Europe/Rome": "+39",
+  "Europe/Amsterdam": "+31",
+  "Pacific/Auckland": "+64",
+  "Pacific/Chatham": "+64",
+  "Europe/Warsaw": "+48",
+  "Europe/Lisbon": "+351",
+  "Atlantic/Madeira": "+351",
+  "Atlantic/Azores": "+351",
+  "Europe/Madrid": "+34",
+  "Africa/Ceuta": "+34",
+  "Atlantic/Canary": "+34",
+  "Europe/Stockholm": "+46",
+  "Europe/Zurich": "+41",
+  "Europe/London": "+44",
+  "Europe/Jersey": "+44",
+  "Europe/Guernsey": "+44",
+  "Europe/Isle_of_Man": "+44",
+};
+
+/**
+ * Detects the user's phone country code based on their browser timezone.
+ * Uses Intl.DateTimeFormat to get the IANA timezone identifier and maps it
+ * to the corresponding phone country code from supportedPhoneCountryCodes.
+ *
+ * @returns The phone country code string (e.g., "+44" for UK) or "+1" as fallback
+ */
+export function getDefaultPhoneCountryCode(): string {
+  try {
+    const detectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const phoneCode = timezoneToPhoneCountryCode[detectedTimezone];
+
+    if (phoneCode) {
+      // Verify the detected code is in our supported list
+      const isSupported = supportedPhoneCountryCodes.some(
+        (entry) => entry.phoneCountryCode === phoneCode
+      );
+      if (isSupported) {
+        return phoneCode;
+      }
+    }
+  } catch {
+    // Intl API not available, fall through to default
+  }
+
+  return supportedPhoneCountryCodes[0].phoneCountryCode; // "+1" fallback
+}
+
 export const GEO_CONTEXT = [
   {
     domain: GB_DOMAIN,

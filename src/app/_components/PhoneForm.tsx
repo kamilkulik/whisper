@@ -1,8 +1,7 @@
 import { useTranslations } from "next-intl";
 import { ValidationErrors } from "../_types";
-import { useTriangulatedLocation } from "../_hooks/useTriangulatedLocation";
-import { GEO_CONTEXT, supportedPhoneCountryCodes } from "../_consts";
-import { useEffect, useState } from "react";
+import { supportedPhoneCountryCodes, getDefaultPhoneCountryCode } from "../_consts";
+import { useEffect } from "react";
 
 type PhoneFormProps = {
   formData: { phoneNumber: string; email: string; countryCode: string };
@@ -40,9 +39,9 @@ export function PhoneForm({
   const t = useTranslations("Components.PhoneForm");
   const sharedMessages = useTranslations("Shared.countries");
   const phoneCountryCodeOptions = supportedPhoneCountryCodes;
-  
+
   useEffect(() => {
-    handleCountrySelect(phoneCountryCodeOptions[0].phoneCountryCode);
+    handleCountrySelect(getDefaultPhoneCountryCode());
   }, []);
 
   return (
@@ -89,9 +88,8 @@ export function PhoneForm({
                     data-oid="f6znpna"
                   >
                     <svg
-                      className={`w-4 h-4 text-white transition-transform ${
-                        isCountryDropdownOpen ? "rotate-180" : ""
-                      }`}
+                      className={`w-4 h-4 text-white transition-transform ${isCountryDropdownOpen ? "rotate-180" : ""
+                        }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -118,11 +116,10 @@ export function PhoneForm({
                           onClick={() =>
                             handleCountrySelect(option.phoneCountryCode)
                           }
-                          className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-2xl ${
-                            formData.countryCode === option.phoneCountryCode
-                              ? "bg-gray-700"
-                              : ""
-                          }`}
+                          className={`w-full px-6 py-3 text-left text-white hover:bg-gray-700 first:rounded-t-2xl last:rounded-b-2xl transition-colors text-2xl ${formData.countryCode === option.phoneCountryCode
+                            ? "bg-gray-700"
+                            : ""
+                            }`}
                           data-oid="jp414j."
                         >
                           {option.phoneCountryCode} {sharedMessages(option.country)}
@@ -151,11 +148,10 @@ export function PhoneForm({
                   }}
                   onBlur={(e) => handleInputBlur("phoneNumber", e.target.value)}
                   required
-                  className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white text-xl placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${
-                    validationErrors.phoneNumber
-                      ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                      : "focus:ring-white/30"
-                  }`}
+                  className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white text-xl placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-2xl ${validationErrors.phoneNumber
+                    ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                    : "focus:ring-white/30"
+                    }`}
                   placeholder={t("form-label-phone-number-placeholder")}
                   data-oid="6a6jkxb"
                 />
@@ -186,11 +182,10 @@ export function PhoneForm({
               }}
               onBlur={(e) => handleInputBlur("email", e.target.value)}
               required
-              className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl ${
-                validationErrors.email
-                  ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
-                  : "focus:ring-white/30"
-              }`}
+              className={`w-full h-12 px-6 py-3 bg-white/20 border-0 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 backdrop-blur-sm placeholder:text-xl ${validationErrors.email
+                ? "focus:ring-red-500/50 ring-2 ring-red-500/30"
+                : "focus:ring-white/30"
+                }`}
               placeholder={t("form-label-email-placeholder")}
             />
             {validationErrors.email && (

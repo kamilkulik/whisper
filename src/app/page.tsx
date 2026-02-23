@@ -520,7 +520,7 @@ export default function Home() {
 
       const cookieUserId = await userIdFromCookie();
 
-      console.log("[ page ] [ handleStartJourneyWithScroll ] cookieUserId: ", cookieUserId);
+      // console.log("[ page ] [ handleStartJourneyWithScroll ] cookieUserId: ", cookieUserId);
 
       if (cookieUserId) {
         const meta =
