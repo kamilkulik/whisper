@@ -231,7 +231,7 @@ export const POST = async (request: NextRequest) => {
       httpOnly: process.env.VERCEL_ENV === "production",
       secure: process.env.VERCEL_ENV === "production", // Only secure in production
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 14, // 7 days
+      maxAge: 60 * 60 * 24 * 14, // 14 days
       path: "/",
     });
 
@@ -241,7 +241,7 @@ export const POST = async (request: NextRequest) => {
       httpOnly: false,
       secure: process.env.VERCEL_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 14, // 7 days
+      maxAge: 60 * 60 * 24 * 14, // 14 days
       path: "/",
     });
 
