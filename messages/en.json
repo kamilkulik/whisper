@@ -406,8 +406,8 @@
       "form-label-message-language": "Message language",
       "form-terms-of-service-1": "By continuing, you agree to our ",
       "form-terms-of-service-2": "Terms of Service and Privacy Policy",
-      "form-submit-button": "SEND",
-      "form-submit-button-loading": "SENDING..."
+      "form-submit-button": "Start my evening ritual",
+      "form-submit-button-loading": "STARTING..."
     },
     "CtaButton": {
       "button": "Start now"

@@ -406,8 +406,8 @@
       "form-label-message-language": "Język wiadomości",
       "form-terms-of-service-1": "Kontynuując, zgadzasz się na nasz ",
       "form-terms-of-service-2": "Regulamin i Politykę Prywatności",
-      "form-submit-button": "WYŚLIJ",
-      "form-submit-button-loading": "WYSYŁANIE..."
+      "form-submit-button": "Rozpocznij mój rytuał",
+      "form-submit-button-loading": "Rozpoczynanie..."
     },
     "CtaButton": {
       "button": "Zacznij teraz"
