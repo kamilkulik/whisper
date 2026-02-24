@@ -26,9 +26,15 @@ export async function handleSessionCompleted(
   let user: Pick<User, "id" | "email" | "phoneNumber" | "messageLanguage" | "premium"> | null =
     null;
   try {
-    user = await prisma.user.findUnique({
+    const clientRef = eventData.client_reference_id!;
+    const clientRefAsNum = Number(clientRef);
+
+    user = await prisma.user.findFirst({
       where: {
-        phoneNumber: eventData.client_reference_id!
+        OR: [
+          { phoneNumber: clientRef },
+          { id: clientRefAsNum },
+        ],
       },
       select: {
         id: true,
@@ -108,18 +114,29 @@ export async function handleSessionCompleted(
   }
 
   // TODO below could be performed async so the user doesn't have to wait
+  console.log()
 
   // mark user as premium
   if (!user.premium) {
     await prisma.user.update({
       where: { id: user.id },
-      data: { premium: true, email: eventData.customer_email },
+      data: { premium: true },
     });
+    console.log(
+      `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`,
+    );
   }
 
-  console.log(
-    `[ /api/payments/utils/handleSessionCompleted ] User ${user.email} marked as premium`,
-  );
+  const userEmailFromEvent = eventData.customer_details?.email;
+  if (!user.email && userEmailFromEvent) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { email: userEmailFromEvent },
+    });
+    console.log(
+      `[ /api/payments/utils/handleSessionCompleted ] User ${user.id} email updated to ${userEmailFromEvent}`,
+    );
+  }
 
   // Log the webhook event
   await prisma.webhookEventLog.create({
