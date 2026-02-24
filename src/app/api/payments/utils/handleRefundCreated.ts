@@ -13,6 +13,7 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
     },
     select: {
       id: true,
+      userId: true,
     },
   });
 
@@ -39,6 +40,19 @@ export async function handleRefundCreated(refund: Stripe.Refund) {
   console.log(
     `[ /api/payments/utils/handleRefundCreated ] Subscription ${subscriptionId.id} updated with refund information`
   );
+
+  await prisma.user.update({
+    where: {
+      id: subscriptionId.userId
+    },
+    data: {
+      premium: false
+    }
+  })
+
+  console.log(
+    `[ /api/payments/utils/handleRefundCreated ] Premium flag for user ${subscriptionId.userId} set to false`
+  )
 
   // Log the webhook event
   await prisma.webhookEventLog.create({

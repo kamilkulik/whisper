@@ -15,6 +15,16 @@ export interface SubscriptionFactoryInput {
   user: Pick<User, "id">;
 }
 
+function createRawExpiryDate(created: number, days: number, expiryAdjustmentInMilis: number) {
+  return new Date(created + days * 24 * 60 * 60 * 1000 + expiryAdjustmentInMilis);
+}
+
+function snapToEndOfDay(date: Date): Date {
+  const result = new Date(date);
+  result.setUTCHours(23, 59, 59, 999);
+  return result;
+}
+
 export function subscriptionFactory({
   created,
   expiryAdjustmentInMilis,
@@ -31,12 +41,13 @@ export function subscriptionFactory({
   | "type"
   | "userId"
 > {
-  const expiresIn7DaysAt = new Date(
-    created + 7 * 24 * 60 * 60 * 1000 + expiryAdjustmentInMilis
-  );
-  const expiresIn30DaysAt = new Date(
-    created + 30 * 24 * 60 * 60 * 1000 + expiryAdjustmentInMilis
-  );
+  // Snap to end of expiry day:
+  const rawTrialExpiry = createRawExpiryDate(created, 7, expiryAdjustmentInMilis);
+  const expiresIn7DaysAt = snapToEndOfDay(rawTrialExpiry);
+
+  const rawExpiry = createRawExpiryDate(created, 30, expiryAdjustmentInMilis);
+  const expiresIn30DaysAt = snapToEndOfDay(rawExpiry);
+
   const subscriptionType = getSubscriptionType(productType);
 
   const dateExpires =
