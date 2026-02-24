@@ -150,6 +150,7 @@
       "subtitle-3": "tomorrow",
       "subtitle-4": "this very",
       "subtitle-5": "evening",
+      "subtitle-continuation": "to keep your evening ritual alive",
       "trial-card": {
         "title": "Test for free",
         "duration": "First 7 days free",
@@ -158,7 +159,7 @@
         "CTA-button": "Start free trial"
       },
       "one-time-purchase-card": {
-        "tooltip": "popular choice",
+        "tooltip": "no comitments",
         "title": "One-off month",
         "duration": "30 DAYS OF EVENING WHISPERS",
         "currency": "£",
@@ -166,7 +167,7 @@
         "CTA-button": "Buy for "
       },
       "subscription-card": {
-        "tooltip": "for regular readers",
+        "tooltip": "popular choice",
         "title": "Subscription",
         "duration": "MONTHLY",
         "currency": "£",

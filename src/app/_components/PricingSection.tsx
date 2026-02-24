@@ -21,11 +21,12 @@ import { useUserContext } from "../_contexts/UserContext";
 
 
 interface PricingSectionProps {
+  isContinuation?: boolean;
   onGetStarted?: (product: SubscriptionType) => () => Promise<void>;
   userId?: number; // userId will ONLY be passed from /subscribe page
 }
 
-const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, userId }, ref) => {
+const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = false, onGetStarted, userId }, ref) => {
   const [showTrial, setShowTrial] = useState(false);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {},
@@ -52,7 +53,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
       // English: currency before number (e.g., £19)
       return (
         <>
-          <span className="text-2xl text-gray-300">{currency}</span>
+          <span className="text-2xl font-semibold text-gray-200">{currency}</span>
           <span className="text-8xl font-bold text-white">{amount}</span>
         </>
       );
@@ -61,7 +62,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
       return (
         <>
           <span className="text-8xl font-bold text-white">{amount}</span>
-          <span className="text-2xl text-gray-300">{currency}</span>
+          <span className="text-2xl font-semibold text-gray-200">{currency}</span>
         </>
       );
     }
@@ -181,7 +182,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
             {t("pricing-section.subtitle-1")}
           </p>
           <p className="text-2xl text-green-400 font-semibold">
-            {`${t("pricing-section.subtitle-2")} ${subtitleTimeVariant} ${t("pricing-section.subtitle-5")}`}
+            {isContinuation ? `${t("pricing-section.subtitle-continuation")}` : `${t("pricing-section.subtitle-2")} ${subtitleTimeVariant} ${t("pricing-section.subtitle-5")}`}
           </p>
         </div>
 
@@ -249,7 +250,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
                 {t("pricing-section.subscription-card.tooltip")}
               </div>
             </div>
-            <div className="relative bg-gradient-to-br from-yellow-400/20 to-orange-400/20 backdrop-blur-sm rounded-2xl shadow-2xl border border-yellow-400/30 duration-300 hover:shadow-3xl overflow-hidden flex flex-col h-full ring-2 ring-yellow-400/80 ring-opacity-90 shadow-[0_0_60px_rgba(59,130,246,0.8)]">
+            <div className="relative bg-gradient-to-br from-yellow-400/30 to-orange-400/30 backdrop-blur-sm rounded-2xl shadow-2xl border border-yellow-400/30 duration-300 hover:shadow-3xl overflow-hidden flex flex-col h-full ring-2 ring-yellow-400/80 ring-opacity-90 shadow-[0_0_60px_rgba(235,210,130,0.8)]">
               {/* Header Section */}
               <div className="bg-gradient-to-r from-yellow-400/40 to-orange-400/40 px-8 py-6 text-center">
                 <h3 className="text-3xl md:text-2xl font-extrabold text-white mb-2">
@@ -262,77 +263,6 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
 
               {/* Content Section */}
               <div className="grid place-content-center grow py-8">
-                <div className="flex items-baseline justify-center">
-                  {pricingData ? (
-                    formatCurrency(
-                      pricingData.oneTimePrice,
-                      pricingData.currency,
-                    )
-                  ) : (
-                    <Spinner size="xl" />
-                  )}
-                </div>
-                <p className="text-gray-400 text-lg">
-                  {t("pricing-section.one-time-purchase-card.period")}
-                </p>
-              </div>
-
-              {/* Button Section */}
-              <div className="px-8 pb-8 flex justify-center">
-                {pricingData ? (
-                  <button
-                    onClick={handleButtonClick(SubscriptionType.ONE_TIME)}
-                    disabled={loadingStates[SubscriptionType.ONE_TIME]}
-                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 disabled:from-gray-400 disabled:to-gray-500 text-gray-900 disabled:text-gray-500 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {loadingStates[SubscriptionType.ONE_TIME] ? (
-                      <>
-                        <Spinner size="sm" />
-                        {t(
-                          "pricing-section.one-time-purchase-card.CTA-button",
-                        ) +
-                          new Intl.NumberFormat(locale, {
-                            style: "currency",
-                            currency: pricingData.currency,
-                            notation: "compact",
-                          }).format(+pricingData.oneTimePrice)}
-                      </>
-                    ) : (
-                      t("pricing-section.one-time-purchase-card.CTA-button") +
-                      new Intl.NumberFormat(locale, {
-                        style: "currency",
-                        currency: pricingData.currency,
-                        notation: "compact",
-                      }).format(+pricingData.oneTimePrice)
-                    )}
-                  </button>
-                ) : (
-                  <Spinner size="lg" />
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* One-time Payment - Most Popular */}
-          <div className="relative hover:shadow-3xl hover:-translate-y-2 transition-all">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-[2]">
-              <div className="bg-red-500 text-white px-4 py-2 rounded-full text-base font-bold whitespace-nowrap">
-                {t("pricing-section.one-time-purchase-card.tooltip")}
-              </div>
-            </div>
-            <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-2xl shadow-3xl border border-blue-500/30 transition-all duration-300 hover:shadow-3xl overflow-hidden flex flex-col h-full ring-2 ring-blue-400/80 ring-opacity-90 shadow-[0_0_60px_rgba(59,130,246,0.8)]">
-              {/* Header Section */}
-              <div className="bg-blue-700/50 px-8 py-6 text-center">
-                <h3 className="text-3xl md:text-2xl font-extrabold text-white mb-2">
-                  {t("pricing-section.one-time-purchase-card.title")}
-                </h3>
-                <p className="text-blue-100 text-lg md:text-sm font-medium">
-                  {t("pricing-section.one-time-purchase-card.duration")}
-                </p>
-              </div>
-
-              {/* Content Section */}
-              <div className="grid place-content-center grow py-8">
                 {pricingData ? (
                   <>
                     <div className="flex items-baseline justify-center">
@@ -340,11 +270,11 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
                         pricingData.subscriptionPrice,
                         pricingData.currency,
                       )}
-                      <span className="text-gray-400">
+                      <span className="text-gray-200">
                         {t("pricing-section.subscription-card.period")}
                       </span>
                     </div>
-                    <p className="text-gray-400 text-lg">
+                    <p className="text-gray-300 text-lg">
                       {t("pricing-section.subscription-card.price1")}
                       {`${+pricingData.subscriptionPrice * 12} ${pricingData.currency}`}
                       {t("pricing-section.subscription-card.price2")}
@@ -361,15 +291,88 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
                   <button
                     onClick={handleButtonClick(SubscriptionType.MONTHLY)}
                     disabled={loadingStates[SubscriptionType.MONTHLY]}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 disabled:from-gray-400 disabled:to-gray-500 text-gray-900 disabled:text-gray-500 font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {loadingStates[SubscriptionType.MONTHLY] ? (
                       <>
                         <Spinner size="sm" />
                         {t("pricing-section.subscription-card.CTA-button")}
                       </>
-                    ) : (
+                    ) :
                       t("pricing-section.subscription-card.CTA-button")
+                    }
+                  </button>
+                ) : (
+                  <Spinner size="lg" />
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* One-time Payment - Most Popular */}
+          <div className="relative hover:shadow-3xl hover:-translate-y-2 transition-all">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-[2]">
+              <div className="bg-purple-500 text-white px-4 py-2 rounded-full text-base font-bold whitespace-nowrap">
+                {t("pricing-section.one-time-purchase-card.tooltip")}
+              </div>
+            </div>
+            <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-2xl shadow-3xl border border-blue-500/30 transition-all duration-300 hover:shadow-3xl overflow-hidden flex flex-col h-full ring-2 ring-blue-400/80 ring-opacity-90 shadow-[0_0_60px_rgba(59,130,246,0.8)]">
+              {/* Header Section */}
+              <div className="bg-blue-700/50 px-8 py-6 text-center">
+                <h3 className="text-3xl md:text-2xl font-extrabold text-white mb-2">
+                  {t("pricing-section.one-time-purchase-card.title")}
+                </h3>
+                <p className="text-blue-100 text-lg md:text-sm font-medium">
+                  {t("pricing-section.one-time-purchase-card.duration")}
+                </p>
+              </div>
+
+              {/* Content Section */}
+              <div className="grid place-content-center grow py-8">
+                <div className="flex items-baseline justify-center">
+                  {pricingData ? (
+                    formatCurrency(
+                      pricingData.oneTimePrice,
+                      pricingData.currency,
+                    )
+                  ) : (
+                    <Spinner size="xl" />
+                  )}
+                </div>
+                <p className="text-gray-300 text-lg">
+                  {t("pricing-section.one-time-purchase-card.period")}
+                </p>
+              </div>
+
+              {/* Button Section */}
+              <div className="px-8 pb-8 flex justify-center">
+                {pricingData ? (
+                  <button
+                    onClick={handleButtonClick(SubscriptionType.ONE_TIME)}
+                    disabled={loadingStates[SubscriptionType.ONE_TIME]}
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30 text-2xl md:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {loadingStates[SubscriptionType.ONE_TIME] ? (
+                      <>
+                        <Spinner size="sm" />
+                        {t(
+                          "pricing-section.one-time-purchase-card.CTA-button",
+                        ) +
+                          new Intl.NumberFormat(locale, {
+                            style: "currency",
+                            currency: pricingData.currency,
+                            notation: "compact",
+                          }).format(+pricingData.oneTimePrice)}
+                      </>
+                    ) : (
+                      (
+                        t("pricing-section.one-time-purchase-card.CTA-button") +
+                        new Intl.NumberFormat(locale, {
+                          style: "currency",
+                          currency: pricingData.currency,
+                          notation: "compact",
+                        }).format(+pricingData.oneTimePrice)
+                      )
                     )}
                   </button>
                 ) : (

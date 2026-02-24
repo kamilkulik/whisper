@@ -24,6 +24,6 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
   }
 
   return (
-    <PricingSection userId={userId} />
+    <PricingSection userId={userId} isContinuation={true} />
   );
 }
