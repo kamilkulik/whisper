@@ -1,5 +1,3 @@
-import NavigationBar from "../_components/NavigationBar";
-
 export default function UserLayout({
   children,
 }: {
@@ -13,9 +11,6 @@ export default function UserLayout({
         <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-blue-500/40 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-3xl"></div>
       </div>
-
-      <NavigationBar />
-
       {/* Main Content */}
       <div className="relative min-h-screen flex items-center justify-center">
         <div className="px-6 pt-12 text-center">{children}</div>

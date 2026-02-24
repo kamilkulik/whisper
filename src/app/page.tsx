@@ -1237,18 +1237,18 @@ export default function Home() {
         </ModalWrapper>
       )}
 
-      {modal === "subscribe" && (
+      {modal === "ritual" && (
         <ModalWrapper
           description={t("modal-wrapper.login.description")}
           title={t("modal-wrapper.login.title")}
           isOpen={true}
           onClose={handleModalClose}
-          modalId="subscribe"
+          modalId="ritual"
         >
           <ConfirmationCodeForm
             isLoginMode={true}
             isEmailMode={false}
-            onLoginSuccess={() => router.push("/subscribe")}
+            onLoginSuccess={() => router.push("/ritual")}
           />
         </ModalWrapper>
       )}

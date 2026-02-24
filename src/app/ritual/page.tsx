@@ -3,7 +3,6 @@ import { getUserFromSessionId } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PricingSection from "../_components/PricingSection";
-import { ReturnButton } from "../_components/ReturnButton";
 
 export default async function SubscribePage({ searchParams }: { searchParams: Promise<{ userId?: number }> }) {
   const cookieStore = await cookies();
@@ -12,7 +11,7 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
 
   if (!userId) {
     if (!sessionId) {
-      redirect("/?modal=subscribe");
+      redirect("/?modal=ritual");
     }
 
     const userFromSession = await getUserFromSessionId<"id">(sessionId.value, {
@@ -20,13 +19,12 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
     });
 
     if (!userFromSession) {
-      redirect("/?modal=subscribe");
+      redirect("/?modal=ritual");
     }
   }
 
   return (
     <div className="flex flex-col items-center mb-3">
-      <ReturnButton href="/dashboard" />
       <PricingSection userId={userId} />
     </div>
   );

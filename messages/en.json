@@ -543,6 +543,11 @@
       "signature-team": "The Evening Whisper Team 🌙"
     }
   },
+  "TextTemplates": {
+    "trial-ending": {
+      "psMethod": "P.S. Tonight marks our 7th evening together, bringing your free trial to a close. If you’d like to keep your evening ritual alive, you can choose your path here:"
+    }
+  },
   "API": {
     "confirm-otp": {
       "GET": {

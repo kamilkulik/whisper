@@ -6,10 +6,10 @@ import {
   MessageTranslation,
   SubscriptionStatus,
   SupportedLanguagesEnum,
-  User,
 } from "@prisma/client";
 import { isCronSecretValid } from "../../utils/checkCronSecret";
 import { convertUTCHourToLocal, TimezoneOption } from "@/app/_consts";
+import { getTranslations } from "next-intl/server";
 
 export type UserRawType = {
   id: number;
@@ -18,7 +18,40 @@ export type UserRawType = {
   last_used_message: number;
   timezone: string;
   delivery_hour: number;
+  premium: boolean;
 };
+
+/**
+ * Function that returns a flag that confirms
+ * a user is ending their trial
+ */
+
+function isTrialEnding(messageNumber: number) {
+  return messageNumber === 7;
+}
+
+/**
+ * Function that creates the message depending on whether
+ * the user is no their last trial message or not
+ */
+async function createMessage(
+  message: string,
+  messageNumber: number,
+  userId: number,
+  premium: boolean,
+  language: string = "en"
+): Promise<string> {
+  let messageText = message;
+
+  if (isTrialEnding(messageNumber) && !premium) {
+    const t = await getTranslations({ locale: language, namespace: "TextTemplates.trial-ending" })
+    messageText += "\n---\n" + t("psMethod");
+    messageText += " https://www.eveningwhisper.app/ritual/"
+    messageText += userId.toString()
+  }
+
+  return messageText;
+}
 
 export const GET = async (request: NextRequest) => {
   const isCronProcessingEnabled = process.env.ENABLE_CRON === "true";
@@ -46,7 +79,7 @@ export const GET = async (request: NextRequest) => {
 
     // 1. get all users who should receive a message
     const users: UserRawType[] = await prisma.$queryRaw`
-      SELECT u.id, u.last_used_message, u.message_language, u.phone_number, u.timezone, u.delivery_hour
+      SELECT u.id, u.last_used_message, u.message_language, u.phone_number, u.timezone, u.delivery_hour, u.premium
       FROM users u 
       LEFT JOIN subscriptions s ON s.user_id = u.id 
       AND s.status = ${SubscriptionStatus.ACTIVE}::"SubscriptionStatus"
@@ -68,13 +101,13 @@ export const GET = async (request: NextRequest) => {
     const usersInDeliveryHour = users.filter((user) => {
       // Compare current UTC hour with the UTC delivery hour stored in the database
       const shouldProcess = currentUTCHour === user.delivery_hour;
-      
+
       if (!shouldProcess) {
         console.log(
           `[ /api/cron/distribute ] Skipping user ${user.id} - current UTC hour: ${currentUTCHour}, delivery hour (UTC): ${user.delivery_hour}`
         );
       }
-      
+
       return shouldProcess;
     });
 
@@ -124,12 +157,12 @@ export const GET = async (request: NextRequest) => {
     }
 
     const messagesHash = messages.reduce(
-      (
+      function (
         acc,
         message: Pick<Message, "id"> & {
           translations: Pick<MessageTranslation, "text" | "language">[];
         }
-      ) => {
+      ) {
         const translationsMap = toTranslationMap(message.translations);
         acc.set(message.id, translationsMap);
 
@@ -140,6 +173,7 @@ export const GET = async (request: NextRequest) => {
 
     // 5. Send message for each user
     for (const user of usersWithNextMessage) {
+      // at this point we have people how are either in active trial or are premium users
       try {
         const message = messagesHash.get(user.next_message);
         if (!message) {
@@ -148,7 +182,8 @@ export const GET = async (request: NextRequest) => {
           );
           continue;
         }
-        const messageText = message[user.message_language];
+        const rawMessageText = message[user.message_language];
+        const messageText = await createMessage(rawMessageText, user.next_message, user.id, user.premium, user.message_language.toLowerCase());
 
         if (messageText) {
           // Convert UTC delivery hour back to user's local timezone for SMS scheduling
@@ -158,7 +193,7 @@ export const GET = async (request: NextRequest) => {
             user.timezone as TimezoneOption
           );
           console.log(
-            `[ /api/cron/distribute ] Sending message to user ${user.id} with message: ${messageText} (timezone: ${user.timezone}, hour: ${localDeliveryHour}:59 local / ${user.delivery_hour}:59 UTC)`
+            `[ /api/cron/distribute ] Sending message to user ${user.id} with message #: ${user.next_message} (timezone: ${user.timezone}, hour: ${localDeliveryHour}:59 local / ${user.delivery_hour}:59 UTC)`
           );
           await sendSms(user.phone_number, messageText, true, {
             timezone: user.timezone,

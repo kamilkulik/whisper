@@ -539,6 +539,11 @@
       "signature-team": "Zespół Wieczornego Szeptu 🌙"
     }
   },
+  "TextTemplates": {
+    "trial-ending": {
+      "psMethod": "P.S. dzisiaj jest nasz siódmy wspólny wieczór, kończący okres próbny. Jeśli chcesz, utrzymać swój wieczorny rytuał, możesz wybrać swoją ścieżkę pod tym linkiem: "
+    }
+  },
   "API": {
     "confirm-otp": {
       "GET": {

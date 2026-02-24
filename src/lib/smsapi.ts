@@ -238,7 +238,7 @@ class TwilioClient extends SmsClientInterface {
   ): Promise<void> {
     try {
       console.log(
-        `[ TwilioClient.sendSms ] Sending SMS via Twilio to ${phoneNumber}: ${message}`,
+        `[ TwilioClient.sendSms ] Sending SMS via Twilio to ${phoneNumber}: scheduled ${scheduled}`,
       );
 
       const messageOptions: MessageListInstanceCreateOptions = {
