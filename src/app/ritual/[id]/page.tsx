@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PricingSection from "../../_components/PricingSection";
 
-export default async function SubscribePage({ params }: { params: Promise<{ id?: number }> }) {
+export default async function SubscribePage({ params }: { params: Promise<{ id?: string }> }) {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId");
   const { id } = await params;
@@ -24,6 +24,6 @@ export default async function SubscribePage({ params }: { params: Promise<{ id?:
   }
 
   return (
-    <PricingSection userId={id} isContinuation={true} />
+    <PricingSection userId={Number(id)} isContinuation={true} />
   );
 }

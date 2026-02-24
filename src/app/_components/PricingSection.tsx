@@ -94,8 +94,6 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
         const cookieUserId = await userIdFromCookie();
         const retrievedUserId = userId ?? cookieUserId;
 
-        console.log("[ PricingSection ] [ handleClickWithoutOnGetStarted ] retrievedUserId: ", retrievedUserId);
-
         if (retrievedUserId) {
           const meta =
             product !== SubscriptionType.TRIAL

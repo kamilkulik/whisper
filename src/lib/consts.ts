@@ -66,14 +66,14 @@ export const productConfigs: Record<
     DEFAULT: {
       [SubscriptionType.ONE_TIME]: {
         mode: "payment",
-        price: "price_1RtLzh0JWfkzhBgp0ZDaEYyO", // One-time payment price
-        prod: "prod_SozzARWuQNWE3X",
+        price: "price_1T4RBH1u5HYgja2Nt7lTIeZd", // One-time payment price
+        prod: "prod_U2WDh9XAupOOzP",
         quantity: 1,
       },
       [SubscriptionType.MONTHLY]: {
         mode: "subscription",
-        price: "price_1RwGZm0JWfkzhBgpFj7IcYev", // Subscription price
-        prod: "prod_Ss0akCgGVEcXaR",
+        price: "price_1T4R9G1u5HYgja2NF8JG8aUf", // Subscription price
+        prod: "prod_U2WBY2XhepSnm4",
         quantity: 1,
       },
     },
