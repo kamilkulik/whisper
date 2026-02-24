@@ -2,14 +2,14 @@
 import { getUserFromSessionId } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import PricingSection from "../_components/PricingSection";
+import PricingSection from "../../_components/PricingSection";
 
-export default async function SubscribePage({ searchParams }: { searchParams: Promise<{ userId?: number }> }) {
+export default async function SubscribePage({ params }: { params: Promise<{ id?: number }> }) {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId");
-  const { userId } = await searchParams;
+  const { id } = await params;
 
-  if (!userId) {
+  if (!id) {
     if (!sessionId) {
       redirect("/?modal=ritual");
     }
@@ -24,6 +24,6 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
   }
 
   return (
-    <PricingSection userId={userId} isContinuation={true} />
+    <PricingSection userId={id} isContinuation={true} />
   );
 }
