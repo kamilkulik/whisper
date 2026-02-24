@@ -80,6 +80,7 @@ function buildUserData(userData: CapiUserData): Record<string, unknown> {
 export async function sendCapiEvent(
   options: SendCapiEventOptions,
 ): Promise<void> {
+  if (process.env.NODE_ENV !== 'production') return;
   if (!PIXEL_ID || !FB_CAPI_AUTH_TOKEN) {
     console.warn(
       "[ fbCapi ] Missing NEXT_PUBLIC_FB_PIXEL_ID or FB_CAPI_AUTH_TOKEN, skipping CAPI send",
