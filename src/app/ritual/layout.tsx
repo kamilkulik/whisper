@@ -13,7 +13,7 @@ export default function UserLayout({
       </div>
       {/* Main Content */}
       <div className="relative min-h-screen flex items-center justify-center">
-        <div className="px-6 pt-12 text-center">{children}</div>
+        <div className="px-6 text-center">{children}</div>
       </div>
     </div>
   );

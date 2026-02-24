@@ -24,8 +24,6 @@ export default async function SubscribePage({ searchParams }: { searchParams: Pr
   }
 
   return (
-    <div className="flex flex-col items-center mb-3">
-      <PricingSection userId={userId} />
-    </div>
+    <PricingSection userId={userId} />
   );
 }

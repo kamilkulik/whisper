@@ -170,10 +170,10 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
     : t("pricing-section.subtitle-4");
 
   return (
-    <div className="relative py-20">
+    <div className="relative py-8">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
             {t("pricing-section.title")}
           </h2>
@@ -187,7 +187,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ onGetStarted, use
 
         {/* Pricing Cards */}
         <div
-          className={`grid gap-8 mb-12 ${showTrial
+          className={`grid gap-8 mb-4 ${showTrial
             ? "md:grid-cols-3"
             : "md:grid-cols-2 md:max-w-4xl md:mx-auto"
             }`}
