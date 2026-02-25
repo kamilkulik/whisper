@@ -28,7 +28,7 @@ export type UserRawType = {
  */
 
 function isTrialEnding(messageNumber: number) {
-  return messageNumber === 7;
+  return messageNumber == 7;
 }
 
 /**
@@ -45,6 +45,7 @@ async function createMessage(
   let messageText = message;
 
   if (isTrialEnding(messageNumber) && !premium) {
+    console.log("[ api/cron/distribute ] [ createMessage ] Adding trial ending message to user " + userId);
     const t = await getTranslations({ locale: language, namespace: "TextTemplates.trial-ending" })
     messageText += "\n---\n" + t("psMethod");
     messageText += " https://www.eveningwhisper.app/ritual/"
@@ -196,7 +197,7 @@ export const GET = async (request: NextRequest) => {
             user.timezone as TimezoneOption
           );
           console.log(
-            `[ /api/cron/distribute ] Sending message to user ${user.id} with message #: ${user.next_message} (timezone: ${user.timezone}, hour: ${localDeliveryHour}:59 local / ${user.delivery_hour}:59 UTC)`
+            `[ /api/cron/distribute ] Sending message to user ${user.id} with message #${user.next_message} (timezone: ${user.timezone}, hour: ${localDeliveryHour}:59 local / ${user.delivery_hour}:59 UTC)`
           );
           await sendSms(user.phone_number, messageText, true, {
             timezone: user.timezone,

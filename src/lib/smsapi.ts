@@ -306,7 +306,7 @@ class LocalSmsClient extends SmsClientInterface {
     const deliveryHour =
       schedulingOptions?.deliveryHour ?? DEFAULT_DELIVERY_HOUR;
     console.log(
-      `[ LocalSmsClient.sendSms ] Sending SMS to ${phoneNumber} `,
+      `[ LocalSmsClient.sendSms ] Sending SMS to ${phoneNumber} message: ${message}`,
       scheduled
         ? `(scheduled for ${deliveryHour}:59 in ${timezone})`
         : "(immediate)",
