@@ -10,6 +10,7 @@ import {
 import { isCronSecretValid } from "../../utils/checkCronSecret";
 import { convertUTCHourToLocal, TimezoneOption } from "@/app/_consts";
 import { getTranslations } from "next-intl/server";
+import { markSubsExpired } from "./markSubsExpired";
 
 export type UserRawType = {
   id: number;
@@ -70,12 +71,11 @@ export const GET = async (request: NextRequest) => {
 
     const now = new Date();
     console.log(
-      `[ /api/cron/distribute ] Cron job executed at: ${now.toISOString()}`
-    );
-    console.log(
       "[ /api/cron/distribute ] CET time:",
       now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })
     );
+
+    await markSubsExpired();
 
     // 1. get all users who should receive a message
     const users: UserRawType[] = await prisma.$queryRaw`
@@ -85,8 +85,11 @@ export const GET = async (request: NextRequest) => {
       AND s.status = ${SubscriptionStatus.ACTIVE}::"SubscriptionStatus"
       AND s.date_expires > NOW() 
       WHERE ( 
-        u.trial_ends > NOW() OR
-        s.id IS NOT NULL
+        (
+          u.trial_ends > NOW() 
+          AND COALESCE(u.last_used_message, 0) < 7
+        )
+        OR s.id IS NOT NULL
       );
     `;
 

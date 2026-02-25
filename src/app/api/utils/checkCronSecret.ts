@@ -8,11 +8,6 @@ export function isCronSecretValid(request: NextRequest): boolean {
   if (!isLocalMode) {
     // Verify that this is a legitimate Vercel cron request
     const authHeader = request.headers.get("Authorization");
-    console.log("🔍 [ isCronSecretValid ] authHeader:", authHeader);
-    console.log(
-      "🔍 [ isCronSecretValid ] process.env.CRON_SECRET:",
-      process.env.CRON_SECRET
-    );
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return false;
     }
