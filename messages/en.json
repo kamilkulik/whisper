@@ -433,7 +433,10 @@
       "newsletter-subtitle": "Subscribe to receive exclusive offers, original stories, events and more.",
       "newsletter-button": "SUBMIT",
       "newsletter-placeholder": "Enter your email",
-      "copyright": "© 2026 Evening Whisper. All rights reserved."
+      "copyright": "© 2026 Evening Whisper. All rights reserved.",
+      "contact-title": "Contact",
+      "contact-name": "Evening Whisper",
+      "contact-email": "contact@eveningwhisper.app"
     },
     "PhoneForm": {
       "form-title": {

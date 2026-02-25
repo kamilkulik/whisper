@@ -433,7 +433,10 @@
       "newsletter-subtitle": "Zapisz się, aby otrzymywać ekskluzywne oferty, oryginalne historie, wydarzenia i więcej.",
       "newsletter-button": "SUBMIT",
       "newsletter-placeholder": "Wprowadź swój adres email",
-      "copyright": "© 2026 Evening Whisper. Wszelkie prawa zastrzeżone."
+      "copyright": "© 2026 Wieczorny Szept. Wszelkie prawa zastrzeżone.",
+      "contact-title": "Kontakt",
+      "contact-name": "Wieczorny Szept",
+      "contact-email": "contact@eveningwhisper.app"
     },
     "PhoneForm": {
       "form-title": {

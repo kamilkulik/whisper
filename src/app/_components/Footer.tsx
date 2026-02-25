@@ -15,10 +15,10 @@ export function Footer() {
       {/* Main Footer Content */}
       <div className="relative pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-center mb-12">
+          <div className="flex flex-col md:flex-row justify-center gap-16 md:gap-24 mb-12">
             {/* Links Section */}
-            <div className="text-center">
-              <h3 className="text-2xl font-bold mb-8 elegant-text">
+            <div className="text-center md:text-left">
+              <h3 className="text-3xl font-bold mb-8 elegant-text">
                 {t("title")}
               </h3>
               <ul className="space-y-4">
@@ -44,6 +44,26 @@ export function Footer() {
                     className="text-white/80 hover:text-white transition-colors"
                   >
                     {t("link-3")}
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Section */}
+            <div className="text-center md:text-left order-first md:order-last">
+              <h3 className="text-3xl font-bold mb-8 elegant-text">
+                {t("contact-title")}
+              </h3>
+              <ul className="space-y-4">
+                <li>
+                  <span className="text-white/80">{t("contact-name")}</span>
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${t("contact-email")}`}
+                    className="text-white/80 hover:text-white transition-colors"
+                  >
+                    {t("contact-email")}
                   </a>
                 </li>
               </ul>
