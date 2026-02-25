@@ -5,7 +5,6 @@ import {
   Heading,
   Hr,
   Html,
-  Preview,
   Section,
   Text,
 } from "@react-email/components";
@@ -27,7 +26,6 @@ export async function ConfirmCodeViaEmail({
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>{t("preview")}</Preview>
         <Container style={container}>
           <Section style={coverSection}>
             <Section style={imageSection}>

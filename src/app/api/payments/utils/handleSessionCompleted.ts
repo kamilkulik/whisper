@@ -29,31 +29,45 @@ export async function handleSessionCompleted(
     const clientRef = eventData.client_reference_id!;
     const clientRefAsNum = Number(clientRef);
 
-    user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { phoneNumber: clientRef },
-          { id: clientRefAsNum },
-        ],
-      },
-      select: {
-        id: true,
-        email: true,
-        phoneNumber: true,
-        messageLanguage: true,
-        premium: true,
-      },
-    });
+    const selectFields = {
+      id: true,
+      email: true,
+      phoneNumber: true,
+      messageLanguage: true,
+      premium: true,
+    };
+
+    // If it parses to a valid integer, look up by ID; otherwise treat as phone number
+    if (Number.isInteger(clientRefAsNum)) {
+      console.log(
+        `[ /api/payments/utils/handleSessionCompleted ] User ID is integer: ${clientRefAsNum}`,
+      );
+      user = await prisma.user.findFirst({
+        where: { id: clientRefAsNum },
+        select: selectFields,
+      });
+    }
+
+    // Fallback: look up by phone number (covers both phone-string refs and ID miss)
+    if (!user) {
+      console.log(
+        `[ /api/payments/utils/handleSessionCompleted ] User ID is not an integer. Looking up user by phone number: ${clientRef}`,
+      );
+      user = await prisma.user.findFirst({
+        where: { phoneNumber: clientRef },
+        select: selectFields,
+      });
+    }
   } catch (error) {
     console.error(
-      "[ /api/payments/utils/handleSessionCompleted ] Error finding user",
+      `[ /api/payments/utils/handleSessionCompleted ] Error finding user #${eventData.client_reference_id}`,
       error,
     );
   }
 
   if (!user) {
     throw new Error(
-      "[ /api/payments/utils/handleSessionCompleted ] User not found",
+      `[ /api/payments/utils/handleSessionCompleted ] User #${eventData.client_reference_id} not found`,
     );
   }
 
@@ -149,14 +163,15 @@ export async function handleSessionCompleted(
 
   // notify them
 
-  if (eventData.customer_email) {
+  if (userEmailFromEvent) {
     try {
-      const t = await getTranslations("EmailTemplates.Welcome");
+      const locale = user.messageLanguage.toLowerCase()
+      const t = await getTranslations({ locale, namespace: "EmailTemplates.Welcome" })
       await sendEmail({
-        locale: user.messageLanguage.toLowerCase(),
+        locale,
         subject: t("subject"),
         subscriptionType: getSubscriptionType(productType),
-        to: eventData.customer_email,
+        to: userEmailFromEvent,
         template: "welcome",
       });
     } catch (error) {

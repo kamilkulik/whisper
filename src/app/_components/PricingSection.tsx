@@ -69,6 +69,10 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
   };
 
   useEffect(() => {
+    if (isContinuation) {
+      setShowTrial(false);
+      return;
+    }
     const fetchShowTrial = async () => {
       const showTrial = await shouldShowTrial();
       setShowTrial(showTrial);

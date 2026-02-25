@@ -123,7 +123,7 @@ export default function ContactForm({
         if (selectedProduct === null) {
           setMessage(t("form-submit-success"));
           setTimeout(() => {
-            window.location.href = "/subscribe";
+            window.location.href = `/ritual/${verifiedPhoneNumber}`;
           }, 1500);
           // If it's a trial, redirect to trial success page
         } else if (selectedProduct === SubscriptionType.TRIAL) {
