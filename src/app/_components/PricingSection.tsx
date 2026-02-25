@@ -284,7 +284,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
               </div>
 
               {/* Button Section */}
-              <div className="px-8 pb-8 flex justify-center">
+              <div className="px-8 pb-4 md:pb-8 flex justify-center">
                 {pricingData ? (
                   <button
                     onClick={handleButtonClick(SubscriptionType.MONTHLY)}
@@ -303,6 +303,12 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
                 ) : (
                   <Spinner size="lg" />
                 )}
+              </div>
+
+              {/* Mobile-only Secure Checkout Trust Badge */}
+              <div className="flex items-center justify-center gap-2 px-8 pb-6 text-gray-400 text-base md:hidden">
+                <span>🔒</span>
+                <span>{t("pricing-section.secure-checkout")}</span>
               </div>
             </div>
           </div>
@@ -343,7 +349,7 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
               </div>
 
               {/* Button Section */}
-              <div className="px-8 pb-8 flex justify-center">
+              <div className="px-8 pb-4 md:pb-8 flex justify-center">
                 {pricingData ? (
                   <button
                     onClick={handleButtonClick(SubscriptionType.ONE_TIME)}
@@ -377,10 +383,22 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
                   <Spinner size="lg" />
                 )}
               </div>
+
+              {/* Mobile-only Secure Checkout Trust Badge */}
+              <div className="flex items-center justify-center gap-2 px-8 pb-6 text-gray-400 text-base md:hidden">
+                <span>🔒</span>
+                <span>{t("pricing-section.secure-checkout")}</span>
+              </div>
             </div>
           </div>
 
 
+        </div>
+
+        {/* Desktop/Tablet Secure Checkout Trust Badge */}
+        <div className="hidden md:flex items-center justify-center gap-2 mt-6 text-gray-400 text-base">
+          <span>🔒</span>
+          <span>{t("pricing-section.secure-checkout")}</span>
         </div>
       </div>
     </div>

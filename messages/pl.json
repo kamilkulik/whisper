@@ -175,7 +175,8 @@
         "price1": "równowartość ",
         "price2": " /rok",
         "CTA-button": "Rozpocznij subskrypcję"
-      }
+      },
+      "secure-checkout": "Płatność bezpieczna jak w banku. Nigdy nie przechowujemy ani nie widzimy danych Twojej karty."
     },
     "faq": {
       "title": "Często zadawane pytania",

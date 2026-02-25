@@ -175,7 +175,8 @@
         "price1": "equivalent to ",
         "price2": " / year",
         "CTA-button": "Start subscription"
-      }
+      },
+      "secure-checkout": "Bank-level secure checkout. We never store or see your credit card details."
     },
     "faq": {
       "title": "Frequently Asked Questions",
