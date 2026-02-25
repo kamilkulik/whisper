@@ -8,6 +8,7 @@ import TestimonialsCarousel from "./_components/TestimonialsCarousel";
 import ImageCarousel from "./_components/ImageCarousel";
 import HowItWorks from "./_components/HowItWorks";
 import PricingSection from "./_components/PricingSection";
+import WhyIBuiltSection from "./_components/WhyIBuiltSection";
 import { ModalWrapper } from "./_components/ModalWrapper";
 import TestingToolsWrapper from "./_components/TestingToolsWrapper";
 import AccordionItem from "./_components/AccordionItem";
@@ -1147,6 +1148,9 @@ export default function Home() {
               <TestimonialsCarousel testimonials={testimonials} />
             </div>
           </div>
+
+          {/* Why I Built Section */}
+          <WhyIBuiltSection />
 
           {/* Pricing Section */}
           <div id="pricing-section">
