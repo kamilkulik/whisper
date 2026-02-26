@@ -172,8 +172,12 @@ export default function ContactForm({
           }, 1500);
         }
       } else {
-        // Display the error message from the API response
-        setMessage(data.error || t("form-submit-error"));
+        if (response.status === 401) {
+          setMessage("Your secure session has expired. Please verify your phone number again to save these changes");
+        } else {
+          // Display the error message from the API response
+          setMessage(data.error || t("form-submit-error"));
+        }
       }
     } catch (error) {
       setMessage(t("form-submit-error"));
