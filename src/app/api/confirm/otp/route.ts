@@ -16,7 +16,7 @@ const temporarySessionIdCache = TemporarySessionIdCache.getInstance();
 function generateConfiramtionCodeDetails() {
   return {
     confirmationCode: Math.floor(100000 + Math.random() * 900000),
-    confirmationCodeExpires: new Date(Date.now() + 1000 * 60 * 2), // 2 minutes
+    confirmationCodeExpires: new Date(Date.now() + 1000 * 60 * 5), // 5 minutes
     sessionId: uuidv4(),
   };
 }
