@@ -55,9 +55,36 @@ export function ConfirmationCodeGrid({
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
+  const fillCodeFromString = (digits: string) => {
+    const cleaned = digits.replace(/\D/g, "").slice(0, 6).split("");
+    if (cleaned.length === 0) return;
+
+    const newCode = [...code];
+    cleaned.forEach((digit, i) => {
+      newCode[i] = digit;
+    });
+    setCode(newCode);
+
+    if (newCode.every((d) => d !== "") && newCode.join("").length === 6) {
+      // Focus last input for visual feedback, then submit
+      inputRefs.current[5]?.focus();
+      onCodeComplete(newCode.join(""));
+    } else {
+      // Focus the next empty input
+      const nextEmpty = newCode.findIndex((d) => d === "");
+      if (nextEmpty !== -1) {
+        inputRefs.current[nextEmpty]?.focus();
+      }
+    }
+  };
+
   const handleInputChange = (index: number, value: string) => {
-    // Only allow single digit
-    if (value.length > 1) return;
+    // Safari "Fill from SMS" / autofill may inject the full code into one input.
+    // Detect multi-character input and distribute across all cells.
+    if (value.length > 1) {
+      fillCodeFromString(value);
+      return;
+    }
 
     // Only allow numbers
     if (!/^\d*$/.test(value)) return;
@@ -93,16 +120,7 @@ export function ConfirmationCodeGrid({
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text");
-    const digits = pastedData.replace(/\D/g, "").slice(0, 6).split("");
-
-    if (digits.length === 6) {
-      const newCode = [...code];
-      digits.forEach((digit, index) => {
-        newCode[index] = digit;
-      });
-      setCode(newCode);
-      onCodeComplete(newCode.join(""));
-    }
+    fillCodeFromString(pastedData);
   };
 
   return (
@@ -129,7 +147,8 @@ export function ConfirmationCodeGrid({
             }}
             type="text"
             inputMode="numeric"
-            maxLength={1}
+            autoComplete={index === 0 ? "one-time-code" : "off"}
+            maxLength={index === 0 ? 6 : 1}
             value={digit}
             onChange={(e) => handleInputChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}

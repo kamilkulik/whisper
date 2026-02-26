@@ -28,23 +28,37 @@ class SessionIdCache {
       return;
     }
 
-    try {
-      // Upsert the key-value pair - this will create or update the existing key
-      await this.prismaClient.keyValue.upsert({
-        where: { key },
-        update: { value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
-        create: { key, value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
-      });
+    const maxRetries = 3;
+    const delays = [1000, 2000, 3000];
 
-      console.log(
-        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`,
-        await this.get(key)
-      );
-    } catch (error) {
-      console.error(
-        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error setting sessionId:`,
-        error
-      );
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        // Upsert the key-value pair - this will create or update the existing key
+        await this.prismaClient.keyValue.upsert({
+          where: { key },
+          update: { value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
+          create: { key, value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
+        });
+
+        console.log(
+          `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`
+        );
+        return; // Success, exit the loop
+      } catch (error) {
+        if (attempt < maxRetries) {
+          console.warn(
+            `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error setting sessionId (attempt ${attempt + 1}/${maxRetries} failed). Retrying in ${delays[attempt]}ms...`,
+            error
+          );
+          await new Promise((resolve) => setTimeout(resolve, delays[attempt]));
+        } else {
+          console.error(
+            `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error setting sessionId (all ${maxRetries} retries failed):`,
+            error
+          );
+          throw error; // Throw after all retries fail so the caller fails the request
+        }
+      }
     }
   }
 

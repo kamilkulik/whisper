@@ -103,7 +103,7 @@ export default function ContactForm({
         body: JSON.stringify(body),
       });
 
-      const data: UserData = await response.json();
+      const data = await response.json();
 
       if (response.ok) {
         // Store verified phone number in user context for downstream use
@@ -171,6 +171,9 @@ export default function ContactForm({
             }
           }, 1500);
         }
+      } else {
+        // Display the error message from the API response
+        setMessage(data.error || t("form-submit-error"));
       }
     } catch (error) {
       setMessage(t("form-submit-error"));

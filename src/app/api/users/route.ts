@@ -73,6 +73,7 @@ export const PUT = async (request: NextRequest) => {
       !timezone &&
       deliveryHour === undefined
     ) {
+      console.error("[ users PUT ] No fields provided");
       return NextResponse.json(
         { error: tShared("form-validation-errors.missing-fields") },
         { status: 400 },
@@ -88,6 +89,7 @@ export const PUT = async (request: NextRequest) => {
     if (email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
+        console.error(`[ users PUT ] Invalid email: ${email}`);
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-email") },
           { status: 400 },
@@ -104,6 +106,7 @@ export const PUT = async (request: NextRequest) => {
         });
 
       if (existingEmailUser && existingEmailUser.id !== user.id) {
+        console.error(`[ users PUT ] Email already taken: ${email}`);
         return NextResponse.json(
           { error: tShared("form-validation-errors.email-already-taken") },
           { status: 400 },
@@ -120,6 +123,7 @@ export const PUT = async (request: NextRequest) => {
 
       // Validate E.164 format
       if (!isValidE164(normalizedPhone)) {
+        console.error(`[ users PUT ] Invalid phone number: ${phoneNumber}`);
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-phone-number") },
           { status: 400 },
@@ -136,6 +140,7 @@ export const PUT = async (request: NextRequest) => {
         });
 
       if (existingPhoneUser && existingPhoneUser.id !== user.id) {
+        console.error(`[ users PUT ] Phone number already taken: ${phoneNumber}`);
         return NextResponse.json(
           {
             error: tShared("form-validation-errors.phone-number-already-taken"),
@@ -155,6 +160,7 @@ export const PUT = async (request: NextRequest) => {
     // Validate and add timezone if provided
     if (timezone) {
       if (!isValidTimezone(timezone)) {
+        console.error(`[ users PUT ] Invalid timezone: ${timezone}`);
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-timezone") },
           { status: 400 },
@@ -166,6 +172,7 @@ export const PUT = async (request: NextRequest) => {
     // Validate and add delivery hour if provided
     if (deliveryHour !== undefined) {
       if (!isValidDeliveryHour(deliveryHour)) {
+        console.error(`[ users PUT ] Invalid delivery hour: ${deliveryHour}`);
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-delivery-hour") },
           { status: 400 },
@@ -226,7 +233,7 @@ export const POST = async (request: NextRequest) => {
 
     // Validate required fields
     if (!body.phoneNumber) {
-      console.log("[ users ] [ POST ] No phoneNumber in body");
+      console.error("[ users ] [ POST ] No phoneNumber in body");
       return NextResponse.json(
         { error: tShared("form-validation-errors.all-fields-required") },
         { status: 400 },
@@ -237,6 +244,7 @@ export const POST = async (request: NextRequest) => {
     if (body.email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(body.email)) {
+        console.error(`[ users ] [ POST ] Invalid email: ${body.email}`);
         return NextResponse.json(
           { error: tShared("form-validation-errors.invalid-email") },
           { status: 400 },
@@ -247,6 +255,7 @@ export const POST = async (request: NextRequest) => {
     // Normalize and validate phone number (must be in E.164 format: +[country code][number])
     const normalizedPhone = normalizeE164(body.phoneNumber);
     if (!isValidE164(normalizedPhone)) {
+      console.error(`[ users ] [ POST ] Invalid phone number: ${body.phoneNumber}`);
       return NextResponse.json(
         { error: tShared("form-validation-errors.invalid-phone-number") },
         { status: 400 },
@@ -288,6 +297,7 @@ export const POST = async (request: NextRequest) => {
         !body.premium;
 
       if (triesToUseTrialAgain) {
+        console.error(`[ users ] [ POST ] User ${existingPhoneNumberUser?.id ?? existingEmailUser?.id} ${body.email ?? body.phoneNumber} tried to use trial again`);
         return NextResponse.json({ error: t("trial-used") }, { status: 400 });
       }
 
