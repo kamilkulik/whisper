@@ -28,6 +28,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const t = await getTranslations("API.confirm-otp.GET");
 
   if (!phoneNumber && !email) {
+    console.error(`[ GET /api/confirm/otp ] Phone number or email is required ${JSON.stringify(request.nextUrl, null, 2)}`);
     return NextResponse.json(
       { error: "Phone number or email is required" },
       { status: 400 },
@@ -114,6 +115,7 @@ export const POST = async (request: NextRequest) => {
   );
 
   if (!confirmationCode || !sessionId) {
+    console.error(`[ POST /api/confirm/otp ] confirmationCode and sessionId are required ${JSON.stringify(body, null, 2)}`);
     return NextResponse.json(
       { error: "confirmationCode and sessionId are required" },
       { status: 400 },
@@ -127,6 +129,7 @@ export const POST = async (request: NextRequest) => {
     !cachedSessionDetails.confirmationCode ||
     !cachedSessionDetails.confirmationCodeExpires
   ) {
+    console.error(`[ POST /api/confirm/otp ] Invalid sessionId or confirmationCode ${JSON.stringify(cachedSessionDetails, null, 2)}`);
     return NextResponse.json(
       { error: "Invalid sessionId or confirmationCode" },
       { status: 400 },
@@ -152,7 +155,7 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (existingUser) {
-          console.log("[ POST /api/confirm/otp ]", "existing user", email);
+          console.log(`[ POST /api/confirm/otp ] existing user ${email}`);
           try {
             await prisma.user.update({
               where: { email },
@@ -164,12 +167,7 @@ export const POST = async (request: NextRequest) => {
             console.error("Error saving to the db", err);
           }
         } else {
-          console.log(
-            "[ POST /api/confirm/otp ]",
-            "no existing user",
-            email,
-            " - redirecting to signup",
-          );
+          console.log(`[ POST /api/confirm/otp ] no existing user ${email} - redirecting to signup`);
           // return raw 307 redirect with desition /?modal=phone
           return NextResponse.json({
             redirectUrl: "/?modal=phone",
@@ -250,6 +248,7 @@ export const POST = async (request: NextRequest) => {
 
     return response;
   } else {
+    console.error(`[ POST /api/confirm/otp ] Invalid or expired confirmation code ${JSON.stringify(cachedSessionDetails, null, 2)}`);
     return NextResponse.json(
       { error: "Invalid or expired confirmation code" },
       { status: 400 },
