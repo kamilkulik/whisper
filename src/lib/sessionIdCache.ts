@@ -20,6 +20,41 @@ class SessionIdCache {
     return SessionIdCache.instance;
   }
 
+  private async withRetry<T>(
+    operationName: string,
+    operation: () => Promise<T>,
+    fallbackResult?: T
+  ): Promise<T | undefined> {
+    const maxRetries = 3;
+    const delays = [1000, 1300, 1600];
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await operation();
+      } catch (error) {
+        if (attempt < maxRetries) {
+          console.warn(
+            `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error during ${operationName} (attempt ${attempt + 1}/${maxRetries} failed). Retrying in ${delays[attempt]}ms...`,
+            error
+          );
+          await new Promise((resolve) => setTimeout(resolve, delays[attempt]));
+        } else {
+          console.error(
+            `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error during ${operationName} (all ${maxRetries} retries failed):`,
+            error
+          );
+
+          // Throw error for operations without a fallback result (like 'set')
+          if (fallbackResult === undefined) {
+            throw error;
+          }
+
+          return fallbackResult;
+        }
+      }
+    }
+  }
+
   public async set(key: string, value: string) {
     if (!key || !value) {
       console.log(
@@ -28,42 +63,22 @@ class SessionIdCache {
       return;
     }
 
-    const maxRetries = 3;
-    const delays = [1000, 2000, 3000];
+    await this.withRetry('set', async () => {
+      // Upsert the key-value pair - this will create or update the existing key
+      await this.prismaClient.keyValue.upsert({
+        where: { key },
+        update: { value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
+        create: { key, value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
+      });
 
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        // Upsert the key-value pair - this will create or update the existing key
-        await this.prismaClient.keyValue.upsert({
-          where: { key },
-          update: { value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
-          create: { key, value, expiresAt: new Date(Date.now() + 60 * 60 * 1000) },
-        });
-
-        console.log(
-          `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`
-        );
-        return; // Success, exit the loop
-      } catch (error) {
-        if (attempt < maxRetries) {
-          console.warn(
-            `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error setting sessionId (attempt ${attempt + 1}/${maxRetries} failed). Retrying in ${delays[attempt]}ms...`,
-            error
-          );
-          await new Promise((resolve) => setTimeout(resolve, delays[attempt]));
-        } else {
-          console.error(
-            `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error setting sessionId (all ${maxRetries} retries failed):`,
-            error
-          );
-          throw error; // Throw after all retries fail so the caller fails the request
-        }
-      }
-    }
+      console.log(
+        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - sessionId saved for key: ${key}`
+      );
+    });
   }
 
   public async get(key: string): Promise<string | undefined> {
-    try {
+    return this.withRetry<string | undefined>('get', async () => {
       const result = await this.prismaClient.keyValue.findFirst({
         where: {
           AND: [{ key }, { expiresAt: { gt: new Date() } }],
@@ -77,37 +92,21 @@ class SessionIdCache {
       );
 
       return result?.value;
-    } catch (error) {
-      console.error(
-        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error getting sessionId:`,
-        error
-      );
-      return undefined;
-    }
+    }, undefined);
   }
 
   public async delete(key: string) {
-    try {
+    await this.withRetry('delete', async () => {
       await this.prismaClient.keyValue.delete({
         where: { key },
       });
-    } catch (error) {
-      console.error(
-        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error deleting sessionId:`,
-        error
-      );
-    }
+    }, undefined); // Using undefined as fallback so it swallows errors like original implementation
   }
 
   public async clear() {
-    try {
+    await this.withRetry('clear', async () => {
       await this.prismaClient.keyValue.deleteMany();
-    } catch (error) {
-      console.error(
-        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error clearing cache:`,
-        error
-      );
-    }
+    }, undefined);
   }
 
   public async clearAllSessionsForSameNumber(number: string) {
@@ -116,16 +115,11 @@ class SessionIdCache {
       number
     );
 
-    try {
+    await this.withRetry('clearAllSessionsForSameNumber', async () => {
       await this.prismaClient.keyValue.deleteMany({
         where: { value: number },
       });
-    } catch (error) {
-      console.error(
-        `[ sessionIdCache ] Cache instanceId: ${this.instanceId} - Error clearing sessions for number:`,
-        error
-      );
-    }
+    }, undefined);
   }
 }
 
