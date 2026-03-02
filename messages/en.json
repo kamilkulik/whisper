@@ -554,6 +554,9 @@
     }
   },
   "TextTemplates": {
+    "penultimate-message": {
+      "psMethod": "P.S. Just a gentle heads-up that tomorrow is the final evening of your free trial. You don't need to do anything tonight, but if you'd like to explore how to keep your evening ritual going after tomorrow, you can view the options here:"
+    },
     "trial-ending": {
       "psMethod": "P.S. Tonight marks our 7th evening together, bringing your free trial to a close. If you’d like to keep your evening ritual alive, you can choose your path here:"
     }

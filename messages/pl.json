@@ -550,6 +550,9 @@
     }
   },
   "TextTemplates": {
+    "penultimate-message": {
+      "psMethod": "P.S. Jutro jest nasz ostatni wspólny wieczór. Jeśli chciałabyś kontynuować nasz rytuał, oto jak możesz utrzymać szepty przy sobie:"
+    },
     "trial-ending": {
       "psMethod": "P.S. dzisiaj jest nasz siódmy wspólny wieczór, kończący okres próbny. Jeśli chcesz, utrzymać swój wieczorny rytuał, możesz wybrać swoją ścieżkę pod tym linkiem: "
     }

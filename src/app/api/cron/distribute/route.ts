@@ -23,6 +23,15 @@ export type UserRawType = {
 };
 
 /**
+ * Function that returns a flag confirming
+ * it's penultimate message
+ */
+
+function isPenultimateMessage(messageNumber: number) {
+  return messageNumber == 6;
+}
+
+/**
  * Function that returns a flag that confirms
  * a user is ending their trial
  */
@@ -43,6 +52,14 @@ async function createMessage(
   language: string = "en"
 ): Promise<string> {
   let messageText = message;
+
+  if (isPenultimateMessage(messageNumber) && !premium) {
+    console.log("[ api/cron/distribute ] [ createMessage ] Adding penultimate message to user " + userId);
+    const t = await getTranslations({ locale: language, namespace: "TextTemplates.penultimate-message" })
+    messageText += "\n---\n" + t("psMethod");
+    messageText += " https://www.eveningwhisper.app/ritual/"
+    messageText += userId.toString()
+  }
 
   if (isTrialEnding(messageNumber) && !premium) {
     console.log("[ api/cron/distribute ] [ createMessage ] Adding trial ending message to user " + userId);
