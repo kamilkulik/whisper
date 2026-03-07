@@ -93,8 +93,9 @@ Recommendation: Do NOT add motion/framer-motion. All animations described are ac
 - `SignUpSection.tsx` is a whole viewport component
 - `SignUpSection.tsx` is a parent + coordinator component. It conditionally renders subsequent elements. It holds all state required to complete the signup
 - `SeeHowItFeels.tsx` is a big pulsating button - pulsating like a heart, rendered as child of `SignUpSection.tsx` - uses the `heartbeat` animation as defined in `tailwind.config.js`. 
-- `SeeHowItFeels.tsx` has a text "see how it feels" that fades out as the user taps the button. When the user taps the button, they get shown the `PhoneForm.tsx` component with new title ""your whisper is ready for you. Your phone number is how it finds you now"". They enter their phone number.
-- `PhoneForm.tsx` has a button "Let the whisper find me"
+- `SeeHowItFeels.tsx` has a text "see how it feels" that fades out as the user taps the button. When the user taps the button, they get shown the `PhoneNumberForm.tsx` component with new title ""your whisper is ready for you. Your phone number is how it finds you now"". They enter their phone number.
+- `PhoneNumberForm.tsx` replicates `ConfirmationCodeForm.tsx` with `PhoneForm.tsx`. This is meant to ensure that `sessionId` is properly set for the user.
+- `PhoneNumberForm.tsx` has a button "Let the whisper find me"
 It needs to be "Hold to Confirm". Once the user holds the button for 2 seconds, it becomes a solid circle with the text "sending your whisper..." - it ripples like a heartbeat.
 - `SeeHowItFeels.tsx` button keeps polling the backend api to check whether the message was delivered by the webhook handler. 
 - **NOTE ON SERVERLESS ARCHITECTURE** - Webhook listener will be on a separate instance to the `SeeHowItFeels` button. They need to use objective USER ID to communicate. They will use the `sessionId`, because no DB USER ID will have been available at that point. The frontend will have to poll the backend on separate API. That's why the listener needs to persist the delivery status in the database. Use `sessionIdCache` to handle failures & retries.
