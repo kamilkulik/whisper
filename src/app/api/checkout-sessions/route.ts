@@ -18,6 +18,7 @@ export interface CheckoutSessionsPayload {
   fbc?: string;
   eventId?: string;
   eventSourceUrl?: string;
+  newSignUp?: boolean;
 }
 
 export async function POST(request: NextRequest) {
@@ -30,6 +31,7 @@ export async function POST(request: NextRequest) {
       fbc: bodyFbc,
       eventId: bodyEventId,
       eventSourceUrl,
+      newSignUp,
     } = body;
 
     const headersList = await headers();
@@ -70,8 +72,12 @@ export async function POST(request: NextRequest) {
       config,
     );
 
+    const isDevelopment = environment === "development";
+    const newSignUpPriceId = isDevelopment ? "price_1T8nne1u5HYgja2NiBiEtQFA" : "price_1T8nop1u5HYgja2N9UNjO4Dk";
+
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
+      allow_promotion_codes: true,
       client_reference_id: clientReferenceId,
       ...(body.email ? { customer_email: body.email } : {}),
       metadata: {
@@ -85,10 +91,11 @@ export async function POST(request: NextRequest) {
       },
       line_items: [
         {
-          price: config.price,
+          price: newSignUp ? newSignUpPriceId : config.price,
           quantity: config.quantity,
         },
       ],
+      ...(config.mode === "subscription" && newSignUp ? { subscription_data: { trial_period_days: 7 } } : {}),
       mode: config.mode,
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/?canceled=true`,
