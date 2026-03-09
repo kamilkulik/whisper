@@ -204,6 +204,13 @@ export const PRICING_CONTEXT: PricingContextData[] = [
     currency: "USD",
     currencySign: "$",
   },
+  {
+    country: "DISCOUNT",
+    oneTimePrice: "5.5",
+    subscriptionPrice: "4.5",
+    currency: "USD",
+    currencySign: "$",
+  },
 ];
 
 export function getPricingContext(country: string) {

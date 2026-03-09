@@ -45,7 +45,8 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
 
   const t = useTranslations("LandingPage");
   const locale = useLocale();
-  const pricingData = getPricingContext("DEFAULT");
+  const usersWithDiscount = [16, 17, 21, 24, 31]
+  const pricingData = usersWithDiscount.includes(userId ?? -1) ? getPricingContext("DISCOUNT") : getPricingContext("DEFAULT");
 
   // Helper function to format currency based on locale
   const formatCurrency = (amount: string, currency: string) => {
@@ -180,12 +181,19 @@ const PricingSection = forwardRef<any, PricingSectionProps>(({ isContinuation = 
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
             {t("pricing-section.title")}
           </h2>
-          <p className="text-xl text-blue-200 mb-2">
-            {t("pricing-section.subtitle-1")}
-          </p>
-          <p className="text-2xl text-green-400 font-semibold">
-            {isContinuation ? `${t("pricing-section.subtitle-continuation")}` : `${t("pricing-section.subtitle-2")} ${subtitleTimeVariant} ${t("pricing-section.subtitle-5")}`}
-          </p>
+          {usersWithDiscount.includes(userId ?? -1) ?
+            <>
+              <p className="text-2xl text-green-400 font-semibold">
+                {`Remember to apply your exclusive coupon EARLY-${usersWithDiscount.indexOf(userId ?? -1) + 1} at checkout!`}
+              </p>
+            </> : <>
+              <p className="text-xl text-blue-200 mb-2">
+                {t("pricing-section.subtitle-1")}
+              </p>
+              <p className="text-2xl text-green-400 font-semibold">
+                {isContinuation ? `${t("pricing-section.subtitle-continuation")}` : `${t("pricing-section.subtitle-2")} ${subtitleTimeVariant} ${t("pricing-section.subtitle-5")}`}
+              </p>
+            </>}
         </div>
 
         {/* Pricing Cards */}
