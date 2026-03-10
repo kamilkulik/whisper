@@ -213,13 +213,13 @@ export default function PhoneNumberForm({
 
             {/* Hold to Confirm Button */}
             {isSending ? (
-                <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 shadow-[0_0_60px_rgba(251,191,36,0.4)] flex items-center justify-center heartbeat">
+                <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full mx-auto bg-gradient-to-r from-yellow-400 to-orange-400 shadow-[0_0_60px_rgba(251,191,36,0.4)] flex items-center justify-center heartbeat">
                     <span className="text-gray-900 text-xl md:text-2xl font-bold text-center whitespace-nowrap">
                         sending your whisper...
                     </span>
                 </div>
             ) : (
-                <div className="relative mt-4">
+                <div className="relative mt-4 flex flex-col items-center justify-center w-full">
                     <button
                         ref={buttonRef}
                         onMouseDown={handleHoldStart}

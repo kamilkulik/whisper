@@ -166,12 +166,12 @@ export default function SignUpSection() {
                     {/* SENDING state — waiting for delivery */}
                     {flowState === "SENDING" && (
                         <div className="animate-fadeIn flex flex-col items-center justify-center text-center">
-                            <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 shadow-[0_0_60px_rgba(251,191,36,0.4)] flex items-center justify-center heartbeat mb-6">
+                            <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 shadow-[0_0_60px_rgba(251,191,36,0.4)] flex items-center justify-center heartbeat mb-6">
                                 <span className="text-gray-900 text-2xl md:text-2xl font-bold text-center px-4">
                                     sending your whisper...
                                 </span>
                             </div>
-                            <p className="text-blue-200 text-lg">
+                            <p className="text-blue-200 text-2xl">
                                 Your whisper is on its way. This usually takes just a moment.
                             </p>
                         </div>

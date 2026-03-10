@@ -66,14 +66,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const isDevelopment = environment === "development";
+    const newSignUpPriceId = isDevelopment ? "price_1T8nne1u5HYgja2NiBiEtQFA" : "price_1T8nop1u5HYgja2N9UNjO4Dk";
+
     console.log(
       "[ /api/checkout-sessions ]",
       "--- IMPORTANT --- config",
-      config,
+      newSignUp ? newSignUpPriceId : config,
     );
 
-    const isDevelopment = environment === "development";
-    const newSignUpPriceId = isDevelopment ? "price_1T8nne1u5HYgja2NiBiEtQFA" : "price_1T8nop1u5HYgja2N9UNjO4Dk";
 
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
