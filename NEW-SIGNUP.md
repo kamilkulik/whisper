@@ -101,18 +101,17 @@ It needs to be "Hold to Confirm". Once the user holds the button for 2 seconds, 
 - **NOTE ON SERVERLESS ARCHITECTURE** - Webhook listener will be on a separate instance to the `SeeHowItFeels` button. They need to use objective USER ID to communicate. They will use the `sessionId`, because no DB USER ID will have been available at that point. The frontend will have to poll the backend on separate API. That's why the listener needs to persist the delivery status in the database. Use `sessionIdCache` to handle failures & retries.
 
 Suggested logic:
-1. When the user holds the button to submit, the frontend generates a temporary, cryptographically secure UUID (e.g., crypto.randomUUID()).
-2. The frontend sends POST /api/whisper/deliver with the payload: { phoneNumber: "+447...", deliverySessionId: "uuid-1234..." }.
-3. Your serverless function triggers Twilio, creates a temporary record in Postgres DB (or Redis) linked to that deliverySessionId, and returns a 200 OK.
-4. Your webhook listener receives the Twilio delivery receipt and updates the DB record matching the phone number to "Delivered."
-5. Your frontend polls GET /api/whisper/status?sessionId=uuid-1234....
+1. The frontend sends POST /api/whisper/send?phoneNumber=+447... .
+2. Serverless function triggers Twilio, creates a temporary record in Postgres DB (or Redis) linked to that `sessionId`, and returns a 200 OK.
+3. Webhook listener receives the Twilio delivery receipt and updates the DB record matching the phone number. Use the `deliveries` table.
+4. Frontend polls GET /api/whisper/status?sessionId=uuid-1234....
 
 - `SeeHowItFeels.tsx` will timeout after 60 seconds and show an error message "We're having trouble delivering your whisper. We politely ask to retry in a moment."
 - `handleNavigateToPricing` gets renamed to `handleNavigateToSignUp`
 - Once the delivery gets confirmed, the button will fade out and be replaced by the Form asking the user to start the paid 1 USD trial.
 - The `InitiateCheckout.tsx` component is a form. I has copy: "Your whisper was just delivered. While you read it, would you like to keep this feeling every evening for the next 7 days for just $1?"
 - `InitiateCheckout.tsx` component has two buttons:
-    - YES - they get taken to the usual signup form which they got AFTER entering the OTP originally. The user and their phone number need to be known to the backend, which will create the checkout session for them.
+    - YES - they get taken to the usual signup form which they got AFTER entering the OTP originally. Just like in case of the regular signup flow implemented in `ContactForm.tsx`, the user need to get created in the DB first. The user and their phone number need to be known to the backend, which will create the checkout session for them.
     - NO - they get shown a single feeback form question "what made you quit?". (e.g., "Too expensive", "Didn't like the poem", "Just browsing"). This way I'll be getting additional feedback (hopefully). 
 
 
@@ -137,6 +136,123 @@ The "hold for 2 seconds" interaction needs careful mobile handling:
 - Rate limiting is per phone number which already exists on the `users` table
 - Rate limiting allows 3 tryout messages per phone number IN TOTAL
 
+## MESSAGE DELIVERY
+
+- for keeping track of message delivery create a new `deliveries` table. It has columns: `phoneNumber`, `sessionId`, `createdAt`, `messageNumber`, `delivered` (Boolean flag)
+- Each message is a separate row in the table
+- For rate limiting, you count messages sent to a phone number
+- For delivery, you check `delivered` status of the latest created message for a `sessionId`
+- when creating the user in the `users` table, the `lastUsedMessage` needs to be same as the number of message sent with the latest tryout to that user's phone number
+
+## API ENDPOINTS
+
+- POST /api/whisper/send - sends a whisper to a phone number - replicates behaviour of the existing endpoint `/api/confirm/otp` but for the "See how it feels" flow - sends a whisper to a phone number. It uses `phoneNumber` from `deliveries` table to identify the message. It uses `tryoutCount` and `tryoutLastSentAt` from `users` table to rate limit the messages. It writes each request as a new row in the `deliveries` table. It returns `success` or `error`. This endpoint will take messages from the `messages` table and send them to the user. It will use the `lastUsedMessage` column from the `users` table to determine the next message to send. It will use the `tryoutCount` column from the `users` table to determine the next message to send.
+- GET /api/whisper/status?sessionId=uuid-1234... - gets the status of a whisper. It returns Boolean flag for `delivered`.
+
+## TWILIO WEBHOOK
+
+- POST /api/whisper/webhook - receives webhook from Twilio with message status. It updates the `delivered` flag in the `deliveries` table.
+
+## FEEDBACK FORM
+
+- POST /api/whisper/feedback - receives feedback from user. It writes the feedback to the `feedback` table.
+- `feedback` table has columns: `phoneNumber`, `sessionId`, `feedback`, `createdAt`
+- valid `sessionId` needs to be provided to the POST /api/whisper/feedback endpoint to be accepted.
+- `sessionId` is the same `sessionId` as the one used for the message delivery.
+
+## STRIPE CHANGES
+
+- This time, the trial is going to be opt-out, transitioning into 11.99 USD monthly subscription
+- the `api/checkout-sessions` route handler now looks at product type & `newSignUp` flag, and for subscription it will set a 7 day trial period
+- need to use a new subscription product - but only for new signups. Product logic already implemented in the `src/app/api/checkout-sessions/route.ts` file.
+
+## USER SERVICE
+- encapsulates user creation, retrieval and udpate logic currently used by `api/users` route handler
+- it will be called by the `api/whisper/send` route handler to create a new user
+- it will be called by the `api/whisper/send` route handler to update the user record
+- it will be called by the `api/whisper/send` route handler to get the user record - check whether user already exists
+
+## MESSAGE SERVICE
+- encapsulates message retrieval logic from `api/cron/distribute` route handler
+- `api/cron/distribute` route handler should now use that service to retrieve messages for distribution
+- it will be used as well by `api/whisper/send` to get the right message to the user
+- it needs to include logic for updating the user record and increment sent message number
+
+
+## SESSION ID flow for THE NEW SIGNUP
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant SENDRoute as /api/whisper/send
+    participant STATUSRoute as /api/whisper/status
+    participant USERRoute as /api/users
+    participant FEEDBACKRoute as /api/whisper/feedback
+    participant Twilio
+    participant UserService as UserService<br/>Needs to be created
+    participant MessageService as MessageService<br/>Needs to be created
+    participant TempCache as DB: SessionIdCache<br/>(TemporarySessionIdCache)
+    participant PrismaUser as DB: User<br/>(Prisma)
+    participant Deliveries as DB: Deliveries<br/>(Prisma)
+    participant Feedback as DB: Feedback<br/>(Prisma)
+    
+    %% See how it feels flow: SEND SMS
+    Note over Client, SENDRoute: 1. See how it feels FLOW: SEND SMS
+    Client->>SENDRoute: POST /api/whisper/send?phoneNumber
+    SENDRoute->>UserService: SELECT tryout_count, last_used_message FROM users u WHERE u.phone_number = phoneNumber;
+    
+    alt If User does NOT exist (New User)
+
+        %% New User Registration
+        Note over Client, SessionIdCache: 2. Create Profile Route (Extra Verification)
+        SENDRoute->>UserService: createUser (body: user details)
+        UserService->>UserService: Create and assign sessionId
+        UserService->>SessionIdCache: store sessionId:phoneNumber
+        UserService->>PrismaUser: create and persist user
+        UserService-->>SENDRoute: Return success
+
+    else The user DOES exist (Existing User)
+        %% Verify rate limiting for existing user
+        SENDRoute->>UserService: Get tryout_count for phone_number
+    end
+    
+    Note over Client, MessageService: Verify rate limites quota
+    SENDRoute->>SENDRoute: verify rate limits
+    SENDRoute->>MessageService: getNextUserMessage
+    SENDRoute->>Twilio: Send SMS with whisper
+    SENDRoute->>Deliveries: Create initial record 'phoneNumber', 'sessionId', 'createdAt', 'messageNumber', with delivered:false
+    SENDRoute-->>Client: Return success: true, set sessionId cookie
+    
+    %% Twilio delivery webhook flow
+    Note over Twilio, TwilioWebhookListener: Listening for webhook from Twilio
+    Twilio->>TwilioWebhookListener: whisper sent to phoneNumber delivered
+    TwilioWebhookListener->>Deliveries: updates 'delivered' to true
+
+    %% Client polling for delivery status
+    Note over Client, Deliveries: Polling for whisper delivery status
+    loop every 2 seconds until 60 second timeout
+    Client->>STATUSRoute: continuously poll for delivery status using received sessionId<br/>GET /api/whisper/status?sessionId=uuid-1234...
+    STATUSRoute->>Deliveries: SELECT delivered FROM deliveries WHERE sessionId = received sessionId
+    STATUSRoute->>Client: returns delivered flag
+    end
+
+    %% Handle polling error
+    Note over Client, Client: Handle polling error
+    opt Polling for whisper status times out
+    Client->>Client: Show error, ask to retry
+    end
+
+    %%Ask to signup
+    Note over Client, PrismaUser: Updating user with delivery_hour, timezone, message_language
+    alt User agrees to signup
+        Client->>USERRoute: PUT to update the user with required form data
+        %%Next initiate checkout as usual
+    else 
+        Client->>FEEDBACKRoute: POST /api/whisper/feedback
+        FEEDBACKRoute->>Feedback: Save user feedback to DB
+    end
+```
+
 
 # TWILIO ADDITIONAL ERROR HANDLING
 
@@ -148,7 +264,3 @@ The "hold for 2 seconds" interaction needs careful mobile handling:
 - 30005: Unknown destination handset
 - 35118: MessagingServiceSid is required to schedule a message
 
-# STRIPE CHANGES
-
-- This time, the trial is going to be opt-out, transitioning into 11.99 USD service.
-- On day 6 & 7, the user will be notified the trial is about to end, and that they will be charged. The message will include a link to cancel.
