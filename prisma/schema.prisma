@@ -91,6 +91,8 @@ model User {
   sessionId               String?                @unique @map("session_id")
   timezone                String                 @default("Europe/Warsaw") @map("timezone")
   deliveryHour            Int                    @default(20) @map("delivery_hour") // 0-23, message sent at HH:59
+  tryoutCount             Int                    @default(0) @map("tryout_count")
+  tryoutLastSentAt        DateTime?              @map("tryout_last_sent_at")
   createdAt               DateTime               @default(now()) @map("created_at")
   updatedAt               DateTime?              @updatedAt @map("updated_at")
 
@@ -150,4 +152,25 @@ model WebhookEventLog {
   updatedAt DateTime? @updatedAt @map("updated_at")
 
   @@map("webhook_event_log")
+}
+
+model Delivery {
+  id            Int      @id @default(autoincrement())
+  phoneNumber   String   @map("phone_number")
+  sessionId     String   @map("session_id")
+  messageNumber Int      @map("message_number")
+  delivered     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("deliveries")
+}
+
+model Feedback {
+  id          Int      @id @default(autoincrement())
+  phoneNumber String   @map("phone_number")
+  sessionId   String   @map("session_id")
+  feedback    String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("feedback")
 }

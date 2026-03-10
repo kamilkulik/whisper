@@ -8,6 +8,7 @@ import TestimonialsCarousel from "./_components/TestimonialsCarousel";
 import ImageCarousel from "./_components/ImageCarousel";
 import HowItWorks from "./_components/HowItWorks";
 import PricingSection from "./_components/PricingSection";
+import SignUpSection from "./_components/SignUpSection";
 import WhyIBuiltSection from "./_components/WhyIBuiltSection";
 import { ModalWrapper } from "./_components/ModalWrapper";
 import TestingToolsWrapper from "./_components/TestingToolsWrapper";
@@ -349,7 +350,7 @@ export default function Home() {
     if (modal && modal !== "login" && modal !== "contact") {
       // Small delay to ensure the page is fully loaded
       const timer = setTimeout(() => {
-        const pricingSection = document.querySelector("#pricing-section");
+        const pricingSection = document.querySelector("#signup-section");
         if (pricingSection) {
           pricingSection.scrollIntoView({
             behavior: "smooth",
@@ -559,11 +560,11 @@ export default function Home() {
       router.push(`/?modal=phone`, { scroll: false });
     };
 
-  const handleNavigateToPricing = () => {
-    // Smooth scroll to the pricing section
-    const pricingSection = document.querySelector("#pricing-section");
-    if (pricingSection) {
-      pricingSection.scrollIntoView({
+  const handleNavigateToSignUp = () => {
+    // Smooth scroll to the signup section
+    const signUpSection = document.querySelector("#signup-section");
+    if (signUpSection) {
+      signUpSection.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
@@ -655,7 +656,7 @@ export default function Home() {
                 )}
               </button>
               <button
-                onClick={handleNavigateToPricing}
+                onClick={handleNavigateToSignUp}
                 className="hidden sm:inline-block bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-medium px-6 py-2 rounded-lg transition-colors cursor-pointer"
               >
                 {t("hero.header-cta-button")}
@@ -738,7 +739,7 @@ export default function Home() {
 
                   {/** Encapsulate button into its own component */}
                   <button
-                    onClick={handleNavigateToPricing}
+                    onClick={handleNavigateToSignUp}
                     className="copy-line bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
                     data-delay="1100"
                   >
@@ -1071,7 +1072,7 @@ export default function Home() {
           </div>
 
           {/* How It Works Section */}
-          <HowItWorks onGetStarted={handleNavigateToPricing} />
+          <HowItWorks onGetStarted={handleNavigateToSignUp} />
 
           {/* Smartphone Notification Section */}
           <div className="relative min-h-[80vh] flex items-center my-32">
@@ -1113,7 +1114,7 @@ export default function Home() {
 
                 <div className="order-4 lg:col-start-4 lg:col-span-2 flex flex-col md:max-lg:flex-row md:max-lg:space-x-8 md:max-lg:justify-center items-center self-start">
                   <button
-                    onClick={handleNavigateToPricing}
+                    onClick={handleNavigateToSignUp}
                     className="max-md:my-8 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-2xl lg:text-xl transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform cursor-pointer"
                   >
                     {t("smartphone-notification-section.button")}
@@ -1152,12 +1153,9 @@ export default function Home() {
           {/* Why I Built Section */}
           <WhyIBuiltSection />
 
-          {/* Pricing Section */}
-          <div id="pricing-section">
-            <PricingSection
-              ref={pricingSectionRef}
-              onGetStarted={handleStartJourneyWithScroll}
-            />
+          {/* Sign Up Section (replaces Pricing Section on landing page) */}
+          <div id="signup-section">
+            <SignUpSection />
           </div>
         </div>
 
@@ -1198,7 +1196,7 @@ export default function Home() {
                     {t("bottom-cta.subtitle")}
                   </p>
                   <button
-                    onClick={handleNavigateToPricing}
+                    onClick={handleNavigateToSignUp}
                     className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     {t("bottom-cta.button")}
@@ -1288,11 +1286,11 @@ export default function Home() {
             )}
             handleModalClose={handleModalClose}
           />
-        </ModalWrapper>
+        </ModalWrapper> 
       )}
 
       {/* Testing Tools Widget */}
-      <TestingToolsWrapper />
+      {/* <TestingToolsWrapper /> */}
     </div>
   );
 }

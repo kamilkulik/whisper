@@ -57,7 +57,8 @@ html {
 body {
   box-sizing: border-box;
   font-family: var(--font-montserrat), sans-serif;
-  font-size: 1.6rem; /* 16px base font size */
+  font-size: 1.6rem;
+  /* 16px base font size */
   line-height: 1.6;
   -webkit-overflow-scrolling: touch;
   /* Ensure proper scroll behavior */
@@ -71,22 +72,27 @@ body {
     transform: scale(1);
     opacity: 0.4;
   }
+
   14% {
     transform: scale(1.1);
     opacity: 0.8;
   }
+
   28% {
     transform: scale(1);
     opacity: 0.6;
   }
+
   42% {
     transform: scale(1.15);
     opacity: 0.95;
   }
+
   70% {
     transform: scale(1);
     opacity: 0.6;
   }
+
   100% {
     transform: scale(1);
     opacity: 0.4;
@@ -106,10 +112,12 @@ body {
 
 /* Shake animation */
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   10%,
   30%,
   50%,
@@ -117,6 +125,7 @@ body {
   90% {
     transform: translateX(-8px);
   }
+
   20%,
   40%,
   60%,
@@ -162,7 +171,8 @@ body {
   background: linear-gradient(90deg, #8b5cf6, #ec4899, #f59e0b);
   z-index: 1000;
   transform-origin: left;
-  transform: scaleX(0); /* <-- collapsed by default */
+  transform: scaleX(0);
+  /* <-- collapsed by default */
 }
 
 /* Modern browsers with scroll-timeline */
@@ -178,6 +188,7 @@ body {
   from {
     transform: scaleX(0);
   }
+
   to {
     transform: scaleX(1);
   }
@@ -188,9 +199,11 @@ body {
   0% {
     transform: translateX(-100%);
   }
+
   50% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -239,4 +252,21 @@ body {
 .float-in-right.animate-in {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* Fade-in animation for SignUpSection transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
 }

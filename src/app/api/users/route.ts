@@ -31,6 +31,8 @@ export type UserData = Omit<
   | "createdAt"
   | "updatedAt"
   | "trialEnds"
+  | "tryoutCount"
+  | "tryoutLastSentAt"
 > & { fbEventId?: string; deliveryHour?: number, email?: string | null, name?: string | null };
 
 export const PUT = async (request: NextRequest) => {
@@ -46,11 +48,12 @@ export const PUT = async (request: NextRequest) => {
     }
 
     // Get user from session (include timezone for delivery hour conversion)
-    const user: Pick<User, "id" | "timezone"> | null = await prisma.user.findUnique({
+    const user: Pick<User, "id" | "timezone" | "phoneNumber"> | null = await prisma.user.findUnique({
       where: { sessionId },
       select: {
         id: true,
         timezone: true,
+        phoneNumber: true,
       },
     });
 
@@ -193,7 +196,7 @@ export const PUT = async (request: NextRequest) => {
     });
 
     return NextResponse.json(
-      { message: tShared("PUT.success") },
+      { message: tShared("PUT.success"), phoneNumber: user.phoneNumber },
       { status: 200 },
     );
   } catch (error) {
@@ -224,7 +227,7 @@ export const POST = async (request: NextRequest) => {
     );
 
     if (cachedSessionId !== sessionId) {
-      console.log("[ users ] [ POST ] Cached sessionId does not match");
+      console.log(`[ users ] [ POST ] Cached sessionId does not match ${cachedSessionId} !== ${sessionId}`);
       return NextResponse.json(
         { error: tShared("unauthorized") },
         { status: 401 },

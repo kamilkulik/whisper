@@ -96,7 +96,7 @@ export default function ContactForm({
         product: selectedProduct,
       });
       const response = await fetch("/api/users", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -119,8 +119,48 @@ export default function ContactForm({
           product: SubscriptionType.TRIAL,
         });
 
-        // redirect to the pricing page
-        if (selectedProduct === null) {
+        // Check if this is a new signup flow (from the "see how it feels" button)
+        const urlParams = new URLSearchParams(window.location.search);
+        const isNewSignUp = urlParams.get("newSignUp") === "true";
+
+        if (isNewSignUp) {
+          // New signup flow: create checkout with 7-day trial
+          setMessage(t("form-submit-checkout"));
+
+          const cookies = getMetaCookies();
+          const checkoutSessionsPayload: CheckoutSessionsPayload = {
+            clientReferenceId: data.phoneNumber || verifiedPhoneNumber || formData.phoneNumber,
+            productType: SubscriptionType.MONTHLY,
+            email: isEmailVerified?.email || "",
+            fbp: cookies.fbp,
+            fbc: cookies.fbc,
+            eventId: generateEventId("Purchase"),
+            eventSourceUrl: typeof window !== "undefined" ? window.location.href : undefined,
+            newSignUp: true,
+          };
+
+          setTimeout(async () => {
+            try {
+              const checkoutResponse = await fetch("/api/checkout-sessions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(checkoutSessionsPayload),
+              });
+
+              if (checkoutResponse.ok) {
+                const { url } = await checkoutResponse.json();
+                if (url) {
+                  window.location.href = url;
+                }
+              } else {
+                setMessage(t("form-submit-checkout-error"));
+              }
+            } catch (error) {
+              setMessage(t("form-submit-checkout-error"));
+            }
+          }, 1500);
+        } else if (selectedProduct === null) {
+          // redirect to the pricing page
           setMessage(t("form-submit-success"));
           setTimeout(() => {
             window.location.href = `/ritual/${verifiedPhoneNumber}`;
