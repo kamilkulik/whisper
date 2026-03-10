@@ -156,10 +156,10 @@ export default function PhoneNumberForm({
     return (
         <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto px-4">
             {/* Title */}
-            <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-2 leading-tight">
-                your whisper is ready for you
+            <h2 className="text-4xl md:text-4xl font-bold text-white text-center mb-2 leading-tight">
+                Your whisper is ready for you
             </h2>
-            <p className="text-blue-200 text-center mb-8 text-lg">
+            <p className="text-blue-200 text-center mb-8 text-2xl">
                 Your phone number is how it finds you now
             </p>
 
@@ -171,12 +171,12 @@ export default function PhoneNumberForm({
                         <button
                             type="button"
                             onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                            className="h-full px-3 py-3 bg-gray-700/50 border border-r-0 border-gray-600/50 rounded-l-lg text-white hover:bg-gray-600/50 transition-colors text-sm"
+                            className="h-full px-3 py-3 bg-gray-700/50 border border-r-0 border-gray-600/50 rounded-l-lg text-white hover:bg-gray-600/50 transition-colors text-3xl"
                         >
                             {countryCode}
                         </button>
                         {isCountryDropdownOpen && (
-                            <div className="absolute top-full left-0 mt-1 bg-gray-800 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto min-w-[200px]">
+                            <div className="absolute top-full left-0 mt-1 bg-gray-800 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto min-w-[270px]">
                                 {supportedPhoneCountryCodes.map((entry) => (
                                     <button
                                         key={entry.phoneCountryCode}
@@ -184,7 +184,7 @@ export default function PhoneNumberForm({
                                             setCountryCode(entry.phoneCountryCode);
                                             setIsCountryDropdownOpen(false);
                                         }}
-                                        className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 transition-colors text-sm"
+                                        className="w-full px-4 py-3 text-left text-white hover:bg-gray-700 transition-colors text-2xl"
                                     >
                                         {entry.country} ({entry.phoneCountryCode})
                                     </button>
@@ -201,13 +201,13 @@ export default function PhoneNumberForm({
                             setPhoneNumber(e.target.value);
                             setError(null);
                         }}
-                        className="flex-1 px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-r-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                        className="flex-1 text-3xl max-w-[230px] px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-r-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
                         placeholder="Phone number"
                         autoComplete="tel-national"
                     />
                 </div>
                 {error && (
-                    <p className="text-red-400 text-sm mt-2">{error}</p>
+                    <p className="text-red-400 text-lg mt-2">{error}</p>
                 )}
             </div>
 
@@ -268,11 +268,11 @@ export default function PhoneNumberForm({
                             </svg>
                         )}
 
-                        <span className="text-gray-900 text-xl md:text-2xl font-bold text-center whitespace-nowrap relative z-10">
+                        <span className="text-gray-900 text-2xl md:text-3xl font-bold text-center whitespace-nowrap relative z-10">
                             {isHolding ? "Keep holding..." : "Hold to confirm"}
                         </span>
                     </button>
-                    <p className="text-gray-400 text-xs text-center mt-3">
+                    <p className="text-gray-400 text-xl text-center mt-3">
                         Hold the button for 2 seconds
                     </p>
                 </div>

@@ -27,7 +27,7 @@ export default function SeeHowItFeels({ onPress }: SeeHowItFeelsProps) {
                 id="see-how-it-feels-button"
                 onClick={handleClick}
                 className={`
-          relative w-64 h-64 md:w-80 md:h-80 rounded-full
+          relative w-80 h-80 md:w-80 md:h-80 rounded-full
           bg-gradient-to-r from-yellow-400 to-orange-400
           shadow-[0_0_60px_rgba(251,191,36,0.4)]
           transition-all duration-500 cursor-pointer
@@ -37,7 +37,7 @@ export default function SeeHowItFeels({ onPress }: SeeHowItFeelsProps) {
             >
                 <span
                     className={`
-            text-gray-900 text-2xl md:text-3xl font-bold whitespace-nowrap
+            text-gray-900 text-3xl md:text-3xl font-bold whitespace-nowrap
             transition-opacity duration-300
             ${pressed ? "opacity-0" : "opacity-100"}
           `}

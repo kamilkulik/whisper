@@ -95,7 +95,7 @@ export default function InitiateCheckout({
     if (showFeedback) {
         return (
             <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto px-4">
-                <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-6">
+                <h3 className="text-3xl md:text-3xl font-bold text-white text-center mb-6">
                     What made you quit?
                 </h3>
 
@@ -145,25 +145,25 @@ export default function InitiateCheckout({
     // Main question
     return (
         <div className="flex flex-col items-center justify-center text-center px-4">
-            <p className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
-                Your whisper was just delivered.
+            <p className="text-4xl md:text-3xl font-bold text-white mb-2 leading-tight">
+                Your whisper was just delivered
             </p>
-            <p className="text-lg md:text-xl text-blue-200 mb-8">
+            <p className="text-2xl md:text-2xl text-blue-200 mb-8">
                 While you read it, would you like to keep this feeling every evening for the next 7
-                days for just <span className="text-yellow-400 font-bold">$1</span>?
+                days for <span className="text-yellow-400 font-bold">$0</span>?
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
                 <button
                     onClick={handleYes}
                     disabled={isLoadingCheckout}
-                    className="flex-1 py-4 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-60 cursor-pointer"
+                    className="flex-1 py-4 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold text-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-60 cursor-pointer"
                 >
                     {isLoadingCheckout ? "Loading..." : "Yes, I want this ✨"}
                 </button>
                 <button
                     onClick={handleNo}
-                    className="flex-1 py-4 rounded-lg bg-gray-700/50 border border-gray-600/50 text-gray-300 hover:bg-gray-600/50 transition-all duration-200 cursor-pointer"
+                    className="flex-1 py-4 rounded-lg bg-gray-700/50 border border-gray-600/50 text-gray-300 text-xl hover:bg-gray-600/50 transition-all duration-200 cursor-pointer"
                 >
                     No, not right now
                 </button>
