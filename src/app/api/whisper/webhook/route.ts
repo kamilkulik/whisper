@@ -33,43 +33,39 @@ export async function POST(request: NextRequest) {
 
         // Only update on "delivered" status
         if (messageStatus === "delivered") {
-            after(
-                (async () => {
-                    try {
-                        // Find the most recent undelivered delivery for this phone number
-                        const delivery = await prisma.delivery.findFirst({
-                            where: {
-                                phoneNumber: to,
-                                delivered: false,
-                            },
-                            orderBy: { createdAt: "desc" },
-                        });
+            try {
+                // Find the most recent undelivered delivery for this phone number
+                const delivery = await prisma.delivery.findFirst({
+                    where: {
+                        phoneNumber: to,
+                        delivered: false,
+                    },
+                    orderBy: { createdAt: "desc" },
+                });
 
-                        if (delivery) {
-                            await prisma.delivery.update({
-                                where: { id: delivery.id },
-                                data: { delivered: true },
-                            });
+                if (delivery) {
+                    await prisma.delivery.update({
+                        where: { id: delivery.id },
+                        data: { delivered: true },
+                    });
 
-                            // Mark the user's phone number as verified since it was successfully delivered
-                            await prisma.user.updateMany({
-                                where: { phoneNumber: to },
-                                data: { phoneNumberVerified: true },
-                            });
+                    // Mark the user's phone number as verified since it was successfully delivered
+                    await prisma.user.updateMany({
+                        where: { phoneNumber: to },
+                        data: { phoneNumberVerified: true },
+                    });
 
-                            console.log(
-                                `[ whisper/webhook ] Marked delivery id=${delivery.id} as delivered and verified phone ${to}`
-                            );
-                        } else {
-                            console.warn(
-                                `[ whisper/webhook ] No undelivered delivery found for ${to}`
-                            );
-                        }
-                    } catch (bgError) {
-                        console.error("[ whisper/webhook ] Background error:", bgError);
-                    }
-                })()
-            );
+                    console.log(
+                        `[ whisper/webhook ] Marked delivery id=${delivery.id} as delivered and verified phone ${to}`
+                    );
+                } else {
+                    console.warn(
+                        `[ whisper/webhook ] No undelivered delivery found for ${to}`
+                    );
+                }
+            } catch (bgError) {
+                console.error("[ whisper/webhook ] Database error:", bgError);
+            }
         }
 
         // Twilio expects a 200 response (or TwiML, but we don't need it here)

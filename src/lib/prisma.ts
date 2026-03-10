@@ -7,10 +7,7 @@ import {
   User,
 } from "@prisma/client";
 
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { neonConfig } from "@neondatabase/serverless";
-
-import ws from "ws";
+import { PrismaNeonHTTP } from "@prisma/adapter-neon";
 
 // Type definitions
 declare global {
@@ -25,13 +22,11 @@ const globalForPrisma = globalThis as unknown as {
 let prisma: PrismaClient;
 
 if (process.env.VERCEL_ENV === "production") {
-  // Use Neon adapter for Vercel production
-  neonConfig.webSocketConstructor = ws;
-  // To work in edge environments (Cloudflare Workers, Vercel Edge, etc.), enable querying over fetch
-  neonConfig.poolQueryViaFetch = true;
-
+  // Use Neon HTTP adapter for Vercel production to avoid WebSocket freezing/crashing issues
   const connectionString = `${process.env.DATABASE_URL}`;
-  const adapter = new PrismaNeon({ connectionString });
+  const adapter = new PrismaNeonHTTP(connectionString, {
+    // no extra config needed
+  });
   prisma = globalForPrisma.prisma || new PrismaClient({ adapter });
 } else if (process.env.NODE_ENV === "development") {
   // Use standard Prisma client for development
