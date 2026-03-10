@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@react-email/preview": "^0.0.13",
+    "bufferutil": "^4.1.0",
     "prettier": "^3.6.2",
     "typescript": "^5"
   }
