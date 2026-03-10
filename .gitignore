@@ -44,3 +44,6 @@ next-env.d.ts
 /.shepts
 
 .pnpm-store/
+
+# AI agent
+tasks/
