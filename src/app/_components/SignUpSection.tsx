@@ -109,15 +109,13 @@ export default function SignUpSection() {
                 }
 
                 // Start polling for delivery
-                // Get sessionId from the cookie (it's set by the API response)
-                // We need to read it from cookies after the response
-                const sessionId = getCookie("sessionId");
-                if (sessionId) {
-                    startPolling(sessionId);
+                // Get sessionId from the API response
+                if (data.sessionId) {
+                    startPolling(data.sessionId);
                 } else {
                     // Fallback: poll using phone number from delivery record
                     console.error(
-                        "[ SignUpSection ] No sessionId cookie found after send"
+                        "[ SignUpSection ] No sessionId returned from API after send"
                     );
                     setFlowState("ERROR");
                 }
@@ -210,13 +208,3 @@ export default function SignUpSection() {
     );
 }
 
-/**
- * Helper to read a cookie value by name from document.cookie
- */
-function getCookie(name: string): string | null {
-    if (typeof document === "undefined") return null;
-    const match = document.cookie.match(
-        new RegExp("(^|;\\s*)" + name + "=([^;]*)")
-    );
-    return match ? decodeURIComponent(match[2]) : null;
-}

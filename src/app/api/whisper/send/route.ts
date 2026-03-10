@@ -165,6 +165,7 @@ export async function POST(request: NextRequest) {
         const response = NextResponse.json({
             success: true,
             eventId: contactEventId,
+            sessionId,
         });
 
         response.cookies.set({
