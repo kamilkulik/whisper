@@ -48,8 +48,14 @@ export async function POST(request: NextRequest) {
                     data: { delivered: true },
                 });
 
+                // Mark the user's phone number as verified since it was successfully delivered
+                await prisma.user.updateMany({
+                    where: { phoneNumber: to },
+                    data: { phoneNumberVerified: true },
+                });
+
                 console.log(
-                    `[ whisper/webhook ] Marked delivery id=${delivery.id} as delivered for ${to}`
+                    `[ whisper/webhook ] Marked delivery id=${delivery.id} as delivered and verified phone ${to}`
                 );
             } else {
                 console.warn(

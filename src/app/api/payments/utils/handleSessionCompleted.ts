@@ -37,8 +37,12 @@ export async function handleSessionCompleted(
       premium: true,
     };
 
-    // If it parses to a valid integer, look up by ID; otherwise treat as phone number
-    if (Number.isInteger(clientRefAsNum)) {
+    // A user ID will be entirely numeric. A phone number will start with '+' and/or contain spaces
+    const isUserId = /^\d+$/.test(clientRef);
+
+    // If it's purely digits, look up by ID; otherwise treat as phone number
+    if (isUserId) {
+      const clientRefAsNum = parseInt(clientRef, 10);
       console.log(
         `[ /api/payments/utils/handleSessionCompleted ] User ID is integer: ${clientRefAsNum}`,
       );

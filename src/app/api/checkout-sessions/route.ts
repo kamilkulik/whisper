@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     }
 
     const isDevelopment = environment === "development";
-    const newSignUpPriceId = isDevelopment ? "price_1T8nne1u5HYgja2NiBiEtQFA" : "price_1T8nop1u5HYgja2N9UNjO4Dk";
+    const newSignUpPriceId = isDevelopment ? "price_1T9WNY1u5HYgja2NByvNX4RO" : "price_1T9WJs1u5HYgja2NTRffhuaF";
 
     console.log(
       "[ /api/checkout-sessions ]",

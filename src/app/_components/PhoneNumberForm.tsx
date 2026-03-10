@@ -165,7 +165,7 @@ export default function PhoneNumberForm({
 
             {/* Phone Input */}
             <div className="w-full mb-6">
-                <div className="flex items-stretch">
+                <div className="flex items-stretch justify-center">
                     {/* Country Code Dropdown */}
                     <div className="relative" ref={dropdownRef}>
                         <button
@@ -201,7 +201,7 @@ export default function PhoneNumberForm({
                             setPhoneNumber(e.target.value);
                             setError(null);
                         }}
-                        className="flex-1 text-3xl max-w-[230px] px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-r-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                        className="flex-1 text-3xl max-w-[230px] lg:max-w-[330px] px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-r-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
                         placeholder="Phone number"
                         autoComplete="tel-national"
                     />
