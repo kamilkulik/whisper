@@ -157,10 +157,10 @@ export default function PhoneNumberForm({
         <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto px-4">
             {/* Title */}
             <h2 className="text-4xl md:text-4xl font-bold text-white text-center mb-2 leading-tight">
-                Your whisper is ready for you
+                Your whisper is ready for you...
             </h2>
             <p className="text-blue-200 text-center mb-8 text-2xl">
-                Your phone number is how it finds you now
+                ...Your phone number is how it finds you now
             </p>
 
             {/* Phone Input */}

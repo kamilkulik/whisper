@@ -53,17 +53,15 @@ export default function InitiateCheckout({
         setShowFeedback(true);
     };
 
-    const handleFeedbackSubmit = async () => {
-        const feedback =
-            selectedFeedback === "Other" ? customFeedback : selectedFeedback;
-        if (!feedback || feedback.trim().length === 0) return;
+    const submitFeedback = async (feedbackText: string) => {
+        if (!feedbackText || feedbackText.trim().length === 0) return;
 
         setIsLoadingFeedback(true);
         try {
             const response = await fetch("/api/whisper/feedback", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ feedback }),
+                body: JSON.stringify({ feedback: feedbackText }),
             });
 
             if (response.ok) {
@@ -79,14 +77,25 @@ export default function InitiateCheckout({
         }
     };
 
+    const handleOptionSelect = (option: string) => {
+        setSelectedFeedback(option);
+        if (option !== "Other") {
+            submitFeedback(option);
+        }
+    };
+
+    const handleCustomFeedbackSubmit = () => {
+        submitFeedback(customFeedback);
+    };
+
     // Feedback submitted state
     if (feedbackSent) {
         return (
             <div className="flex flex-col items-center justify-center text-center px-4">
-                <p className="text-white text-xl font-semibold mb-2">
+                <p className="text-white text-2xl font-semibold mb-2">
                     Thank you for your feedback 💙
                 </p>
-                <p className="text-blue-200 text-sm">Your whisper will still be waiting for you.</p>
+                <p className="text-blue-200 text-xl">Your whisper will still be waiting for you.</p>
             </div>
         );
     }
@@ -103,41 +112,40 @@ export default function InitiateCheckout({
                     {feedbackOptions.map((option) => (
                         <button
                             key={option}
-                            onClick={() => setSelectedFeedback(option)}
+                            onClick={() => handleOptionSelect(option)}
+                            disabled={isLoadingFeedback && selectedFeedback === option}
                             className={`
                 w-full px-4 py-3 rounded-lg text-left transition-all duration-200
                 ${selectedFeedback === option
                                     ? "bg-purple-600/60 border border-purple-400 text-white"
                                     : "bg-gray-700/50 border border-gray-600/50 text-gray-200 hover:bg-gray-600/50"
                                 }
+                ${isLoadingFeedback && selectedFeedback === option ? "opacity-50 cursor-wait" : ""}
               `}
                         >
-                            {option}
+                            {isLoadingFeedback && selectedFeedback === option ? "Sending..." : option}
                         </button>
                     ))}
                 </div>
 
                 {selectedFeedback === "Other" && (
-                    <textarea
-                        value={customFeedback}
-                        onChange={(e) => setCustomFeedback(e.target.value)}
-                        className="w-full px-4 py-3 mb-4 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors resize-none"
-                        placeholder="Tell us more..."
-                        rows={3}
-                    />
+                    <>
+                        <textarea
+                            value={customFeedback}
+                            onChange={(e) => setCustomFeedback(e.target.value)}
+                            className="w-full px-4 py-3 mb-4 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                            placeholder="Tell us more..."
+                            rows={3}
+                        />
+                        <button
+                            onClick={handleCustomFeedbackSubmit}
+                            disabled={isLoadingFeedback || !customFeedback.trim()}
+                            className="w-full py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            {isLoadingFeedback ? "Sending..." : "Send feedback"}
+                        </button>
+                    </>
                 )}
-
-                <button
-                    onClick={handleFeedbackSubmit}
-                    disabled={
-                        isLoadingFeedback ||
-                        !selectedFeedback ||
-                        (selectedFeedback === "Other" && !customFeedback.trim())
-                    }
-                    className="w-full py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-300 hover:to-orange-300 text-gray-900 font-bold transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                    {isLoadingFeedback ? "Sending..." : "Send feedback"}
-                </button>
             </div>
         );
     }
