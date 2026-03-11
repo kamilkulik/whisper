@@ -1,7 +1,6 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendSms } from "@/lib/smsapi";
-import { isValidE164, normalizeE164 } from "@/lib/consts";
 import { userService } from "@/services/UserService";
 import { messageService } from "@/services/MessageService";
 import { SupportedLanguagesEnum } from "@prisma/client";
@@ -9,6 +8,7 @@ import { sendCapiEvent, buildCapiUserData } from "@/lib/fbCapi";
 import { generateEventId } from "@/lib/eventId";
 import { Event } from "@/lib/fbq";
 import { generateCsrfToken } from "../../utils/csfrProtection";
+import { twilioService } from "@/services/TwilioService";
 
 /**
  * POST /api/whisper/send
@@ -33,8 +33,9 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const phoneNumber = normalizeE164(rawPhone);
-        if (!isValidE164(phoneNumber)) {
+        const { phoneNumber, valid } = await twilioService.lookupPhoneNumber(rawPhone);
+
+        if (!valid) {
             console.warn(`[ api/whisper/send ] Invalid phone number format: ${rawPhone}`);
             return NextResponse.json(
                 { error: "Invalid phone number format" },
@@ -183,6 +184,7 @@ export async function POST(request: NextRequest) {
             success: true,
             eventId: contactEventId,
             sessionId,
+            phoneNumber,
         });
 
         response.cookies.set({

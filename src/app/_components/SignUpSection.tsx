@@ -108,6 +108,12 @@ export default function SignUpSection() {
                     return;
                 }
 
+                // Use the canonical phone number returned by the backend
+                // (Twilio-normalized, stripping erroneous leading zeros etc.)
+                if (data.phoneNumber) {
+                    setPhoneNumber(data.phoneNumber);
+                }
+
                 // Start polling for delivery
                 // Get sessionId from the API response
                 if (data.sessionId) {
