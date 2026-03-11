@@ -41,14 +41,16 @@ export async function POST(request: NextRequest) {
     const purchaseEventId = bodyEventId ?? generateEventId("Purchase");
     const baseUrl = await getBaseUrl();
 
-    console.log("[ /api/checkout-sessions ]", "body: ", JSON.stringify(body, null, 2));
+    console.log(`[ api/checkout-sessions ] POST started. clientReferenceId=${clientReferenceId}, productType=${productType}, newSignUp=${newSignUp}`);
 
     if (!clientReferenceId) {
-      throw new Error("[ /api/checkout-sessions ] Client reference ID is required");
+      console.warn("[ api/checkout-sessions ] Client reference ID is required");
+      throw new Error("[ api/checkout-sessions ] Client reference ID is required");
     }
 
     if (!productType) {
-      throw new Error("[ /api/checkout-sessions ] Product type is required");
+      console.warn("[ api/checkout-sessions ] Product type is required");
+      throw new Error("[ api/checkout-sessions ] Product type is required");
     }
 
     const nodeEnv = process.env.NODE_ENV;
@@ -61,18 +63,20 @@ export async function POST(request: NextRequest) {
       productConfigs[environment]["DEFAULT"]?.[productType];
 
     if (!config) {
+      console.warn(`[ api/checkout-sessions ] No product config found for type: ${productType}`);
       throw new Error(
-        `[ /api/checkout-sessions ] No product config found for type: ${productType}`,
+        `[ api/checkout-sessions ] No product config found for type: ${productType}`,
       );
     }
 
     const isDevelopment = environment === "development";
     const newSignUpPriceId = isDevelopment ? "price_1T9WNY1u5HYgja2NByvNX4RO" : "price_1T9WJs1u5HYgja2NTRffhuaF";
 
+    console.log(`[ api/checkout-sessions ] Resolved config for environment=${environment}, isDevelopment=${isDevelopment}`);
     console.log(
-      "[ /api/checkout-sessions ]",
-      "--- IMPORTANT --- config",
-      newSignUp ? newSignUpPriceId : config,
+      "[ api/checkout-sessions ]",
+      "--- IMPORTANT --- config: ",
+      newSignUp ? `newSignUpPriceId=${newSignUpPriceId}` : config,
     );
 
 
@@ -103,8 +107,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (!session.url) {
+      console.warn("[ api/checkout-sessions ] Failed to create checkout session URL");
       throw new Error("Failed to create checkout session URL");
     }
+
+    console.log(`[ api/checkout-sessions ] Stripe checkout session created successfully (session.id=${session.id})`);
 
     // InitiateCheckout CAPI (fire-and-forget)
     after(
@@ -116,12 +123,14 @@ export async function POST(request: NextRequest) {
         clientUserAgent: userAgent,
         eventSourceUrl: eventSourceUrl ?? undefined,
         eventId: purchaseEventId,
-      }).catch(() => { })
+      })
+        .then(() => console.log(`[ api/checkout-sessions ] Dispatched InitiateCheckout CAPI event`))
+        .catch(() => { })
     );
 
     return NextResponse.json({ url: session.url });
   } catch (err: any) {
-    console.error("Error creating checkout session", err);
+    console.error("[ api/checkout-sessions ] Error creating checkout session", err);
     return NextResponse.json(
       { error: err.message },
       { status: err.statusCode || 500 },

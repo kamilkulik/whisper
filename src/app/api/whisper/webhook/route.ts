@@ -21,10 +21,11 @@ export async function POST(request: NextRequest) {
         const to = formData.get("To")?.toString();
 
         console.log(
-            `[ whisper/webhook ] Received status="${messageStatus}" for to="${to}"`
+            `[ api/whisper/webhook ] Received status="${messageStatus}" for to="${to}"`
         );
 
         if (!to || !messageStatus) {
+            console.warn(`[ api/whisper/webhook ] Missing required fields (to: ${!!to}, messageStatus: ${!!messageStatus})`);
             return NextResponse.json(
                 { error: "Missing required fields" },
                 { status: 400 }
@@ -56,22 +57,24 @@ export async function POST(request: NextRequest) {
                     });
 
                     console.log(
-                        `[ whisper/webhook ] Marked delivery id=${delivery.id} as delivered and verified phone ${to}`
+                        `[ api/whisper/webhook ] Marked delivery id=${delivery.id} as delivered and verified phone ${to}`
                     );
                 } else {
                     console.warn(
-                        `[ whisper/webhook ] No undelivered delivery found for ${to}`
+                        `[ api/whisper/webhook ] No undelivered delivery found for ${to}`
                     );
                 }
             } catch (bgError) {
-                console.error("[ whisper/webhook ] Database error:", bgError);
+                console.error("[ api/whisper/webhook ] Database error:", bgError);
             }
+        } else {
+            console.log(`[ api/whisper/webhook ] Ignoring non-delivered status update: ${messageStatus} for ${to}`);
         }
 
         // Twilio expects a 200 response (or TwiML, but we don't need it here)
         return new NextResponse(null, { status: 200 });
     } catch (error) {
-        console.error("[ whisper/webhook ] Error:", error);
+        console.error("[ api/whisper/webhook ] Error:", error);
         return new NextResponse(null, { status: 500 });
     }
 }

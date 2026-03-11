@@ -11,7 +11,10 @@ export async function POST(request: NextRequest) {
     try {
         const sessionId = request.cookies.get("sessionId")?.value;
 
+        console.log(`[ api/whisper/feedback ] POST started. sessionId present: ${!!sessionId}`);
+
         if (!sessionId) {
+            console.warn("[ api/whisper/feedback ] Unauthorized attempt: missing sessionId cookie");
             return NextResponse.json(
                 { error: "Unauthorized" },
                 { status: 401 }
@@ -21,7 +24,10 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { feedback } = body;
 
+        console.log(`[ api/whisper/feedback ] Received feedback string of length ${feedback?.length || 0}`);
+
         if (!feedback || typeof feedback !== "string" || feedback.trim().length === 0) {
+            console.warn("[ api/whisper/feedback ] Invalid or missing feedback payload");
             return NextResponse.json(
                 { error: "Feedback is required" },
                 { status: 400 }
@@ -35,11 +41,14 @@ export async function POST(request: NextRequest) {
         });
 
         if (!user) {
+            console.warn(`[ api/whisper/feedback ] User not found for session: ${sessionId}`);
             return NextResponse.json(
                 { error: "User not found for this session" },
                 { status: 404 }
             );
         }
+
+        console.log(`[ api/whisper/feedback ] Found user (${user.phoneNumber}) for session, saving feedback...`);
 
         await prisma.feedback.create({
             data: {
@@ -49,11 +58,11 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        console.log(`[ whisper/feedback ] Saved feedback from ${user.phoneNumber}`);
+        console.log(`[ api/whisper/feedback ] Saved feedback from ${user.phoneNumber}`);
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("[ whisper/feedback ] Error:", error);
+        console.error("[ api/whisper/feedback ] Error:", error);
         return NextResponse.json(
             { error: "Failed to save feedback" },
             { status: 500 }

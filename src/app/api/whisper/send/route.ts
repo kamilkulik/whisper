@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
         const { phoneNumber: rawPhone, language } = body;
 
         if (!rawPhone) {
+            console.warn("[ api/whisper/send ] Missing raw phone number in request body");
             return NextResponse.json(
                 { error: "Phone number is required" },
                 { status: 400 }
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
 
         const phoneNumber = normalizeE164(rawPhone);
         if (!isValidE164(phoneNumber)) {
+            console.warn(`[ api/whisper/send ] Invalid phone number format: ${rawPhone}`);
             return NextResponse.json(
                 { error: "Invalid phone number format" },
                 { status: 400 }
@@ -45,6 +47,8 @@ export async function POST(request: NextRequest) {
             language && Object.values(SupportedLanguagesEnum).includes(language)
                 ? language
                 : SupportedLanguagesEnum.EN;
+
+        console.log(`[ api/whisper/send ] POST started for phone: ${phoneNumber}, language: ${msgLanguage}`);
 
         // 1. Find or create the user
         let user = await userService.findByPhoneNumber(phoneNumber);
@@ -60,9 +64,12 @@ export async function POST(request: NextRequest) {
             sessionId = result.sessionId;
             userId = result.userId;
 
+            console.log(`[ api/whisper/send ] Created new user (userId=${userId}) with sessionId=${sessionId}`);
+
             // Re-fetch to get the full tryout info
             user = await userService.findByPhoneNumber(phoneNumber);
             if (!user) {
+                console.warn(`[ api/whisper/send ] Failed to successfully create/retrieve user for phone: ${phoneNumber}`);
                 return NextResponse.json(
                     { error: "Failed to create user" },
                     { status: 500 }
@@ -75,7 +82,10 @@ export async function POST(request: NextRequest) {
                 select: { id: true, sessionId: true },
             });
 
+            console.log(`[ api/whisper/send ] Found existing user (userId=${existingUser?.id}), existing session=${!!existingUser?.sessionId}`);
+
             if (!existingUser) {
+                console.warn(`[ api/whisper/send ] Existing user unexpectedly not found after initial check for phone: ${phoneNumber}`);
                 return NextResponse.json(
                     { error: "User not found" },
                     { status: 500 }
@@ -96,13 +106,14 @@ export async function POST(request: NextRequest) {
                 });
                 const { sessionIdCache } = await import("@/lib/sessionIdCache");
                 await sessionIdCache.set(phoneNumber, sessionId);
+                console.log(`[ api/whisper/send ] Generated new sessionId=${sessionId} for existing user`);
             }
         }
 
         // 2. Rate-limit check
         if (userService.isRateLimited(user)) {
-            console.log(
-                `[ whisper/send ] Rate limited: phone=${phoneNumber} tryoutCount=${user.tryoutCount}`
+            console.warn(
+                `[ api/whisper/send ] Rate limited: phone=${phoneNumber} tryoutCount=${user.tryoutCount}`
             );
             return NextResponse.json(
                 { error: "Maximum tryout messages reached" },
@@ -111,17 +122,21 @@ export async function POST(request: NextRequest) {
         }
 
         // 3. Get the next message
+        console.log(`[ api/whisper/send ] Rate limit check passed (tryoutCount=${user.tryoutCount}). Fetching next message...`);
         const nextMessage = await messageService.getNextMessage(
             user.lastUsedMessageId,
             msgLanguage
         );
 
         if (!nextMessage) {
+            console.warn(`[ api/whisper/send ] No message available for user ${userId} and language ${msgLanguage}`);
             return NextResponse.json(
                 { error: "No message available" },
                 { status: 500 }
             );
         }
+
+        console.log(`[ api/whisper/send ] Retrieved next message (id=${nextMessage.id}). Sending via SMS...`);
 
         // 4. Send SMS immediately (not scheduled) via Twilio
         await sendSms(phoneNumber, nextMessage.text, false);
@@ -137,7 +152,7 @@ export async function POST(request: NextRequest) {
         });
 
         console.log(
-            `[ whisper/send ] Sent message #${nextMessage.id} to ${phoneNumber}, delivery id=${delivery.id}`
+            `[ api/whisper/send ] Successfully sent message #${nextMessage.id} to ${phoneNumber}, created delivery id=${delivery.id}`
         );
 
         // 6. Update user: increment tryout, update lastUsedMessage
@@ -158,7 +173,9 @@ export async function POST(request: NextRequest) {
                 userData: buildCapiUserData({ fbp, fbc }),
                 clientUserAgent: userAgent,
                 eventId: contactEventId,
-            }).catch(() => { })
+            })
+                .then(() => console.log(`[ api/whisper/send ] Dispatched Contact CAPI event (eventId=${contactEventId})`))
+                .catch(() => { })
         );
 
         // 8. Return response with sessionId cookie
