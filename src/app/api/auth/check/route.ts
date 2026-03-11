@@ -16,8 +16,9 @@ export async function GET(request: NextRequest) {
       sessionId.value
     );
 
-    const user = await getUserFromSessionId<"sessionId">(sessionId.value, {
+    const user = await getUserFromSessionId<"sessionId" | "tryoutCount">(sessionId.value, {
       sessionId: true,
+      tryoutCount: true,
     });
 
     if (user && user.sessionId === sessionId.value) {
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         authenticated: true,
         sessionId: sessionId.value,
+        showPricing: user.tryoutCount >= 3,
       });
     } else {
       console.log("[ /api/auth/check ] User not found", user);

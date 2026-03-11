@@ -26,7 +26,7 @@ The pricing section - also according to the report - introduces substantial fric
     - YES - they get taken to the usual signup form which they got AFTER entering the OTP originally. The user and their phone number need to be known to the backend, which will create the checkout session for them.
     - NO - they get shown a single feeback form question "what made you quit?". This way I'll be getting additional feedback (hopefully). 
     
-8. This time, the trial is going to be opt-out, transitioning into 11.99 USD service. 
+8. This time, the trial is going to be opt-out, transitioning into 9.99 GBP service. 
 
 9. On day 6 & 7, the user will be notified the trial is about to end, and that they will be charged. The message will include a link to cancel.
 
@@ -75,7 +75,7 @@ flowchart TD
     K --> C
     N -->|"YES"| O["Stripe Checkout → success page"]
     N -->|"NO"| Q["Feedback form: 'What made you quit?'"]
-    O --> P["Trial active, auto-converts to $11.99/mo"]
+    O --> P["Trial active, auto-converts to 9.99 GBP/mo"]
 ```
 
 # NEW SIGNUP OVERALL MECHANICS
@@ -162,7 +162,7 @@ The "hold for 2 seconds" interaction needs careful mobile handling:
 
 ## STRIPE CHANGES
 
-- This time, the trial is going to be opt-out, transitioning into 11.99 USD monthly subscription
+- This time, the trial is going to be opt-out, transitioning into 9.99 GBP monthly subscription
 - the `api/checkout-sessions` route handler now looks at product type & `newSignUp` flag, and for subscription it will set a 7 day trial period
 - need to use a new subscription product - but only for new signups. Product logic already implemented in the `src/app/api/checkout-sessions/route.ts` file.
 

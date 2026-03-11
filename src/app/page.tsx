@@ -611,7 +611,7 @@ export default function Home() {
     }
   };
 
-  const { sessionId, loading: loadingSessionId } = useGetCurrentSession();
+  const { sessionId, loading: loadingSessionId, showPricing } = useGetCurrentSession();
 
   // Handle modal opening to clear loading states
   useEffect(() => {
@@ -1155,7 +1155,10 @@ export default function Home() {
 
           {/* Sign Up Section (replaces Pricing Section on landing page) */}
           <div id="signup-section">
-            <SignUpSection />
+            {showPricing ? <PricingSection
+              ref={pricingSectionRef}
+              onGetStarted={handleStartJourneyWithScroll}
+            /> : <SignUpSection />}
           </div>
         </div>
 
@@ -1286,7 +1289,7 @@ export default function Home() {
             )}
             handleModalClose={handleModalClose}
           />
-        </ModalWrapper> 
+        </ModalWrapper>
       )}
 
       {/* Testing Tools Widget */}
