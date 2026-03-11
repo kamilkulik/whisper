@@ -13,6 +13,8 @@ export interface SubscriptionFactoryInput {
   productType: string;
   subscriptionId: string;
   user: Pick<User, "id">;
+  /** Stripe trial_end timestamp in seconds. When set, overrides the computed trial expiry. */
+  trialEnd?: number;
 }
 
 function createRawExpiryDate(created: number, days: number, expiryAdjustmentInMilis: number) {
@@ -31,6 +33,7 @@ export function subscriptionFactory({
   productType,
   subscriptionId,
   user,
+  trialEnd,
 }: SubscriptionFactoryInput): Pick<
   Subscription,
   | "dateExpires"
@@ -41,19 +44,22 @@ export function subscriptionFactory({
   | "type"
   | "userId"
 > {
-  // Snap to end of expiry day:
-  const rawTrialExpiry = createRawExpiryDate(created, 7, expiryAdjustmentInMilis);
-  const expiresIn7DaysAt = snapToEndOfDay(rawTrialExpiry);
-
-  const rawExpiry = createRawExpiryDate(created, 30, expiryAdjustmentInMilis);
-  const expiresIn30DaysAt = snapToEndOfDay(rawExpiry);
-
   const subscriptionType = getSubscriptionType(productType);
 
-  const dateExpires =
-    subscriptionType === SubscriptionType.TRIAL
-      ? expiresIn7DaysAt
-      : expiresIn30DaysAt;
+  let dateExpires: Date;
+
+  if (subscriptionType === SubscriptionType.TRIAL && trialEnd) {
+    // Use Stripe's authoritative trial_end timestamp
+    dateExpires = snapToEndOfDay(new Date(trialEnd * 1000));
+  } else if (subscriptionType === SubscriptionType.TRIAL) {
+    // Fallback: compute 7-day trial expiry
+    const rawTrialExpiry = createRawExpiryDate(created, 7, expiryAdjustmentInMilis);
+    dateExpires = snapToEndOfDay(rawTrialExpiry);
+  } else {
+    // Paid subscription: 30-day expiry
+    const rawExpiry = createRawExpiryDate(created, 30, expiryAdjustmentInMilis);
+    dateExpires = snapToEndOfDay(rawExpiry);
+  }
 
   return {
     dateExpires,

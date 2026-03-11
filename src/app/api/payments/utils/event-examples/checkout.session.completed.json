@@ -1,0 +1,139 @@
+{
+    "object": {
+        "id": "cs_test_b18cqyCKDvxo4uWrfeYQUGNHhB4E44BSWKBXrgskdoSm6Ax5J4ftHemWAp",
+        "object": "checkout.session",
+        "adaptive_pricing": {
+            "enabled": true
+        },
+        "after_expiration": null,
+        "allow_promotion_codes": true,
+        "amount_subtotal": 0,
+        "amount_total": 0,
+        "automatic_tax": {
+            "enabled": false,
+            "liability": null,
+            "provider": null,
+            "status": null
+        },
+        "billing_address_collection": null,
+        "branding_settings": {
+            "background_color": "#1e3a8a",
+            "border_style": "rounded",
+            "button_color": "#fcc800",
+            "display_name": "eveningwhisper.app",
+            "font_family": "default",
+            "icon": {
+                "file": "file_1T6CrG1u5HYgja2NArzXSsYj",
+                "type": "file"
+            },
+            "logo": {
+                "file": "file_1T6CsC1u5HYgja2NPlh2Q21M",
+                "type": "file"
+            }
+        },
+        "cancel_url": "http://localhost:3000/?canceled=true",
+        "client_reference_id": "+48791731761",
+        "client_secret": null,
+        "collected_information": {
+            "business_name": null,
+            "individual_name": null,
+            "shipping_details": null
+        },
+        "consent": null,
+        "consent_collection": null,
+        "created": 1773173045,
+        "currency": "gbp",
+        "currency_conversion": null,
+        "custom_fields": [],
+        "custom_text": {
+            "after_submit": null,
+            "shipping_address": null,
+            "submit": null,
+            "terms_of_service_acceptance": null
+        },
+        "customer": "cus_U7m4apOCBppZch",
+        "customer_account": null,
+        "customer_creation": "always",
+        "customer_details": {
+            "address": {
+                "city": null,
+                "country": "PL",
+                "line1": null,
+                "line2": null,
+                "postal_code": null,
+                "state": null
+            },
+            "business_name": null,
+            "email": "eazlecustomer-ebux-test-4@heineken.com",
+            "individual_name": null,
+            "name": "Kamil Kulik",
+            "phone": null,
+            "tax_exempt": "none",
+            "tax_ids": []
+        },
+        "customer_email": null,
+        "discounts": [],
+        "expires_at": 1773259445,
+        "invoice": "in_1T9WW61u5HYgja2Nb00wK88B",
+        "invoice_creation": null,
+        "livemode": false,
+        "locale": null,
+        "metadata": {
+            "event_source_url": "http://localhost:3000/?modal=contact&newSignUp=true",
+            "fbc": "",
+            "fbp": "",
+            "priceId": "price_1T4R9G1u5HYgja2NF8JG8aUf",
+            "productId": "prod_U2WBY2XhepSnm4",
+            "productType": "MONTHLY",
+            "purchase_event_id": "Purchase-b113e893-8afe-4744-b837-ab59235766a4"
+        },
+        "mode": "subscription",
+        "origin_context": null,
+        "payment_intent": null,
+        "payment_link": null,
+        "payment_method_collection": "always",
+        "payment_method_configuration_details": {
+            "id": "pmc_1Rt10J1u5HYgja2NOOOFqKDs",
+            "parent": null
+        },
+        "payment_method_options": {
+            "card": {
+                "request_three_d_secure": "automatic"
+            }
+        },
+        "payment_method_types": [
+            "card",
+            "link"
+        ],
+        "payment_status": "paid",
+        "permissions": null,
+        "phone_number_collection": {
+            "enabled": false
+        },
+        "recovered_from": null,
+        "saved_payment_method_options": {
+            "allow_redisplay_filters": [
+                "always"
+            ],
+            "payment_method_remove": "disabled",
+            "payment_method_save": null
+        },
+        "setup_intent": null,
+        "shipping_address_collection": null,
+        "shipping_cost": null,
+        "shipping_options": [],
+        "status": "complete",
+        "submit_type": null,
+        "subscription": "sub_1T9WW71u5HYgja2N35nKwhPi",
+        "success_url": "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
+        "total_details": {
+            "amount_discount": 0,
+            "amount_shipping": 0,
+            "amount_tax": 0
+        },
+        "ui_mode": "hosted",
+        "url": null,
+        "wallet_options": null
+    },
+    "previous_attributes": null
+}

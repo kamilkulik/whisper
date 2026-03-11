@@ -13,6 +13,13 @@ import { after } from "next/server";
 export async function handleSessionCompleted(
   eventData: Stripe.Checkout.Session,
 ) {
+  if (eventData.amount_total === 0) {
+    console.log(
+      "[ /api/payments/utils/handleSessionCompleted ] amount_total is 0, skipping",
+    );
+    return;
+  }
+
   if (!eventData.metadata) {
     throw new Error("Metadata not found");
   }

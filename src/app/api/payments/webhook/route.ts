@@ -4,6 +4,7 @@ import { Buffer } from "node:buffer";
 import {
   handleRefundCreated,
   handleSessionCompleted,
+  handleSubscriptionCreated,
   handleSubscriptionUpdated,
 } from "../utils";
 import { prisma } from "@/lib/prisma";
@@ -163,11 +164,11 @@ export async function POST(request: NextRequest) {
             );
             await handleRefundCreated(refund);
             break;
-          // case "customer.subscription.created":
-          //   const subscriptionCreated = event.data.object;
-          //   console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);
-          //   handleSubscriptionCreated(subscriptionCreated);
-          //   break;
+          case "customer.subscription.created":
+            const subscriptionCreated = event.data.object;
+            console.log(`✅ Subscription ${subscriptionCreated.id} was created!`);
+            await handleSubscriptionCreated(subscriptionCreated);
+            break;
           // case "payment_intent.succeeded":
           //   const paymentIntent = event.data.object;
           //   console.log(
