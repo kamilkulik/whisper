@@ -53,4 +53,10 @@ export class TwilioService {
     }
 }
 
-export const twilioService = new TwilioService();
+// Shell-deploy guard: skip module-scope instantiation when Twilio env vars are missing,
+// otherwise `next build` crashes while loading any route that imports this service.
+// Original:
+// export const twilioService = new TwilioService();
+export const twilioService = (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN)
+    ? new TwilioService()
+    : (null as unknown as TwilioService);
